@@ -5,5 +5,16 @@ fetch(url)
   .then((response) => response.json())
   .then((result) => {
     const data = result.response.body.items.item;
-    console.log(data);
+    const errorPosition = (error) => {
+      alert(error.message);
+    };
+    const showPosition = (position) => {
+      const { latitude, longitude } = position.coords;
+
+      const container = document.getElementById("map");
+    };
+    window.navigator.geolocation.getCurrentPosition(
+      showPosition,
+      errorPosition
+    );
   });
