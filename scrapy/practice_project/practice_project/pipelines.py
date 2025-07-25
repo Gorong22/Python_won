@@ -6,15 +6,8 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
-from scrapy.exceptions import DropItem
 
 
-class Won2ScrapyPipeline:
+class PracticeProjectPipeline:
     def process_item(self, item, spider):
-        if item["description"] :
-            item["description"] = item["description"].strip()
-            return item
-        else :
-            raise DropItem("Missing description in %s" % item)
-
-        
+        return item

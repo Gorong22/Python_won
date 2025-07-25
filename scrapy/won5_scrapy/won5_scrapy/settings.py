@@ -1,4 +1,4 @@
-# Scrapy settings for won2_scrapy project
+# Scrapy settings for won5_scrapy project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,14 +7,14 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = "won2_scrapy"
+BOT_NAME = "won5_scrapy"
 
-SPIDER_MODULES = ["won2_scrapy.spiders"]
-NEWSPIDER_MODULE = "won2_scrapy.spiders"
+SPIDER_MODULES = ["won5_scrapy.spiders"]
+NEWSPIDER_MODULE = "won5_scrapy.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = "won2_scrapy (+http://www.yourdomain.com)"
+#USER_AGENT = "won5_scrapy (+http://www.yourdomain.com)"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -45,13 +45,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    "won2_scrapy.middlewares.Won2ScrapySpiderMiddleware": 543,
+#    "won5_scrapy.middlewares.Won5ScrapySpiderMiddleware": 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    "won2_scrapy.middlewares.Won2ScrapyDownloaderMiddleware": 543,
+#    "won5_scrapy.middlewares.Won5ScrapyDownloaderMiddleware": 543,
 #}
 
 # Enable or disable extensions
@@ -63,10 +63,9 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "won2_scrapy.pipelines.Won2ScrapyPipeline": 300,
+    "won5_scrapy.pipelines.CleanTitlePipeline": 300,
 }
 
-# Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True
 # The initial download delay
@@ -90,3 +89,4 @@ ITEM_PIPELINES = {
 # Set settings whose default value is deprecated to a future-proof value
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+DUPEFILTER_CLASS = "scrapy.dupefilters.BaseDupeFilter"

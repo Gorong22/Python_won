@@ -6,12 +6,9 @@
 import scrapy
 
 
-class Won2ScrapyItem(scrapy.Item):
+class Won5ScrapyItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-
+    
     title = scrapy.Field()
-    description = scrapy.Field()
-
-
     pass

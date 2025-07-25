@@ -1,4 +1,4 @@
-# Scrapy settings for won2_scrapy project
+# Scrapy settings for won3_scrapy project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,14 +7,14 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = "won2_scrapy"
+BOT_NAME = "won3_scrapy"
 
-SPIDER_MODULES = ["won2_scrapy.spiders"]
-NEWSPIDER_MODULE = "won2_scrapy.spiders"
+SPIDER_MODULES = ["won3_scrapy.spiders"]
+NEWSPIDER_MODULE = "won3_scrapy.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = "won2_scrapy (+http://www.yourdomain.com)"
+#USER_AGENT = "won3_scrapy (+http://www.yourdomain.com)"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -45,13 +45,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    "won2_scrapy.middlewares.Won2ScrapySpiderMiddleware": 543,
+#    "won3_scrapy.middlewares.Won3ScrapySpiderMiddleware": 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    "won2_scrapy.middlewares.Won2ScrapyDownloaderMiddleware": 543,
+#    "won3_scrapy.middlewares.Won3ScrapyDownloaderMiddleware": 543,
 #}
 
 # Enable or disable extensions
@@ -63,7 +63,9 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "won2_scrapy.pipelines.Won2ScrapyPipeline": 300,
+    "won3_scrapy.pipelines.SetPipelineWonsil3": 100,
+    "won3_scrapy.pipelines.CategoryPipelineWonsil3": 200,
+    "won3_scrapy.pipelines.RemovePipelineWonsil3": 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

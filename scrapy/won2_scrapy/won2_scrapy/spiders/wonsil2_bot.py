@@ -1,4 +1,5 @@
 import scrapy
+from won2_scrapy.items import Won2ScrapyItem
 
 
 class Wonsil2BotSpider(scrapy.Spider):
@@ -7,4 +8,8 @@ class Wonsil2BotSpider(scrapy.Spider):
     start_urls = ["https://davelee-fun.github.io/"]
 
     def parse(self, response):
-        pass
+        item = Won2ScrapyItem()
+        item["title"] = response.css("h1.sitetitle::text").get()
+        description = response.xpath("//p[@class='lead']/text()").get()
+        item["description"] = description
+        yield item
