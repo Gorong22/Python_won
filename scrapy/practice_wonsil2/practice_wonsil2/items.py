@@ -6,7 +6,9 @@
 import scrapy
 
 
-class categoryItem(scrapy.Item):
-    category = scrapy.Field()
+class PracticeWonsil2Item(scrapy.Item):
+    # define the fields for your item here like:
+    # name = scrapy.Field()
+    title = scrapy.Field()
 
     pass

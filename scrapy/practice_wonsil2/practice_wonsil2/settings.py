@@ -1,4 +1,4 @@
-# Scrapy settings for practice_project project
+# Scrapy settings for practice_wonsil2 project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,14 +7,14 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = "practice_project"
+BOT_NAME = "practice_wonsil2"
 
-SPIDER_MODULES = ["practice_project.spiders"]
-NEWSPIDER_MODULE = "practice_project.spiders"
+SPIDER_MODULES = ["practice_wonsil2.spiders"]
+NEWSPIDER_MODULE = "practice_wonsil2.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = "practice_project (+http://www.yourdomain.com)"
+#USER_AGENT = "practice_wonsil2 (+http://www.yourdomain.com)"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -45,13 +45,13 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    "practice_project.middlewares.PracticeProjectSpiderMiddleware": 543,
+#    "practice_wonsil2.middlewares.PracticeWonsil2SpiderMiddleware": 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    "practice_project.middlewares.PracticeProjectDownloaderMiddleware": 543,
+#    "practice_wonsil2.middlewares.PracticeWonsil2DownloaderMiddleware": 543,
 #}
 
 # Enable or disable extensions
@@ -62,11 +62,9 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-    "practice_project.pipelines.CategoryPipelinePractice": 100,
-    "practice_project.pipelines.SetPipelinePractice": 200,
-    "practice_project.pipelines.RemovePipelinePractice": 300,
-}
+#ITEM_PIPELINES = {
+#    "practice_wonsil2.pipelines.PracticeWonsil2Pipeline": 300,
+#}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -92,3 +90,4 @@ ITEM_PIPELINES = {
 # Set settings whose default value is deprecated to a future-proof value
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+DUPFILTER_CLASS = "scrapy.dupefilters.BaseDupeFilter"
