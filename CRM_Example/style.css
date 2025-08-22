@@ -1,0 +1,144 @@
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+.container{
+  width: 100%;
+  min-height: 100vh;
+  background: url("./img/movie.png") center/cover no-repeat;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: rgba(0,0,0,0.5); /* 검은 오버레이 */
+  background-blend-mode: multiply;    /* 어둡게 섞기 */
+}
+
+.container form{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+}
+
+h2{
+ text-align: center;
+ font-size: 32px;
+ margin-bottom: 20px;
+
+
+
+
+}
+
+.poster-row{
+ width: 100%;
+ display: flex;
+ justify-content: space-around;
+ margin-bottom: 10px;
+ gap: 20px;
+
+}
+
+.poster{
+    text-align: center;
+
+
+}
+
+.img-frame{
+    width: 250px;
+    height: 310px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    border-radius: 8px;  
+}
+
+img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.poster label {
+    display:block;
+
+
+}
+
+input[type=text], 
+input[type=email] {
+    width: 100%;
+    height: 30px;
+    margin-top: 6px;
+    padding: 8px;
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #fff;
+}
+
+
+input[type=text] :focus, 
+input[type=email] :focus {
+    outline: none;
+}
+
+.gender.inner, .age.inner {
+    margin-top: 6px;
+}
+
+.gender.inner label{
+    margin-right: 20px;
+}
+
+
+.gender.inner input[type="radio"], 
+.age.inner input[type="radio"]{
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+
+
+button[type=submit]{
+    width: 200px;
+    padding: 10px;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+
+}
+
+button[type=submit] :hover {
+    background: #000;
+    color:#000;
+
+
+}
+
+@media screen and (max-width: 600px){
+    .container form {
+        width: 100;
+
+    }
+
+    h2{
+        font-size: 20px;
+    }
+
+    .poster-row {
+        flex-direction: column;
+    }
+    .img-frame {
+        margin: auto;
+    }
+}
