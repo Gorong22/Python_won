@@ -173,49 +173,49 @@
         </div>
 
         <!-- 제출 버튼 -->
-        <button type="submit">이벤트 참여하기</button>
+        <button id="submitBtn" type="submit">이벤트 참여하기</button>
       </form>
+      <!-- 폼 바로 아래 아무 곳에 추가 -->
+      <iframe name="gsheet_iframe" id="gsheet_iframe" style="display:none;"></iframe>
       <!-- ===== 설문조사 끝 ===== -->
     </div>
 
     <!-- ===== 스크립트 : 유효성 검사 + 제출 시 구글 시트 전송 + 완료 페이지 이동 ===== -->
     <script>
-      document.querySelector("form").addEventListener("submit", function(e){
-        e.preventDefault(); // 기본 제출 막기
+    (function () {
+      const FORM_ACTION = "https://script.google.com/macros/s/AKfycbysroJUYpjCyp725cNiT60XqVlSPkRN38jhVORJ_e0LeiGHemVtqUrcQ1O53MAEBWjN/exec";
+      const form = document.querySelector("form");
+      const iframe = document.getElementById("gsheet_iframe");
 
-        // 유효성 검사
+      // 폼 속성 세팅: 네이티브 POST → 히든 iframe (CORS 회피)
+      form.setAttribute("action", FORM_ACTION);
+      form.setAttribute("method", "POST");
+      form.setAttribute("target", "gsheet_iframe");
+
+      let submitted = false;
+      let nameCache = "";
+
+      // iframe이 로드되면(=GAS 응답이 돌아오면) 감사 페이지로 이동
+      iframe.addEventListener("load", function () {
+        if (submitted) {
+          window.location.href = `submit.html?name=${encodeURIComponent(nameCache)}`;
+        }
+      });
+
+      // 제출 시 유효성 검사만 하고, 통과하면 네이티브 제출 그대로 진행 (preventDefault 금지)
+      form.addEventListener("submit", function (e) {
         if (!this.checkValidity()) {
+          e.preventDefault();
           alert("⚠️ 올바른 입력방식으로 작성해주세요!");
           return;
         }
-
-        // 폼 데이터 가져오기
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries());
-
-        // Google Apps Script 웹앱 URL (발급받은 걸 넣으세요!)
-        fetch("https://script.google.com/macros/s/AKfycbx0FapSvkA5fEyZmBioL8Xa3L8pBuxZihJ-JIkJnUPJGscn8Vbs0E2PqgubAEwVb433/exec", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data)
-       
-        })
-        .then(res => res.text())
-        .then(msg => {
-          if(msg === "success"){
-            // 이름 포함해서 완료 페이지로 이동
-            window.location.href = `submit.html?name=${encodeURIComponent(data.name)}`;
-          } else {
-            alert("⚠️ 제출 중 문제가 발생했습니다.");
-          }
-        })
-        .catch(err => {
-          console.error(err);
-          alert("⚠️ 서버와 통신 중 오류가 발생했습니다.");
-        });
+        // 완료 페이지에서 이름 쓰려고 캐싱
+        const nameInput = form.querySelector("[name='name']");
+        nameCache = nameInput ? nameInput.value : "";
+        submitted = true; // 이후 iframe load 시 redirect
+        // 주의: 여기서는 e.preventDefault() 하지 않습니다. 네이티브 제출 필요!
       });
+    })();
     </script>
   </body>
 </html>
