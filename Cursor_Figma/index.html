@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TodoList 프로그램</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📝 TodoList</h1>
+            <p>할 일을 관리하고 체계적으로 정리하세요!</p>
+        </header>
+        
+        <main>
+            <div class="input-section">
+                <form id="todoForm" onsubmit="addTodolist(); return false;">
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            id="todo" 
+                            placeholder="할 일을 입력하세요..." 
+                            maxlength="100"
+                            autocomplete="off"
+                        >
+                        <button type="submit" class="add-btn">
+                            <span>추가</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="todo-section">
+                <div class="todo-header">
+                    <h2>할 일 목록</h2>
+                    <div class="todo-stats">
+                        <span id="todoCount">0</span>개 남음
+                    </div>
+                </div>
+                
+                <ul id="todoList" class="todo-list">
+                    <!-- 할 일 항목들이 여기에 동적으로 추가됩니다 -->
+                </ul>
+                
+                <div class="todo-actions">
+                    <button onclick="deleteTodolist()" class="delete-btn">
+                        <span>마지막 항목 삭제</span>
+                    </button>
+                    <button onclick="clearAllTodos()" class="clear-btn">
+                        <span>전체 삭제</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>&copy; 2024 TodoList 프로그램</p>
+        </footer>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
