@@ -16,3 +16,4 @@ __pycache__/
 venv/
 .env/
 
+pandas/00_PANDASPLOTLY_FUNCODING_FIRSTDATA/COVID-19-master/csse_covid_19_data/
