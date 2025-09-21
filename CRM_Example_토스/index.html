@@ -64,13 +64,13 @@
         <label><input type="radio" name="lunch_type" value="직접 도시락" required /> 직접 도시락</label>
         <label><input type="radio" name="lunch_type" value="외식" required /> 외식</label>
 
-        <label>👉 점심 평균 식대</label>
+        <label>👉 점심 식대로 어느정도 지출 하시나요?</label>
         <label><input type="radio" name="lunch_price" value="8천~1만원" required /> 8천~1만원</label>
         <label><input type="radio" name="lunch_price" value="1만~1.2만원" required /> 1만~1.2만원</label>
         <label><input type="radio" name="lunch_price" value="1.2만~1.5만원" required /> 1.2만~1.5만원</label>
         <label><input type="radio" name="lunch_price" value="1.5만원 이상" required /> 1.5만원 이상</label>
 
-        <label>👉 점심에서 가장 아쉬운 점</label>
+        <label>👉 하루 중 즐거운 점심시간. 혹시 아쉬운점이 있으시다면?</label>
         <label><input type="radio" name="lunch_pain" value="가격" required /> 가격</label>
         <label><input type="radio" name="lunch_pain" value="메뉴 다양성" required /> 메뉴 다양성</label>
         <label><input type="radio" name="lunch_pain" value="맛" required /> 맛</label>
@@ -88,13 +88,13 @@
         <label><input type="radio" name="dinner_type" value="직접 요리" required /> 직접 요리</label>
         <label><input type="radio" name="dinner_type" value="밀키트/간편요리" required /> 밀키트·간편요리</label>
 
-        <label>👉 식자재는 주로 어디서 구매하시나요?</label>
+        <label>👉 혹시 요리해서 드신다면 재료는 주로 어디서 구매하시나요?</label>
         <label><input type="radio" name="grocery_place" value="대형마트" required /> 대형마트</label>
         <label><input type="radio" name="grocery_place" value="온라인몰" required /> 온라인몰(쿠팡·SSG 등)</label>
         <label><input type="radio" name="grocery_place" value="동네마트/시장" required /> 동네마트·시장</label>
         <label><input type="radio" name="grocery_place" value="편의점" required /> 편의점</label>
 
-        <label>👉 해당 구매처를 선택하는 주된 이유는?</label>
+        <label>👉 해당 구매처를 선택하는 주된 이유는 무엇인가요?</label>
         <label><input type="radio" name="grocery_reason" value="가격" required /> 가격</label>
         <label><input type="radio" name="grocery_reason" value="품질" required /> 품질</label>
         <label><input type="radio" name="grocery_reason" value="배송" required /> 배송</label>
@@ -111,7 +111,7 @@
         <label><input type="radio" name="supplement_freq" value="거의 안 함" required /> 거의 안 함</label>
         <label><input type="radio" name="supplement_freq" value="전혀 안 함" required /> 전혀 안 함</label>
 
-        <label>👉 필수적으로 챙기는 영양제</label>
+        <label>👉 혹시 가장 중요하다고 생각되어, 꼭 챙겨드시는 영양제가 있으시다면?</label>
         <label><input type="radio" name="supplement_type" value="종합비타민" required /> 종합비타민</label>
         <label><input type="radio" name="supplement_type" value="오메가3" required /> 오메가3</label>
         <label><input type="radio" name="supplement_type" value="유산균" required /> 유산균</label>
@@ -123,12 +123,19 @@
         <label><input type="radio" name="supplement_place" value="약국" required /> 약국</label>
         <label><input type="radio" name="supplement_place" value="드럭스토어" required /> 드럭스토어</label>
         <label><input type="radio" name="supplement_place" value="백화점/전문매장" required /> 백화점·전문매장</label>
+
+        <label>👉 해당 구매처를 선택하는 주된 이유는 무엇인가요?</label>
+        <label><input type="radio" name="grocery_reason" value="가격" required /> 가격</label>
+        <label><input type="radio" name="grocery_reason" value="품질" required /> 품질</label>
+        <label><input type="radio" name="grocery_reason" value="배송" required /> 배송</label>
+        <label><input type="radio" name="grocery_reason" value="브랜드 신뢰" required /> 브랜드 신뢰</label>
+        <label><input type="radio" name="grocery_reason" value="접근성" required /> 접근성</label>
       </div>
 
       <!-- 5. 다이어트 -->
       <div class="card">
         <h3>🏃‍♀️ 5. 다이어트 & 라이프스타일</h3>
-        <label>👉 다이어트 경험 여부</label>
+        <label>👉 다이어트를 주로 자주 하시는 편이신가요?</label>
         <label><input type="radio" name="diet_exp" value="현재 진행 중" required /> 현재 진행 중</label>
         <label><input type="radio" name="diet_exp" value="과거 경험 있음" required /> 과거 경험 있음</label>
         <label><input type="radio" name="diet_exp" value="없음" required /> 없음</label>
@@ -140,12 +147,12 @@
         <label><input type="radio" name="diet_type" value="간헐적 단식" required /> 간헐적 단식</label>
         <label><input type="radio" name="diet_type" value="기타" required /> 기타</label>
 
-        <label>👉 평소 가장 중요하게 생각하는 가치</label>
-        <label><input type="radio" name="diet_value" value="건강" required /> 건강</label>
-        <label><input type="radio" name="diet_value" value="편리함" required /> 편리함</label>
-        <label><input type="radio" name="diet_value" value="가성비" required /> 가성비</label>
-        <label><input type="radio" name="diet_value" value="프리미엄 경험" required /> 프리미엄 경험</label>
-        <label><input type="radio" name="diet_value" value="가족과 함께" required /> 가족과 함께</label>
+        <label>👉 다이어트나 식습관 관리에서 가장 중요하게 생각하시는 가치는 무엇인가요?</label>
+        <label><input type="radio" name="diet_value" value="건강" required /> 건강(체력, 면역력, 질병 예방 등)</label>
+        <label><input type="radio" name="diet_value" value="편리함" required /> 편리함(준비/조리시간 절약, 간편함)</label>
+        <label><input type="radio" name="diet_value" value="가성비" required /> 가성비(가격 대비 효율)</label>
+        <label><input type="radio" name="diet_value" value="프리미엄 경험" required /> 만족감/프리미엄 경험(맛, 기분, 브랜드 이미지 등)</label>
+        <label><input type="radio" name="diet_value" value="목표달성" required /> 목표달성(체중 감량, 바디라인, 상취감)</label>
       </div>
 
       <!-- 6. 주관식 -->
