@@ -8,7 +8,7 @@
 </head>
 <body>
   <div class="container">
-    <form id="surveyForm" action="https://script.google.com/macros/s/AKfycbxyZVKpD8lnwgLi8lh71hNy-6DpGAIhVSgYzBtCgheGeF3LxaFjK3mi1bcJ_hRi3wVgBg/exec" method="POST" target="hidden_iframe">
+    <form id="surveyForm" action="https://script.google.com/macros/s/AKfycbxif6xkI6wLmBPnVbdDazbHQMflbY3tCnPYI7biapK9SGT3AmT8BnKZJwQl8kcfgeaIYw/exec" method="POST" target="hidden_iframe">
       <!-- 타이틀 -->
       <div class="title-box">
         <h2>🥗 식사 & 건강 관리 습관 설문</h2>
@@ -58,14 +58,21 @@
       <div class="card">
         <h3>🍱 3. 평일 점심 식사</h3>
         <label>👉 평소 점심은 주로 어떻게 해결하시나요?</label>
-        <label><input type="radio" name="lunch_type" value="구내식당/빌딩 내부 식당" required /> 구내식당 / 빌딩 내부 식당 </label>
+        <label><input type="radio" name="lunch_type" value="구내식당/빌딩 내부 식당" required /> 구내식당 / 빌딩 내부 식당</label>
         <label><input type="radio" name="lunch_type" value="배달 음식" required /> 배달 음식</label>
         <label><input type="radio" name="lunch_type" value="편의점 간편식" required /> 편의점 간편식</label>
         <label><input type="radio" name="lunch_type" value="직접 도시락" required /> 직접 도시락</label>
-        <label><input type="radio" name="lunch_type" value="외식" required /> 외식</label>
+        <label><input type="radio" name="lunch_type" value="도시락 구독 서비스" required /> 도시락 구독 서비스</label>
+
+        <label>👉 점심 관련 정보는 주로 어디서 얻으시나요?</label>
+        <label><input type="checkbox" name="lunch_info" value="유튜브" /> 유튜브</label>
+        <label><input type="checkbox" name="lunch_info" value="인스타그램/페이스북" /> 인스타그램/페이스북</label>
+        <label><input type="checkbox" name="lunch_info" value="네이버검색/블로그" /> 네이버검색/블로그</label>
+        <label><input type="checkbox" name="lunch_info" value="구글검색" /> 구글 검색</label>
+        <label><input type="checkbox" name="lunch_info" value="기타" /> 기타</label>
 
         <label>👉 점심 식대로 어느정도 지출 하시나요?</label>
-        <label><input type="radio" name="lunch_price" value="8천~1만원" required /> 8천~1만원</label>
+        <label><input type="radio" name="lunch_price" value="1만원 이하" required /> 1만원 이하</label>
         <label><input type="radio" name="lunch_price" value="1만~1.2만원" required /> 1만~1.2만원</label>
         <label><input type="radio" name="lunch_price" value="1.2만~1.5만원" required /> 1.2만~1.5만원</label>
         <label><input type="radio" name="lunch_price" value="1.5만원 이상" required /> 1.5만원 이상</label>
@@ -88,11 +95,29 @@
         <label><input type="radio" name="dinner_type" value="직접 요리" required /> 직접 요리</label>
         <label><input type="radio" name="dinner_type" value="밀키트/간편요리" required /> 밀키트·간편요리</label>
 
-        <label>👉 혹시 요리해서 드신다면 재료는 주로 어디서 구매하시나요?</label>
+        <label>👉 혹시 한번씩 요리해서 드신다면 식자재는 주로 어디서 구매하시나요?</label>
         <label><input type="radio" name="grocery_place" value="대형마트" required /> 대형마트</label>
-        <label><input type="radio" name="grocery_place" value="온라인몰" required /> 온라인몰(쿠팡·SSG 등)</label>
-        <label><input type="radio" name="grocery_place" value="동네마트/시장" required /> 동네마트·시장</label>
+        <label><input type="radio" name="grocery_place" value="쿠팡" required /> 쿠팡</label>
+        <label><input type="radio" name="grocery_place" value="SSG" required /> SSG(쓱닷컴)</label>
         <label><input type="radio" name="grocery_place" value="편의점" required /> 편의점</label>
+
+        <label>👉 요리 및 식자재 관련 정보는 주로 어디서 얻으시나요?</label>
+        <label><input type="checkbox" name="dinner_info" value="유튜브" /> 유튜브</label>
+        <label><input type="checkbox" name="dinner_info" value="인스타그램/페이스북" /> 인스타그램/페이스북</label>
+        <label><input type="checkbox" name="dinner_info" value="네이버검색/블로그" /> 네이버검색/블로그</label>
+        <label><input type="checkbox" name="dinner_info" value="구글검색" /> 구글 검색</label>
+        <label><input type="checkbox" name="dinner_info" value="기타" /> 기타</label>
+
+        <label>👉 구매 빈도는 얼마나 되나요?</label>
+        <label><input type="radio" name="dinner_freq" value="주 1회 이하" required /> 주 1회 이하</label>
+        <label><input type="radio" name="dinner_freq" value="주 2~3회" required /> 주 2~3회</label>
+        <label><input type="radio" name="dinner_freq" value="주 4회 이상" required /> 주 4회 이상</label>
+
+        <label>👉 재료 구매시 평균 지출 금액은?</label>
+        <label><input type="radio" name="dinner_amount" value="1만원 이하" required /> 1만원 이하</label>
+        <label><input type="radio" name="dinner_amount" value="1만~2만원" required /> 1만~2만원</label>
+        <label><input type="radio" name="dinner_amount" value="2만~3만원" required /> 2만~3만원</label>
+        <label><input type="radio" name="dinner_amount" value="4만원 이상" required /> 4만원 이상</label>
 
         <label>👉 해당 구매처를 선택하는 주된 이유는 무엇인가요?</label>
         <label><input type="radio" name="grocery_reason" value="가격" required /> 가격</label>
@@ -116,13 +141,33 @@
         <label><input type="radio" name="supplement_type" value="오메가3" required /> 오메가3</label>
         <label><input type="radio" name="supplement_type" value="유산균" required /> 유산균</label>
         <label><input type="radio" name="supplement_type" value="단백질 보충제" required /> 단백질 보충제</label>
-        <label><input type="radio" name="supplement_type" value="기타" required /> 기타</label>
+        <label><input type="radio" name="supplement_type" value="기타 또는 먹지않음" required /> 기타 또는 먹지않음</label>
+
+        <label>👉 영양제 관련 정보는 주로 어디서 얻으시나요?</label>
+        <label><input type="checkbox" name="supplement_info" value="유튜브" /> 유튜브</label>
+        <label><input type="checkbox" name="supplement_info" value="인스타그램/페이스북" /> 인스타그램/페이스북</label>
+        <label><input type="checkbox" name="supplement_info" value="네이버검색/블로그" /> 네이버검색/블로그</label>
+        <label><input type="checkbox" name="supplement_info" value="구글검색" /> 구글 검색</label>
+        <label><input type="checkbox" name="supplement_info" value="찾아본 적 없음" /> 찾아본 적 없음</label>
 
         <label>👉 주로 어디서 구매하시나요?</label>
-        <label><input type="radio" name="supplement_place" value="온라인몰" required /> 온라인몰(쿠팡·SSG)</label>
-        <label><input type="radio" name="supplement_place" value="약국" required /> 약국</label>
-        <label><input type="radio" name="supplement_place" value="드럭스토어" required /> 올리브영</label>
-        <label><input type="radio" name="supplement_place" value="백화점/전문매장" required /> 백화점·전문매장</label>
+        <label><input type="radio" name="supplement_place" value="구매하지 않음" required /> 구매하지 않음</label>
+        <label><input type="radio" name="supplement_place" value="쿠팡" required /> 쿠팡</label>
+        <label><input type="radio" name="supplement_place" value="온라인몰" required /> 온라인몰 (SSG, 네이버스마트스토어등)</label>
+        <label><input type="radio" name="supplement_place" value="올리브영" required /> 올리브영</label>
+        <label><input type="radio" name="supplement_place" value="약국/전문매장" required /> 약국·전문매장</label>
+
+        <label>👉 구매 빈도는 얼마나 되나요?</label>
+        <label><input type="radio" name="supplement_buyfreq" value="구매하지 않음" required /> 구매하지 않음</label>
+        <label><input type="radio" name="supplement_buyfreq" value="주 1회 이하" required /> 주 1회 이하</label>
+        <label><input type="radio" name="supplement_buyfreq" value="주 2~3회" required /> 주 2~3회</label>
+        <label><input type="radio" name="supplement_buyfreq" value="주 4회 이상" required /> 주 4회 이상</label>
+
+        <label>👉 영양제 구매시 평균 지출 금액은?</label>
+        <label><input type="radio" name="supplement_amount" value="1만원 이하" required /> 1만원 이하</label>
+        <label><input type="radio" name="supplement_amount" value="1만~2만원" required /> 1만~2만원</label>
+        <label><input type="radio" name="supplement_amount" value="2만~3만원" required /> 2만~3만원</label>
+        <label><input type="radio" name="supplement_amount" value="4만원 이상" required /> 4만원 이상</label>
 
         <label>👉 해당 구매처를 선택하는 주된 이유는 무엇인가요?</label>
         <label><input type="radio" name="supplement_reason" value="가격" required /> 가격</label>
@@ -140,6 +185,13 @@
         <label><input type="radio" name="diet_exp" value="과거 경험 있음" required /> 과거 경험 있음</label>
         <label><input type="radio" name="diet_exp" value="없음" required /> 없음</label>
 
+        <label>👉 다이어트 관련 정보는 주로 어디서 얻으시나요?</label>
+        <label><input type="checkbox" name="diet_info" value="유튜브" /> 유튜브</label>
+        <label><input type="checkbox" name="diet_info" value="인스타그램/페이스북" /> 인스타그램/페이스북</label>
+        <label><input type="checkbox" name="diet_info" value="네이버검색/블로그" /> 네이버검색/블로그</label>
+        <label><input type="checkbox" name="diet_info" value="구글검색" /> 구글 검색</label>
+        <label><input type="checkbox" name="diet_info" value="기타" /> 기타</label>
+
         <label>👉 주로 어떤 방식을 시도하셨나요?</label>
         <label><input type="radio" name="diet_type" value="식단 관리" required /> 식단 관리</label>
         <label><input type="radio" name="diet_type" value="운동" required /> 운동</label>
@@ -147,18 +199,25 @@
         <label><input type="radio" name="diet_type" value="간헐적 단식" required /> 간헐적 단식</label>
         <label><input type="radio" name="diet_type" value="기타" required /> 기타</label>
 
+        <label>👉 혹시 식단관리 어플을 사용해보신 적이 있으시다면 아쉬운 점은?</label>
+        <label><input type="radio" name="diet_app" value="사용한적 없음" required /> 사용한적 없음</label>
+        <label><input type="radio" name="diet_app" value="정확성 부족" required /> 정확성 부족 (칼로리, 영양소 인식 부정확)</label>
+        <label><input type="radio" name="diet_app" value="편의성 부족" required /> 편의성 부족 (사진 인식 오류, 입력 과정 불편함)</label>
+        <label><input type="radio" name="diet_app" value="활용성 부족" required /> 활용성 부족 (기기 연동 쇼핑 연동 불편)</label>
+        <label><input type="radio" name="diet_app" value="기타" required /> 기타</label>
+
         <label>👉 다이어트나 식습관 관리에서 가장 중요하게 생각하시는 가치는 무엇인가요?</label>
         <label><input type="radio" name="diet_value" value="건강" required /> 건강(체력, 면역력, 질병 예방 등)</label>
         <label><input type="radio" name="diet_value" value="편리함" required /> 편리함(준비/조리시간 절약, 간편함)</label>
         <label><input type="radio" name="diet_value" value="가성비" required /> 가성비(가격 대비 효율)</label>
         <label><input type="radio" name="diet_value" value="프리미엄 경험" required /> 만족감/프리미엄 경험(맛, 기분, 브랜드 이미지 등)</label>
-        <label><input type="radio" name="diet_value" value="목표달성" required /> 목표달성(체중 감량, 바디라인, 상취감)</label>
+        <label><input type="radio" name="diet_value" value="목표달성" required /> 목표달성(체중 감량, 바디라인, 성취감)</label>
       </div>
 
       <!-- 6. 주관식 -->
       <div class="card">
         <h3>📝 7. 자유 의견</h3>
-        <label>앞으로 점심, 영양제, 다이어트를 더 편하게 하기 위해 필요한 점이 있다면 자유롭게 적어주세요.</label>
+        <label>마지막으로 건강 관리 과정에서 불편하거나 아쉬웠던 점이 있으셨다면 자유롭게 작성 해주세요!</label>
         <textarea name="opinion" rows="3" placeholder="자유롭게 작성해주세요 🙏"></textarea>
       </div>
 
@@ -180,7 +239,7 @@
   <!-- 제출용 숨김 iframe -->
   <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
-  <!-- 로딩 오버레이 (style.css에 이미 스타일 있다고 했으니 그대로 사용) -->
+  <!-- 로딩 오버레이 -->
   <div id="loadingOverlay">⏳ 잠시만 기다려주세요...</div>
 
   <script>
@@ -200,13 +259,11 @@
       }
       submitted = true;
 
-      // 버튼/오버레이
       submitBtn.disabled = true;
       submitBtn.innerText = "⏳ 제출 중...";
       overlay.style.display = "flex";
-      document.body.style.overflow = "hidden"; // 스크롤 잠금
+      document.body.style.overflow = "hidden";
 
-      // 15초 타임아웃(예외 처리)
       timeoutId = setTimeout(() => {
         if (submitted) {
           submitted = false;
@@ -219,9 +276,8 @@
       }, 15000);
     });
 
-    // iframe이 로드되면 성공으로 간주하고 완료 페이지로 이동
     iframe.addEventListener("load", function() {
-      if (!submitted) return; // 최초 빈 로드 등 방지
+      if (!submitted) return;
       clearTimeout(timeoutId);
       submitted = false;
       overlay.style.display = "none";
