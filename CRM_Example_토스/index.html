@@ -197,14 +197,18 @@
         }
         submitted = true;
         document.getElementById("submitBtn").disabled = true;
+        document.getElementById("submitBtn").innerText = "⏳ 제출 중...";
+        loadingOverlay.style.display = "flex"; // ✅ 로딩화면 띄우기
       });
 
       iframe.addEventListener("load", function() {
         if (submitted) {
+          loadingOverlay.style.display = "none"; // ✅ 로딩화면 닫기
           window.location.href = "submit.html"; // ✅ 완료 후 이동
         }
       });
     </script>
   </div>
+        <div id="loadingOverlay">⏳ 잠시만 기다려주세요...</div>
 </body>
 </html>
