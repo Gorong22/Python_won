@@ -8,7 +8,7 @@
 </head>
 <body>
   <div class="container">
-    <form action="">
+    <form id="surveyForm">
       <!-- 타이틀 -->
       <div class="title-box">
         <h2>🥗 식사 & 건강 관리 습관 설문</h2>
@@ -175,44 +175,57 @@
       <!-- 제출 -->
       <button id="submitBtn" type="submit">제출하기</button>
     </form>
-
-    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-
-    <script>
-      const form = document.querySelector("form");
-      const iframe = document.getElementById("hidden_iframe");
-      const loadingOverlay = document.getElementById("loadingOverlay");
-      let submitted = false;
-
-      // Google Apps Script Web App URL 넣기
-      const FORM_ACTION = "YOUR_GOOGLE_APPS_SCRIPT_URL";
-      form.setAttribute("action", FORM_ACTION);
-      form.setAttribute("method", "POST");
-      form.setAttribute("target", "hidden_iframe");
-
-      form.addEventListener("submit", function(e) {
-        if (!form.checkValidity()) {
-          e.preventDefault();
-          alert("⚠️ 모든 문항에 응답해주세요!");
-          return;
-        }
-        submitted = true;
-        document.getElementById("submitBtn").disabled = true;
-        document.getElementById("submitBtn").innerText = "⏳ 제출 중...";
-        loadingOverlay.style.display = "flex"; // ✅ 로딩화면 띄우기
-      });
-
-      iframe.addEventListener("load", function() {
-        if (submitted) {
-          loadingOverlay.style.display = "none"; // ✅ 로딩화면 닫기
-          window.location.href = "submit.html"; // ✅ 완료 후 이동
-        }
-      });
-    </script>
   </div>
 
   <!-- 로딩 오버레이 -->
   <div id="loadingOverlay">⏳ 잠시만 기다려주세요...</div>
+
+  <script>
+    const form = document.getElementById("surveyForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const loadingOverlay = document.getElementById("loadingOverlay");
+
+    // Apps Script URL 넣으세요
+    const FORM_ACTION = "YOUR_GOOGLE_APPS_SCRIPT_URL";
+
+    form.addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      if (!form.checkValidity()) {
+        alert("⚠️ 모든 문항에 응답해주세요!");
+        return;
+      }
+
+      // 버튼 비활성화 + 로딩 시작
+      submitBtn.disabled = true;
+      submitBtn.innerText = "⏳ 제출 중...";
+      loadingOverlay.style.display = "flex";
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch(FORM_ACTION, {
+          method: "POST",
+          body: formData
+        });
+
+        if (response.ok) {
+          window.location.href = "submit.html";
+        } else {
+          alert("⚠️ 제출 실패: 서버 오류");
+          submitBtn.disabled = false;
+          submitBtn.innerText = "제출하기";
+          loadingOverlay.style.display = "none";
+        }
+      } catch (err) {
+        alert("⚠️ 제출 중 오류 발생: " + err.message);
+        submitBtn.disabled = false;
+        submitBtn.innerText = "제출하기";
+        loadingOverlay.style.display = "none";
+      }
+    });
+  </script>
 </body>
 </html>
+
 
