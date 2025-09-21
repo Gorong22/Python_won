@@ -25,7 +25,7 @@ form {
   background: #ffffffcc;
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .title-box {
@@ -51,7 +51,7 @@ form {
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .card h3 {
@@ -89,7 +89,7 @@ input[type="checkbox"] {
   accent-color: #2e7d32;
 }
 
-button[type=submit] {
+button[type="submit"] {
   width: 100%;
   padding: 14px;
   background: #43a047;
@@ -102,7 +102,7 @@ button[type=submit] {
   transition: 0.3s;
 }
 
-button[type=submit]:hover {
+button[type="submit"]:hover {
   background: #2e7d32;
 }
 

@@ -175,6 +175,36 @@
       <!-- 제출 -->
       <button id="submitBtn" type="submit">제출하기</button>
     </form>
+
+    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
+    <script>
+      const form = document.querySelector("form");
+      const iframe = document.getElementById("hidden_iframe");
+      let submitted = false;
+
+      // Google Apps Script Web App URL 넣기
+      const FORM_ACTION = "YOUR_GOOGLE_APPS_SCRIPT_URL";
+      form.setAttribute("action", FORM_ACTION);
+      form.setAttribute("method", "POST");
+      form.setAttribute("target", "hidden_iframe");
+
+      form.addEventListener("submit", function(e) {
+        if (!form.checkValidity()) {
+          e.preventDefault();
+          alert("⚠️ 모든 문항에 응답해주세요!");
+          return;
+        }
+        submitted = true;
+        document.getElementById("submitBtn").disabled = true;
+      });
+
+      iframe.addEventListener("load", function() {
+        if (submitted) {
+          window.location.href = "submit.html"; // ✅ 완료 후 이동
+        }
+      });
+    </script>
   </div>
 </body>
 </html>
