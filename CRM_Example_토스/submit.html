@@ -3,12 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="./style.css" />
   <title>제출 완료</title>
   <style>
+    body {
+      background: linear-gradient(to bottom, #e8f5e9, #c8e6c9);
+      font-family: "Noto Sans KR", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
     .thankyou-box {
       max-width: 600px;
-      margin: 80px auto;
       padding: 40px;
       background: #fff;
       border-radius: 20px;
@@ -19,6 +26,7 @@
     .thankyou-box h2 {
       font-size: 24px;
       margin-bottom: 20px;
+      color: #2e7d32;
     }
     .thankyou-box p {
       margin: 10px 0;
@@ -29,7 +37,7 @@
       display: inline-block;
       margin-top: 25px;
       padding: 12px 24px;
-      background: linear-gradient(135deg, #4cafef, #0077ff);
+      background: linear-gradient(135deg, #66bb6a, #43a047);
       color: #fff;
       font-size: 16px;
       font-weight: 600;
@@ -37,45 +45,19 @@
       border-radius: 50px;
       cursor: pointer;
       transition: 0.3s;
+      text-decoration: none;
     }
     .cta-btn:hover {
-      background: linear-gradient(135deg, #0077ff, #004bb5);
+      background: linear-gradient(135deg, #388e3c, #2e7d32);
     }
   </style>
 </head>
-<body class="container">
-
+<body>
   <div class="thankyou-box">
-    <h2>💌 <span id="username"></span>님,<br>참여해 주셔서 정말 감사합니다!</h2>
-    <p><span id="username2"></span>님의 소중한 의견은<br>마케터로 성장해 나가는 저에게 큰 힘이 됩니다.</p>
-    <p>다시 한 번 소중한 시간을 내어 참여해 주셔서<br>진심으로 감사드립니다.</p>
-    <p>💸 <span id="username3"></span>님이 부자되시기를 기도할게요 🙏</p>
-    
-     <!-- CTA 버튼 -->
-      <button id="closeBtn" class="cta-btn">🚀 부자되러 나가보기</button>
+    <h2>🌱 참여해 주셔서 감사합니다!</h2>
+    <p>여러분의 소중한 응답은 더 나은 서비스와 경험을 만드는 데 큰 힘이 됩니다.</p>
+    <p>함께해주신 정성에 깊이 감사드리며, 건강하고 행복한 하루 되시길 바랍니다 🙏</p>
+    <a href="https://www.kurly.com" class="cta-btn">건강해지러 가기</a>
   </div>
-
-  </div>
-
-   <!-- 스크립트: 이름 넣기 + 창 닫기 -->
-  <script>
-    // URL에서 이름 파라미터 추출
-    const params = new URLSearchParams(window.location.search);
-    const name = params.get("name") || "고객";
-
-    // 이름을 각 위치에 삽입
-    document.getElementById("username").innerText = name;
-    document.getElementById("username2").innerText = name;
-    document.getElementById("username3").innerText = name;
-
-    // 버튼 클릭 시 창 닫기
-    document.getElementById("closeBtn").addEventListener("click", () => {
-      window.close(); // 팝업에서만 동작
-      // 팝업이 아니라면 아래 코드로 대체 가능
-      window.location.href = "https://www.google.com"; 
-    });
-  </script>
-</body>
-</html>
 </body>
 </html>

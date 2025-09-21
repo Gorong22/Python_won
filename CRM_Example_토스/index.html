@@ -1,231 +1,173 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./style.css" />
-    <title>금융 앱 설문</title>
-  </head>
-  <body>
-    <div class="container">
-      <!-- ===== 설문조사 시작 ===== -->
-      <form action="">
-        <!-- 타이틀 -->
-        <div class="title-box">
-          <h2>
-            💸 자주 쓰는 은앵 어플을<br />
-            선택해주세요  🤭✨
-          </h2>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./style.css" />
+  <title>🥗 식사 & 라이프스타일 설문</title>
+</head>
+<body>
+  <div class="container">
+    <form action="">
+      <!-- 타이틀 -->
+      <div class="title-box">
+        <h2>🥗 식사 & 건강 관리 습관 설문</h2>
+        <p>
+          안녕하세요!<br>
+          본 설문은 여러분의 <strong>식사 습관과 건강 관리 방식</strong>을 이해하고,<br>
+          더 나은 서비스를 기획하기 위한 목적으로 진행됩니다.<br><br>
+          약 <strong>3~5분</strong> 정도 소요되며,<br>
+          작성해주신 소중한 의견은 익명으로 처리되고 연구 목적으로만 활용됩니다.<br><br>
+          📝 귀한 시간을 내어 응답해주시는 만큼,<br>
+          더 편리하고 건강한 생활을 만들어 가는 데 큰 힘이 됩니다.<br><br>
+          진심으로 감사드리며, 즐거운 하루 되시길 바랍니다 🙏
+        </p>
+      </div>
 
-        <!-- 포스터 선택 영역 -->
-        <div class="poster-row">
-          <!-- 포스터 1 -->
-          <div class="poster">
-            <div class="img-frame">
-              <img
-                src="https://mblogthumb-phinf.pstatic.net/MjAyMDEyMjJfMjc1/MDAxNjA4NjAzNjI5NjY3.XW5GXQhzHBNPsDlEbakIHbi6tAuwz6lLpXg3UuIx11og.DDBEmjHsJ438XZuIO0uYhgr2rWiIs4fxd3Hwvx3QD3Ag.JPEG.congha/%EC%B9%B4%EC%B9%B4%EC%98%A4%EC%9D%80%ED%96%89-%EB%A1%9C%EA%B3%A0copy_copy.jpg?type=w800"
-                alt="img01"
-              />
-            </div>
-            <label>
-              <input type="radio" name="bank" value="kakaobank" />
-              <p>카카오 뱅크</p>
-            </label>
-          </div>
+      <!-- 0. 응답자 정보 -->
+      <div class="card">
+        <h3>📧 0. 응답자 정보</h3>
+        <label>👉 성함</label>
+        <input type="text" name="name" placeholder="홍길동" required />
+        <label>👉 이메일</label>
+        <input type="email" name="email" placeholder="example@email.com" required />
+      </div>
 
-          <!-- 포스터 2 -->
-          <div class="poster">
-            <div class="img-frame">
-              <img
-                src="https://static.some.co.kr/sometrend/attachments/content/f8ff18f2-2dd6-4af0-a0e7-a4917973d202/[217]thumb-big_750X924.jpg"
-                width="250"
-                alt="img02"
-              />
-            </div>
-            <label>
-              <input type="radio" name="bank" value="tossbank" />
-              <p>토스뱅크</p>
-            </label>
-          </div>
+      <!-- 1. 기본 정보 -->
+      <div class="card">
+        <h3>👤 1. 기본 정보</h3>
+        <label>👉 성별</label>
+        <label><input type="radio" name="gender" value="여성" required /> 여성</label>
+        <label><input type="radio" name="gender" value="남성" required /> 남성</label>
 
-          <!-- 포스터 3 -->
-          <div class="poster">
-            <div class="img-frame">
-              <img
-                src="./img/banklogo.png"
-                width="250"
-                alt="img03"
-              />
-            </div>
-            <label>
-              <input type="radio" name="bank" value="banks" />
-              <p>기존 은행 어플</p>
-            </label>
-          </div>
-        </div>
+        <label>👉 연령대</label>
+        <label><input type="radio" name="age" value="20대" required /> 20대</label>
+        <label><input type="radio" name="age" value="30대" required /> 30대</label>
+        <label><input type="radio" name="age" value="40대" required /> 40대</label>
+        <label><input type="radio" name="age" value="50대 이상" required /> 50대 이상</label>
 
-        <!-- 질문 1 : 선택 이유 -->
-        <div class="card">
-          <p>✨ 1. 해당 금융 앱을 선택한 가장 큰 이유는 무엇인가요?</p>
-          <div class="inner reason">
-            <label>🚀 쓰기가 쉽고 빨라서
-              <input type="radio" name="reason" value="UX" required />
-            </label>
-            <label>🎁 혜택·재미가 많아서 (수수료·금리·이벤트 등)
-              <input type="radio" name="reason" value="ECON" />
-            </label>
-            <label>🔗 다른 서비스랑 잘 연결돼서 (카톡·자산통합 등)
-              <input type="radio" name="reason" value="INTEG" />
-            </label>
-            <label>🛡️ 믿을 수 있고 안전해서 (보안·상담·지점 네트워크)
-              <input type="radio" name="reason" value="TRUST" />
-            </label>
-            <label>💬 기타 (여러분의 솔직한 의견은 저에게 큰 힘이 됩니다)
-              <input type="radio" name="reason" value="OTHER" />
-            </label>
-            <!-- 기타 이유 입력칸 -->
-            <input
-              type="text"
-              name="reason_other"
-              placeholder="✍️ 기타 이유를 입력해주세요"
-              style="margin-top:5px;"
-            />
-          </div>
-        </div>
+        <label>👉 직업군</label>
+        <label><input type="radio" name="job" value="사무직" required /> 사무직</label>
+        <label><input type="radio" name="job" value="연구·개발직" required /> 연구·개발직</label>
+        <label><input type="radio" name="job" value="서비스직" required /> 서비스직</label>
+        <label><input type="radio" name="job" value="전문직" required /> 전문직</label>
+        <label><input type="radio" name="job" value="기타" required /> 기타</label>
+      </div>
 
-        <!-- 질문 2 : 성함 입력 -->
-        <div class="card">
-          
-            🙋‍♀️ 2. 성함을 입력해주세요
-            <div class="inner">
-              <input type="text" name="name" required />
-            </div>
-          
-        </div>
+      <!-- 2. 평일 점심 식사 -->
+      <div class="card">
+        <h3>🍱 2. 평일 점심 식사</h3>
+        <label>👉 평소 점심은 주로 어떻게 해결하시나요?</label>
+        <label><input type="radio" name="lunch_type" value="구내식당/빌딩 내부 식당" required /> 구내식당 / 빌딩 내부 식당 </label>
+        <label><input type="radio" name="lunch_type" value="배달 음식" required /> 배달 음식</label>
+        <label><input type="radio" name="lunch_type" value="편의점 간편식" required /> 편의점 간편식</label>
+        <label><input type="radio" name="lunch_type" value="직접 도시락" required /> 직접 도시락</label>
+        <label><input type="radio" name="lunch_type" value="외식" required /> 외식</label>
 
-        <!-- 질문 3 : 성별 선택 -->
-        <div class="card">
-          ⚧️ 3. 성별을 선택해주세요
-          <div class="inner gender">
-            <label>여성<input type="radio" name="gender" value="female" /></label>
-            <label>남성<input type="radio" name="gender" value="male" /></label>
-          </div>
-        </div>
+        <label>👉 점심 평균 식대</label>
+        <label><input type="radio" name="lunch_price" value="8천~1만원" required /> 8천~1만원</label>
+        <label><input type="radio" name="lunch_price" value="1만~1.2만원" required /> 1만~1.2만원</label>
+        <label><input type="radio" name="lunch_price" value="1.2만~1.5만원" required /> 1.2만~1.5만원</label>
+        <label><input type="radio" name="lunch_price" value="1.5만원 이상" required /> 1.5만원 이상</label>
 
-        <!-- 질문 4 : 연령대 선택 -->
-        <div class="card">
-          🎂 4. 연령대를 선택해주세요
-          <div class="inner age">
-            <label>10대<input type="radio" name="age" value="10" /></label>
-            <label>20대<input type="radio" name="age" value="20" /></label>
-            <label>30대<input type="radio" name="age" value="30" /></label>
-            <label>40대<input type="radio" name="age" value="40" /></label>
-            <label>50대<input type="radio" name="age" value="50" /></label>
-          </div>
-        </div>
+        <label>👉 점심에서 가장 아쉬운 점</label>
+        <label><input type="radio" name="lunch_pain" value="가격" required /> 가격</label>
+        <label><input type="radio" name="lunch_pain" value="메뉴 다양성" required /> 메뉴 다양성</label>
+        <label><input type="radio" name="lunch_pain" value="맛" required /> 맛</label>
+        <label><input type="radio" name="lunch_pain" value="건강/영양" required /> 건강·영양</label>
+        <label><input type="radio" name="lunch_pain" value="양" required /> 양</label>
+        <label><input type="radio" name="lunch_pain" value="배송/편리성" required /> 배송/편리성</label>
+      </div>
 
-        <!-- 질문 5 : 직업군 -->
-        <div class="card">
-          <p>💼 5. 현재 종사 중이신 직업군을 선택해 주세요</p>
-          <div class="inner job">
-            <label>대학생 / 취업준비생
-              <input type="radio" name="job" value="student" required />
-            </label>
-            <label>직장인 (사무/전문직)
-              <input type="radio" name="job" value="worker" />
-            </label>
-            <label>자영업자 / 프리랜서
-              <input type="radio" name="job" value="free" />
-            </label>
-            <label>무직 / 기타
-              <input type="radio" name="job" value="other" />
-            </label>
-          </div>
-        </div>
+      <!-- 3. 저녁 & 주말 식사 -->
+      <div class="card">
+        <h3>🍽️ 3. 저녁 & 주말 식사</h3>
+        <label>👉 평일 저녁이나 주말 식사는 주로 어떻게 해결하시나요?</label>
+        <label><input type="radio" name="dinner_type" value="배달 음식" required /> 배달 음식</label>
+        <label><input type="radio" name="dinner_type" value="외식" required /> 외식</label>
+        <label><input type="radio" name="dinner_type" value="직접 요리" required /> 직접 요리</label>
+        <label><input type="radio" name="dinner_type" value="밀키트/간편요리" required /> 밀키트·간편요리</label>
 
-        <!-- 질문 6 : 이메일 입력 -->
-        <div class="card">
-          
-            📧 6. 이메일 주소를 입력해주세요
-            <div class="inner">
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder="example@email.com"
-              /> 
-            </div>
-          
-        </div>
+        <label>👉 식자재는 주로 어디서 구매하시나요?</label>
+        <label><input type="radio" name="grocery_place" value="대형마트" required /> 대형마트</label>
+        <label><input type="radio" name="grocery_place" value="온라인몰" required /> 온라인몰(쿠팡·SSG 등)</label>
+        <label><input type="radio" name="grocery_place" value="동네마트/시장" required /> 동네마트·시장</label>
+        <label><input type="radio" name="grocery_place" value="편의점" required /> 편의점</label>
 
-        <!-- 개인정보 동의 -->
-        <div class="outer privacy-box">
-          <p>🔒 개인정보 수집·이용 동의</p>
-          <p class="privacy-text"></p>
-          본 설문에서 수집된 개인정보는 <strong>이벤트 참여 확인 및 안내</strong> 목적으로만 사용되며, 
-          활용 기간이 종료된 후에는 <strong>5일 이내 안전하게 폐기</strong>됩니다. 
-          그 외의 용도로는 사용되지 않습니다.
-          </p>
-          <label>
-            <input type="checkbox" name="privacy" required> 동의합니다
-          </label>
-        </div>
+        <label>👉 해당 구매처를 선택하는 주된 이유는?</label>
+        <label><input type="radio" name="grocery_reason" value="가격" required /> 가격</label>
+        <label><input type="radio" name="grocery_reason" value="품질" required /> 품질</label>
+        <label><input type="radio" name="grocery_reason" value="배송" required /> 배송</label>
+        <label><input type="radio" name="grocery_reason" value="브랜드 신뢰" required /> 브랜드 신뢰</label>
+        <label><input type="radio" name="grocery_reason" value="접근성" required /> 접근성</label>
+      </div>
 
-        <!-- 제출 버튼 -->
-        <button id="submitBtn" type="submit">이벤트 참여하기</button>
-      </form>
-      <!-- 폼 바로 아래 아무 곳에 추가 -->
-      <iframe name="gsheet_iframe" id="gsheet_iframe" style="display:none;"></iframe>
-      <!-- ===== 설문조사 끝 ===== -->
-    </div>
+      <!-- 4. 건강 관리 & 영양제 -->
+      <div class="card">
+        <h3>💊 4. 건강 관리 & 영양제</h3>
+        <label>👉 평소 영양제를 얼마나 자주 섭취하시나요?</label>
+        <label><input type="radio" name="supplement_freq" value="매일" required /> 매일</label>
+        <label><input type="radio" name="supplement_freq" value="가끔" required /> 가끔</label>
+        <label><input type="radio" name="supplement_freq" value="거의 안 함" required /> 거의 안 함</label>
+        <label><input type="radio" name="supplement_freq" value="전혀 안 함" required /> 전혀 안 함</label>
 
-    <!-- ===== 스크립트 : 유효성 검사 + 제출 시 구글 시트 전송 + 완료 페이지 이동 ===== -->
-    <script>
-    (function () {
-      const FORM_ACTION = "https://script.google.com/macros/s/AKfycbzGqqo98hOEGagNlkxJxDeUfRzoxP34zbgQvUGiKj0yCKyFyhhp4wCDQZBey12P4qgN/exec";
-      const form = document.querySelector("form");
-      const iframe = document.getElementById("gsheet_iframe");
+        <label>👉 필수적으로 챙기는 영양제</label>
+        <label><input type="radio" name="supplement_type" value="종합비타민" required /> 종합비타민</label>
+        <label><input type="radio" name="supplement_type" value="오메가3" required /> 오메가3</label>
+        <label><input type="radio" name="supplement_type" value="유산균" required /> 유산균</label>
+        <label><input type="radio" name="supplement_type" value="단백질 보충제" required /> 단백질 보충제</label>
+        <label><input type="radio" name="supplement_type" value="기타" required /> 기타</label>
 
-      // 폼 속성 세팅: 네이티브 POST → 히든 iframe (CORS 회피)
-      form.setAttribute("action", FORM_ACTION);
-      form.setAttribute("method", "POST");
-      form.setAttribute("target", "gsheet_iframe");
+        <label>👉 주로 어디서 구매하시나요?</label>
+        <label><input type="radio" name="supplement_place" value="온라인몰" required /> 온라인몰</label>
+        <label><input type="radio" name="supplement_place" value="약국" required /> 약국</label>
+        <label><input type="radio" name="supplement_place" value="드럭스토어" required /> 드럭스토어</label>
+        <label><input type="radio" name="supplement_place" value="백화점/전문매장" required /> 백화점·전문매장</label>
+      </div>
 
-      let submitted = false;
-      let nameCache = "";
+      <!-- 5. 다이어트 -->
+      <div class="card">
+        <h3>🏃‍♀️ 5. 다이어트 & 라이프스타일</h3>
+        <label>👉 다이어트 경험 여부</label>
+        <label><input type="radio" name="diet_exp" value="현재 진행 중" required /> 현재 진행 중</label>
+        <label><input type="radio" name="diet_exp" value="과거 경험 있음" required /> 과거 경험 있음</label>
+        <label><input type="radio" name="diet_exp" value="없음" required /> 없음</label>
 
-      // iframe이 로드되면(=GAS 응답이 돌아오면) 감사 페이지로 이동
-      iframe.addEventListener("load", function () {
-        if (submitted) {
-          window.location.href = `submit.html?name=${encodeURIComponent(nameCache)}`;
-        }
-      });
+        <label>👉 주로 어떤 방식을 시도하셨나요?</label>
+        <label><input type="radio" name="diet_type" value="식단 관리" required /> 식단 관리</label>
+        <label><input type="radio" name="diet_type" value="운동" required /> 운동</label>
+        <label><input type="radio" name="diet_type" value="보조제·약품" required /> 보조제·약품</label>
+        <label><input type="radio" name="diet_type" value="간헐적 단식" required /> 간헐적 단식</label>
+        <label><input type="radio" name="diet_type" value="기타" required /> 기타</label>
 
-      // 제출 시 유효성 검사만 하고, 통과하면 네이티브 제출 그대로 진행 (preventDefault 금지)
-      form.addEventListener("submit", function (e) {
-        if (!this.checkValidity()) {
-          e.preventDefault();
-          alert("⚠️ 올바른 입력방식으로 작성해주세요!");
-          return;
-        }
-        // 완료 페이지에서 이름 쓰려고 캐싱
-        const nameInput = form.querySelector("[name='name']");
-        nameCache = nameInput ? nameInput.value : "";
-        submitted = true; // 이후 iframe load 시 redirect
-        // 주의: 여기서는 e.preventDefault() 하지 않습니다. 네이티브 제출 필요!
-        // ✅ 로딩 오버레이 표시 + 버튼 중복 클릭 방지
-        document.getElementById("loading-overlay").style.display = "flex";
-        const submitBtn = document.getElementById("submitBtn");
-        if (submitBtn) submitBtn.disabled = true;
-        
-      });
-    })();
-    </script>
-    <div id="loading-overlay" style="display:none;">
-      <div class="loading-box">⏳ 로딩 중입니다. 잠시만 기다려주세요...</div>
-    </div>
+        <label>👉 평소 가장 중요하게 생각하는 가치</label>
+        <label><input type="radio" name="diet_value" value="건강" required /> 건강</label>
+        <label><input type="radio" name="diet_value" value="편리함" required /> 편리함</label>
+        <label><input type="radio" name="diet_value" value="가성비" required /> 가성비</label>
+        <label><input type="radio" name="diet_value" value="프리미엄 경험" required /> 프리미엄 경험</label>
+        <label><input type="radio" name="diet_value" value="가족과 함께" required /> 가족과 함께</label>
+      </div>
 
+      <!-- 6. 주관식 -->
+      <div class="card">
+        <h3>📝 6. 자유 의견</h3>
+        <label>앞으로 점심, 영양제, 다이어트를 더 편하게 하기 위해 필요한 점이 있다면 자유롭게 적어주세요.</label>
+        <textarea name="opinion" rows="3" placeholder="자유롭게 작성해주세요 🙏"></textarea>
+      </div>
 
-  </body>
+      <!-- 개인정보 -->
+      <div class="privacy-box">
+        <p>🔒 개인정보 수집·이용 동의</p>
+        <p class="privacy-text">
+          본 설문은 연구 목적으로만 사용되며, 개인정보는 안내·참여 확인 외 다른 용도로 사용되지 않습니다.<br>
+          활용 기간 종료 후 5일 이내 안전하게 폐기됩니다.
+        </p>
+        <label><input type="checkbox" name="privacy" required /> 동의합니다</label>
+      </div>
+
+      <!-- 제출 -->
+      <button id="submitBtn" type="submit">제출하기</button>
+    </form>
+  </div>
+</body>
 </html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>금융 앱 설문</title>
+  </head>
+  <body>
+    <div class="container">
+      <!-- ===== 설문조사 시작 ===== -->
+      <form action="">
+        <!-- 타이틀 -->
+        <div class="title-box">
+          <h2>
+            💸 자주 쓰는 은앵 어플을<br />
+            선택해주세요  🤭✨
+          </h2>
+        </div>
+
+        <!-- 포스터 선택 영역 -->
+        <div class="poster-row">
+          <!-- 포스터 1 -->
+          <div class="poster">
+            <div class="img-frame">
+              <img
+                src="https://mblogthumb-phinf.pstatic.net/MjAyMDEyMjJfMjc1/MDAxNjA4NjAzNjI5NjY3.XW5GXQhzHBNPsDlEbakIHbi6tAuwz6lLpXg3UuIx11og.DDBEmjHsJ438XZuIO0uYhgr2rWiIs4fxd3Hwvx3QD3Ag.JPEG.congha/%EC%B9%B4%EC%B9%B4%EC%98%A4%EC%9D%80%ED%96%89-%EB%A1%9C%EA%B3%A0copy_copy.jpg?type=w800"
+                alt="img01"
+              />
+            </div>
+            <label>
+              <input type="radio" name="bank" value="kakaobank" />
+              <p>카카오 뱅크</p>
+            </label>
+          </div>
+
+          <!-- 포스터 2 -->
+          <div class="poster">
+            <div class="img-frame">
+              <img
+                src="https://static.some.co.kr/sometrend/attachments/content/f8ff18f2-2dd6-4af0-a0e7-a4917973d202/[217]thumb-big_750X924.jpg"
+                width="250"
+                alt="img02"
+              />
+            </div>
+            <label>
+              <input type="radio" name="bank" value="tossbank" />
+              <p>토스뱅크</p>
+            </label>
+          </div>
+
+          <!-- 포스터 3 -->
+          <div class="poster">
+            <div class="img-frame">
+              <img
+                src="./img/banklogo.png"
+                width="250"
+                alt="img03"
+              />
+            </div>
+            <label>
+              <input type="radio" name="bank" value="banks" />
+              <p>기존 은행 어플</p>
+            </label>
+          </div>
+        </div>
+
+        <!-- 질문 1 : 선택 이유 -->
+        <div class="card">
+          <p>✨ 1. 해당 금융 앱을 선택한 가장 큰 이유는 무엇인가요?</p>
+          <div class="inner reason">
+            <label>🚀 쓰기가 쉽고 빨라서
+              <input type="radio" name="reason" value="UX" required />
+            </label>
+            <label>🎁 혜택·재미가 많아서 (수수료·금리·이벤트 등)
+              <input type="radio" name="reason" value="ECON" />
+            </label>
+            <label>🔗 다른 서비스랑 잘 연결돼서 (카톡·자산통합 등)
+              <input type="radio" name="reason" value="INTEG" />
+            </label>
+            <label>🛡️ 믿을 수 있고 안전해서 (보안·상담·지점 네트워크)
+              <input type="radio" name="reason" value="TRUST" />
+            </label>
+            <label>💬 기타 (여러분의 솔직한 의견은 저에게 큰 힘이 됩니다)
+              <input type="radio" name="reason" value="OTHER" />
+            </label>
+            <!-- 기타 이유 입력칸 -->
+            <input
+              type="text"
+              name="reason_other"
+              placeholder="✍️ 기타 이유를 입력해주세요"
+              style="margin-top:5px;"
+            />
+          </div>
+        </div>
+
+        <!-- 질문 2 : 성함 입력 -->
+        <div class="card">
+          
+            🙋‍♀️ 2. 성함을 입력해주세요
+            <div class="inner">
+              <input type="text" name="name" required />
+            </div>
+          
+        </div>
+
+        <!-- 질문 3 : 성별 선택 -->
+        <div class="card">
+          ⚧️ 3. 성별을 선택해주세요
+          <div class="inner gender">
+            <label>여성<input type="radio" name="gender" value="female" /></label>
+            <label>남성<input type="radio" name="gender" value="male" /></label>
+          </div>
+        </div>
+
+        <!-- 질문 4 : 연령대 선택 -->
+        <div class="card">
+          🎂 4. 연령대를 선택해주세요
+          <div class="inner age">
+            <label>10대<input type="radio" name="age" value="10" /></label>
+            <label>20대<input type="radio" name="age" value="20" /></label>
+            <label>30대<input type="radio" name="age" value="30" /></label>
+            <label>40대<input type="radio" name="age" value="40" /></label>
+            <label>50대<input type="radio" name="age" value="50" /></label>
+          </div>
+        </div>
+
+        <!-- 질문 5 : 직업군 -->
+        <div class="card">
+          <p>💼 5. 현재 종사 중이신 직업군을 선택해 주세요</p>
+          <div class="inner job">
+            <label>대학생 / 취업준비생
+              <input type="radio" name="job" value="student" required />
+            </label>
+            <label>직장인 (사무/전문직)
+              <input type="radio" name="job" value="worker" />
+            </label>
+            <label>자영업자 / 프리랜서
+              <input type="radio" name="job" value="free" />
+            </label>
+            <label>무직 / 기타
+              <input type="radio" name="job" value="other" />
+            </label>
+          </div>
+        </div>
+
+        <!-- 질문 6 : 이메일 입력 -->
+        <div class="card">
+          
+            📧 6. 이메일 주소를 입력해주세요
+            <div class="inner">
+              <input
+                type="email"
+                name="email"
+                required
+                placeholder="example@email.com"
+              /> 
+            </div>
+          
+        </div>
+
+        <!-- 개인정보 동의 -->
+        <div class="outer privacy-box">
+          <p>🔒 개인정보 수집·이용 동의</p>
+          <p class="privacy-text"></p>
+          본 설문에서 수집된 개인정보는 <strong>이벤트 참여 확인 및 안내</strong> 목적으로만 사용되며, 
+          활용 기간이 종료된 후에는 <strong>5일 이내 안전하게 폐기</strong>됩니다. 
+          그 외의 용도로는 사용되지 않습니다.
+          </p>
+          <label>
+            <input type="checkbox" name="privacy" required> 동의합니다
+          </label>
+        </div>
+
+        <!-- 제출 버튼 -->
+        <button id="submitBtn" type="submit">이벤트 참여하기</button>
+      </form>
+      <!-- 폼 바로 아래 아무 곳에 추가 -->
+      <iframe name="gsheet_iframe" id="gsheet_iframe" style="display:none;"></iframe>
+      <!-- ===== 설문조사 끝 ===== -->
+    </div>
+
+    <!-- ===== 스크립트 : 유효성 검사 + 제출 시 구글 시트 전송 + 완료 페이지 이동 ===== -->
+    <script>
+    (function () {
+      const FORM_ACTION = "https://script.google.com/macros/s/AKfycbzGqqo98hOEGagNlkxJxDeUfRzoxP34zbgQvUGiKj0yCKyFyhhp4wCDQZBey12P4qgN/exec";
+      const form = document.querySelector("form");
+      const iframe = document.getElementById("gsheet_iframe");
+
+      // 폼 속성 세팅: 네이티브 POST → 히든 iframe (CORS 회피)
+      form.setAttribute("action", FORM_ACTION);
+      form.setAttribute("method", "POST");
+      form.setAttribute("target", "gsheet_iframe");
+
+      let submitted = false;
+      let nameCache = "";
+
+      // iframe이 로드되면(=GAS 응답이 돌아오면) 감사 페이지로 이동
+      iframe.addEventListener("load", function () {
+        if (submitted) {
+          window.location.href = `submit.html?name=${encodeURIComponent(nameCache)}`;
+        }
+      });
+
+      // 제출 시 유효성 검사만 하고, 통과하면 네이티브 제출 그대로 진행 (preventDefault 금지)
+      form.addEventListener("submit", function (e) {
+        if (!this.checkValidity()) {
+          e.preventDefault();
+          alert("⚠️ 올바른 입력방식으로 작성해주세요!");
+          return;
+        }
+        // 완료 페이지에서 이름 쓰려고 캐싱
+        const nameInput = form.querySelector("[name='name']");
+        nameCache = nameInput ? nameInput.value : "";
+        submitted = true; // 이후 iframe load 시 redirect
+        // 주의: 여기서는 e.preventDefault() 하지 않습니다. 네이티브 제출 필요!
+        // ✅ 로딩 오버레이 표시 + 버튼 중복 클릭 방지
+        document.getElementById("loading-overlay").style.display = "flex";
+        const submitBtn = document.getElementById("submitBtn");
+        if (submitBtn) submitBtn.disabled = true;
+        
+      });
+    })();
+    </script>
+    <div id="loading-overlay" style="display:none;">
+      <div class="loading-box">⏳ 로딩 중입니다. 잠시만 기다려주세요...</div>
+    </div>
+
+
+  </body>
+</html>
