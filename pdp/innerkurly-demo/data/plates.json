@@ -1,0 +1,82 @@
+[
+  {
+    "id": "glow",
+    "title": "광채 피부 식단",
+    "kcal": 1600,
+    "protein": 80,
+    "price": 129000,
+    "periodDays": 14,
+    "tags": ["피부건강", "항산화", "비타민 풍부"],
+    "allergy": ["견과류", "갑각류"],
+    "nutrition": {"carb": 150, "protein": 80, "fat": 60, "fiber": 30, "sugar": 25, "sodium": 1200},
+    "items": [{"name": "연어 샐러드"}, {"name": "아보카도 샌드위치"}, {"name": "베리 스무디"}],
+    "guide": [{"step": "아침", "desc": "베리 스무디로 비타민을 보충하세요."}],
+    "supplements": [{"name": "콜라겐 부스터", "desc": "피부 탄력을 위해"}],
+    "reviews": {
+      "summary": {"average": 4.8, "count": 120},
+      "list": [{"author": "뷰티러버", "rating": 5, "comment": "피부가 정말 맑아졌어요!"}],
+      "qa": [{"q": "임산부가 먹어도 되나요?", "a": "전문의와 상담 후 섭취를 권장합니다."}]
+    },
+    "policy": {"shipping": "무료배송", "return": "신선식품으로 교환/환불 불가"}
+  },
+  {
+    "id": "slim",
+    "title": "슬림핏 다이어트 식단",
+    "kcal": 1200,
+    "protein": 90,
+    "price": 119000,
+    "periodDays": 14,
+    "tags": ["체중조절", "고단백", "저칼로리"],
+    "allergy": [],
+    "nutrition": {"carb": 100, "protein": 90, "fat": 40, "fiber": 25, "sugar": 15, "sodium": 1000},
+    "items": [{"name": "닭가슴살 현미밥"}, {"name": "두부 샐러드"}, {"name": "프로틴 쉐이크"}],
+    "guide": [{"step": "저녁", "desc": "가볍게 두부 샐러드로 마무리하세요."}],
+    "supplements": [{"name": "L-카르니틴", "desc": "체지방 감소에 도움"}],
+    "reviews": {
+      "summary": {"average": 4.6, "count": 250},
+      "list": [{"author": "다이어터", "rating": 5, "comment": "맛있게 다이어트 성공!"}],
+      "qa": []
+    },
+    "policy": {"shipping": "무료배송", "return": "신선식품으로 교환/환불 불가"}
+  },
+  {
+    "id": "detox",
+    "title": "클린 디톡스 식단",
+    "kcal": 1400,
+    "protein": 60,
+    "price": 139000,
+    "periodDays": 7,
+    "tags": ["디톡스", "클렌즈", "채소 위주"],
+    "allergy": ["밀"],
+    "nutrition": {"carb": 180, "protein": 60, "fat": 50, "fiber": 40, "sugar": 30, "sodium": 800},
+    "items": [{"name": "케일 주스"}, {"name": "퀴노아 샐러드"}, {"name": "야채 수프"}],
+    "guide": [{"step": "점심", "desc": "퀴노아 샐러드로 포만감을 주세요."}],
+    "supplements": [{"name": "밀크씨슬", "desc": "간 건강에 도움"}],
+    "reviews": {
+      "summary": {"average": 4.7, "count": 98},
+      "list": [{"author": "직장인", "rating": 4, "comment": "몸이 가벼워지는 느낌이에요."}],
+      "qa": []
+    },
+    "policy": {"shipping": "무료배송", "return": "신선식품으로 교환/환불 불가"}
+  },
+  {
+    "id": "condition",
+    "title": "컨디션 회복 식단",
+    "kcal": 1800,
+    "protein": 100,
+    "price": 149000,
+    "periodDays": 7,
+    "tags": ["에너지", "기력회복", "균형영양"],
+    "allergy": [],
+    "nutrition": {"carb": 200, "protein": 100, "fat": 70, "fiber": 35, "sugar": 28, "sodium": 1500},
+    "items": [{"name": "전복죽"}, {"name": "장어 덮밥"}, {"name": "소고기 야채볶음"}],
+    "guide": [{"step": "저녁", "desc": "장어 덮밥으로 기력을 보충하세요."}],
+    "supplements": [{"name": "홍삼 스틱", "desc": "면역력 증진"}],
+    "reviews": {
+      "summary": {"average": 4.9, "count": 150},
+      "list": [{"author": "운동맨", "rating": 5, "comment": "운동 후 먹으니 회복이 빨라요."}],
+      "qa": []
+    },
+    "policy": {"shipping": "무료배송", "return": "신선식품으로 교환/환불 불가"}
+  }
+]

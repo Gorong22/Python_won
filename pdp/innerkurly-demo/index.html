@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inner Kurly</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <div id="app">
+        <header class="app-header">
+            <div class="logo">Inner Kurly</div>
+            <div class="header-icons">
+                <button class="icon-btn" aria-label="알림"><img src="/assets/icon-bell.svg" alt=""></button>
+                <button class="icon-btn" aria-label="장바구니"><img src="/assets/icon-cart.svg" alt=""></button>
+                <button class="icon-btn" aria-label="검색"><img src="/assets/icon-search.svg" alt=""></button>
+            </div>
+        </header>
+        <nav class="tab-bar">
+            <a href="#home" class="tab-item active">홈</a>
+            <a href="#plates" class="tab-item">추천식단</a>
+            <a href="#missions" class="tab-item">미션</a>
+            <a href="#lounge" class="tab-item">라운지</a>
+            <a href="#event" class="tab-item">이벤트</a>
+            <a href="#my" class="tab-item">마이</a>
+        </nav>
+        <main id="view-container"></main>
+        <nav class="bottom-nav">
+            <a href="#home" class="nav-item active" aria-label="홈">
+                <img src="/assets/icon-home.svg" alt=""><span>홈</span>
+            </a>
+            <a href="#lounge" class="nav-item" aria-label="라운지">
+                <img src="/assets/icon-lounge.svg" alt=""><span>라운지</span>
+            </a>
+            <a href="#plates" class="nav-item" aria-label="추천식단">
+                <img src="/assets/icon-plates.svg" alt=""><span>추천식단</span>
+            </a>
+            <a href="#search" class="nav-item" aria-label="검색">
+                <img src="/assets/icon-search-nav.svg" alt=""><span>검색</span>
+            </a>
+            <a href="#my" class="nav-item" aria-label="마이">
+                <img src="/assets/icon-my.svg" alt=""><span>마이</span>
+            </a>
+        </nav>
+    </div>
+    <div id="modal-container"></div>
+    <div id="toast-container"></div>
+</body>
+</html>
