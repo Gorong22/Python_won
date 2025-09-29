@@ -2,16 +2,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- DATA SCHEMAS ---
     const REVIEWS = [
-        { quote: "피부가 탱탱해지고 화장이 잘 먹어요! ✨", rating: 5, name: "김**", age: 32, img: "https://placehold.co/100x100/F8F6FB/A566D6?text=User1" },
-        { quote: "출근 전 자동 기록이라 루틴이 쉬워졌어요.", rating: 4.5, name: "박**", age: 29, img: "https://placehold.co/100x100/F8F6FB/A566D6?text=User2" },
-        { quote: "도시락이 아닌 뷰티 루틴이라는 점이 달라요.", rating: 5, name: "이**", age: 35, img: "https://placehold.co/100x100/F8F6FB/A566D6?text=User3" },
-        { quote: "속이 편안하고 아침에 일어나는게 가뿐해요.", rating: 4, name: "최**", age: 41, img: "https://placehold.co/100x100/F8F6FB/A566D6?text=User4" },
-        { quote: "AI가 식단을 추천해주니 고민할 필요가 없어요.", rating: 5, name: "정**", age: 27, img: "https://placehold.co/100x100/F8F6FB/A566D6?text=User5" },
-        { quote: "30일 챌린지 성공! 소소한 리워드도 좋네요.", rating: 5, name: "윤**", age: 33, img: "https://placehold.co/100x100/F8F6FB/A566D6?text=User6" },
-        { quote: "주 3회 배송으로 신선하게 먹을 수 있어서 만족!", rating: 4.5, name: "장**", age: 38, img: "https://placehold.co/100x100/F8F6FB/A566D6?text=User7" },
-        { quote: "라운지에서 다른 분들 팁 얻는 재미가 쏠쏠해요.", rating: 5, name: "임**", age: 31, img: "https://placehold.co/100x100/F8F6FB/A566D6?text=User8" },
-        { quote: "슬림 플레이트 먹고 군것질이 확실히 줄었어요.", rating: 4.5, name: "한**", age: 28, img: "https://placehold.co/100x100/F8F6FB/A566D6?text=User9" },
-        { quote: "피부톤이 맑아졌다는 얘기를 자주 들어요.", rating: 5, name: "서**", age: 36, img: "https://placehold.co/100x100/F8F6FB/A566D6?text=User10" }
+        { quote: "피부가 탱탱해지고 화장이 잘 먹어요! ✨", rating: 5, name: "김**", age: 32, img: "https://images.unsplash.com/photo-1580820267682-426da823b514?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" },
+        { quote: "출근 전 자동 기록이라 루틴이 쉬워졌어요.", rating: 4.5, name: "박**", age: 29, img: "https://images.unsplash.com/photo-1556228720-195a672e8a03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" },
+        { quote: "도시락이 아닌 뷰티 루틴이라는 점이 달라요.", rating: 5, name: "이**", age: 35, img: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" },
+        { quote: "속이 편안하고 아침에 일어나는게 가뿐해요.", rating: 4, name: "최**", age: 41, img: "https://images.unsplash.com/photo-1529042410759-befb1204b468?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" },
+        { quote: "AI가 식단을 추천해주니 고민할 필요가 없어요.", rating: 5, name: "정**", age: 27, img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" },
+        { quote: "30일 챌린지 성공! 소소한 리워드도 좋네요.", rating: 5, name: "윤**", age: 33, img: "https://images.unsplash.com/photo-1590548784725-33d66d91e126?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" },
+        { quote: "주 3회 배송으로 신선하게 먹을 수 있어서 만족!", rating: 4.5, name: "장**", age: 38, img: "https://images.unsplash.com/photo-157193594028a-1921a3494853?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" },
+        { quote: "라운지에서 다른 분들 팁 얻는 재미가 쏠쏠해요.", rating: 5, name: "임**", age: 31, img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" },
+        { quote: "슬림 플레이트 먹고 군것질이 확실히 줄었어요.", rating: 4.5, name: "한**", age: 28, img: "https://images.unsplash.com/photo-1525875092322-259403de4313?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" },
+        { quote: "피부톤이 맑아졌다는 얘기를 자주 들어요.", rating: 5, name: "서**", age: 36, img: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" },
     ];
 
     const PLATES = [
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!container) return;
         container.innerHTML = PLATES.map(plate => `
             <div class="card plate-card">
-                <img src="${plate.img}" alt="${plate.title}" class="plate-card__img" loading="lazy">
+                <img src="${plate.img}" alt="${plate.title} 예시 이미지" class="plate-card__img" loading="lazy">
                 <div class="plate-card__content">
                     <h3 class="plate-card__title">${plate.title}</h3>
                     <p class="plate-card__tagline">${plate.tagline}</p>
@@ -49,25 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
         `).join('');
-    }
-
-    function renderReviews() {
-        const slider = document.getElementById('reviews-slider');
-        const dots = document.getElementById('reviews-dots');
-        if (!slider || !dots) return;
-
-        slider.innerHTML = REVIEWS.map(review => `
-            <div class="review-slide">
-                <img src="${review.img}" alt="${review.name}님의 후기" class="review-slide__img" loading="lazy">
-                <div class="review-slide__content">
-                    <p class="review-slide__quote">“${review.quote}”</p>
-                    <div class="review-slide__rating">${'★'.repeat(Math.floor(review.rating))}${'☆'.repeat(5 - Math.floor(review.rating))}</div>
-                    <p class="review-slide__author">${review.name} (${review.age}세)</p>
-                </div>
-            </div>
-        `).join('');
-
-        dots.innerHTML = REVIEWS.map((_, index) => `<span class="reviews__dot ${index === 0 ? 'active' : ''}" data-slide="${index}"></span>`).join('');
     }
 
     function renderChallenges() {
@@ -100,18 +81,58 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('');
     }
 
-    // --- INTERACTIVITY --- 
+    function renderSwiperReviews() {
+        const swiperWrapper = document.getElementById('reviews-swiper-wrapper');
+        if (!swiperWrapper) return;
 
+        swiperWrapper.innerHTML = REVIEWS.map(r => `
+            <div class="swiper-slide">
+                <div class="review-swiper-card">
+                    <img src="${r.img}" alt="${r.name}님의 후기 이미지" class="review-swiper-card__img" loading="lazy">
+                    <div class="review-swiper-card__body">
+                        <p class="review-swiper-card__quote">“${r.quote}”</p>
+                        <div class="review-swiper-card__rating">${'★'.repeat(Math.floor(r.rating))}${'☆'.repeat(5 - Math.floor(r.rating))}</div>
+                        <p class="review-swiper-card__author">${r.name} (${r.age}세)</p>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function initSwiper() {
+        if (typeof Swiper === 'undefined') return;
+
+        new Swiper('.review-swiper', {
+            loop: true,
+            slidesPerView: 1,
+            spaceBetween: 20,
+            centeredSlides: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 30,
+                },
+                1200: {
+                    slidesPerView: 3,
+                    spaceBetween: 40,
+                },
+            },
+        });
+    }
+
+    // --- Other Initializations ---
     function initMobileNav() {
         const navToggle = document.querySelector('.nav__toggle');
         const navMenu = document.querySelector('.nav__menu');
         if (!navToggle || !navMenu) return;
-
         navToggle.addEventListener('click', () => {
             navToggle.classList.toggle('is-open');
             navMenu.classList.toggle('is-open');
         });
-
         document.querySelectorAll('.nav__link, .hero__cta').forEach(link => {
             link.addEventListener('click', () => {
                 if (navMenu.classList.contains('is-open')) {
@@ -122,94 +143,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function initReviewSlider() {
-        const slider = document.getElementById('reviews-slider');
-        const dots = document.querySelectorAll('.reviews__dot');
-        const nextBtn = document.querySelector('.reviews__nav-btn--next');
-        const prevBtn = document.querySelector('.reviews__nav-btn--prev');
-        if (!slider || dots.length === 0) return;
-
-        let currentIndex = 0;
-        let intervalId = null;
-
-        function goToSlide(index) {
-            slider.style.transform = `translateX(-${index * 100}%)`;
-            dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
-            currentIndex = index;
-        }
-
-        function nextSlide() {
-            const newIndex = (currentIndex + 1) % REVIEWS.length;
-            goToSlide(newIndex);
-        }
-        
-        function prevSlide() {
-            const newIndex = (currentIndex - 1 + REVIEWS.length) % REVIEWS.length;
-            goToSlide(newIndex);
-        }
-
-        function startAutoplay() {
-            stopAutoplay();
-            intervalId = setInterval(nextSlide, 4500);
-        }
-
-        function stopAutoplay() {
-            clearInterval(intervalId);
-        }
-
-        nextBtn.addEventListener('click', () => { nextSlide(); stopAutoplay(); startAutoplay(); });
-        prevBtn.addEventListener('click', () => { prevSlide(); stopAutoplay(); startAutoplay(); });
-
-        dots.forEach(dot => {
-            dot.addEventListener('click', (e) => {
-                const index = parseInt(e.target.dataset.slide, 10);
-                goToSlide(index);
-                stopAutoplay();
-                startAutoplay();
-            });
-        });
-        
-        const sliderWrapper = slider.parentElement;
-        sliderWrapper.addEventListener('mouseenter', stopAutoplay);
-        sliderWrapper.addEventListener('mouseleave', startAutoplay);
-
-        let touchstartX = 0;
-        let touchendX = 0;
-
-        slider.addEventListener('touchstart', e => { touchstartX = e.changedTouches[0].screenX; }, { passive: true });
-        slider.addEventListener('touchend', e => {
-            touchendX = e.changedTouches[0].screenX;
-            if (touchendX < touchstartX - 50) nextSlide();
-            if (touchendX > touchstartX + 50) prevSlide();
-            stopAutoplay();
-            startAutoplay();
-        });
-
-        startAutoplay();
-    }
-
     function initFaqAccordion() {
         const faqList = document.getElementById('faq-list');
         if (!faqList) return;
-
         faqList.addEventListener('click', (e) => {
             const questionBtn = e.target.closest('.faq__question');
             if (questionBtn) {
                 const item = questionBtn.closest('.faq__item');
-                const isOpened = item.classList.toggle('is-open');
-                questionBtn.setAttribute('aria-expanded', isOpened);
-            }
-        });
-        
-        faqList.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                const questionBtn = e.target.closest('.faq__question');
-                if (questionBtn) {
-                    e.preventDefault();
-                    const item = questionBtn.closest('.faq__item');
-                    const isOpened = item.classList.toggle('is-open');
-                    questionBtn.setAttribute('aria-expanded', isOpened);
-                }
+                item.classList.toggle('is-open');
+                questionBtn.setAttribute('aria-expanded', item.classList.contains('is-open'));
             }
         });
     }
@@ -217,13 +159,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function initCharts() {
         if (typeof Chart === 'undefined') return;
 
+        Chart.defaults.animation.duration = 1500;
+        Chart.defaults.animation.easing = 'easeOutQuart';
+
         const defaultOptions = {
             responsive: true,
             maintainAspectRatio: false,
-            animation: {
-                duration: 1000,
-                easing: 'easeOutQuart'
-            },
             plugins: {
                 legend: { display: false }
             },
@@ -233,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // 1) Vitamin C Chart
         const vitcCtx = document.getElementById('vitcChart');
         if (vitcCtx) {
             new Chart(vitcCtx, {
@@ -253,27 +193,24 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // 2) Antioxidant Chart
         const antioxidantCtx = document.getElementById('antioxidantChart');
         if (antioxidantCtx) {
             new Chart(antioxidantCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['고 항산화 식단군', '대조군'],
+                    labels: ['고 항산화 식단군 (광노화 위험도 약 10% 감소)', '대조군'],
                     datasets: [{
-                        label: '광노화 발생률',
-                        data: [90, 100], // 10% 낮음을 표현
-                        backgroundColor: ['rgba(95, 0, 128, 0.7)', 'rgba(236, 231, 244, 1)'],
+                        data: [90, 10],
+                        backgroundColor: ['rgba(95, 0, 128, 0.7)', 'rgba(236, 231, 244, 0.5)'],
                         borderColor: ['#fff', '#fff'],
                         borderWidth: 4,
                         hoverOffset: 8
                     }]
                 },
-                options: { ...defaultOptions, cutout: '70%', plugins: { ...defaultOptions.plugins, legend: { display: true, position: 'bottom' } }, scales: { y: { display: false }, x: { display: false } } }
+                options: { ...defaultOptions, cutout: '70%', plugins: { ...defaultOptions.plugins, legend: { display: true, position: 'bottom', labels: { boxWidth: 15, padding: 20 } } }, scales: { y: { display: false }, x: { display: false } } }
             });
         }
 
-        // 3) MUFA Chart
         const mufaCtx = document.getElementById('mufaChart');
         if (mufaCtx) {
             new Chart(mufaCtx, {
@@ -282,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     labels: ['Q1', 'Q2', 'Q3', 'Q4', 'Q5'],
                     datasets: [{
                         label: '광노화 위험도 (OR)',
-                        data: [1.0, 0.92, 0.85, 0.78, 0.71], // 예시 데이터
+                        data: [1.0, 0.92, 0.85, 0.78, 0.71],
                         backgroundColor: 'rgba(165, 102, 214, 0.5)',
                         borderColor: 'rgba(165, 102, 214, 1)',
                         borderWidth: 1,
@@ -348,11 +285,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- INITIALIZE ALL --- 
     renderPlates();
-    renderReviews();
     renderChallenges();
     renderFaqs();
+    renderSwiperReviews();
+    initSwiper();
     initMobileNav();
-    initReviewSlider();
     initFaqAccordion();
     initCharts();
     initBackButton();
