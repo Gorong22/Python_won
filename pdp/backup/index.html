@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이너컬리 | 매일, 나를 위해 건강한 습관의 시작</title>
+    <meta name="description" content="식단과 이너뷰티가 만나는 푸디케이션, 이너컬리. 건강한 루틴을 위한 프리미엄 식단과 앱 서비스를 만나보세요.">
+
+    <!-- SEO & Open Graph -->
+    <meta property="og:title" content="이너컬리 | 오늘의 선택이, 내일의 피부를 만듭니다">
+    <meta property="og:description" content="한 끼를 먹더라도, 내 몸과 피부가 진짜로 원하는 것을 채워야 하니까요. 컬리가 새롭게 제안하는 이너뷰티 루틴.">
+    <meta property="og:image" content="https://placehold.co/1200x630/5F0080/FFFFFF?text=Inner+Kurly">
+    <meta property="og:image:alt" content="이너컬리 로고">
+    <meta property="og:url" content="https://example.com">
+    <meta property="og:type" content="website">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Swiper.js CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://example.com"
+      }]
+    }
+    </script>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="#home" class="nav__logo">Inner Kurly</a>
+            <ul class="nav__menu">
+                <li class="nav__item"><a href="#plates" class="nav__link">이너플레이트</a></li>
+                <li class="nav__item"><a href="#reviews" class="nav__link">후기</a></li>
+                <li class="nav__item"><a href="#app" class="nav__link">루션 앱</a></li>
+                <li class="nav__item"><a href="#challenge" class="nav__link">챌린지</a></li>
+                <li class="nav__item"><a href="#members" class="nav__link">멤버스</a></li>
+                <li class="nav__item"><a href="#faq" class="nav__link">FAQ</a></li>
+            </ul>
+            <button class="nav__toggle" aria-label="메뉴 열기">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- 1) Hero Section -->
+        <section id="home" class="hero section">
+            <div class="hero__container container">
+                <button class="hero__back-btn" aria-label="뒤로가기">
+                    <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></svg>
+                </button>
+                <div class="hero__content">
+                    <h1 class="hero__title">여러분의 아름다움을<br>더욱 빛나게 할 수 있습니다</h1>
+                    <div class="hero__subtitles">
+                        <p>매일, 나를 위해 건강한 습관의 시작</p>
+                        <p>먹는 습관이 당신의 나이를 결정한다는 사실, 알고 계셨나요?</p>
+                        <p>하루 1회 화장보다, 하루 1회 좋은 영양과 습관이</p>
+                        <p>컬리가 새롭게 제안하는 바쁜 나를 위한 이너뷰티 루틴</p>
+                        <p>한 끼를 먹더라도, 내 몸과 피부가 진짜로 원하는 것을 채워야 하니까요</p>
+                    </div>
+                    <div class="hero__actions">
+                        <a href="#plates" class="btn btn--primary hero__cta" data-analytics="cta_plates_hero">자세히 보러가기</a>
+                    </div>
+                </div>
+                <div class="hero__visual">
+                    <img src="https://placehold.co/600x500/F8F6FB/5F0080?text=Inner+Beauty+Routine" alt="프리미엄 푸디케이션 식단" loading="lazy">
+                </div>
+            </div>
+        </section>
+
+        <!-- 2) Insight & Graph Section -->
+        <section id="insight" class="insight section">
+            <div class="insight__container container">
+                <h2 class="section__title">데이터로 증명된<br>이너뷰티의 효과</h2>
+                <div class="insight__grid">
+                    <figure class="insight__graph-item">
+                        <div class="insight__graph-wrapper"><canvas id="vitcChart"></canvas></div>
+                        <figcaption class="insight__caption"><b>비타민C 섭취량과 피부 노화</b><br>출처: Cosgrove MC et al., Am J Clin Nutr. 2007;86(4):1225–1231.</figcaption>
+                    </figure>
+                    <figure class="insight__graph-item">
+                        <div class="insight__graph-wrapper"><canvas id="antioxidantChart"></canvas></div>
+                        <figcaption class="insight__caption"><b>고 항산화 식단과 광노화</b><br>출처: JID 2021, Dietary Antioxidant Capacity & Photoaging</figcaption>
+                    </figure>
+                    <figure class="insight__graph-item">
+                        <div class="insight__graph-wrapper"><canvas id="mufaChart"></canvas></div>
+                        <figcaption class="insight__caption"><b>올리브오일 MUFA 섭취와 광노화</b><br>출처: Latreille J et al., PLoS One. 2012;7(9):e44490.</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3) Plates Section -->
+        <section id="plates" class="plates section">
+            <div class="plates__container container">
+                <h2 class="section__title">매일을, 나를 위해 — 이너컬리 세트</h2>
+                <p class="section__subtitle">단순 식사가 아닌, 이너뷰티 루틴</p>
+                <div id="plates-list" class="plates__list">
+                    <!-- JS will populate this -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 4) Reviews Section -->
+        <section id="reviews" class="reviews section">
+            <div class="reviews__container container">
+                <h2 class="section__title">고객들이 먼저 느낀 변화</h2>
+                <p class="section__subtitle">30만+ 고객님들의 생생한 후기를 만나보세요</p>
+            </div>
+            <div class="swiper-container">
+                <div class="swiper review-swiper">
+                    <div class="swiper-wrapper" id="reviews-swiper-wrapper">
+                        <!-- JS will populate this -->
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+
+        <!-- 5) App Section -->
+        <section id="app" class="app-section section">
+            <div class="app-section__container container">
+                <div class="app-section__content">
+                    <h2 class="section__title">루션 앱으로 루틴이<br>더 간편해집니다</h2>
+                    <p class="section__subtitle">먹는 순간을 넘어, 매일을 관리하는 이너뷰티 루틴</p>
+                    <ul class="app-section__features">
+                        <li><strong>자동 칼로리 기록</strong> 식단 사진만 찍으면 AI가 분석해요.</li>
+                        <li><strong>기분·컨디션 체크</strong> 매일의 변화를 감성적으로 기록해요.</li>
+                        <li><strong>AI 맞춤 추천</strong> 내 데이터 기반으로 다음 플랜을 제안해요.</li>
+                    </ul>
+                </div>
+                <div class="app-section__visual">
+                    <img src="https://placehold.co/400x600/F8F6FB/5F0080?text=헬스/뷰티+앱+UI" alt="이너컬리 루션 앱 UI 목업" loading="lazy">
+                </div>
+            </div>
+        </section>
+
+        <!-- 6) Challenge Section -->
+        <section id="challenge" class="challenge section">
+            <div class="challenge__container container">
+                <h2 class="section__title">30·60·90일 챌린지,<br>지속할수록 커지는 리워드</h2>
+                <p class="section__subtitle">오픈베타 참여 시 리워드 선착순 혜택 제공</p>
+                <div id="challenge-timeline" class="challenge__timeline">
+                     <!-- JS will populate this -->
+                </div>
+                <p class="challenge__caption">*상세 조건은 멤버스 안내 참고</p>
+            </div>
+        </section>
+
+        <!-- 7) Community Section -->
+        <section id="community" class="community section">
+            <div class="community__container container">
+                <h2 class="section__title">같이 하면, 오래 갑니다</h2>
+                <p class="section__subtitle">서로 응원하고 노하우를 나누는 공간, 라운지에서 더 깊이 만나보세요</p>
+                <div class="community__grid">
+                    <div class="card community-card">
+                        <img src="https://placehold.co/300x200/F8F6FB/A566D6?text=커뮤니티+피드" alt="커뮤니티 #오운완 챌린지 인증샷 예시" class="community-card__img" loading="lazy">
+                        <div class="community-card__content">
+                            <h3 class="community-card__title">#오운완 챌린지</h3>
+                            <p>오늘의 이너플레이트 인증하고 함께 응원해요.</p>
+                        </div>
+                    </div>
+                    <div class="card community-card">
+                        <img src="https://placehold.co/300x200/F8F6FB/A566D6?text=전문가+칼럼" alt="전문가 영양 칼럼 미리보기" class="community-card__img" loading="lazy">
+                        <div class="community-card__content">
+                            <h3 class="community-card__title">라운지 칼럼</h3>
+                            <p>영양사가 알려주는 똑똑한 식단 관리법.</p>
+                        </div>
+                    </div>
+                    <div class="card community-card">
+                        <img src="https://placehold.co/300x200/F8F6FB/A566D6?text=Q&A" alt="사용자 Q&A 게시판 미리보기" class="community-card__img" loading="lazy">
+                        <div class="community-card__content">
+                            <h3 class="community-card__title">무엇이든 물어보세요</h3>
+                            <p>이너컬리 팀과 전문가가 직접 답변해 드려요.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8) Members Section -->
+        <section id="members" class="members section">
+            <div class="members__container container">
+                <h2 class="section__title">이너컬리 멤버스</h2>
+                <ul class="members__badges">
+                    <li>포인트 적립</li>
+                    <li>프리미엄 콘텐츠</li>
+                    <li>전용 이벤트</li>
+                    <li>커뮤니티/라운지 접근</li>
+                </ul>
+                <div class="members__main-visual">
+                    <img src="https://placehold.co/500x350/FFFFFF/5c1d9e?text=보냉백+플레이트" alt="이너컬리 멤버스 웰컴 기프트: 보냉백과 플레이트 세트">
+                </div>
+                <div class="members__cta">
+                    <a href="#cta" class="btn btn--pill btn--light" data-analytics="cta_join_members">이너컬리 멤버스 합류하기</a>
+                    <a href="#" class="members__link">멤버십 혜택 자세히 보기</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9) FAQ Section -->
+        <section id="faq" class="faq section">
+            <div class="faq__container container">
+                <h2 class="section__title">자주 묻는 질문</h2>
+                <div id="faq-list" class="faq__list">
+                    <!-- JS will populate this -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 10) Final CTA Section -->
+        <section id="cta" class="cta section">
+            <div class="cta__container container">
+                <h2 class="cta__title">오늘의 선택이,<br>내일의 피부를 만듭니다.</h2>
+                <div class="cta__actions">
+                    <a href="#" class="btn btn--primary" data-analytics="cta_subscribe_final">지금 구독 시작하기</a>
+                    <a href="#members" class="btn btn--ghost" data-analytics="cta_members_final">멤버스 혜택 보기</a>
+                </div>
+                <p class="cta__caption">*오픈베타 기간 중 혜택이 순차 적용됩니다.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer__container container">
+            <p>&copy; 2025 Inner Kurly. All rights reserved.</p>
+            <div class="footer__links">
+                <a href="#">이용약관</a>
+                <a href="#">개인정보처리방침</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="app.js" defer></script>
+</body>
+</html>

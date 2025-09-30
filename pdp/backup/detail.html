@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이너플레이트 상세 - 이너컬리</title>
+    <meta name="description" content="이너컬리 이너플레이트 상세 정보입니다.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html#home" class="nav__logo">Inner Kurly</a>
+            <ul class="nav__menu">
+                <li class="nav__item"><a href="index.html#plates" class="nav__link">이너플레이트</a></li>
+                <li class="nav__item"><a href="index.html#reviews" class="nav__link">후기</a></li>
+                <li class="nav__item"><a href="index.html#app" class="nav__link">루션 앱</a></li>
+                <li class="nav__item"><a href="index.html#challenge" class="nav__link">챌린지</a></li>
+                <li class="nav__item"><a href="index.html#members" class="nav__link">멤버스</a></li>
+                <li class="nav__item"><a href="index.html#faq" class="nav__link">FAQ</a></li>
+            </ul>
+            <button class="nav__toggle" aria-label="메뉴 열기">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <h1 class="section__title" id="plate-name">이너플레이트 상세 정보</h1>
+                <p class="section__subtitle" id="plate-tagline">선택하신 플레이트에 대한 상세 내용을 표시하는 페이지입니다.</p>
+                
+                <div style="text-align: center; padding: 80px; background-color: var(--color-surface); border-radius: 16px;">
+                    <p>상세 콘텐츠 준비 중입니다.</p>
+                </div>
+
+                <div style="text-align: center; margin-top: 48px;">
+                    <a href="index.html#plates" class="btn btn--ghost">목록으로 돌아가기</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer__container container">
+            <p>&copy; 2025 Inner Kurly. All rights reserved.</p>
+            <div class="footer__links">
+                <a href="#">이용약관</a>
+                <a href="#">개인정보처리방침</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const plateNameEl = document.getElementById('plate-name');
+            const plateTaglineEl = document.getElementById('plate-tagline');
+
+            const plateData = {
+                glow: { title: "글로우 플레이트", tagline: "비타민C + 콜라겐으로 채우는 피부 광채" },
+                slim: { title: "슬림 플레이트", tagline: "균형 잡힌 단백질로 만드는 가벼운 하루" },
+                detox: { title: "디톡스 플레이트", tagline: "식이섬유 중심으로 몸을 리셋하는 시간" },
+                balance: { title: "밸런스 플레이트", tagline: "지속 가능한 건강을 위한 영양 밸런스" }
+            };
+
+            const params = new URLSearchParams(window.location.search);
+            const plateKey = params.get('plate');
+
+            if (plateKey && plateData[plateKey]) {
+                const data = plateData[plateKey];
+                plateNameEl.textContent = data.title;
+                plateTaglineEl.textContent = data.tagline;
+                document.title = `${data.title} - 이너컬리`;
+            } 
+        });
+    </script>
+</body>
+</html>
