@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
     <header class="header">
@@ -33,10 +33,10 @@
     </header>
 
     <main>
-        <section class="auth-form section">
-            <div class="container">
+        <section class="auth-section section">
+            <div class="auth-form-container">
                 <h2 class="section__title">회원가입</h2>
-                <form>
+                <form class="auth-form">
                     <div class="form-group">
                         <label for="name">이름</label>
                         <input type="text" id="name" placeholder="이름을 입력하세요" required>
@@ -53,7 +53,7 @@
                         <label for="confirm-password">비밀번호 확인</label>
                         <input type="password" id="confirm-password" placeholder="비밀번호를 다시 입력하세요" required>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group form-group--checkbox">
                         <input type="checkbox" id="terms" required>
                         <label for="terms">이용약관 및 개인정보처리방침에 동의합니다.</label>
                     </div>
@@ -62,14 +62,20 @@
                     </div>
                 </form>
                 <div class="social-login">
-                    <p>SNS 계정으로 간편하게 가입</p>
-                    <div class="social-login-buttons">
-                        <button class="btn"><img src="assets/icon-naver.png" alt="네이버 로그인"></button>
-                        <button class="btn"><img src="assets/icon-google.png" alt="구글 로그인"></button>
-                        <button class="btn"><img src="assets/icon-kakao.png" alt="카카오 로그인"></button>
+                    <p class="social-login__title">SNS 계정으로 간편하게 가입</p>
+                    <div class="social-login__buttons">
+                         <button class="social-btn social-btn--kakao" aria-label="카카오로 가입">
+                            <svg viewBox="0 0 32 32"><path d="M16 4.64c-6.96 0-12.64 4.48-12.64 10.08 0 3.52 2.24 6.624 5.76 8.48l-2.08 7.52 8.064-4.16c.96.16 1.92.256 2.88.256 6.96 0 12.64-4.48 12.64-10.08S22.96 4.64 16 4.64z"></path></svg>
+                        </button>
+                        <button class="social-btn social-btn--naver" aria-label="네이버로 가입">
+                            <svg viewBox="0 0 32 32"><path d="M21.514 19.2H10.486V12.8h11.028v6.4z M16 4.64L4.64 4.64v22.72h11.36V19.2h-4.48V12.8h4.48V4.64h6.88l6.88 6.88v15.44h-4.48V19.2h4.48v-8.64L20.48 4.64H16z"></path></svg>
+                        </button>
+                        <button class="social-btn social-btn--google" aria-label="구글로 가입">
+                            <svg viewBox="0 0 32 32"><path d="M16.96 17.216h7.808c.128.832.192 1.6.192 2.56 0 7.488-4.8 12.224-8 12.224-7.04 0-12.8-5.76-12.8-12.8s5.76-12.8 12.8-12.8c3.84 0 6.4 1.6 7.936 3.072l-2.56 2.496c-1.152-.96-2.816-1.92-5.376-1.92-4.416 0-7.616 3.648-7.616 8.128s3.2 8.128 7.616 8.128c5.056 0 6.976-3.264 7.232-4.928H16.96v-3.584z"></path></svg>
+                        </button>
                     </div>
                 </div>
-                <p class="login-link">이미 회원이신가요? <a href="login.html">로그인</a></p>
+                <p class="auth-link">이미 회원이신가요? <a href="login.html">로그인</a></p>
             </div>
         </section>
     </main>
@@ -84,6 +90,6 @@
         </div>
     </footer>
 
-    <script src="app.js" defer></script>
+    <script src="./js/app.js" defer></script>
 </body>
 </html>

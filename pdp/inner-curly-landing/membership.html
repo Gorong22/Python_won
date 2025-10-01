@@ -1,130 +1,112 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>이너컬리 멤버십 | Inner Kurly</title>
-    <meta name="description" content="이너컬리 멤버십 전용 혜택을 만나보세요. 프리미엄 콘텐츠, 포인트 적립, 특별 이벤트 등.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Membership | Inner Kurly</title>
+  <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
-    <header class="header">
-        <nav class="nav container">
-            <a href="index.html" class="nav__logo">Inner Kurly</a>
-            <ul class="nav__menu">
-                <li class="nav__item"><a href="index.html#plates">이너플레이트</a></li>
-                <li class="nav__item"><a href="index.html#reviews">후기</a></li>
-                <li class="nav__item"><a href="index.html#app">루션 앱</a></li>
-                <li class="nav__item"><a href="index.html#challenge">챌린지</a></li>
-                <li class="nav__item"><a href="index.html#members">멤버스</a></li>
-                <li class="nav__item"><a href="index.html#faq">FAQ</a></li>
-            </ul>
-            <div class="header__util">
-                <a href="login.html" class="btn btn--ghost btn--small">로그인</a>
-                <a href="signup.html" class="btn btn--ghost btn--small">회원가입</a>
-                <a href="cart.html" class="btn btn--ghost btn--small cart-btn">
-                    <span class="cart-badge">0</span>
-                </a>
-            </div>
-            <button class="nav__toggle" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
-        </nav>
-    </header>
+  <header class="header">
+    <nav class="nav container">
+      <a href="index.html" class="nav__logo">Inner Kurly</a>
+      <ul class="nav__menu">
+        <li><a href="index.html#plates">이너플레이트</a></li>
+        <li><a href="index.html#pricing">구독 상품</a></li>
+        <li><a href="index.html#reviews">고객 후기</a></li>
+        <li><a href="membership.html">멤버십</a></li>
+      </ul>
+      <div class="header__util">
+        <a href="login.html" class="btn btn--ghost btn--small">로그인</a>
+        <a href="signup.html" class="btn btn--ghost btn--small">회원가입</a>
+      </div>
+    </nav>
+  </header>
 
-    <main class="pdp-main">
-        <!-- Membership Hero Section -->
-        <section class="pdp-hero">
-            <div class="pdp-hero__image" style="background-image: url('assets/membership-hero.png');"></div>
-            <div class="pdp-hero__content">
-                <h1>이너컬리 멤버스</h1>
-                <p>나를 위한 프리미엄 혜택, 지금 경험하세요</p>
-                <a href="#" class="btn btn--primary">멤버스 가입하기</a>
-            </div>
-        </section>
+  <!-- HERO -->
+  <section class="membership-hero-section">
+    <h1 class="membership-hero-section__title">Kurly Membership × Inner Kurly</h1>
+    <p class="membership-hero-section__subtitle">
+      월 1,900원 컬리 멤버스 + 이너컬리 구독으로<br>
+      더 큰 혜택을 누리세요.
+    </p>
+    <a href="#" class="btn btn--primary btn--large">멤버십 가입하기</a>
+  </section>
 
-        <!-- Membership Benefits Section -->
-        <section class="section">
-            <div class="container">
-                <h2 class="section__title">멤버스만을 위한 특별한 혜택</h2>
-                <p class="section__subtitle">이너컬리 멤버스가 되어 건강한 라이프스타일을 더욱 풍요롭게 만드세요.</p>
-                <div class="members-benefits-grid">
-                    <div class="benefit-item card">
-                        <img src="assets/icon-point.png" alt="포인트 아이콘" class="benefit-icon">
-                        <h3>포인트 적립</h3>
-                        <p>구매 금액의 최대 5% 포인트 적립</p>
-                    </div>
-                    <div class="benefit-item card">
-                        <img src="assets/icon-content.png" alt="콘텐츠 아이콘" class="benefit-icon">
-                        <h3>프리미엄 콘텐츠</h3>
-                        <p>전문가 칼럼, 맞춤형 식단 가이드 제공</p>
-                    </div>
-                    <div class="benefit-item card">
-                        <img src="assets/icon-event.png" alt="이벤트 아이콘" class="benefit-icon">
-                        <h3>전용 이벤트</h3>
-                        <p>멤버스만을 위한 특별 할인 및 증정 이벤트</p>
-                    </div>
-                    <div class="benefit-item card">
-                        <img src="assets/icon-community.png" alt="커뮤니티 아이콘" class="benefit-icon">
-                        <h3>커뮤니티/라운지</h3>
-                        <p>비공개 커뮤니티에서 정보 공유 및 소통</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Trial Offer Section -->
-        <section class="section members-trial-offer">
-            <div class="container">
-                <h2 class="section__title">지금 가입하면, TRIAL ROUTINE 3일 무료!</h2>
-                <p class="section__subtitle">이너컬리 멤버스에 합류하고, 원하는 플레이트 3일 체험 기회를 놓치지 마세요.</p>
-                <a href="#" class="btn btn--primary btn--pill">멤버스 가입하고 혜택 받기</a>
-            </div>
-        </section>
-
-        <!-- FAQ Section (Membership specific) -->
-        <section id="faq" class="faq section">
-            <div class="faq__container container">
-                <h2 class="section__title">멤버십 자주 묻는 질문</h2>
-                <div class="faq__list">
-                    <div class="faq__item">
-                        <button class="faq__question"><span>Q.</span> 멤버십 가입 비용은 얼마인가요?</button>
-                        <div class="faq__answer"><p>이너컬리 멤버십은 월 9,900원으로 이용 가능하며, 연간 결제 시 할인 혜택이 제공됩니다.</p></div>
-                    </div>
-                    <div class="faq__item">
-                        <button class="faq__question"><span>Q.</span> 트라이얼 루틴은 어떻게 신청하나요?</button>
-                        <div class="faq__answer"><p>멤버십 가입 완료 후 마이페이지에서 원하시는 플레이트의 트라이얼 루틴을 신청하실 수 있습니다.</p></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Sticky Bottom Bar -->
-    <div class="sticky-bottom-bar">
-        <div class="sticky-bottom-bar__container">
-            <div class="sticky-text">
-                <p><strong>멤버스 가입 시 TRIAL ROUTINE 3일 무료 제공</strong></p>
-                <p>모든 배송은 친환경 보냉팩에 담겨 신선도를 유지합니다</p>
-            </div>
-            <a href="#" class="btn btn--primary">멤버스 가입하기</a>
-        </div>
+  <!-- BENEFITS -->
+  <section class="section">
+    <h2 class="section__title">Membership 혜택</h2>
+    <div class="members-benefits-grid">
+      <div class="benefit-item">
+        <img src="./assets/icon-coupon.png" class="benefit-icon" alt="쿠폰">
+        <h3>무료배송 쿠폰</h3>
+        <p>2만 원 이상 구매 시 매월 무료배송 쿠폰 제공</p>
+      </div>
+      <div class="benefit-item">
+        <img src="./assets/icon-point.png" class="benefit-icon" alt="적립금">
+        <h3>매월 적립금 2,000원</h3>
+        <p>회원 전용 혜택으로 쓸 수 있는 포인트</p>
+      </div>
+      <div class="benefit-item">
+        <img src="./assets/icon-discount.png" class="benefit-icon" alt="할인">
+        <h3>뷰티/식품 전용 쿠폰팩</h3>
+        <p>매달 다양한 할인 혜택 제공</p>
+      </div>
+      <div class="benefit-item">
+        <img src="./assets/icon-special.png" class="benefit-icon" alt="스페셜">
+        <h3>Inner Kurly 전용 혜택</h3>
+        <p>플레이트 구독 결합 시 추가 케어 혜택</p>
+      </div>
     </div>
+  </section>
 
-    <footer class="footer">
-        <div class="footer__container container">
-            <p>&copy; 2025 Inner Kurly. All rights reserved.</p>
-            <div class="footer__links">
-                <a href="#">이용약관</a>
-                <a href="#">개인정보처리방침</a>
-            </div>
-        </div>
-    </footer>
+  <!-- PRICING -->
+  <section class="section">
+    <h2 class="section__title">Membership 가격</h2>
+    <div class="membership-pricing__grid">
+      <div class="membership-pricing-card">
+        <h3 class="membership-pricing-card__title">Kurly 멤버스</h3>
+        <p class="membership-pricing-card__price">₩1,900<span class="duration">/월</span></p>
+        <p class="membership-pricing-card__save">매월 적립금 2,000원 + 무료배송 쿠폰</p>
+        <ul class="membership-pricing-card__features">
+          <li>무료배송 쿠폰 3장</li>
+          <li>매월 적립금 2,000원</li>
+          <li>뷰티/식품 멤버스 전용 쿠폰팩</li>
+        </ul>
+        <a href="#" class="btn btn--primary">멤버십 가입</a>
+      </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="app.js" defer></script>
+      <div class="membership-pricing-card membership-pricing-card--popular">
+        <span class="badge">추천</span>
+        <h3 class="membership-pricing-card__title">Slim Plate 구독</h3>
+        <p class="membership-pricing-card__price">₩45,000<span class="duration">/월</span></p>
+        <p class="membership-pricing-card__save">저칼로리 · 단백질 중심 루틴</p>
+        <ul class="membership-pricing-card__features">
+          <li>균형 잡힌 저칼로리 식단</li>
+          <li>단백질 중심 구성</li>
+          <li>체지방 관리 & 에너지 케어</li>
+        </ul>
+        <a href="plate-slim.html" class="btn btn--ghost">자세히 보기</a>
+      </div>
+
+      <div class="membership-pricing-card">
+        <h3 class="membership-pricing-card__title">Glow Plate 구독</h3>
+        <p class="membership-pricing-card__price">₩45,000<span class="duration">/월</span></p>
+        <p class="membership-pricing-card__save">피부 속부터 빛나는 이너뷰티 케어</p>
+        <ul class="membership-pricing-card__features">
+          <li>수분 & 영양 케어</li>
+          <li>지친 피부 컨디션 회복</li>
+          <li>광채 피부 루틴</li>
+        </ul>
+        <a href="plate-glow.html" class="btn btn--ghost">자세히 보기</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer__container container">
+      <p>&copy; 2025 Inner Kurly. All rights reserved.</p>
+    </div>
+  </footer>
 </body>
 </html>

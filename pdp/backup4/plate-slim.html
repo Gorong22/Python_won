@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slim Plate | 이너컬리</title>
+  <meta name="description" content="가볍지만 균형 잡힌 하루를 위한 Slim Plate. 이너컬리가 제안하는 프리미엄 이너뷰티 식단을 만나보세요.">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body class="plate-slim">
+  <!-- 헤더 -->
+  <header class="header">
+    <h1>Slim Plate</h1>
+    <p>가볍게, 그러나 균형 있게</p>
+  </header>
+
+  <!-- 메인 비주얼 -->
+  <section class="hero">
+    <img src="./images/slim-main.jpg" alt="Slim Plate 대표 이미지">
+    <h2 class="section__title">Slim Plate</h2>
+    <p>부담 없는 칼로리, 영양은 그대로</p>
+    <div class="hashtags">
+      <span>#다이어트</span>
+      <span>#로우칼로리</span>
+      <span>#슬림바디</span>
+    </div>
+    <button class="btn-cta">지금 시작하기</button>
+  </section>
+
+  <!-- 후기 섹션 -->
+  <section class="reviews">
+    <h3 class="section__title">고객 후기</h3>
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">"식단 조절할 때 딱 좋아요!"</div>
+        <div class="swiper-slide">"맛있고 배부르지만 칼로리는 낮아요."</div>
+        <div class="swiper-slide">"헬스 다니면서 먹으니 효과가 배가 됩니다."</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 멤버십 -->
+  <section class="membership">
+    <h3 class="section__title">이너컬리 멤버스 혜택</h3>
+    <p>Slim Plate 구독 시 전용 식단 가이드 + 멤버십 챌린지 참여권 제공</p>
+    <button class="btn-cta">멤버십 합류하기</button>
+  </section>
+
+  <!-- 푸터 -->
+  <footer class="footer">
+    <p>&copy; 2025 InnerKurly. All rights reserved.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    new Swiper('.swiper', {
+      loop: true,
+      autoplay: { delay: 2500 }
+    });
+  </script>
+</body>
+</html>

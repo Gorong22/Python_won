@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이너컬리 멤버십 | Inner Kurly</title>
+    <meta name="description" content="이너컬리 멤버십 전용 혜택을 만나보세요. 프리미엄 콘텐츠, 포인트 적립, 특별 이벤트 등.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html" class="nav__logo">Inner Kurly</a>
+            <ul class="nav__menu">
+                <li class="nav__item"><a href="index.html#plates">이너플레이트</a></li>
+                <li class="nav__item"><a href="index.html#reviews">후기</a></li>
+                <li class="nav__item"><a href="index.html#app">루션 앱</a></li>
+                <li class="nav__item"><a href="index.html#challenge">챌린지</a></li>
+                <li class="nav__item"><a href="index.html#members">멤버스</a></li>
+                <li class="nav__item"><a href="index.html#faq">FAQ</a></li>
+            </ul>
+            <div class="header__util">
+                <a href="login.html" class="btn btn--ghost btn--small">로그인</a>
+                <a href="signup.html" class="btn btn--ghost btn--small">회원가입</a>
+                <a href="cart.html" class="btn btn--ghost btn--small cart-btn">
+                    <span class="cart-badge">0</span>
+                </a>
+            </div>
+            <button class="nav__toggle" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
+        </nav>
+    </header>
+
+    <main class="pdp-main">
+        <!-- Membership Hero Section -->
+        <section class="pdp-hero">
+            <div class="pdp-hero__image" style="background-image: url('assets/membership-hero.png');"></div>
+            <div class="pdp-hero__content">
+                <h1>이너컬리 멤버스</h1>
+                <p>나를 위한 프리미엄 혜택, 지금 경험하세요</p>
+                <a href="#" class="btn btn--primary">멤버스 가입하기</a>
+            </div>
+        </section>
+
+        <!-- Membership Benefits Section -->
+        <section class="section">
+            <div class="container">
+                <h2 class="section__title">멤버스만을 위한 특별한 혜택</h2>
+                <p class="section__subtitle">이너컬리 멤버스가 되어 건강한 라이프스타일을 더욱 풍요롭게 만드세요.</p>
+                <div class="members-benefits-grid">
+                    <div class="benefit-item card">
+                        <img src="assets/icon-point.png" alt="포인트 아이콘" class="benefit-icon">
+                        <h3>포인트 적립</h3>
+                        <p>구매 금액의 최대 5% 포인트 적립</p>
+                    </div>
+                    <div class="benefit-item card">
+                        <img src="assets/icon-content.png" alt="콘텐츠 아이콘" class="benefit-icon">
+                        <h3>프리미엄 콘텐츠</h3>
+                        <p>전문가 칼럼, 맞춤형 식단 가이드 제공</p>
+                    </div>
+                    <div class="benefit-item card">
+                        <img src="assets/icon-event.png" alt="이벤트 아이콘" class="benefit-icon">
+                        <h3>전용 이벤트</h3>
+                        <p>멤버스만을 위한 특별 할인 및 증정 이벤트</p>
+                    </div>
+                    <div class="benefit-item card">
+                        <img src="assets/icon-community.png" alt="커뮤니티 아이콘" class="benefit-icon">
+                        <h3>커뮤니티/라운지</h3>
+                        <p>비공개 커뮤니티에서 정보 공유 및 소통</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trial Offer Section -->
+        <section class="section members-trial-offer">
+            <div class="container">
+                <h2 class="section__title">지금 가입하면, TRIAL ROUTINE 3일 무료!</h2>
+                <p class="section__subtitle">이너컬리 멤버스에 합류하고, 원하는 플레이트 3일 체험 기회를 놓치지 마세요.</p>
+                <a href="#" class="btn btn--primary btn--pill">멤버스 가입하고 혜택 받기</a>
+            </div>
+        </section>
+
+        <!-- FAQ Section (Membership specific) -->
+        <section id="faq" class="faq section">
+            <div class="faq__container container">
+                <h2 class="section__title">멤버십 자주 묻는 질문</h2>
+                <div class="faq__list">
+                    <div class="faq__item">
+                        <button class="faq__question"><span>Q.</span> 멤버십 가입 비용은 얼마인가요?</button>
+                        <div class="faq__answer"><p>이너컬리 멤버십은 월 9,900원으로 이용 가능하며, 연간 결제 시 할인 혜택이 제공됩니다.</p></div>
+                    </div>
+                    <div class="faq__item">
+                        <button class="faq__question"><span>Q.</span> 트라이얼 루틴은 어떻게 신청하나요?</button>
+                        <div class="faq__answer"><p>멤버십 가입 완료 후 마이페이지에서 원하시는 플레이트의 트라이얼 루틴을 신청하실 수 있습니다.</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div class="sticky-footer-bar">
+        <div class="sticky-footer-bar__container">
+            <div class="sticky-footer-bar__text">
+                <strong>지금 구독하고 건강한 습관을 시작하세요.</strong>
+                <span>멤버스 가입 시 3일 무료 체험 혜택</span>
+            </div>
+            <div class="sticky-footer-bar__actions">
+                <a href="index.html#pricing" class="btn btn--primary">구독하기</a>
+                <a href="membership.html" class="btn btn--ghost">멤버스 혜택 보기</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer__container container">
+            <p>&copy; 2025 Inner Kurly. All rights reserved.</p>
+            <div class="footer__links">
+                <a href="#">이용약관</a>
+                <a href="#">개인정보처리방침</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="app.js" defer></script>
+</body>
+</html>

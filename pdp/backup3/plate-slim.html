@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slim Plate | 이너컬리</title>
+    <meta name="description" content="가볍지만 균형 잡힌 하루를 위한 Slim Plate. 이너컬리가 제안하는 프리미엄 이너뷰티 식단을 만나보세요.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html" class="nav__logo">Inner Kurly</a>
+            <ul class="nav__menu">
+                <li class="nav__item"><a href="index.html#plates">이너플레이트</a></li>
+                <li class="nav__item"><a href="index.html#reviews">후기</a></li>
+                <li class="nav__item"><a href="index.html#app">루션 앱</a></li>
+                <li class="nav__item"><a href="index.html#challenge">챌린지</a></li>
+                <li class="nav__item"><a href="index.html#members">멤버스</a></li>
+                <li class="nav__item"><a href="index.html#faq">FAQ</a></li>
+            </ul>
+            <div class="header__util">
+                <a href="login.html" class="btn btn--ghost btn--small">로그인</a>
+                <a href="signup.html" class="btn btn--ghost btn--small">회원가입</a>
+                <a href="cart.html" class="btn btn--ghost btn--small cart-btn">
+                    <span class="cart-badge">0</span>
+                </a>
+            </div>
+            <button class="nav__toggle" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
+        </nav>
+    </header>
+
+    <main class="pdp-main">
+        <!-- 1) 상단 PDP (Hero) -->
+        <section class="pdp-hero">
+            <div class="pdp-hero__image" style="background-image: url('assets/plate-slim-hero.png');"></div>
+            <div class="pdp-hero__content">
+                <h1>Slim Plate</h1>
+                <p>균형 단백질, 가벼운 하루</p>
+                <a href="#" class="btn btn--primary">지금 구매하기</a>
+            </div>
+        </section>
+
+        <!-- 2) 인트로 섹션 -->
+        <section class="pdp-intro section">
+            <div class="container">
+                <h2 class="section__title">나의 이너뷰티 루틴을 완성하는 프리미엄 플레이트</h2>
+                <p class="section__subtitle">체지방 관리와 건강한 식단을 동시에 잡고 싶은 분들을 위한 슬림 플레이트입니다. 저칼로리 고단백 식단과 기능성 영양제로 가볍고 활기찬 하루를 경험하세요.</p>
+                <div class="pdp-problems">
+                    <h3>이런 고민에 추천해요</h3>
+                    <ul>
+                        <li>#체지방관리</li>
+                        <li>#칼로리부담</li>
+                        <li>#식사대체</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3) 도시락 상세 섹션 -->
+        <section class="pdp-meal-detail section">
+            <div class="container">
+                <h2 class="section__title">Slim Plate 도시락 구성</h2>
+                <div class="meal-grid">
+                    <div class="meal-item card">
+                        <div class="meal-image" style="background-image: url('assets/meal-chicken-slim.png');"></div>
+                        <h3>닭가슴살 샐러드</h3>
+                        <p class="meal-description">신선한 채소와 담백한 닭가슴살로 구성된 샐러드. 고단백 저칼로리로 포만감을 줍니다.</p>
+                        <ul class="nutrition-facts">
+                            <li><span>칼로리</span><span>280kcal</span></li>
+                            <li><span>단백질</span><span>30g</span></li>
+                            <li><span>지방</span><span>5g</span></li>
+                            <li><span>탄수화물</span><span>10g</span></li>
+                        </ul>
+                    </div>
+                    <div class="meal-item card">
+                        <div class="meal-image" style="background-image: url('assets/meal-tofu-slim.png');"></div>
+                        <h3>두부 채소 플레이트</h3>
+                        <p class="meal-description">고단백 두부와 다양한 채소의 조화. 식물성 단백질과 식이섬유를 동시에 섭취할 수 있습니다.</p>
+                        <ul class="nutrition-facts">
+                            <li><span>칼로리</span><span>250kcal</span></li>
+                            <li><span>단백질</span><span>20g</span></li>
+                            <li><span>지방</span><span>7g</span></li>
+                            <li><span>탄수화물</span><span>15g</span></li>
+                        </ul>
+                    </div>
+                    <div class="meal-item card">
+                        <div class="meal-image" style="background-image: url('assets/meal-oat-slim.png');"></div>
+                        <h3>귀리밥 & 채소</h3>
+                        <p class="meal-description">식이섬유가 풍부한 귀리밥과 신선한 채소 반찬. 건강한 탄수화물과 비타민을 제공합니다.</p>
+                        <ul class="nutrition-facts">
+                            <li><span>칼로리</span><span>300kcal</span></li>
+                            <li><span>단백질</span><span>18g</span></li>
+                            <li><span>지방</span><span>6g</span></li>
+                            <li><span>탄수화물</span><span>45g</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4) 영양제 상세 섹션 -->
+        <section class="pdp-supplement-detail section">
+            <div class="container">
+                <h2 class="section__title">Slim Plate 영양제 구성</h2>
+                <div class="supplement-grid">
+                    <div class="supplement-item card">
+                        <div class="supplement-image" style="background-image: url('assets/supplement-lcarnitine.png');"></div>
+                        <h3>L-카르니틴</h3>
+                        <p>지방산을 미토콘드리아로 운반하여 에너지 생성에 기여, 지방 대사를 촉진합니다.</p>
+                    </div>
+                    <div class="supplement-item card">
+                        <div class="supplement-image" style="background-image: url('assets/supplement-greentea.png');"></div>
+                        <h3>녹차 추출물</h3>
+                        <p>카테킨 성분이 체지방 감소와 항산화 작용에 도움을 주어 건강한 다이어트를 지원합니다.</p>
+                    </div>
+                    <div class="supplement-item card">
+                        <div class="supplement-image" style="background-image: url('assets/supplement-vitb.png');"></div>
+                        <h3>비타민 B군</h3>
+                        <p>탄수화물, 단백질, 지방의 에너지 대사를 원활하게 하여 활력 있는 하루를 돕습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5) 고객 후기 섹션 -->
+        <section class="pdp-reviews section">
+            <div class="container">
+                <h2 class="section__title">고객님들이 증명하는<br>Slim Plate의 효과</h2>
+                <div class="ai-summary">
+                    <p><strong>AI 후기 요약:</strong> "체지방 감소, 몸이 가벼워짐, 포만감 유지"</p>
+                </div>
+                
+                <div class="swiper pdp-review-swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide review-card card">
+                            <div class="review-card__header">
+                                <img src="assets/review-avatar-1.png" alt="고객 아바타" class="review-card__avatar">
+                                <div class="review-card__info">
+                                    <h4>김**님 (32세)</h4>
+                                    <p>Slim Plate</p>
+                                </div>
+                            </div>
+                            <p class="review-card__quote">"점심 대용으로 먹고 있는데, 속이 편안하고 저녁까지 든든해요. 체지방도 조금씩 줄어드는 것 같아 만족합니다."</p>
+                            <div class="review-card__rating">★★★★★</div>
+                        </div>
+                        <div class="swiper-slide review-card card">
+                            <div class="review-card__header">
+                                <img src="assets/review-avatar-2.png" alt="고객 아바타" class="review-card__avatar">
+                                <div class="review-card__info">
+                                    <h4>이**님 (29세)</h4>
+                                    <p>Slim Plate</p>
+                                </div>
+                            </div>
+                            <p class="review-card__quote">"운동과 병행하니 시너지가 좋아요. 몸이 훨씬 가벼워지고 컨디션도 좋아졌습니다."</p>
+                            <div class="review-card__rating">★★★★☆</div>
+                        </div>
+                        <div class="swiper-slide review-card card">
+                            <div class="review-card__header">
+                                <img src="assets/review-avatar-3.png" alt="고객 아바타" class="review-card__avatar">
+                                <div class="review-card__info">
+                                    <h4>박**님 (35세)</h4>
+                                    <p>Slim Plate</p>
+                                </div>
+                            </div>
+                            <p class="review-card__quote">"맛있고 건강하게 다이어트 할 수 있어서 좋아요. 특히 닭가슴살 샐러드가 정말 신선해요."</p>
+                            <div class="review-card__rating">★★★★★</div>
+                        </div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6) 멤버십 혜택 섹션 -->
+        <section id="members" class="members section">
+            <div class="members__container container">
+                <h2 class="section__title">이너컬리 멤버스</h2>
+                <ul class="members__badges">
+                    <li>포인트 적립</li>
+                    <li>프리미엄 콘텐츠</li>
+                    <li>전용 이벤트</li>
+                    <li>커뮤니티/라운지 접근</li>
+                </ul>
+                <div class="members__main-visual">
+                    <img src="assets/members-visual.png" alt="이너컬리 멤버스 웰컴 기프트: 보냉백과 플레이트 세트">
+                </div>
+                <div class="members__cta">
+                    <a href="membership.html" class="btn btn--pill btn--light">멤버십 혜택 자세히 보기</a>
+                    <a href="membership.html" class="btn btn--primary">멤버스 합류하기</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7) 챌린지 섹션 -->
+        <section id="challenge" class="challenge section">
+            <div class="challenge__container container">
+                <h2 class="section__title">30·60·90일 챌린지,<br>지속할수록 커지는 리워드</h2>
+                <p class="section__subtitle">오픈베타 참여 시 리워드 선착순 혜택 제공</p>
+                <div class="challenge-timeline">
+                    <div class="challenge-item card">
+                        <div class="challenge-item__day">30일</div>
+                        <h3 class="challenge-item__title">변화 체감</h3>
+                        <p class="challenge-item__desc">체지방 감소, 몸이 가벼워짐</p>
+                    </div>
+                    <div class="challenge-item card">
+                        <div class="challenge-item__day">60일</div>
+                        <h3 class="challenge-item__title">탄력 & 라인</h3>
+                        <p class="challenge-item__desc">균형 잡힌 바디 라인 형성</p>
+                    </div>
+                    <div class="challenge-item card">
+                        <div class="challenge-item__day">90일</div>
+                        <h3 class="challenge-item__title">지속 가능한 습관</h3>
+                        <p class="challenge-item__desc">건강한 식습관 루틴 완성</p>
+                    </div>
+                </div>
+                <p class="challenge__caption">*상세 조건은 멤버스 안내 참고</p>
+            </div>
+        </section>
+
+        <!-- 8) 루션 앱 소개 섹션 -->
+        <section id="app" class="app-section section">
+            <div class="app-section__container container">
+                <div class="app-section__content">
+                    <h2 class="section__title">루션 앱으로 루틴이<br>더 간편해집니다</h2>
+                    <p class="section__subtitle">먹는 순간을 넘어, 매일을 관리하는 이너뷰티 루틴</p>
+                    <ul class="app-section__features">
+                        <li><strong>AI 분석</strong> 식단 사진만 찍으면 AI가 분석해요.</li>
+                        <li><strong>컨디션 트래킹</strong> 매일의 변화를 감성적으로 기록해요.</li>
+                        <li><strong>맞춤 추천</strong> 내 데이터 기반으로 다음 플랜을 제안해요.</li>
+                    </ul>
+                </div>
+                <div class="app-section__visual">
+                    <img src="assets/app-mockup.png" alt="이너컬리 루션 앱 UI 목업" loading="lazy">
+                </div>
+            </div>
+        </section>
+
+        <!-- 9) 이벤트 섹션 -->
+        <section id="event" class="event section">
+            <div class="container">
+                <h2 class="section__title">이너컬리 특별 이벤트</h2>
+                <p class="section__subtitle">오픈베타 기간 중 멤버십 합류 시 해당 Plate 트라이얼 3일 무료 제공</p>
+                <div class="event-visual">
+                    <img src="assets/event-banner.png" alt="이벤트 배너">
+                </div>
+            </div>
+        </section>
+
+        <!-- 10) 최종 CTA 섹션 -->
+        <section id="cta" class="cta section">
+            <div class="cta__container container">
+                <h2 class="cta__title">오늘 시작하면,<br>내일이 달라집니다.</h2>
+                <div class="cta__actions">
+                    <a href="#" class="btn btn--primary" data-analytics="cta_subscribe_final">지금 구독 시작하기</a>
+                    <a href="https://www.kurly.com/member/membership" class="btn btn--ghost" target="_blank">멤버스 혜택 보기</a>
+                </div>
+                <p class="cta__caption">*오픈베타 기간 중 혜택이 순차 적용됩니다.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Sticky Bottom Bar -->
+    <div class="sticky-bottom-bar">
+        <div class="sticky-bottom-bar__container">
+            <div class="sticky-text">
+                <p><strong>멤버스 가입 시 TRIAL ROUTINE 3일 무료 제공</strong></p>
+                <p>모든 배송은 친환경 보냉팩에 담겨 신선도를 유지합니다</p>
+            </div>
+            <a href="membership.html" class="btn btn--primary">멤버스 가입하기</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer__container container">
+            <p>&copy; 2025 Inner Kurly. All rights reserved.</p>
+            <div class="footer__links">
+                <a href="#">이용약관</a>
+                <a href="#">개인정보처리방침</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="app.js" defer></script>
+</body>
+</html>
