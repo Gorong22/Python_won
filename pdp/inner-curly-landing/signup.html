@@ -7,14 +7,15 @@
     <link rel="stylesheet" href="css/styles.css">
     <style>
         body { background-color: #f9f9f9; }
-        .signup-container { max-width: 600px; margin: 50px auto; padding: 40px; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .signup-container { max-width: 700px; margin: 50px auto; padding: 40px; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .signup-container h1 { text-align: center; margin-bottom: 30px; font-size: 28px; color: #333; }
-        .form-group { margin-bottom: 25px; }
-        .form-group label { display: block; margin-bottom: 10px; font-weight: bold; font-size: 16px; }
-        .form-group input[type="text"], .form-group input[type="email"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
-        .form-group .checkbox-group label, .form-group .radio-group label { font-weight: normal; display: inline-block; margin-right: 20px; }
-        .form-group input[type="checkbox"], .form-group input[type="radio"] { margin-right: 8px; }
-        .form-group .other-input { margin-top: 10px; }
+        fieldset { border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 25px; }
+        legend { font-size: 1.2rem; font-weight: bold; margin-left: 10px; padding: 0 10px; color: var(--color-primary); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 10px; font-weight: 600; font-size: 1rem; }
+        .input-group, .radio-group, .checkbox-group { display: flex; flex-wrap: wrap; gap: 15px; }
+        .checkbox-group label, .radio-group label { font-weight: normal; display: flex; align-items: center; gap: 5px; }
+        input[type="text"], input[type="email"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
         .submit-btn { width: 100%; padding: 15px; background-color: #5f0080; color: white; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background-color 0.3s; }
         .submit-btn:hover { background-color: #4b0066; }
         .password-notice { text-align: center; margin-top: 20px; font-size: 0.9rem; color: #888; }
@@ -24,49 +25,69 @@
     <div class="signup-container">
         <h1>회원가입 & 설문</h1>
         <form id="signupForm">
-            <!-- Form Fields... -->
-            <div class="form-group">
-                <label>[기본 정보]</label>
-                <input type="text" id="name" name="name" placeholder="이름 (필수)" required>
-            </div>
-            <div class="form-group">
-                <input type="email" id="email" name="email" placeholder="이메일 (필수)" required>
-            </div>
-            <div class="form-group">
-                <label>[이너뷰티 고민]</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="concerns" value="피부 광채"> 피부 광채</label>
-                    <label><input type="checkbox" name="concerns" value="다이어트/체중 관리"> 다이어트/체중 관리</label>
-                    <label><input type="checkbox" name="concerns" value="독소 배출/장 건강"> 독소 배출/장 건강</label>
-                    <label><input type="checkbox" name="concerns" value="피로 회복/컨디션"> 피로 회복/컨디션</label>
-                    <label><input type="checkbox" name="concerns" value="영양 균형/식습관"> 영양 균형/식습관</label>
-                    <label><input type="checkbox" name="concerns" value="기타"> 기타 <input type="text" name="concern_other" class="other-input" placeholder="기타 고민 입력"></label>
+            <fieldset>
+                <legend>기본 정보</legend>
+                <div class="form-group">
+                    <input type="text" id="name" name="name" placeholder="이름 (필수)" required>
                 </div>
-            </div>
-            <div class="form-group">
-                <label>[생활 습관]</label>
-                <p>식습관</p>
-                <div class="radio-group">
-                    <label><input type="radio" name="diet_habit" value="가공식품 多"> 가공식품 多</label>
-                    <label><input type="radio" name="diet_habit" value="균형 잡힌 식사"> 균형 잡힌 식사</label>
-                    <label><input type="radio" name="diet_habit" value="자주 외식"> 자주 외식</label>
+                <div class="form-group">
+                    <input type="email" id="email" name="email" placeholder="이메일 (필수)" required>
                 </div>
-                 <p style="margin-top: 15px;">영양제 섭취 습관</p>
-                <div class="radio-group">
-                    <label><input type="radio" name="supplement_habit" value="매일"> 매일</label>
-                    <label><input type="radio" name="supplement_habit" value="가끔"> 가끔</label>
-                    <label><input type="radio" name="supplement_habit" value="안함"> 안함</label>
+            </fieldset>
+
+            <fieldset>
+                <legend>스트레스 관리 😌</legend>
+                <div class="form-group">
+                    <label>Q1. 요즘 가장 불편한 증상은 무엇인가요?</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="stress_q1" value="긴장/예민"> 긴장/예민</label>
+                        <label><input type="checkbox" name="stress_q1" value="집중 저하"> 집중 저하</label>
+                        <label><input type="checkbox" name="stress_q1" value="두근거림"> 두근거림</label>
+                        <label><input type="checkbox" name="stress_q1" value="소화 불편"> 소화 불편</label>
+                        <label><input type="checkbox" name="stress_q1" value="두통/뒷목 뻐근"> 두통/뒷목 뻐근</label>
+                        <label><input type="checkbox" name="stress_q1" value="잘 모르겠어요"> 잘 모르겠어요</label>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label>[관심 항목]</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="interests" value="맞춤형 식단"> 맞춤형 식단</label>
-                    <label><input type="checkbox" name="interests" value="영양제 추천"> 영양제 추천</label>
-                    <label><input type="checkbox" name="interests" value="피부·다이어트"> 피부·다이어트</label>
-                    <label><input type="checkbox" name="interests" value="장 건강"> 장 건강</label>
+                <div class="form-group">
+                    <label>Q2. 스트레스가 심해지는 시간대는요?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="stress_q2" value="오전"> 오전</label>
+                        <label><input type="radio" name="stress_q2" value="오후"> 오후</label>
+                        <label><input type="radio" name="stress_q2" value="저녁"> 저녁</label>
+                        <label><input type="radio" name="stress_q2" value="밤"> 밤</label>
+                        <label><input type="radio" name="stress_q2" value="주말"> 주말</label>
+                        <label><input type="radio" name="stress_q2" value="상시"> 상시</label>
+                    </div>
                 </div>
-            </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>수면 😴</legend>
+                <div class="form-group">
+                    <label>Q1. 어떤 부분이 가장 어려우세요?</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="sleep_q1" value="잠들기"> 잠들기</label>
+                        <label><input type="checkbox" name="sleep_q1" value="중간에 자주 깸"> 중간에 자주 깸</label>
+                        <label><input type="checkbox" name="sleep_q1" value="이른 각성"> 이른 각성</label>
+                        <label><input type="checkbox" name="sleep_q1" value="숙면감 부족"> 숙면감 부족</label>
+                        <label><input type="checkbox" name="sleep_q1" value="코골이 의심"> 코골이 의심</label>
+                        <label><input type="checkbox" name="sleep_q1" value="잘 모르겠어요"> 잘 모르겠어요</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Q2. 평균 수면 시간은요?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="sleep_q2" value="~5시간"> ~5시간</label>
+                        <label><input type="radio" name="sleep_q2" value="6시간"> 6시간</label>
+                        <label><input type="radio" name="sleep_q2" value="7시간"> 7시간</label>
+                        <label><input type="radio" name="sleep_q2" value="8시간+"> 8시간+</label>
+                        <label><input type="radio" name="sleep_q2" value="가변적"> 가변적</label>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Other fieldsets for Gut Health, Multivitamin, etc. would go here -->
+
             <button type="submit" class="submit-btn">가입 및 설문 완료하기</button>
             <p class="password-notice">파일럿 테스트 중입니다. 모든 계정 비밀번호는 1234로 통일됩니다.</p>
         </form>
@@ -82,32 +103,49 @@
             localStorage.setItem('userEmail', email);
 
             const formData = new FormData(form);
-            const data = {};
+            let data = {};
+            // FormData를 객체로 변환 (체크박스 등 다중 값 처리 포함)
             for (let [key, value] of formData.entries()) {
-                if (data[key]) {
-                    data[key] += ", " + value;
+                if (key.endsWith('[]')) { // For potential future multi-select
+                    let name = key.slice(0, -2);
+                    if (!data[name]) data[name] = [];
+                    data[name].push(value);
+                } else if (data[key]) {
+                    if (!Array.isArray(data[key])) {
+                        data[key] = [data[key]];
+                    }
+                    data[key].push(value);
                 } else {
                     data[key] = value;
+                }
+            }
+            // 배열인 값들을 콤마로 구분된 문자열로 변환
+            for (let key in data) {
+                if (Array.isArray(data[key])) {
+                    data[key] = data[key].join(', ');
                 }
             }
 
             data.password = "1234";
             data.timestamp = new Date().toISOString();
 
+            console.log("Sending final data object:", data);
+
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
                 body: JSON.stringify(data),
-                mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' }
             })
-            .then(() => {
+            .then(response => response.json()) // 서버로부터의 응답을 JSON으로 파싱
+            .then(res => {
+                console.log('Success:', res);
                 alert("가입해주셔서 감사합니다. 곧 더 나은 서비스를 준비하겠습니다.");
                 form.reset();
                 window.location.href = 'index.html';
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert("오류가 발생했습니다. 다시 시도해주세요.");
+                alert("오류가 발생했습니다. 다시 시도해주세요. 콘솔 창에서 CORS 오류가 보이는지 확인해주세요.");
             });
         });
     </script>
