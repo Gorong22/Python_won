@@ -24,7 +24,7 @@
     <div class="signup-container">
         <h1>회원가입 & 설문</h1>
         <form id="signupForm">
-            <!-- Form Fields... (same as before) -->
+            <!-- Form Fields... -->
             <div class="form-group">
                 <label>[기본 정보]</label>
                 <input type="text" id="name" name="name" placeholder="이름 (필수)" required>
@@ -94,12 +94,11 @@
             data.password = "1234";
             data.timestamp = new Date().toISOString();
 
-            console.log("Sending signup data as JSON:", data);
-
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
-                body: JSON.stringify(data), // 데이터를 JSON 문자열로 전송
-                mode: 'no-cors' // 서버 응답을 읽지 않음
+                body: JSON.stringify(data),
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' }
             })
             .then(() => {
                 alert("가입해주셔서 감사합니다. 곧 더 나은 서비스를 준비하겠습니다.");
