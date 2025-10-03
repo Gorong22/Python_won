@@ -1,192 +1,236 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Balance Plate | 이너컬리</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./css/styles.css" />
-</head>
-<body class="plate-balance pdp-main">
-
-  <!-- HERO -->
-  <section class="pdp-hero-section">
-    <div class="pdp-hero-section__image-wrapper">
-      <img src="./images/balance-hero.jpg" alt="Balance Plate 대표 이미지" class="pdp-hero-section__image" />
-    </div>
-    <div class="pdp-hero-section__content">
-      <h1 class="pdp-hero-section__title">Balance Plate</h1>
-      <p class="pdp-hero-section__tagline">영양 밸런스를 위한 가장 기본의 선택</p>
-      <p class="pdp-hero-section__description">
-        단백질, 탄수화물, 지방의 균형을 맞춘 구성으로<br />
-        매일 안정적인 에너지를 채워드립니다.
-      </p>
-      <div class="pdp-hero-section__actions">
-        <button class="btn btn--primary">구독 시작하기</button>
-        <button class="btn btn--ghost">식단표 다운로드</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Balance Plate | 이너컬리</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body class="plate-balance pdp-main">
+    <!-- HERO -->
+    <section class="pdp-hero-section">
+      <div class="pdp-hero-section__image-wrapper">
+        <img
+          src="./images/balance-hero.jpg"
+          alt="Balance Plate 대표 이미지"
+          class="pdp-hero-section__image"
+        />
       </div>
-    </div>
-  </section>
-
-  <!-- USP -->
-  <section class="section">
-    <h2 class="section__title">Balance Plate는 이런 분께 추천합니다</h2>
-    <div class="hashtags">
-      <span>#균형잡힌영양</span>
-      <span>#심플라이프</span>
-      <span>#매일건강</span>
-    </div>
-  </section>
-
-  <!-- 메뉴 -->
-  <section class="section menu">
-    <h2 class="section__title">오늘의 식단 구성</h2>
-    <div class="menu-list">
-      <div class="menu-item">
-        <img src="./images/balance-chicken.jpg" alt="닭가슴살 플레이트" />
-        <h4>닭가슴살 플레이트</h4>
-        <p>420 kcal · 닭가슴살 + 고구마 + 브로콜리</p>
-        <span class="tag">단백질</span>
-      </div>
-      <div class="menu-item">
-        <img src="./images/balance-tofu.jpg" alt="두부 스테이크" />
-        <h4>두부 스테이크</h4>
-        <p>360 kcal · 두부 + 야채구이</p>
-        <span class="tag">식물성단백질</span>
-      </div>
-      <div class="menu-item">
-        <img src="./images/balance-yogurt.jpg" alt="견과 요거트" />
-        <h4>견과 요거트</h4>
-        <p>210 kcal · 플레인 요거트 + 아몬드</p>
-        <span class="tag">영양간식</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- 영양 성분 -->
-  <section class="section nutrition">
-    <h2 class="section__title">영양 성분 (1일 제공량)</h2>
-    <table class="nutrition-table">
-      <tr><th>칼로리</th><td>990 kcal</td></tr>
-      <tr><th>단백질</th><td>55 g</td></tr>
-      <tr><th>탄수화물</th><td>88 g</td></tr>
-      <tr><th>지방</th><td>30 g</td></tr>
-      <tr><th>칼슘</th><td>95% RDA</td></tr>
-      <tr><th>비타민 B군</th><td>120% RDA</td></tr>
-    </table>
-  </section>
-
-  <!-- 구독 옵션 -->
-  <section class="section pricing">
-    <h2 class="section__title">구독 옵션</h2>
-    <div class="pricing__grid">
-      <div class="pricing-card" data-total-price="67000" data-days="7">
-        <h3 class="pricing-card__title">Weekly Plan (7일)</h3>
-        <p class="pricing-card__price">67,000원</p>
-        <p class="pricing-card__daily"></p>
-        <button class="btn btn--primary">주간 구독하기</button>
-      </div>
-      <div class="pricing-card" data-total-price="239000" data-days="28">
-        <h3 class="pricing-card__title">Monthly Plan (4주)</h3>
-        <p class="pricing-card__price">239,000원</p>
-        <p class="pricing-card__daily"></p>
-        <button class="btn btn--primary">월간 구독하기</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- 챌린지 & 리워드 -->
-  <section class="section challenge">
-    <h2 class="section__title">30일 챌린지 & 리워드</h2>
-    <div class="challenge-rewards">
-      <div class="reward-card">
-        <div class="reward-card__icon">🥗</div>
-        <h3 class="reward-card__title">30일 완주</h3>
-        <p>Balance Plate 30일 기록하면<br>헬시 레시피북 증정</p>
-      </div>
-      <div class="reward-card">
-        <div class="reward-card__icon">⚖️</div>
-        <h3 class="reward-card__title">60일 완주</h3>
-        <p>60일 완주 시<br>이너컬리 포인트 적립</p>
-      </div>
-      <div class="reward-card">
-        <div class="reward-card__icon">🏆</div>
-        <h3 class="reward-card__title">90일 완주</h3>
-        <p>90일 달성 시<br>Balance 전용 스페셜 리워드 박스 제공</p>
-      </div>
-    </div>
-    <div class="challenge__cta">
-      <button class="btn btn--primary">챌린지 참여하기</button>
-      <p class="challenge__app-info">* 챌린지는 이너컬리 앱에서 자동 기록됩니다.</p>
-    </div>
-  </section>
-
-  <!-- 후기 -->
-  <section class="section reviews">
-    <h2 class="section__title">고객 후기</h2>
-    <div class="review-card">
-      <div class="review-card__header">
-        <img src="./images/user7.jpg" alt="user" class="review-card__avatar" />
-        <div class="review-card__info">
-          <h4>이하나 (28세)</h4>
-          <p>⭐️⭐️⭐️⭐️⭐️</p>
+      <div class="pdp-hero-section__content">
+        <h1 class="pdp-hero-section__title">Balance Plate</h1>
+        <p class="pdp-hero-section__tagline">
+          영양 밸런스를 위한 가장 기본의 선택
+        </p>
+        <p class="pdp-hero-section__description">
+          단백질, 탄수화물, 지방의 균형을 맞춘 구성으로<br />
+          매일 안정적인 에너지를 채워드립니다.
+        </p>
+        <div class="pdp-hero-section__actions">
+          <button class="btn btn--primary">구독 시작하기</button>
+          <button class="btn btn--ghost">식단표 다운로드</button>
         </div>
       </div>
-      <p class="review-card__quote">
-        "하루 세 끼 중 한 끼를 Balance Plate로 바꾸니 몸이 한결 편해요."
-      </p>
-    </div>
-    <div class="review-card">
-      <div class="review-card__header">
-        <img src="./images/user8.jpg" alt="user" class="review-card__avatar" />
-        <div class="review-card__info">
-          <h4>최민준 (35세)</h4>
-          <p>⭐️⭐️⭐️⭐️</p>
+    </section>
+
+    <!-- USP -->
+    <section class="section">
+      <h2 class="section__title">Balance Plate는 이런 분께 추천합니다</h2>
+      <div class="hashtags">
+        <span>#균형잡힌영양</span>
+        <span>#심플라이프</span>
+        <span>#매일건강</span>
+      </div>
+    </section>
+
+    <!-- 메뉴 -->
+    <section class="section menu">
+      <h2 class="section__title">오늘의 식단 구성</h2>
+      <div class="menu-list">
+        <div class="menu-item">
+          <img src="./images/balance-chicken.jpg" alt="닭가슴살 플레이트" />
+          <h4>닭가슴살 플레이트</h4>
+          <p>420 kcal · 닭가슴살 + 고구마 + 브로콜리</p>
+          <span class="tag">단백질</span>
+        </div>
+        <div class="menu-item">
+          <img src="./images/balance-tofu.jpg" alt="두부 스테이크" />
+          <h4>두부 스테이크</h4>
+          <p>360 kcal · 두부 + 야채구이</p>
+          <span class="tag">식물성단백질</span>
+        </div>
+        <div class="menu-item">
+          <img src="./images/balance-yogurt.jpg" alt="견과 요거트" />
+          <h4>견과 요거트</h4>
+          <p>210 kcal · 플레인 요거트 + 아몬드</p>
+          <span class="tag">영양간식</span>
         </div>
       </div>
-      <p class="review-card__quote">
-        "식단이 심플하고 담백해서 매일 먹기 부담이 없습니다."
-      </p>
-    </div>
-  </section>
+    </section>
 
-  <!-- 멤버십 -->
-  <section class="section members">
-    <h2 class="section__title">이너컬리 멤버스 혜택</h2>
-    <ul class="members__badges">
-      <li>첫 구독 30% 할인</li>
-      <li>헬시 레시피북 무료</li>
-      <li>AI 맞춤 리포트</li>
-    </ul>
-    <div class="members__cta">
-      <button class="btn btn--primary">멤버십 구독하기</button>
-    </div>
-  </section>
+    <!-- 영양 성분 -->
+    <section class="section nutrition">
+      <h2 class="section__title">영양 성분 (1일 제공량)</h2>
+      <table class="nutrition-table">
+        <tr>
+          <th>칼로리</th>
+          <td>990 kcal</td>
+        </tr>
+        <tr>
+          <th>단백질</th>
+          <td>55 g</td>
+        </tr>
+        <tr>
+          <th>탄수화물</th>
+          <td>88 g</td>
+        </tr>
+        <tr>
+          <th>지방</th>
+          <td>30 g</td>
+        </tr>
+        <tr>
+          <th>칼슘</th>
+          <td>95% RDA</td>
+        </tr>
+        <tr>
+          <th>비타민 B군</th>
+          <td>120% RDA</td>
+        </tr>
+      </table>
+    </section>
 
-  <!-- Sticky CTA -->
-  <div class="sticky-footer-bar">
-    <div class="sticky-footer-bar__container">
-      <div class="sticky-footer-bar__text">
-        <strong>Balance Plate 구독</strong>
-        <span class="footer-price"></span>
+    <!-- 구독 옵션 -->
+    <section class="section pricing">
+      <h2 class="section__title">구독 옵션</h2>
+      <div class="pricing__grid">
+        <div class="pricing-card" data-total-price="67000" data-days="7">
+          <h3 class="pricing-card__title">Weekly Plan (7일)</h3>
+          <p class="pricing-card__price">67,000원</p>
+          <p class="pricing-card__daily"></p>
+          <button class="btn btn--primary">주간 구독하기</button>
+        </div>
+        <div class="pricing-card" data-total-price="239000" data-days="28">
+          <h3 class="pricing-card__title">Monthly Plan (4주)</h3>
+          <p class="pricing-card__price">239,000원</p>
+          <p class="pricing-card__daily"></p>
+          <button class="btn btn--primary">월간 구독하기</button>
+        </div>
       </div>
-      <div class="sticky-footer-bar__actions">
-        <button class="btn btn--primary">장바구니 담기</button>
-        <button class="btn btn--ghost">바로 구매</button>
+    </section>
+
+    <!-- 챌린지 & 리워드 -->
+    <section class="section challenge">
+      <h2 class="section__title">30일 챌린지 & 리워드</h2>
+      <div class="challenge-rewards">
+        <div class="reward-card">
+          <div class="reward-card__icon">🥗</div>
+          <h3 class="reward-card__title">30일 완주</h3>
+          <p>Balance Plate 30일 기록하면<br />헬시 레시피북 증정</p>
+        </div>
+        <div class="reward-card">
+          <div class="reward-card__icon">⚖️</div>
+          <h3 class="reward-card__title">60일 완주</h3>
+          <p>60일 완주 시<br />이너컬리 포인트 적립</p>
+        </div>
+        <div class="reward-card">
+          <div class="reward-card__icon">🏆</div>
+          <h3 class="reward-card__title">90일 완주</h3>
+          <p>90일 달성 시<br />Balance 전용 스페셜 리워드 박스 제공</p>
+        </div>
+      </div>
+      <div class="challenge__cta">
+        <button class="btn btn--primary">챌린지 참여하기</button>
+        <p class="challenge__app-info">
+          * 챌린지는 루션 앱에서 자동 기록됩니다.
+        </p>
+      </div>
+    </section>
+
+    <!-- 후기 -->
+    <section class="section reviews">
+      <h2 class="section__title">고객 후기</h2>
+      <div class="review-card">
+        <div class="review-card__header">
+          <img
+            src="./images/user7.jpg"
+            alt="user"
+            class="review-card__avatar"
+          />
+          <div class="review-card__info">
+            <h4>이하나 (28세)</h4>
+            <p>⭐️⭐️⭐️⭐️⭐️</p>
+          </div>
+        </div>
+        <p class="review-card__quote">
+          "하루 세 끼 중 한 끼를 Balance Plate로 바꾸니 몸이 한결 편해요."
+        </p>
+      </div>
+      <div class="review-card">
+        <div class="review-card__header">
+          <img
+            src="./images/user8.jpg"
+            alt="user"
+            class="review-card__avatar"
+          />
+          <div class="review-card__info">
+            <h4>최민준 (35세)</h4>
+            <p>⭐️⭐️⭐️⭐️</p>
+          </div>
+        </div>
+        <p class="review-card__quote">
+          "식단이 심플하고 담백해서 매일 먹기 부담이 없습니다."
+        </p>
+      </div>
+    </section>
+
+    <!-- 멤버십 -->
+    <section class="section members">
+      <h2 class="section__title">이너컬리 멤버스 혜택</h2>
+      <ul class="members__badges">
+        <li>첫 구독 30% 할인</li>
+        <li>이너컬리 한정판 보냉백 증정</li>
+        <li>AI 맞춤 리포트</li>
+      </ul>
+      <div class="members__cta">
+        <button class="btn btn--primary">멤버십 구독하기</button>
+      </div>
+    </section>
+
+    <!-- Sticky CTA -->
+    <div class="sticky-footer-bar">
+      <div class="sticky-footer-bar__container">
+        <div class="sticky-footer-bar__text">
+          <strong>Balance Plate 구독</strong>
+          <span class="footer-price"></span>
+        </div>
+        <div class="sticky-footer-bar__actions">
+          <button class="btn btn--primary">장바구니 담기</button>
+          <button class="btn btn--ghost">바로 구매</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <script>
-    document.querySelectorAll(".pricing-card").forEach(card => {
-      const total = parseInt(card.dataset.totalPrice, 10);
-      const days = parseInt(card.dataset.days, 10);
-      const daily = Math.round(total / days);
-      card.querySelector(".pricing-card__daily").textContent = `하루 약 ${daily.toLocaleString()}원`;
-    });
-    const minPrice = Math.min(...[...document.querySelectorAll(".pricing-card")].map(c => parseInt(c.dataset.totalPrice, 10) / parseInt(c.dataset.days, 10)));
-    document.querySelector(".footer-price").textContent = `하루 약 ${Math.round(minPrice).toLocaleString()}원부터`;
-  </script>
-
-</body>
+    <script>
+      document.querySelectorAll(".pricing-card").forEach((card) => {
+        const total = parseInt(card.dataset.totalPrice, 10);
+        const days = parseInt(card.dataset.days, 10);
+        const daily = Math.round(total / days);
+        card.querySelector(
+          ".pricing-card__daily"
+        ).textContent = `하루 약 ${daily.toLocaleString()}원`;
+      });
+      const minPrice = Math.min(
+        ...[...document.querySelectorAll(".pricing-card")].map(
+          (c) =>
+            parseInt(c.dataset.totalPrice, 10) / parseInt(c.dataset.days, 10)
+        )
+      );
+      document.querySelector(
+        ".footer-price"
+      ).textContent = `하루 약 ${Math.round(minPrice).toLocaleString()}원부터`;
+    </script>
+  </body>
 </html>

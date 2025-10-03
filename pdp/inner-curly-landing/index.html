@@ -1,434 +1,775 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
+  <head>
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id=GTM-KWL72ML2'+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-KWL72ML2');</script>
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=GTM-KWL72ML2" + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-KWL72ML2");
+    </script>
     <!-- End Google Tag Manager -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>이너컬리 | 매일, 나를 위해 건강한 습관의 시작</title>
-    <meta name="description" content="식단과 이너뷰티가 만나는 푸디케이션, 이너컬리. 건강한 루틴을 위한 프리미엄 식단과 앱 서비스를 만나보세요.">
+    <meta
+      name="description"
+      content="식단과 이너뷰티가 만나는 푸디케이션, 이너컬리. 건강한 루틴을 위한 프리미엄 식단과 앱 서비스를 만나보세요."
+    />
 
     <!-- SEO & Open Graph -->
-    <meta property="og:title" content="이너컬리 | 매일, 나를 위 건강한 습관의 시작">
-    <meta property="og:description" content="한 끼를 먹더라도, 내 몸과 피부가 진짜로 원하는 것을 채워야 하니까요. 컬리가 새롭게 제안하는 이너뷰티 루틴.">
-    <meta property="og:image" content="./assets/og-image.png">
-    <meta property="og:image:alt" content="이너컬리 프리미엄 식단">
-    <meta property="og:url" content="https://inner-kurly.example.com">
-    <meta property="og:type" content="website">
+    <meta
+      property="og:title"
+      content="이너컬리 | 매일, 나를 위 건강한 습관의 시작"
+    />
+    <meta
+      property="og:description"
+      content="한 끼를 먹더라도, 내 몸과 피부가 진짜로 원하는 것을 채워야 하니까요. 컬리가 새롭게 제안하는 이너뷰티 루틴."
+    />
+    <meta property="og:image" content="./assets/og-image.png" />
+    <meta property="og:image:alt" content="이너컬리 프리미엄 식단" />
+    <meta property="og:url" content="https://inner-kurly.example.com" />
+    <meta property="og:type" content="website" />
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- Swiper.js CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
 
     <!-- CSS -->
-    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/styles.css" />
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CR9VXF0VLH"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-CR9VXF0VLH"
+    ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-CR9VXF0VLH');
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-CR9VXF0VLH");
     </script>
 
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": "이너컬리 구독 서비스",
-      "description": "프리미엄 이너뷰티 식단 구독 서비스",
-      "brand": {
-        "@type": "Brand",
-        "name": "Inner Kurly"
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "이너컬리 구독 서비스",
+        "description": "프리미엄 이너뷰티 식단 구독 서비스",
+        "brand": {
+          "@type": "Brand",
+          "name": "Inner Kurly"
+        }
       }
-    }
     </script>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWL72ML2"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-KWL72ML2"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
     <header class="header">
-        <nav class="nav container">
-            <a href="#home" class="nav__logo">Inner Kurly</a>
-            <ul class="nav__menu">
-                <li class="nav__item"><a href="#plates" class="nav__link">추천 식단</a></li>
-                <li class="nav__item"><a href="#pricing" class="nav__link">구독 상품</a></li>
-                <li class="nav__item"><a href="#reviews" class="nav__link">고객 후기</a></li>
-                <li class="nav__item"><a href="#challenge" class="nav__link">챌린지</a></li>
-            </ul>
-            <div class="header__util">
-                <a href="login.html" class="btn btn--ghost btn--small">로그인</a>
-                <a href="signup.html" class="btn btn--ghost btn--small">회원가입</a>
-                <a href="cart.html" class="btn btn--ghost btn--small cart-btn">
-                    🛒 <span class="cart-badge">0</span>
-                </a>
-            </div>
-            <button class="nav__toggle" aria-label="메뉴 열기">
-                <span></span><span></span><span></span>
-            </button>
-        </nav>
+      <nav class="nav container">
+        <a href="index.html" class="nav__logo">Inner Kurly</a>
+        <ul class="nav__menu">
+          <li class="nav__item">
+            <a href="#plates" class="nav__link">추천 식단</a>
+          </li>
+          <li class="nav__item">
+            <a href="#pricing" class="nav__link">구독 상품</a>
+          </li>
+          <li class="nav__item">
+            <a href="#reviews" class="nav__link">고객 후기</a>
+          </li>
+          <li class="nav__item">
+            <a href="#challenge" class="nav__link">챌린지</a>
+          </li>
+        </ul>
+        <div class="header__util">
+          <a href="login.html" class="btn btn--ghost btn--small">로그인</a>
+          <a href="signup.html" class="btn btn--ghost btn--small">회원가입</a>
+          <a href="cart.html" class="btn btn--ghost btn--small cart-btn">
+            🛒 <span class="cart-badge">0</span>
+          </a>
+        </div>
+        <button class="nav__toggle" aria-label="메뉴 열기">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
     </header>
 
     <main>
-        <!-- Hero Section -->
-        <section id="home" class="hero-section">
-            <div class="hero-section__bg"></div>
-            <div class="hero-section__content container" data-animate="fade-up">
-                <h1 class="hero-section__title">하루 한 끼, 나를 위한 건강한 투자</h1>
-                <p class="hero-section__subtitle">이너컬리가 제안하는 프리미엄 이너뷰티 식단으로<br>가장 빛나는 당신을 만나보세요.</p>
-                <a href="#pricing" class="btn btn--primary btn--large">구독 시작하기</a>
-            </div>
-        </section>
+      <!-- Hero Section -->
+      <section id="home" class="hero-section">
+        <div class="hero-section__bg"></div>
+        <div class="hero-section__content container" data-animate="fade-up">
+          <h1 class="hero-section__title">하루 한 끼, 나를 위한 건강한 투자</h1>
+          <p class="hero-section__subtitle">
+            이너컬리가 제안하는 프리미엄 이너뷰티 식단으로<br />가장 빛나는
+            당신을 만나보세요.
+          </p>
+          <a href="#pricing" class="btn btn--primary btn--large"
+            >구독 시작하기</a
+          >
+        </div>
+      </section>
 
-        <!-- Insight Section (Charts) -->
-        <section id="insight" class="insight section">
-            <div class="container">
-                <h2 class="section__title" data-animate="fade-up">데이터로 증명된 이너뷰티 효과</h2>
-                <p class="section__subtitle" data-animate="fade-up" data-animate-delay="100">과학적인 식단이 우리 몸에 미치는 긍정적인 영향을 확인해보세요.</p>
-                <div class="insight__grid">
-                    <div class="insight-card" data-animate="fade-up">
-                        <div class="insight-card__graph">
-                            <div class="bar-chart">
-                                <div class="bar-chart__label">주름 지수 20% ↓</div>
-                                <div class="bar-chart__bar" style="height: 80%;"></div>
-                                <div class="bar-chart__bar bar-chart__bar--control" style="height: 100%;"></div>
-                            </div>
-                        </div>
-                        <h3 class="insight-card__title">비타민 C 섭취와 피부 노화</h3>
-                        <p class="insight-card__summary">비타민C를 꾸준히 섭취한 그룹은 그렇지 않은 그룹보다 주름 발생률이 현저히 낮았습니다.</p>
-                        <p class="insight-card__source">출처: Am J Clin Nutr, 2007</p>
-                    </div>
-                    <div class="insight-card" data-animate="fade-up" data-animate-delay="200">
-                        <div class="insight-card__graph">
-                            <div class="donut-chart">
-                                <div class="donut-chart__percent">68%</div>
-                                <div class="donut-chart__label">광노화 감소</div>
-                            </div>
-                        </div>
-                        <h3 class="insight-card__title">항산화 식단과 광노화</h3>
-                        <p class="insight-card__summary">고함량 항산화 식단을 섭취한 그룹은 자외선으로 인한 피부 광노화 발생이 68% 감소했습니다.</p>
-                        <p class="insight-card__source">출처: JID, 2021</p>
-                    </div>
-                    <div class="insight-card" data-animate="fade-up" data-animate-delay="400">
-                        <div class="insight-card__graph">
-                            <div class="horizontal-bar-chart">
-                                <div class="h-bar-wrapper"><div class="h-bar" style="width: 60%;"></div></div>
-                                <div class="h-bar-wrapper">
-                                    <div class="h-bar" style="width: 80%;"></div>
-                                    <span class="h-bar__label">+25%</span>
-                                </div>
-                            </div>
-                        </div>
-                        <h3 class="insight-card__title">올리브오일과 피부 탄력</h3>
-                        <p class="insight-card__summary">올리브오일의 단일불포화지방산(MUFA)을 섭취한 그룹은 피부 탄력 점수가 25% 높았습니다.</p>
-                        <p class="insight-card__source">출처: PLoS One, 2012</p>
-                    </div>
+      <!-- Insight Section (Charts) -->
+      <section id="insight" class="insight section">
+        <div class="container">
+          <h2 class="section__title" data-animate="fade-up">
+            데이터로 증명된 이너뷰티 효과
+          </h2>
+          <p
+            class="section__subtitle"
+            data-animate="fade-up"
+            data-animate-delay="100"
+          >
+            과학적인 식단이 우리 몸에 미치는 긍정적인 영향을 확인해보세요.
+          </p>
+          <div class="insight__grid">
+            <div class="insight-card" data-animate="fade-up">
+              <div class="insight-card__graph">
+                <div class="bar-chart">
+                  <div class="bar-chart__label">주름 지수 20% ↓</div>
+                  <div class="bar-chart__bar" style="height: 80%"></div>
+                  <div
+                    class="bar-chart__bar bar-chart__bar--control"
+                    style="height: 100%"
+                  ></div>
                 </div>
+              </div>
+              <h3 class="insight-card__title">비타민 C 섭취와 피부 노화</h3>
+              <p class="insight-card__summary">
+                비타민C를 꾸준히 섭취한 그룹은 그렇지 않은 그룹보다 주름
+                발생률이 현저히 낮았습니다.
+              </p>
+              <p class="insight-card__source">출처: Am J Clin Nutr, 2007</p>
             </div>
-        </section>
+            <div
+              class="insight-card"
+              data-animate="fade-up"
+              data-animate-delay="200"
+            >
+              <div class="insight-card__graph">
+                <div class="donut-chart">
+                  <div class="donut-chart__percent">68%</div>
+                  <div class="donut-chart__label">광노화 감소</div>
+                </div>
+              </div>
+              <h3 class="insight-card__title">항산화 식단과 광노화</h3>
+              <p class="insight-card__summary">
+                고함량 항산화 식단을 섭취한 그룹은 자외선으로 인한 피부 광노화
+                발생이 68% 감소했습니다.
+              </p>
+              <p class="insight-card__source">출처: JID, 2021</p>
+            </div>
+            <div
+              class="insight-card"
+              data-animate="fade-up"
+              data-animate-delay="400"
+            >
+              <div class="insight-card__graph">
+                <div class="horizontal-bar-chart">
+                  <div class="h-bar-wrapper">
+                    <div class="h-bar" style="width: 60%"></div>
+                  </div>
+                  <div class="h-bar-wrapper">
+                    <div class="h-bar" style="width: 80%"></div>
+                    <span class="h-bar__label">+25%</span>
+                  </div>
+                </div>
+              </div>
+              <h3 class="insight-card__title">올리브오일과 피부 탄력</h3>
+              <p class="insight-card__summary">
+                올리브오일의 단일불포화지방산(MUFA)을 섭취한 그룹은 피부 탄력
+                점수가 25% 높았습니다.
+              </p>
+              <p class="insight-card__source">출처: PLoS One, 2012</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <!-- Insight Section (News) -->
-        <section id="insight-news" class="insight-news-section section">
-            <div class="container">
-                <h2 class="section__title" data-animate="fade-up">먹는 습관이 피부와 노화를 결정합니다</h2>
-                <div class="insight-news__grid">
-                    <div class="insight-news__card" data-animate="fade-up">
-                        <div class="insight-news__icon">“</div>
-                        <p class="insight-news__statement">외식 → 지방·설탕 과다 섭취</p>
-                        <p class="insight-news__source">출처: 질병관리청</p>
-                    </div>
-                    <div class="insight-news__card" data-animate="fade-up" data-animate-delay="100">
-                        <div class="insight-news__icon">“</div>
-                        <p class="insight-news__statement">가공식품 많이 먹을수록 4개월 늙어 보임</p>
-                        <p class="insight-news__source">출처: AJCN</p>
-                    </div>
-                    <div class="insight-news__card" data-animate="fade-up" data-animate-delay="200">
-                        <div class="insight-news__icon">“</div>
-                        <p class="insight-news__statement">캡사이신·지방 음식 → 염증·트러블 유발</p>
-                        <p class="insight-news__source">출처: GQ Korea</p>
-                    </div>
-                    <div class="insight-news__card" data-animate="fade-up" data-animate-delay="300">
-                        <div class="insight-news__icon">“</div>
-                        <p class="insight-news__statement">당류·유지류 과다 섭취 → 피부 산도 변화</p>
-                        <p class="insight-news__source">출처: 헬스조선</p>
-                    </div>
-                </div>
+      <!-- Insight Section (News) -->
+      <section id="insight-news" class="insight-news-section section">
+        <div class="container">
+          <h2 class="section__title" data-animate="fade-up">
+            먹는 습관이 노화의 속도를 결정합니다
+          </h2>
+          <div class="insight-news__grid">
+            <div class="insight-news__card" data-animate="fade-up">
+              <figure class="insight-news__media">
+                <img
+                  src="./assets/insight-sugar.png"
+                  alt="당분이 높은 가공식품"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+              <p class="insight-news__statement">외식 → 지방·설탕 과다 섭취</p>
+              <p class="insight-news__source">출처: 질병관리청</p>
             </div>
-        </section>
+            <div
+              class="insight-news__card"
+              data-animate="fade-up"
+              data-animate-delay="100"
+            >
+              <figure class="insight-news__media">
+                <img
+                  src="./assets/insight-ultraprocessed.png"
+                  alt="초가공식품 예시"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+              <p class="insight-news__statement">
+                가공식품 많이 먹을수록 4개월 늙어 보임
+              </p>
+              <p class="insight-news__source">출처: AJCN</p>
+            </div>
+            <div
+              class="insight-news__card"
+              data-animate="fade-up"
+              data-animate-delay="200"
+            >
+              <figure class="insight-news__media">
+                <img
+                  src="./assets/insight-spicyfat.png"
+                  alt="매운/기름진 음식"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+              <p class="insight-news__statement">
+                캡사이신·지방 음식 → 염증·트러블 유발
+              </p>
+              <p class="insight-news__source">출처: GQ Korea</p>
+            </div>
+            <div
+              class="insight-news__card"
+              data-animate="fade-up"
+              data-animate-delay="300"
+            >
+              <figure class="insight-news__media">
+                <img
+                  src="./assets/insight-skin.png"
+                  alt="당류가 들어간 유제품"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+              <p class="insight-news__statement">
+                당류·유지류 과다 섭취 → 피부 산도 변화
+              </p>
+              <p class="insight-news__source">출처: 헬스조선</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <!-- Plates Section -->
-        <section id="plates" class="plates section">
-            <div class="plates__container container">
-                <h2 class="section__title" data-animate="fade-up">매일을, 나를 위해 — 이너컬리 세트</h2>
-                <p class="section__subtitle" data-animate="fade-up" data-animate-delay="100">단순 식사가 아닌, 이너뷰티 루틴</p>
-                <div class="plates__list">
-                    <a href="./plate-glow.html" class="plate-card card" data-animate="fade-up">
-                        <img src="./assets/plate-glow-hero.png" alt="Glow Plate" class="plate-card__img">
-                        <div class="plate-card__content">
-                            <h3 class="plate-card__title">Glow Plate</h3>
-                            <p class="plate-card__tagline">피부 속부터 빛나는 투명함</p>
-                            <div class="plate-card__actions">
-                                <span class="btn btn--primary btn--small">자세히 보기</span>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="./plate-slim.html" class="plate-card card" data-animate="fade-up" data-animate-delay="100">
-                        <img src="./assets/plate-slim-hero.png" alt="Slim Plate" class="plate-card__img">
-                        <div class="plate-card__content">
-                            <h3 class="plate-card__title">Slim Plate</h3>
-                            <p class="plate-card__tagline">가볍지만 균형 잡힌 하루</p>
-                            <div class="plate-card__actions">
-                                <span class="btn btn--primary btn--small">자세히 보기</span>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="./plate-detox.html" class="plate-card card" data-animate="fade-up" data-animate-delay="200">
-                        <img src="./assets/plate-detox-hero.png" alt="Detox Plate" class="plate-card__img">
-                        <div class="plate-card__content">
-                            <h3 class="plate-card__title">Detox Plate</h3>
-                            <p class="plate-card__tagline">하루를 리셋하는 식이섬유 루틴</p>
-                            <div class="plate-card__actions">
-                                <span class="btn btn--primary btn--small">자세히 보기</span>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="./plate-balance.html" class="plate-card card" data-animate="fade-up" data-animate-delay="300">
-                        <img src="./assets/plate-balance-hero.png" alt="Balance Plate" class="plate-card__img">
-                        <div class="plate-card__content">
-                            <h3 class="plate-card__title">Balance Plate</h3>
-                            <p class="plate-card__tagline">지속 가능한 균형 잡힌 라이프</p>
-                            <div class="plate-card__actions">
-                                <span class="btn btn--primary btn--small">자세히 보기</span>
-                            </div>
-                        </div>
-                    </a>
+      <!-- Plates Section -->
+      <section id="plates" class="plates section">
+        <div class="plates__container container">
+          <h2 class="section__title" data-animate="fade-up">
+            매일을, 나를 위해 — 이너컬리 세트
+          </h2>
+          <p
+            class="section__subtitle"
+            data-animate="fade-up"
+            data-animate-delay="100"
+          >
+            단순 식사가 아닌, 이너뷰티 루틴
+          </p>
+          <div class="plates__list">
+            <a
+              href="./plate-glow.html"
+              class="plate-card card"
+              data-animate="fade-up"
+            >
+              <img
+                src="./assets/plate-glow-hero.png"
+                alt="Glow Plate"
+                class="plate-card__img"
+              />
+              <div class="plate-card__content">
+                <h3 class="plate-card__title">Glow Plate</h3>
+                <p class="plate-card__tagline">피부 속부터 빛나는 투명함</p>
+                <div class="plate-card__actions">
+                  <span class="btn btn--primary btn--small">자세히 보기</span>
                 </div>
-            </div>
-        </section>
+              </div>
+            </a>
+            <a
+              href="./plate-slim.html"
+              class="plate-card card"
+              data-animate="fade-up"
+              data-animate-delay="100"
+            >
+              <img
+                src="./assets/plate-slim-hero.png"
+                alt="Slim Plate"
+                class="plate-card__img"
+              />
+              <div class="plate-card__content">
+                <h3 class="plate-card__title">Slim Plate</h3>
+                <p class="plate-card__tagline">가볍지만 균형 잡힌 하루</p>
+                <div class="plate-card__actions">
+                  <span class="btn btn--primary btn--small">자세히 보기</span>
+                </div>
+              </div>
+            </a>
+            <a
+              href="./plate-detox.html"
+              class="plate-card card"
+              data-animate="fade-up"
+              data-animate-delay="200"
+            >
+              <img
+                src="./assets/plate-detox-hero.png"
+                alt="Detox Plate"
+                class="plate-card__img"
+              />
+              <div class="plate-card__content">
+                <h3 class="plate-card__title">Detox Plate</h3>
+                <p class="plate-card__tagline">하루를 리셋하는 식이섬유 루틴</p>
+                <div class="plate-card__actions">
+                  <span class="btn btn--primary btn--small">자세히 보기</span>
+                </div>
+              </div>
+            </a>
+            <a
+              href="./plate-balance.html"
+              class="plate-card card"
+              data-animate="fade-up"
+              data-animate-delay="300"
+            >
+              <img
+                src="./assets/plate-balance-hero.png"
+                alt="Balance Plate"
+                class="plate-card__img"
+              />
+              <div class="plate-card__content">
+                <h3 class="plate-card__title">Balance Plate</h3>
+                <p class="plate-card__tagline">지속 가능한 균형 잡힌 라이프</p>
+                <div class="plate-card__actions">
+                  <span class="btn btn--primary btn--small">자세히 보기</span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
 
-        <!-- Pricing Section -->
-        <section id="pricing" class="pricing section">
-            <div class="container">
-                <h2 class="section__title" data-animate="fade-up">구독 상품</h2>
-                <p class="section__subtitle" data-animate="fade-up" data-animate-delay="100">라이프스타일에 맞는 플랜을 선택하세요.</p>
-                <div class="pricing__grid">
-                    <div class="pricing-card pricing-card--trial" data-animate="fade-up">
-                        <h3 class="pricing-card__title">TRIAL ROUTINE</h3>
-                        <p class="pricing-card__price">무료 <span class="duration">(3일)</span></p>
-                        <p class="pricing-card__desc">멤버스 가입 시 자동 제공되는 웰컴 이벤트입니다. (보냉팩 포함)</p>
-                        <div class="pricing-card__actions">
-                            <button class="btn btn--ghost" disabled>이벤트 제공</button>
-                        </div>
-                    </div>
-                    <div class="pricing-card" data-animate="fade-up" data-animate-delay="100">
-                        <h3 class="pricing-card__title">WEEKLY 3 DAYS</h3>
-                        <p class="pricing-card__price">45,000원 <span class="duration">/ 주</span></p>
-                        <p class="pricing-card__daily">(1일 15,000원)</p>
-                        <ul class="pricing-card__features"><li>주 3회, 원하는 요일 선택</li><li>가장 인기있는 플랜</li></ul>
-                        <div class="pricing-card__actions">
-                            <a href="#" class="btn btn--primary">구독하기</a>
-                            <button class="btn btn--ghost add-to-cart-btn" data-item="weekly3">장바구니</button>
-                        </div>
-                    </div>
-                    <div class="pricing-card" data-animate="fade-up" data-animate-delay="200">
-                        <h3 class="pricing-card__title">WEEKLY 5 DAYS</h3>
-                        <p class="pricing-card__price">73,000원 <span class="duration">/ 주</span></p>
-                        <p class="pricing-card__daily">(1일 14,600원)</p>
-                        <ul class="pricing-card__features"><li>주 5회, 평일 집중 관리</li><li>꾸준한 루틴 형성에 최적</li></ul>
-                        <div class="pricing-card__actions">
-                            <a href="#" class="btn btn--primary">구독하기</a>
-                            <button class="btn btn--ghost add-to-cart-btn" data-item="weekly5">장바구니</button>
-                        </div>
-                    </div>
-                    <div class="pricing-card" data-animate="fade-up" data-animate-delay="300">
-                        <h3 class="pricing-card__title">MONTHLY ROUTINE</h3>
-                        <p class="pricing-card__price">280,000원 <span class="duration">/ 월</span></p>
-                        <p class="pricing-card__daily">(1일 14,000원)</p>
-                        <ul class="pricing-card__features"><li>월 20회, 가장 높은 할인율</li><li>장기적인 변화를 원할 때</li></ul>
-                        <div class="pricing-card__actions">
-                            <a href="#" class="btn btn--primary">구독하기</a>
-                            <button class="btn btn--ghost add-to-cart-btn" data-item="monthly">장바구니</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="payment-methods" data-animate="fade-up">
-                    <span>결제 수단:</span>
-                    <img src="./assets/payment-icons.png" alt="신용카드, 간편결제">
-                </div>
+      <!-- Pricing Section -->
+      <section id="pricing" class="pricing section">
+        <div class="container">
+          <h2 class="section__title" data-animate="fade-up">구독 상품</h2>
+          <p
+            class="section__subtitle"
+            data-animate="fade-up"
+            data-animate-delay="100"
+          >
+            라이프스타일에 맞는 플랜을 선택하세요.
+          </p>
+          <div class="pricing__grid">
+            <div
+              class="pricing-card pricing-card--trial"
+              data-animate="fade-up"
+            >
+              <h3 class="pricing-card__title">TRIAL ROUTINE</h3>
+              <p class="pricing-card__price">
+                무료 <span class="duration">(3일)</span>
+              </p>
+              <p class="pricing-card__desc">
+                멤버스 가입 시 자동 제공되는 웰컴 이벤트입니다. (보냉팩 포함)
+              </p>
+              <div class="pricing-card__actions">
+                <button class="btn btn--ghost" disabled>이벤트 제공</button>
+              </div>
             </div>
-        </section>
+            <div
+              class="pricing-card"
+              data-animate="fade-up"
+              data-animate-delay="100"
+            >
+              <h3 class="pricing-card__title">WEEKLY 3 DAYS</h3>
+              <p class="pricing-card__price">
+                45,000원 <span class="duration">/ 주</span>
+              </p>
+              <p class="pricing-card__daily">(1일 15,000원)</p>
+              <ul class="pricing-card__features">
+                <li>주 3회, 원하는 요일 선택</li>
+                <li>가장 인기있는 플랜</li>
+              </ul>
+              <div class="pricing-card__actions">
+                <a href="#" class="btn btn--primary">구독하기</a>
+                <button
+                  class="btn btn--ghost add-to-cart-btn"
+                  data-item="weekly3"
+                >
+                  장바구니
+                </button>
+              </div>
+            </div>
+            <div
+              class="pricing-card"
+              data-animate="fade-up"
+              data-animate-delay="200"
+            >
+              <h3 class="pricing-card__title">WEEKLY 5 DAYS</h3>
+              <p class="pricing-card__price">
+                73,000원 <span class="duration">/ 주</span>
+              </p>
+              <p class="pricing-card__daily">(1일 14,600원)</p>
+              <ul class="pricing-card__features">
+                <li>주 5회, 평일 집중 관리</li>
+                <li>꾸준한 루틴 형성에 최적</li>
+              </ul>
+              <div class="pricing-card__actions">
+                <a href="#" class="btn btn--primary">구독하기</a>
+                <button
+                  class="btn btn--ghost add-to-cart-btn"
+                  data-item="weekly5"
+                >
+                  장바구니
+                </button>
+              </div>
+            </div>
+            <div
+              class="pricing-card"
+              data-animate="fade-up"
+              data-animate-delay="300"
+            >
+              <h3 class="pricing-card__title">MONTHLY ROUTINE</h3>
+              <p class="pricing-card__price">
+                280,000원 <span class="duration">/ 월</span>
+              </p>
+              <p class="pricing-card__daily">(1일 14,000원)</p>
+              <ul class="pricing-card__features">
+                <li>월 20회, 가장 높은 할인율</li>
+                <li>장기적인 변화를 원할 때</li>
+              </ul>
+              <div class="pricing-card__actions">
+                <a href="#" class="btn btn--primary">구독하기</a>
+                <button
+                  class="btn btn--ghost add-to-cart-btn"
+                  data-item="monthly"
+                >
+                  장바구니
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="payment-methods" data-animate="fade-up">
+            <span>결제 수단:</span>
+            <img src="./assets/payment-icons.png" alt="신용카드, 간편결제" />
+          </div> -->
+        </div>
+      </section>
 
-        <!-- Reviews Section -->
-        <section id="reviews" class="reviews section">
-            <div class="container">
-                <h2 class="section__title" data-animate="fade-up">고객들이 먼저 느낀 변화</h2>
-                <p class="section__subtitle" data-animate="fade-up" data-animate-delay="100">30만+ 고객님들의 생생한 후기를 만나보세요.</p>
-                <div class="swiper review-swiper" data-animate="fade-up" data-animate-delay="200">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide review-card card">
-                            <div class="review-card__header">
-                                <img src="./assets/review-avatar-1.png" alt="고객 아바타" class="review-card__avatar">
-                                <div class="review-card__info">
-                                    <h4>김**님 (32세)</h4>
-                                    <p>Glow Plate</p>
-                                </div>
-                            </div>
-                            <p class="review-card__quote">"피부가 탱탱해지고 화장이 잘 먹어요! ✨ 2주 꾸준히 먹으니 피부결이 매끈해졌어요."</p>
-                            <div class="review-card__rating">★★★★★</div>
-                        </div>
-                        <div class="swiper-slide review-card card">
-                            <div class="review-card__header">
-                                <img src="./assets/review-avatar-2.png" alt="고객 아바타" class="review-card__avatar">
-                                <div class="review-card__info">
-                                    <h4>박**님 (29세)</h4>
-                                    <p>Slim Plate</p>
-                                </div>
-                            </div>
-                            <p class="review-card__quote">"점심 대용으로 딱 좋아요. 포만감 있으면서도 가벼워서 다이어트에 큰 도움이 됩니다."</p>
-                            <div class="review-card__rating">★★★★☆</div>
-                        </div>
-                        <div class="swiper-slide review-card card">
-                            <div class="review-card__header">
-                                <img src="./assets/review-avatar-3.png" alt="고객 아바타" class="review-card__avatar">
-                                <div class="review-card__info">
-                                    <h4>이**님 (35세)</h4>
-                                    <p>Detox Plate</p>
-                                </div>
-                            </div>
-                            <p class="review-card__quote">"속이 편안하고 아침에 일어나는게 가뿐해요. 몸이 정화되는 느낌이라 꾸준히 먹고 있어요."</p>
-                            <div class="review-card__rating">★★★★★</div>
-                        </div>
-                    </div>
-                    <div class="swiper-pagination"></div>
+      <!-- Reviews Section -->
+      <section id="reviews" class="reviews section">
+        <div class="container">
+          <h2 class="section__title" data-animate="fade-up">
+            고객님들이 먼저 느낀 변화
+          </h2>
+          <p
+            class="section__subtitle"
+            data-animate="fade-up"
+            data-animate-delay="100"
+          >
+            30만+ 고객님들의 생생한 후기를 만나보세요.
+          </p>
+          <div
+            class="swiper review-swiper"
+            data-animate="fade-up"
+            data-animate-delay="200"
+          >
+            <div class="swiper-wrapper">
+              <div class="swiper-slide review-card card">
+                <div class="review-card__header">
+                  <img
+                    src="./assets/review-avatar-1.png"
+                    alt="고객 아바타"
+                    class="review-card__avatar"
+                  />
+                  <div class="review-card__info">
+                    <h4>김**님 (32세)</h4>
+                    <p>Glow Plate</p>
+                  </div>
                 </div>
+                <p class="review-card__quote">
+                  "피부가 탱탱해지고 화장이 잘 먹어요! ✨ 2주 꾸준히 먹으니
+                  피부결이 매끈해졌어요."
+                </p>
+                <div class="review-card__rating">★★★★★</div>
+              </div>
+              <div class="swiper-slide review-card card">
+                <div class="review-card__header">
+                  <img
+                    src="./assets/review-avatar-2.png"
+                    alt="고객 아바타"
+                    class="review-card__avatar"
+                  />
+                  <div class="review-card__info">
+                    <h4>박**님 (29세)</h4>
+                    <p>Slim Plate</p>
+                  </div>
+                </div>
+                <p class="review-card__quote">
+                  "점심 대용으로 딱 좋아요. 포만감 있으면서도 가벼워서
+                  다이어트에 큰 도움이 됩니다."
+                </p>
+                <div class="review-card__rating">★★★★☆</div>
+              </div>
+              <div class="swiper-slide review-card card">
+                <div class="review-card__header">
+                  <img
+                    src="./assets/review-avatar-3.png"
+                    alt="고객 아바타"
+                    class="review-card__avatar"
+                  />
+                  <div class="review-card__info">
+                    <h4>이**님 (35세)</h4>
+                    <p>Detox Plate</p>
+                  </div>
+                </div>
+                <p class="review-card__quote">
+                  "속이 편안하고 아침에 일어나는게 가뿐해요. 몸이 정화되는
+                  느낌이라 꾸준히 먹고 있어요."
+                </p>
+                <div class="review-card__rating">★★★★★</div>
+              </div>
             </div>
-        </section>
+            <div class="swiper-pagination"></div>
+          </div>
+        </div>
+      </section>
 
-        <!-- Challenge Section -->
-        <section id="challenge" class="challenge section">
-            <div class="challenge__container container">
-                <h2 class="section__title" data-animate="fade-up">30·60·90일 챌린지</h2>
-                <p class="section__subtitle" data-animate="fade-up" data-animate-delay="100">루션 앱에서 참여하고, 지속할수록 커지는 리워드를 받으세요.</p>
-                <div class="challenge-rewards">
-                    <div class="reward-card" data-animate="fade-up">
-                        <div class="reward-card__icon">🎁</div>
-                        <h3 class="reward-card__title">30일 달성</h3>
-                        <p class="reward-card__desc">마켓컬리 5천원 쿠폰</p>
-                    </div>
-                    <div class="reward-card" data-animate="fade-up" data-animate-delay="200">
-                        <div class="reward-card__icon">✨</div>
-                        <h3 class="reward-card__title">60일 달성</h3>
-                        <p class="reward-card__desc">뷰티컬리 팩 세트</p>
-                    </div>
-                    <div class="reward-card" data-animate="fade-up" data-animate-delay="400">
-                        <div class="reward-card__icon">🏆</div>
-                        <h3 class="reward-card__title">90일 달성</h3>
-                        <p class="reward-card__desc">시크릿 리워드 (TBD)</p>
-                    </div>
-                </div>
-                <div class="challenge__cta" data-animate="fade-up">
-                    <p class="challenge__app-info">챌린지는 루션 앱을 통해서만 참여할 수 있습니다.</p>
-                    <div class="app-badges">
-                        <a href="#" class="app-badge"><img src="./assets/app-store-badge.svg" alt="Download on the App Store"></a>
-                        <a href="#" class="app-badge"><img src="./assets/google-play-badge.svg" alt="Get it on Google Play"></a>
-                    </div>
-                </div>
+      <!-- Challenge Section -->
+      <section id="challenge" class="challenge section">
+        <div class="challenge__container container">
+          <h2 class="section__title" data-animate="fade-up">
+            30·60·90일 챌린지
+          </h2>
+          <p
+            class="section__subtitle"
+            data-animate="fade-up"
+            data-animate-delay="100"
+          >
+            루션 앱에서 참여하고, 지속할수록 커지는 리워드를 받으세요.
+          </p>
+          <div class="challenge-rewards">
+            <div class="reward-card" data-animate="fade-up">
+              <div class="reward-card__icon">🎁</div>
+              <h3 class="reward-card__title">30일 달성</h3>
+              <p class="reward-card__desc">마켓컬리 5천원 쿠폰</p>
             </div>
-        </section>
+            <div
+              class="reward-card"
+              data-animate="fade-up"
+              data-animate-delay="200"
+            >
+              <div class="reward-card__icon">✨</div>
+              <h3 class="reward-card__title">60일 달성</h3>
+              <p class="reward-card__desc">뷰티컬리 팩 세트</p>
+            </div>
+            <div
+              class="reward-card"
+              data-animate="fade-up"
+              data-animate-delay="400"
+            >
+              <div class="reward-card__icon">🏆</div>
+              <h3 class="reward-card__title">90일 달성</h3>
+              <p class="reward-card__desc">시크릿 리워드 (TBD)</p>
+            </div>
+          </div>
+          <div class="challenge__cta" data-animate="fade-up">
+            <p class="challenge__app-info">
+              챌린지는 루션 앱을 통해서만 참여할 수 있습니다.
+            </p>
+            <div class="app-badges">
+              <a href="#" class="app-badge"
+                ><img
+                  src="./assets/app-store-badge.svg"
+                  alt="Download on the App Store"
+              /></a>
+              <a href="#" class="app-badge"
+                ><img
+                  src="./assets/google-play-badge.svg"
+                  alt="Get it on Google Play"
+              /></a>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <!-- App Section -->
-        <section id="app" class="app-section section">
-            <div class="app-section__container container">
-                <div class="app-section__content" data-animate="fade-up">
-                    <h2 class="section__title">루션 앱으로 루틴이<br>더 간편해집니다</h2>
-                    <p class="section__subtitle">먹는 순간을 넘어, 매일을 관리하는 이너뷰티 루틴</p>
-                    <ul class="app-section__features">
-                        <li><strong>AI 분석</strong> 식단 사진만 찍으면 AI가 분석해요.</li>
-                        <li><strong>컨디션 트래킹</strong> 매일의 변화를 감성적으로 기록해요.</li>
-                        <li><strong>맞춤 추천</strong> 내 데이터 기반으로 다음 플랜을 제안해요.</li>
-                    </ul>
-                     <div class="app-badges">
-                        <a href="#" class="app-badge"><img src="./assets/app-store-badge.svg" alt="Download on the App Store"></a>
-                        <a href="#" class="app-badge"><img src="./assets/google-play-badge.svg" alt="Get it on Google Play"></a>
-                    </div>
-                </div>
-                <div class="app-section__visual" data-animate="fade-up" data-animate-delay="200">
-                    <img src="./assets/app-mockup.png" alt="이너컬리 루션 앱 UI 목업" loading="lazy">
-                </div>
+      <!-- App Section -->
+      <section id="app" class="app-section section">
+        <div class="app-section__container container">
+          <div class="app-section__content" data-animate="fade-up">
+            <h2 class="section__title">
+              루션 앱으로 루틴이<br />더 간편해집니다
+            </h2>
+            <p class="section__subtitle">
+              먹는 순간을 넘어, 매일을 관리하는 이너뷰티 루틴
+            </p>
+            <ul class="app-section__features">
+              <li>
+                <strong>AI 분석</strong> 식단 사진만 찍으면 AI가 분석해요.
+              </li>
+              <li>
+                <strong>컨디션 트래킹</strong> 매일의 변화를 감성적으로
+                기록해요.
+              </li>
+              <li>
+                <strong>맞춤 추천</strong> 내 데이터 기반으로 다음 플랜을
+                제안해요.
+              </li>
+            </ul>
+            <div class="app-badges">
+              <a href="#" class="app-badge"
+                ><img
+                  src="./assets/app-store-badge.svg"
+                  alt="Download on the App Store"
+              /></a>
+              <a href="#" class="app-badge"
+                ><img
+                  src="./assets/google-play-badge.svg"
+                  alt="Get it on Google Play"
+              /></a>
             </div>
-        </section>
+          </div>
+          <div
+            class="app-section__visual"
+            data-animate="fade-up"
+            data-animate-delay="200"
+          >
+            <img
+              src="./assets/app-mockup.png"
+              alt="이너컬리 루션 앱 UI 목업"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
 
-        <!-- Final CTA Section -->
-        <section id="cta" class="cta section">
-            <div class="cta__container container" data-animate="fade-up">
-                <h2 class="cta__title">오늘 시작하면, 내일이 달라집니다.</h2>
-                <div class="cta__actions">
-                    <a href="#pricing" class="btn btn--primary btn--large">지금 구독 시작하기</a>
-                    <a href="membership.html" class="btn btn--ghost">멤버스 혜택 보기</a>
-                </div>
-            </div>
-        </section>
+      <!-- Final CTA Section -->
+      <section id="cta" class="cta section">
+        <div class="cta__container container" data-animate="fade-up">
+          <h2 class="cta__title">오늘 시작하면, 내일이 달라집니다.</h2>
+          <div class="cta__actions">
+            <a href="#pricing" class="btn btn--primary btn--large"
+              >지금 구독 시작하기</a
+            >
+            <a href="membership.html" class="btn btn--ghost"
+              >멤버스 혜택 보기</a
+            >
+          </div>
+        </div>
+      </section>
 
-        <!-- FAQ Section -->
-        <section id="faq" class="faq section">
-            <div class="faq__container container">
-                <h2 class="section__title" data-animate="fade-up">자주 묻는 질문</h2>
-                <div class="faq__list" data-animate="fade-up" data-animate-delay="100">
-                    <div class="faq__item">
-                        <button class="faq__question"><span>Q.</span> 이너컬리 플레이트는 무엇인가요?</button>
-                        <div class="faq__answer"><p>이너컬리 플레이트는 바쁜 현대인을 위해 영양 전문가가 설계한 맞춤형 식단 및 영양제 프로그램입니다. 피부 건강, 체지방 관리, 디톡스 등 다양한 목표에 맞춰 최적화된 루틴을 제공합니다.</p></div>
-                    </div>
-                    <div class="faq__item">
-                        <button class="faq__question"><span>Q.</span> 배송은 어떻게 이루어지나요?</button>
-                        <div class="faq__answer"><p>모든 플레이트는 친환경 보냉팩에 담겨 신선도를 유지하며, 주 3회 또는 5회 정기 배송됩니다. 원하시는 요일과 시간을 선택하실 수 있습니다.</p></div>
-                    </div>
-                    <div class="faq__item">
-                        <button class="faq__question"><span>Q.</span> 멤버십 혜택은 무엇인가요?</button>
-                        <div class="faq__answer"><p>멤버스 가입 시 TRIAL ROUTINE 3일 무료 제공, 포인트 적립, 프리미엄 콘텐츠, 전용 이벤트 참여 등 다양한 혜택을 누리실 수 있습니다.</p></div>
-                    </div>
-                </div>
+      <!-- FAQ Section -->
+      <section id="faq" class="faq section">
+        <div class="faq__container container">
+          <h2 class="section__title" data-animate="fade-up">자주 묻는 질문</h2>
+          <div
+            class="faq__list"
+            data-animate="fade-up"
+            data-animate-delay="100"
+          >
+            <div class="faq__item">
+              <button class="faq__question">
+                <span>Q.</span> 이너컬리 플레이트는 무엇인가요?
+              </button>
+              <div class="faq__answer">
+                <p>
+                  이너컬리 플레이트는 바쁜 현대인을 위해 영양 전문가가 설계한
+                  맞춤형 식단 및 영양제 프로그램입니다. 피부 건강, 체지방 관리,
+                  디톡스 등 다양한 목표에 맞춰 최적화된 루틴을 제공합니다.
+                </p>
+              </div>
             </div>
-        </section>
+            <div class="faq__item">
+              <button class="faq__question">
+                <span>Q.</span> 배송은 어떻게 이루어지나요?
+              </button>
+              <div class="faq__answer">
+                <p>
+                  모든 플레이트는 친환경 보냉팩에 담겨 신선도를 유지하며, 주 3회
+                  또는 5회 정기 배송됩니다. 원하시는 요일과 시간을 선택하실 수
+                  있습니다.
+                </p>
+              </div>
+            </div>
+            <div class="faq__item">
+              <button class="faq__question">
+                <span>Q.</span> 멤버십 혜택은 무엇인가요?
+              </button>
+              <div class="faq__answer">
+                <p>
+                  멤버스 가입 시 TRIAL ROUTINE 3일 무료 제공, 포인트 적립,
+                  프리미엄 콘텐츠, 전용 이벤트 참여 등 다양한 혜택을 누리실 수
+                  있습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <div class="sticky-footer-bar">
-        <div class="sticky-footer-bar__container">
-            <div class="sticky-footer-bar__text">
-                <strong>지금 구독하고 건강한 습관을 시작하세요.</strong>
-                <span>멤버스 가입 시 3일 무료 체험 혜택</span>
-            </div>
-            <div class="sticky-footer-bar__actions">
-                <a href="#pricing" class="btn btn--primary">구독하기</a>
-                <a href="membership.html" class="btn btn--ghost">멤버스 혜택 보기</a>
-            </div>
+      <div class="sticky-footer-bar__container">
+        <div class="sticky-footer-bar__text">
+          <strong>지금 구독하고 건강한 습관을 시작하세요.</strong>
+          <span>멤버스 가입 시 3일 무료 체험 혜택</span>
         </div>
+        <div class="sticky-footer-bar__actions">
+          <a href="#pricing" class="btn btn--primary">구독하기</a>
+          <a href="membership.html" class="btn btn--ghost">멤버스 혜택 보기</a>
+        </div>
+      </div>
     </div>
 
     <footer class="footer">
-        <div class="footer__container container">
-            <p>&copy; 2025 Inner Kurly. All rights reserved.</p>
-            <div class="footer__links">
-                <a href="#">이용약관</a>
-                <a href="#">개인정보처리방침</a>
-            </div>
+      <div class="footer__container container">
+        <p>&copy; 2025 Inner Kurly. All rights reserved.</p>
+        <div class="footer__links">
+          <a href="#">이용약관</a>
+          <a href="#">개인정보처리방침</a>
         </div>
+      </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="./js/app.js" defer></script>
-</body>
+  </body>
 </html>
