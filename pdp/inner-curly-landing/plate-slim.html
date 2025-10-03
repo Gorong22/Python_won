@@ -28,7 +28,7 @@
           맛있고 건강하게 슬림한 바디를 관리하세요.
         </p>
         <div class="pdp-hero-section__actions">
-          <button class="btn btn--primary">구독 시작하기</button>
+          <button class="btn btn--primary" data-product="slim-plate-main" data-action="subscribe">구독 시작하기</button>
           <button class="btn btn--ghost">식단표 다운로드</button>
         </div>
       </div>
@@ -73,30 +73,12 @@
     <section class="section nutrition">
       <h2 class="section__title">영양 성분 (1일 제공량)</h2>
       <table class="nutrition-table">
-        <tr>
-          <th>칼로리</th>
-          <td>780 kcal</td>
-        </tr>
-        <tr>
-          <th>단백질</th>
-          <td>50 g</td>
-        </tr>
-        <tr>
-          <th>탄수화물</th>
-          <td>65 g</td>
-        </tr>
-        <tr>
-          <th>지방</th>
-          <td>22 g</td>
-        </tr>
-        <tr>
-          <th>식이섬유</th>
-          <td>25 g</td>
-        </tr>
-        <tr>
-          <th>비타민 A</th>
-          <td>110% RDA</td>
-        </tr>
+        <tr><th>칼로리</th><td>780 kcal</td></tr>
+        <tr><th>단백질</th><td>50 g</td></tr>
+        <tr><th>탄수화물</th><td>65 g</td></tr>
+        <tr><th>지방</th><td>22 g</td></tr>
+        <tr><th>식이섬유</th><td>25 g</td></tr>
+        <tr><th>비타민 A</th><td>110% RDA</td></tr>
       </table>
     </section>
 
@@ -108,13 +90,13 @@
           <h3 class="pricing-card__title">Weekly Plan (7일)</h3>
           <p class="pricing-card__price">62,000원</p>
           <p class="pricing-card__daily"></p>
-          <button class="btn btn--primary">주간 구독하기</button>
+          <button class="btn btn--primary" data-product="slim-weekly" data-action="subscribe">주간 구독하기</button>
         </div>
         <div class="pricing-card" data-total-price="219000" data-days="28">
           <h3 class="pricing-card__title">Monthly Plan (4주)</h3>
           <p class="pricing-card__price">219,000원</p>
           <p class="pricing-card__daily"></p>
-          <button class="btn btn--primary">월간 구독하기</button>
+          <button class="btn btn--primary" data-product="slim-monthly" data-action="subscribe">월간 구독하기</button>
         </div>
       </div>
     </section>
@@ -123,27 +105,13 @@
     <section class="section challenge">
       <h2 class="section__title">30일 챌린지 & 리워드</h2>
       <div class="challenge-rewards">
-        <div class="reward-card">
-          <div class="reward-card__icon">🥗</div>
-          <h3 class="reward-card__title">30일 완주</h3>
-          <p>Slim Plate 30일 기록하면<br />체중 관리 다이어리 제공</p>
-        </div>
-        <div class="reward-card">
-          <div class="reward-card__icon">🔥</div>
-          <h3 class="reward-card__title">60일 완주</h3>
-          <p>60일 완주 시<br />이너컬리 포인트 적립</p>
-        </div>
-        <div class="reward-card">
-          <div class="reward-card__icon">🏆</div>
-          <h3 class="reward-card__title">90일 완주</h3>
-          <p>90일 달성 시<br />슬림 전용 스페셜 리워드 박스 제공</p>
-        </div>
+        <div class="reward-card"><div class="reward-card__icon">🥗</div><h3 class="reward-card__title">30일 완주</h3><p>Slim Plate 30일 기록하면<br />체중 관리 다이어리 제공</p></div>
+        <div class="reward-card"><div class="reward-card__icon">🔥</div><h3 class="reward-card__title">60일 완주</h3><p>60일 완주 시<br />이너컬리 포인트 적립</p></div>
+        <div class="reward-card"><div class="reward-card__icon">🏆</div><h3 class="reward-card__title">90일 완주</h3><p>90일 달성 시<br />슬림 전용 스페셜 리워드 박스 제공</p></div>
       </div>
       <div class="challenge__cta">
         <button class="btn btn--primary">챌린지 참여하기</button>
-        <p class="challenge__app-info">
-          * 챌린지는 이너컬리 앱에서 자동 기록됩니다.
-        </p>
+        <p class="challenge__app-info">* 챌린지는 이너컬리 앱에서 자동 기록됩니다.</p>
       </div>
     </section>
 
@@ -151,37 +119,12 @@
     <section class="section reviews">
       <h2 class="section__title">고객 후기</h2>
       <div class="review-card">
-        <div class="review-card__header">
-          <img
-            src="./images/user3.jpg"
-            alt="user"
-            class="review-card__avatar"
-          />
-          <div class="review-card__info">
-            <h4>박지현 (31세)</h4>
-            <p>⭐️⭐️⭐️⭐️⭐️</p>
-          </div>
-        </div>
-        <p class="review-card__quote">
-          "칼로리 걱정 없이 든든하게 먹을 수 있어요. 운동과 병행하니 효과가
-          좋네요."
-        </p>
+        <div class="review-card__header"><img src="./images/user3.jpg" alt="user" class="review-card__avatar"/><div class="review-card__info"><h4>박지현 (31세)</h4><p>⭐️⭐️⭐️⭐️⭐️</p></div></div>
+        <p class="review-card__quote">"칼로리 걱정 없이 든든하게 먹을 수 있어요. 운동과 병행하니 효과가 좋네요."</p>
       </div>
       <div class="review-card">
-        <div class="review-card__header">
-          <img
-            src="./images/user4.jpg"
-            alt="user"
-            class="review-card__avatar"
-          />
-          <div class="review-card__info">
-            <h4>정은우 (27세)</h4>
-            <p>⭐️⭐️⭐️⭐️</p>
-          </div>
-        </div>
-        <p class="review-card__quote">
-          "맛있고 배부르지만 칼로리가 낮아서 다이어트에 부담이 없어요."
-        </p>
+        <div class="review-card__header"><img src="./images/user4.jpg" alt="user" class="review-card__avatar"/><div class="review-card__info"><h4>정은우 (27세)</h4><p>⭐️⭐️⭐️⭐️</p></div></div>
+        <p class="review-card__quote">"맛있고 배부르지만 칼로리가 낮아서 다이어트에 부담이 없어요."</p>
       </div>
     </section>
 
@@ -194,7 +137,7 @@
         <li>AI 맞춤 리포트</li>
       </ul>
       <div class="members__cta">
-        <button class="btn btn--primary">멤버십 구독하기</button>
+        <button class="btn btn--primary" data-product="membership" data-action="subscribe">멤버십 구독하기</button>
       </div>
     </section>
 
@@ -206,8 +149,8 @@
           <span class="footer-price"></span>
         </div>
         <div class="sticky-footer-bar__actions">
-          <button class="btn btn--primary">장바구니 담기</button>
-          <button class="btn btn--ghost">바로 구매</button>
+          <button class="btn btn--primary" data-product="slim-plate-sticky" data-action="cart">장바구니 담기</button>
+          <button class="btn btn--ghost" data-product="slim-plate-sticky" data-action="subscribe">바로 구매</button>
         </div>
       </div>
     </div>
@@ -217,19 +160,44 @@
         const total = parseInt(card.dataset.totalPrice, 10);
         const days = parseInt(card.dataset.days, 10);
         const daily = Math.round(total / days);
-        card.querySelector(
-          ".pricing-card__daily"
-        ).textContent = `하루 약 ${daily.toLocaleString()}원`;
+        card.querySelector(".pricing-card__daily").textContent = `하루 약 ${daily.toLocaleString()}원`;
       });
-      const minPrice = Math.min(
-        ...[...document.querySelectorAll(".pricing-card")].map(
-          (c) =>
-            parseInt(c.dataset.totalPrice, 10) / parseInt(c.dataset.days, 10)
-        )
-      );
-      document.querySelector(
-        ".footer-price"
-      ).textContent = `하루 약 ${Math.round(minPrice).toLocaleString()}원부터`;
+      const minPrice = Math.min(...[...document.querySelectorAll(".pricing-card")].map((c) => parseInt(c.dataset.totalPrice, 10) / parseInt(c.dataset.days, 10)));
+      document.querySelector(".footer-price").textContent = `하루 약 ${Math.round(minPrice).toLocaleString()}원부터`;
+    </script>
+    <script>
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5I9T-x28x2iYb_sJixTN1Ae9pqT57pNMcv1K7Xmb63sVEDVuh7zmLbAoDSa96hQuG/exec";
+
+        function sendData(data) {
+            console.log("Sending data:", data);
+            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+            if (navigator.sendBeacon && navigator.sendBeacon(GOOGLE_SCRIPT_URL, blob)) {
+                console.log("Data successfully sent via sendBeacon.");
+                return Promise.resolve();
+            }
+            return fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: blob, keepalive: true });
+        }
+
+        const handleActionClick = (e) => {
+            const button = e.currentTarget;
+            const product = button.dataset.product;
+            const action = button.dataset.action;
+            const userEmail = localStorage.getItem('userEmail');
+
+            if (!userEmail) {
+                alert('회원가입 후 이용해주세요.');
+                window.location.href = 'signup.html';
+                return;
+            }
+
+            const data = { timestamp: new Date().toISOString(), email: userEmail, product: product, action: action };
+
+            sendData(data).then(() => alert('감사합니다! 선택하신 내용이 저장되었습니다.')).catch(error => console.error('Error:', error));
+        };
+
+        document.querySelectorAll('[data-product]').forEach(button => {
+            button.addEventListener('click', handleActionClick);
+        });
     </script>
   </body>
 </html>
