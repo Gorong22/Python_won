@@ -28,7 +28,7 @@
           가볍고 클린한 일상을 시작하세요.
         </p>
         <div class="pdp-hero-section__actions">
-          <button class="btn btn--primary">구독 시작하기</button>
+          <button class="btn btn--primary" data-product="detox-hero" data-action="subscribe">구독 시작하기</button>
           <button class="btn btn--ghost">식단표 다운로드</button>
         </div>
       </div>
@@ -73,30 +73,12 @@
     <section class="section nutrition">
       <h2 class="section__title">영양 성분 (1일 제공량)</h2>
       <table class="nutrition-table">
-        <tr>
-          <th>칼로리</th>
-          <td>680 kcal</td>
-        </tr>
-        <tr>
-          <th>단백질</th>
-          <td>28 g</td>
-        </tr>
-        <tr>
-          <th>탄수화물</th>
-          <td>82 g</td>
-        </tr>
-        <tr>
-          <th>지방</th>
-          <td>18 g</td>
-        </tr>
-        <tr>
-          <th>식이섬유</th>
-          <td>30 g</td>
-        </tr>
-        <tr>
-          <th>비타민 K</th>
-          <td>150% RDA</td>
-        </tr>
+        <tr><th>칼로리</th><td>680 kcal</td></tr>
+        <tr><th>단백질</th><td>28 g</td></tr>
+        <tr><th>탄수화물</th><td>82 g</td></tr>
+        <tr><th>지방</th><td>18 g</td></tr>
+        <tr><th>식이섬유</th><td>30 g</td></tr>
+        <tr><th>비타민 K</th><td>150% RDA</td></tr>
       </table>
     </section>
 
@@ -108,13 +90,13 @@
           <h3 class="pricing-card__title">Weekly Plan (7일)</h3>
           <p class="pricing-card__price">59,000원</p>
           <p class="pricing-card__daily"></p>
-          <button class="btn btn--primary">주간 구독하기</button>
+          <button class="btn btn--primary" data-product="detox-weekly" data-action="subscribe">주간 구독하기</button>
         </div>
         <div class="pricing-card" data-total-price="199000" data-days="28">
           <h3 class="pricing-card__title">Monthly Plan (4주)</h3>
           <p class="pricing-card__price">199,000원</p>
           <p class="pricing-card__daily"></p>
-          <button class="btn btn--primary">월간 구독하기</button>
+          <button class="btn btn--primary" data-product="detox-monthly" data-action="subscribe">월간 구독하기</button>
         </div>
       </div>
     </section>
@@ -123,27 +105,13 @@
     <section class="section challenge">
       <h2 class="section__title">30일 챌린지 & 리워드</h2>
       <div class="challenge-rewards">
-        <div class="reward-card">
-          <div class="reward-card__icon">🥗</div>
-          <h3 class="reward-card__title">30일 완주</h3>
-          <p>Detox Plate 30일 기록하면<br />그린 주스 무료 쿠폰</p>
-        </div>
-        <div class="reward-card">
-          <div class="reward-card__icon">🌿</div>
-          <h3 class="reward-card__title">60일 완주</h3>
-          <p>60일 완주 시<br />이너컬리 포인트 적립</p>
-        </div>
-        <div class="reward-card">
-          <div class="reward-card__icon">🏆</div>
-          <h3 class="reward-card__title">90일 완주</h3>
-          <p>90일 달성 시<br />Detox 전용 리워드 박스 제공</p>
-        </div>
+        <div class="reward-card"><div class="reward-card__icon">🥗</div><h3 class="reward-card__title">30일 완주</h3><p>Detox Plate 30일 기록하면<br />그린 주스 무료 쿠폰</p></div>
+        <div class="reward-card"><div class="reward-card__icon">🌿</div><h3 class="reward-card__title">60일 완주</h3><p>60일 완주 시<br />이너컬리 포인트 적립</p></div>
+        <div class="reward-card"><div class="reward-card__icon">🏆</div><h3 class="reward-card__title">90일 완주</h3><p>90일 달성 시<br />Detox 전용 리워드 박스 제공</p></div>
       </div>
       <div class="challenge__cta">
         <button class="btn btn--primary">챌린지 참여하기</button>
-        <p class="challenge__app-info">
-          * 챌린지는 루션 앱에서 자동 기록됩니다.
-        </p>
+        <p class="challenge__app-info">* 챌린지는 이너컬리 앱에서 자동 기록됩니다.</p>
       </div>
     </section>
 
@@ -151,36 +119,12 @@
     <section class="section reviews">
       <h2 class="section__title">고객 후기</h2>
       <div class="review-card">
-        <div class="review-card__header">
-          <img
-            src="./images/user5.jpg"
-            alt="user"
-            class="review-card__avatar"
-          />
-          <div class="review-card__info">
-            <h4>최윤아 (26세)</h4>
-            <p>⭐️⭐️⭐️⭐️⭐️</p>
-          </div>
-        </div>
-        <p class="review-card__quote">
-          "몸이 한결 가벼워지고 속도 편안해졌어요. 출근길이 상쾌합니다!"
-        </p>
+        <div class="review-card__header"><img src="./images/user5.jpg" alt="user" class="review-card__avatar"/><div class="review-card__info"><h4>최윤아 (26세)</h4><p>⭐️⭐️⭐️⭐️⭐️</p></div></div>
+        <p class="review-card__quote">"몸이 한결 가벼워지고 속도 편안해졌어요. 출근길이 상쾌합니다!"</p>
       </div>
       <div class="review-card">
-        <div class="review-card__header">
-          <img
-            src="./images/user6.jpg"
-            alt="user"
-            class="review-card__avatar"
-          />
-          <div class="review-card__info">
-            <h4>김도윤 (32세)</h4>
-            <p>⭐️⭐️⭐️⭐️</p>
-          </div>
-        </div>
-        <p class="review-card__quote">
-          "디톡스 주스 맛이 상큼해서 매일 마시는 재미가 있어요."
-        </p>
+        <div class="review-card__header"><img src="./images/user6.jpg" alt="user" class="review-card__avatar"/><div class="review-card__info"><h4>김도윤 (32세)</h4><p>⭐️⭐️⭐️⭐️</p></div></div>
+        <p class="review-card__quote">"디톡스 주스 맛이 상큼해서 매일 마시는 재미가 있어요."</p>
       </div>
     </section>
 
@@ -193,7 +137,7 @@
         <li>AI 맞춤 리포트</li>
       </ul>
       <div class="members__cta">
-        <button class="btn btn--primary">멤버십 구독하기</button>
+        <button class="btn btn--primary" data-product="membership" data-action="subscribe">멤버십 구독하기</button>
       </div>
     </section>
 
@@ -205,8 +149,8 @@
           <span class="footer-price"></span>
         </div>
         <div class="sticky-footer-bar__actions">
-          <button class="btn btn--primary">장바구니 담기</button>
-          <button class="btn btn--ghost">바로 구매</button>
+          <button class="btn btn--primary" data-product="detox-sticky" data-action="cart">장바구니 담기</button>
+          <button class="btn btn--ghost" data-product="detox-sticky" data-action="subscribe">바로 구매</button>
         </div>
       </div>
     </div>
@@ -216,19 +160,45 @@
         const total = parseInt(card.dataset.totalPrice, 10);
         const days = parseInt(card.dataset.days, 10);
         const daily = Math.round(total / days);
-        card.querySelector(
-          ".pricing-card__daily"
-        ).textContent = `하루 약 ${daily.toLocaleString()}원`;
+        card.querySelector(".pricing-card__daily").textContent = `하루 약 ${daily.toLocaleString()}원`;
       });
-      const minPrice = Math.min(
-        ...[...document.querySelectorAll(".pricing-card")].map(
-          (c) =>
-            parseInt(c.dataset.totalPrice, 10) / parseInt(c.dataset.days, 10)
-        )
-      );
-      document.querySelector(
-        ".footer-price"
-      ).textContent = `하루 약 ${Math.round(minPrice).toLocaleString()}원부터`;
+      const minPrice = Math.min(...[...document.querySelectorAll(".pricing-card")].map((c) => parseInt(c.dataset.totalPrice, 10) / parseInt(c.dataset.days, 10)));
+      document.querySelector(".footer-price").textContent = `하루 약 ${Math.round(minPrice).toLocaleString()}원부터`;
+    </script>
+    <script>
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrNJF9zOe87chhdAwlb0tVnO3Qk6eeqzo71fb7udZ8lzSbBgYvTKI-NyqCpTqY9e6V/exec";
+
+        const handleActionClick = (e) => {
+            const button = e.currentTarget;
+            const product = button.dataset.product;
+            const action = button.dataset.action;
+            const userEmail = localStorage.getItem('userEmail');
+
+            if (!userEmail) {
+                alert('회원가입 후 이용해주세요.');
+                window.location.href = 'signup.html';
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("timestamp", new Date().toISOString());
+            formData.append("email", userEmail);
+            formData.append("product", product);
+            formData.append("action", action);
+
+            console.log("Sending click data:");
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
+
+            fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: formData, mode: 'no-cors' })
+            .then(() => alert('감사합니다! 선택하신 내용이 저장되었습니다.'))
+            .catch(error => console.error('Error:', error));
+        };
+
+        document.querySelectorAll('[data-product]').forEach(button => {
+            button.addEventListener('click', handleActionClick);
+        });
     </script>
   </body>
 </html>

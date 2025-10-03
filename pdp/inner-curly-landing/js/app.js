@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function initScrollAnimations() {
         const animatedElements = document.querySelectorAll('[data-animate]');
         if (animatedElements.length === 0) return;
-
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -56,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }, { threshold: 0.1 });
-
         animatedElements.forEach(el => observer.observe(el));
     }
 
@@ -100,99 +98,155 @@ document.addEventListener('DOMContentLoaded', () => {
                     image: e.target.dataset.itemImage,
                 };
                 addToCart(item);
-                // Redirect to cart.html only if it's from PDP hero section
                 if (e.target.closest('.pdp-hero-section__actions')) {
                     window.location.href = 'cart.html';
                 }
             });
         });
 
-        // Cart page specific rendering and event listeners
         if (document.body.classList.contains('cart-page')) {
             renderCartPage();
         }
+        updateCartBadge(); // Initial update on any page
+    }
 
-        updateCartBadge(); // Initial update on any page load
+    function renderCartPage() {
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartSummary = {
+            subtotal: document.getElementById('summary-subtotal'),
+            shipping: document.getElementById('summary-shipping'),
+            total: document.getElementById('summary-total'),
+        };
+        const getCart = () => JSON.parse(localStorage.getItem('innerKurlyCart')) || [];
+        const setCart = (cart) => localStorage.setItem('innerKurlyCart', JSON.stringify(cart));
 
-        function renderCartPage() {
-            const cartItemsContainer = document.getElementById('cart-items');
-            const cartEmptyMessage = cartItemsContainer.querySelector('.cart-empty-message');
-            const cartSummary = {
-                subtotal: document.getElementById('summary-subtotal'),
-                shipping: document.getElementById('summary-shipping'),
-                total: document.getElementById('summary-total'),
-            };
+        const render = () => {
+            const cart = getCart();
+            cartItemsContainer.innerHTML = '';
+            let subtotal = 0;
 
-            const render = () => {
-                const cart = getCart();
-                cartItemsContainer.innerHTML = ''; // Clear existing items
-                let subtotal = 0;
-
-                if (cart.length === 0) {
-                    cartItemsContainer.innerHTML = `
-                        <div class="cart-empty-message">
-                            <p>장바구니가 비어 있습니다.</p>
-                            <a href="index.html#plates" class="btn btn--primary">식단 보러가기</a>
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="cart-empty-message">
+                        <p>장바구니가 비어 있습니다.</p>
+                        <a href="index.html#plates" class="btn btn--primary">식단 보러가기</a>
+                    </div>`;
+            } else {
+                cart.forEach(item => {
+                    subtotal += item.price * item.quantity;
+                    const itemHtml = `
+                        <div class="cart-item" data-id="${item.id}">
+                            <img src="${item.image}" alt="${item.name}" class="cart-item__image">
+                            <div class="cart-item__details">
+                                <h3>${item.name}</h3>
+                                <p>${item.price.toLocaleString()}원</p>
+                            </div>
+                            <div class="cart-item__quantity">
+                                <button class="quantity-btn" data-action="decrease">-</button>
+                                <input type="text" value="${item.quantity}" readonly>
+                                <button class="quantity-btn" data-action="increase">+</button>
+                            </div>
+                            <div class="cart-item__total-price">${(item.price * item.quantity).toLocaleString()}원</div>
+                            <button class="cart-item__remove" data-action="remove">×</button>
                         </div>`;
+                    cartItemsContainer.insertAdjacentHTML('beforeend', itemHtml);
+                });
+            }
+
+            const shipping = subtotal > 0 && subtotal < 50000 ? 3000 : 0;
+            const total = subtotal + shipping;
+            cartSummary.subtotal.textContent = `${subtotal.toLocaleString()}원`;
+            cartSummary.shipping.textContent = shipping > 0 ? `${shipping.toLocaleString()}원` : '무료';
+            cartSummary.total.textContent = `${total.toLocaleString()}원`;
+        };
+
+        cartItemsContainer.addEventListener('click', (e) => {
+            const target = e.target;
+            const itemDiv = target.closest('.cart-item');
+            if (!itemDiv) return;
+
+            const itemId = itemDiv.dataset.id;
+            let cart = getCart();
+            const itemIndex = cart.findIndex(item => item.id === itemId);
+            if (itemIndex === -1) return;
+
+            const action = target.dataset.action;
+            if (action === 'increase') {
+                cart[itemIndex].quantity++;
+            } else if (action === 'decrease') {
+                if (cart[itemIndex].quantity > 1) {
+                    cart[itemIndex].quantity--;
                 } else {
-                    cart.forEach(item => {
-                        subtotal += item.price * item.quantity;
-                        const itemHtml = `
-                            <div class="cart-item" data-id="${item.id}">
-                                <img src="${item.image}" alt="${item.name}" class="cart-item__image">
-                                <div class="cart-item__details">
-                                    <h3>${item.name}</h3>
-                                    <p>${item.price.toLocaleString()}원</p>
-                                </div>
-                                <div class="cart-item__quantity">
-                                    <button class="quantity-btn" data-action="decrease">-</button>
-                                    <input type="text" value="${item.quantity}" readonly>
-                                    <button class="quantity-btn" data-action="increase">+</button>
-                                </div>
-                                <div class="cart-item__total-price">${(item.price * item.quantity).toLocaleString()}원</div>
-                                <button class="cart-item__remove" data-action="remove">×</button>
-                            </div>`;
-                        cartItemsContainer.insertAdjacentHTML('beforeend', itemHtml);
-                    });
-                }
-
-                const shipping = subtotal > 0 && subtotal < 50000 ? 3000 : 0; // Example shipping logic
-                const total = subtotal + shipping;
-                cartSummary.subtotal.textContent = `${subtotal.toLocaleString()}원`;
-                cartSummary.shipping.textContent = shipping > 0 ? `${shipping.toLocaleString()}원` : '무료';
-                cartSummary.total.textContent = `${total.toLocaleString()}원`;
-            };
-
-            cartItemsContainer.addEventListener('click', (e) => {
-                const target = e.target;
-                const itemDiv = target.closest('.cart-item');
-                if (!itemDiv) return;
-
-                const itemId = itemDiv.dataset.id;
-                let cart = getCart();
-                const itemIndex = cart.findIndex(item => item.id === itemId);
-                if (itemIndex === -1) return;
-
-                const action = target.dataset.action;
-                if (action === 'increase') {
-                    cart[itemIndex].quantity++;
-                } else if (action === 'decrease') {
-                    if (cart[itemIndex].quantity > 1) {
-                        cart[itemIndex].quantity--;
-                    } else {
-                        cart.splice(itemIndex, 1);
-                    }
-                } else if (action === 'remove') {
                     cart.splice(itemIndex, 1);
                 }
+            } else if (action === 'remove') {
+                cart.splice(itemIndex, 1);
+            }
 
-                setCart(cart);
-                render();
-                updateCartBadge(); // Update header badge after cart changes
+            setCart(cart);
+            render();
+            // Also update the badge in the header
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const cartBadge = document.querySelector('.cart-badge');
+            if(cartBadge) cartBadge.textContent = count;
+        });
+
+        render();
+    }
+
+    // --- Signup Form Submit (추가된 부분) ---
+    function initSignupForm() {
+        const form = document.querySelector(".auth-form");
+        if (!form) return;
+
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/★★★YOUR_EXEC_URL★★★/exec"; // 배포한 Web App URL 넣기
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("name")?.value?.trim() || "";
+            const email = document.getElementById("email")?.value?.trim() || "";
+            const pw    = document.getElementById("password")?.value || "";
+            const pw2   = document.getElementById("confirm-password")?.value || "";
+            const agree = document.getElementById("terms")?.checked;
+
+            if (!agree) {
+                alert("이용약관 및 개인정보처리방침에 동의해주세요.");
+                return;
+            }
+            if (!name || !email) {
+                alert("이름과 이메일을 입력해주세요.");
+                return;
+            }
+            if (pw !== pw2) {
+                alert("비밀번호가 일치하지 않습니다.");
+                return;
+            }
+
+            // 파일럿 정책: 비밀번호가 비어있으면 1234 사용
+            const password = pw || "1234";
+
+            const payload = {
+                timestamp: new Date().toISOString(),
+                name,
+                email,
+                password
+            };
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                body: new URLSearchParams(payload) // JSON 아님!
+            })
+            .then(() => {
+                alert("가입해주셔서 감사합니다!");
+                try { localStorage.setItem("userEmail", email); } catch (_) {}
+                window.location.href = "index.html";
+            })
+            .catch((err) => {
+                console.error(err);
+                alert("오류가 발생했습니다. 다시 시도해주세요.");
             });
-
-            render(); // Initial render of cart page
-        }
+        });
     }
 
     // --- INITIALIZE ALL ---
@@ -201,8 +255,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initFaqAccordion();
     initScrollAnimations();
     initCart();
-    // Add class to body if it's the cart page for specific CSS
-    if (window.location.pathname.includes('cart.html')) {
+    initSignupForm();
+
+    if (document.querySelector('.cart-section')) {
         document.body.classList.add('cart-page');
+        renderCartPage();
     }
 });
+
