@@ -1,172 +1,178 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>이너컬리 회원가입</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <style>
-        body {
-            background-color: #f9f9f9;
-        }
-        .signup-container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 40px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        .signup-container h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 28px;
-            color: #333;
-        }
-        .form-group {
-            margin-bottom: 25px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-            font-size: 16px;
-        }
-        .form-group input[type="text"],
-        .form-group input[type="email"] {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        .form-group .checkbox-group label,
-        .form-group .radio-group label {
-            font-weight: normal;
-            display: inline-block;
-            margin-right: 20px;
-        }
-        .form-group input[type="checkbox"],
-        .form-group input[type="radio"] {
-            margin-right: 8px;
-        }
-        .form-group .other-input {
-            margin-top: 10px;
-        }
-        .submit-btn {
-            width: 100%;
-            padding: 15px;
-            background-color: #5f0080;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .submit-btn:hover {
-            background-color: #4b0066;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>이너컬리 회원가입</title>
+  <style>
+    body {
+      background-color: #f9f9f9;
+      font-family: Arial, sans-serif;
+    }
+    .signup-container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 40px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .signup-container h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 28px;
+      color: #333;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .form-group .checkbox-group label,
+    .form-group .radio-group label {
+      font-weight: normal;
+      display: inline-block;
+      margin-right: 15px;
+    }
+    .form-group input[type="checkbox"],
+    .form-group input[type="radio"] {
+      margin-right: 6px;
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 15px;
+      background-color: #5f0080;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .submit-btn:hover {
+      background-color: #4b0066;
+    }
+  </style>
 </head>
 <body>
-    <div class="signup-container">
-        <h1>회원가입 & 설문</h1>
-        <form id="signupForm">
-            <div class="form-group">
-                <label>[기본 정보]</label>
-                <input type="text" id="name" name="name" placeholder="이름 (필수)" required>
-            </div>
-            <div class="form-group">
-                <input type="email" id="email" name="email" placeholder="이메일 (필수)" required>
-            </div>
+  <div class="signup-container">
+    <h1>회원가입 & 설문</h1>
+    <form id="signupForm">
+      <!-- 기본 정보 -->
+      <div class="form-group">
+        <label>[기본 정보]</label>
+        <input type="text" id="name" name="name" placeholder="이름 (필수)" required>
+      </div>
+      <div class="form-group">
+        <input type="email" id="email" name="email" placeholder="이메일 (필수)" required>
+      </div>
+      <div class="form-group">
+        <input type="password" id="password" name="password" placeholder="비밀번호 (필수)" required>
+      </div>
 
-            <div class="form-group">
-                <label>[이너뷰티 고민]</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="concerns" value="피부 광채"> 피부 광채</label>
-                    <label><input type="checkbox" name="concerns" value="다이어트/체중 관리"> 다이어트/체중 관리</label>
-                    <label><input type="checkbox" name="concerns" value="독소 배출/장 건강"> 독소 배출/장 건강</label>
-                    <label><input type="checkbox" name="concerns" value="피로 회복/컨디션"> 피로 회복/컨디션</label>
-                    <label><input type="checkbox" name="concerns" value="영양 균형/식습관"> 영양 균형/식습관</label>
-                    <label><input type="checkbox" name="concerns" value="기타"> 기타 <input type="text" name="concern_other" class="other-input" placeholder="기타 고민 입력"></label>
-                </div>
-            </div>
+      <!-- 이너뷰티 고민 -->
+      <div class="form-group">
+        <label>[이너뷰티 고민]</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" name="concerns" value="피부 광채"> 피부 광채</label>
+          <label><input type="checkbox" name="concerns" value="다이어트/체중 관리"> 다이어트/체중 관리</label>
+          <label><input type="checkbox" name="concerns" value="독소 배출/장 건강"> 독소 배출/장 건강</label>
+          <label><input type="checkbox" name="concerns" value="피로 회복/컨디션"> 피로 회복/컨디션</label>
+          <label><input type="checkbox" name="concerns" value="영양 균형/식습관"> 영양 균형/식습관</label>
+          <label><input type="checkbox" name="concerns" value="기타"> 기타 
+            <input type="text" name="concern_other" class="other-input" placeholder="기타 고민 입력">
+          </label>
+        </div>
+      </div>
 
-            <div class="form-group">
-                <label>[생활 습관]</label>
-                <p>식습관</p>
-                <div class="radio-group">
-                    <label><input type="radio" name="diet_habit" value="가공식품 多"> 가공식품 多</label>
-                    <label><input type="radio" name="diet_habit" value="균형 잡힌 식사"> 균형 잡힌 식사</label>
-                    <label><input type="radio" name="diet_habit" value="자주 외식"> 자주 외식</label>
-                </div>
-                 <p style="margin-top: 15px;">영양제 섭취 습관</p>
-                <div class="radio-group">
-                    <label><input type="radio" name="supplement_habit" value="매일"> 매일</label>
-                    <label><input type="radio" name="supplement_habit" value="가끔"> 가끔</label>
-                    <label><input type="radio" name="supplement_habit" value="안함"> 안함</label>
-                </div>
-            </div>
+      <!-- 생활 습관 -->
+      <div class="form-group">
+        <label>[생활 습관]</label>
+        <p>식습관</p>
+        <div class="radio-group">
+          <label><input type="radio" name="diet_habit" value="가공식품 多"> 가공식품 多</label>
+          <label><input type="radio" name="diet_habit" value="균형 잡힌 식사"> 균형 잡힌 식사</label>
+          <label><input type="radio" name="diet_habit" value="자주 외식"> 자주 외식</label>
+        </div>
+        <p style="margin-top: 15px;">영양제 섭취 습관</p>
+        <div class="radio-group">
+          <label><input type="radio" name="supplement_habit" value="매일"> 매일</label>
+          <label><input type="radio" name="supplement_habit" value="가끔"> 가끔</label>
+          <label><input type="radio" name="supplement_habit" value="안함"> 안함</label>
+        </div>
+      </div>
 
-            <div class="form-group">
-                <label>[관심 항목]</label>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" name="interests" value="맞춤형 식단"> 맞춤형 식단</label>
-                    <label><input type="checkbox" name="interests" value="영양제 추천"> 영양제 추천</label>
-                    <label><input type="checkbox" name="interests" value="피부·다이어트"> 피부·다이어트</label>
-                    <label><input type="checkbox" name="interests" value="장 건강"> 장 건강</label>
-                </div>
-            </div>
+      <!-- 관심 항목 -->
+      <div class="form-group">
+        <label>[관심 항목]</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" name="interests" value="맞춤형 식단"> 맞춤형 식단</label>
+          <label><input type="checkbox" name="interests" value="영양제 추천"> 영양제 추천</label>
+          <label><input type="checkbox" name="interests" value="피부·다이어트"> 피부·다이어트</label>
+          <label><input type="checkbox" name="interests" value="장 건강"> 장 건강</label>
+        </div>
+      </div>
 
-            <button type="submit" class="submit-btn">가입 및 설문 완료하기</button>
-        </form>
-    </div>
+      <button type="submit" class="submit-btn">가입 및 설문 완료하기</button>
+    </form>
+  </div>
 
-    <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5I9T-x28x2iYb_sJixTN1Ae9pqT57pNMcv1K7Xmb63sVEDVuh7zmLbAoDSa96hQuG/exec";
+  <script>
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5I9T-x28x2iYb_sJixTN1Ae9pqT57pNMcv1K7Xmb63sVEDVuh7zmLbAoDSa96hQuG/exec";
 
-        function sendData(data) {
-            console.log("Sending signup data:", data);
-            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
-            if (navigator.sendBeacon && navigator.sendBeacon(GOOGLE_SCRIPT_URL, blob)) {
-                console.log("Signup data successfully sent via sendBeacon.");
-                return Promise.resolve();
-            }
-            return fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: blob, keepalive: true });
-        }
+    function sendData(data) {
+      const params = new URLSearchParams(data);
+      return fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        body: params
+      });
+    }
 
-        document.getElementById('signupForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const form = e.target;
-            const email = form.email.value;
-            localStorage.setItem('userEmail', email);
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
 
-            const formData = new FormData(form);
-            const data = {
-                timestamp: new Date().toISOString(),
-                name: formData.get('name'),
-                email: formData.get('email'),
-                concerns: formData.getAll('concerns').join(', '),
-                concern_other: formData.get('concern_other'),
-                diet_habit: formData.get('diet_habit'),
-                supplement_habit: formData.get('supplement_habit'),
-                interests: formData.getAll('interests').join(', ')
-            };
+      const data = {
+        timestamp: new Date().toISOString(),
+        name: formData.get('name'),
+        email: formData.get('email'),
+        password: formData.get('password'),
+        concerns: formData.getAll('concerns').join(', '),
+        concern_other: formData.get('concern_other'),
+        diet_habit: formData.get('diet_habit'),
+        supplement_habit: formData.get('supplement_habit'),
+        interests: formData.getAll('interests').join(', ')
+      };
 
-            sendData(data)
-            .then(() => {
-                alert("가입해주셔서 감사합니다. 곧 더 나은 서비스를 준비하겠습니다.");
-                form.reset();
-                window.location.href = 'index.html';
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert("오류가 발생했습니다. 다시 시도해주세요.");
-            });
+      // localStorage 저장
+      localStorage.setItem('userEmail', data.email);
+
+      sendData(data)
+        .then(() => {
+          alert("가입해주셔서 감사합니다. 곧 더 나은 서비스를 준비하겠습니다.");
+          form.reset();
+          window.location.href = 'index.html';
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert("오류가 발생했습니다. 다시 시도해주세요.");
         });
-    </script>
-
+    });
+  </script>
 </body>
 </html>
