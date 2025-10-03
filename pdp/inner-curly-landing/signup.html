@@ -7,14 +7,16 @@
     <link rel="stylesheet" href="css/styles.css">
     <style>
         body { background-color: #f9f9f9; }
-        .signup-container { max-width: 700px; margin: 50px auto; padding: 40px; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .signup-container { max-width: 700px; margin: 50px auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        @media (min-width: 768px) { .signup-container { padding: 40px; } }
         .signup-container h1 { text-align: center; margin-bottom: 30px; font-size: 28px; color: #333; }
         fieldset { border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 25px; }
         legend { font-size: 1.2rem; font-weight: bold; margin-left: 10px; padding: 0 10px; color: var(--color-primary); }
         .form-group { margin-bottom: 20px; }
+        .form-group:last-child { margin-bottom: 0; }
         .form-group label { display: block; margin-bottom: 10px; font-weight: 600; font-size: 1rem; }
-        .input-group, .radio-group, .checkbox-group { display: flex; flex-wrap: wrap; gap: 15px; }
-        .checkbox-group label, .radio-group label { font-weight: normal; display: flex; align-items: center; gap: 5px; }
+        .input-group, .radio-group, .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px 15px; }
+        .checkbox-group label, .radio-group label { font-weight: normal; display: flex; align-items: center; gap: 5px; font-size: 0.95rem; }
         input[type="text"], input[type="email"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
         .submit-btn { width: 100%; padding: 15px; background-color: #5f0080; color: white; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background-color 0.3s; }
         .submit-btn:hover { background-color: #4b0066; }
@@ -27,66 +29,191 @@
         <form id="signupForm">
             <fieldset>
                 <legend>기본 정보</legend>
-                <div class="form-group">
-                    <input type="text" id="name" name="name" placeholder="이름 (필수)" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" id="email" name="email" placeholder="이메일 (필수)" required>
-                </div>
+                <div class="form-group"><input type="text" id="name" name="name" placeholder="이름 (필수)" required></div>
+                <div class="form-group"><input type="email" id="email" name="email" placeholder="이메일 (필수)" required></div>
             </fieldset>
 
             <fieldset>
                 <legend>스트레스 관리 😌</legend>
-                <div class="form-group">
-                    <label>Q1. 요즘 가장 불편한 증상은 무엇인가요?</label>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" name="stress_q1" value="긴장/예민"> 긴장/예민</label>
-                        <label><input type="checkbox" name="stress_q1" value="집중 저하"> 집중 저하</label>
-                        <label><input type="checkbox" name="stress_q1" value="두근거림"> 두근거림</label>
-                        <label><input type="checkbox" name="stress_q1" value="소화 불편"> 소화 불편</label>
-                        <label><input type="checkbox" name="stress_q1" value="두통/뒷목 뻐근"> 두통/뒷목 뻐근</label>
-                        <label><input type="checkbox" name="stress_q1" value="잘 모르겠어요"> 잘 모르겠어요</label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Q2. 스트레스가 심해지는 시간대는요?</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="stress_q2" value="오전"> 오전</label>
-                        <label><input type="radio" name="stress_q2" value="오후"> 오후</label>
-                        <label><input type="radio" name="stress_q2" value="저녁"> 저녁</label>
-                        <label><input type="radio" name="stress_q2" value="밤"> 밤</label>
-                        <label><input type="radio" name="stress_q2" value="주말"> 주말</label>
-                        <label><input type="radio" name="stress_q2" value="상시"> 상시</label>
-                    </div>
-                </div>
+                <div class="form-group"><label>Q1. 요즘 가장 불편한 증상은 무엇인가요?</label><div class="checkbox-group">
+                    <label><input type="checkbox" name="stress_q1" value="긴장/예민"> 긴장/예민</label>
+                    <label><input type="checkbox" name="stress_q1" value="집중 저하"> 집중 저하</label>
+                    <label><input type="checkbox" name="stress_q1" value="두근거림"> 두근거림</label>
+                    <label><input type="checkbox" name="stress_q1" value="소화 불편"> 소화 불편</label>
+                    <label><input type="checkbox" name="stress_q1" value="두통/뒷목 뻐근"> 두통/뒷목 뻐근</label>
+                    <label><input type="checkbox" name="stress_q1" value="잘 모르겠어요"> 잘 모르겠어요</label>
+                </div></div>
+                <div class="form-group"><label>Q2. 스트레스가 심해지는 시간대는요?</label><div class="radio-group">
+                    <label><input type="radio" name="stress_q2" value="오전"> 오전</label>
+                    <label><input type="radio" name="stress_q2" value="오후"> 오후</label>
+                    <label><input type="radio" name="stress_q2" value="저녁"> 저녁</label>
+                    <label><input type="radio" name="stress_q2" value="밤"> 밤</label>
+                    <label><input type="radio" name="stress_q2" value="주말"> 주말</label>
+                    <label><input type="radio" name="stress_q2" value="상시"> 상시</label>
+                </div></div>
             </fieldset>
 
             <fieldset>
                 <legend>수면 😴</legend>
-                <div class="form-group">
-                    <label>Q1. 어떤 부분이 가장 어려우세요?</label>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" name="sleep_q1" value="잠들기"> 잠들기</label>
-                        <label><input type="checkbox" name="sleep_q1" value="중간에 자주 깸"> 중간에 자주 깸</label>
-                        <label><input type="checkbox" name="sleep_q1" value="이른 각성"> 이른 각성</label>
-                        <label><input type="checkbox" name="sleep_q1" value="숙면감 부족"> 숙면감 부족</label>
-                        <label><input type="checkbox" name="sleep_q1" value="코골이 의심"> 코골이 의심</label>
-                        <label><input type="checkbox" name="sleep_q1" value="잘 모르겠어요"> 잘 모르겠어요</label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Q2. 평균 수면 시간은요?</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="sleep_q2" value="~5시간"> ~5시간</label>
-                        <label><input type="radio" name="sleep_q2" value="6시간"> 6시간</label>
-                        <label><input type="radio" name="sleep_q2" value="7시간"> 7시간</label>
-                        <label><input type="radio" name="sleep_q2" value="8시간+"> 8시간+</label>
-                        <label><input type="radio" name="sleep_q2" value="가변적"> 가변적</label>
-                    </div>
-                </div>
+                <div class="form-group"><label>Q1. 어떤 부분이 가장 어려우세요?</label><div class="checkbox-group">
+                    <label><input type="checkbox" name="sleep_q1" value="잠들기"> 잠들기</label>
+                    <label><input type="checkbox" name="sleep_q1" value="중간에 자주 깸"> 중간에 자주 깸</label>
+                    <label><input type="checkbox" name="sleep_q1" value="이른 각성"> 이른 각성</label>
+                    <label><input type="checkbox" name="sleep_q1" value="숙면감 부족"> 숙면감 부족</label>
+                    <label><input type="checkbox" name="sleep_q1" value="코골이 의심"> 코골이 의심</label>
+                    <label><input type="checkbox" name="sleep_q1" value="잘 모르겠어요"> 잘 모르겠어요</label>
+                </div></div>
+                <div class="form-group"><label>Q2. 평균 수면 시간은요?</label><div class="radio-group">
+                    <label><input type="radio" name="sleep_q2" value="~5시간"> ~5시간</label>
+                    <label><input type="radio" name="sleep_q2" value="6시간"> 6시간</label>
+                    <label><input type="radio" name="sleep_q2" value="7시간"> 7시간</label>
+                    <label><input type="radio" name="sleep_q2" value="8시간+"> 8시간+</label>
+                    <label><input type="radio" name="sleep_q2" value="가변적"> 가변적</label>
+                </div></div>
             </fieldset>
 
-            <!-- Other fieldsets for Gut Health, Multivitamin, etc. would go here -->
+            <fieldset>
+                <legend>장 건강/유산균 🦠</legend>
+                <div class="form-group"><label>Q1. 주 증상/패턴을 골라주세요.</label><div class="checkbox-group">
+                    <label><input type="checkbox" name="gut_q1" value="더부룩"> 더부룩</label>
+                    <label><input type="checkbox" name="gut_q1" value="가스"> 가스</label>
+                    <label><input type="checkbox" name="gut_q1" value="변비"> 변비</label>
+                    <label><input type="checkbox" name="gut_q1" value="묽은 변"> 묽은 변</label>
+                    <label><input type="checkbox" name="gut_q1" value="복통"> 복통</label>
+                    <label><input type="checkbox" name="gut_q1" value="잘 모르겠어요"> 잘 모르겠어요</label>
+                </div></div>
+                <div class="form-group"><label>Q2. 유제품·발효식품 섭취 빈도는요?</label><div class="radio-group">
+                    <label><input type="radio" name="gut_q2" value="거의 없음"> 거의 없음</label>
+                    <label><input type="radio" name="gut_q2" value="주 1-2회"> 주 1-2회</label>
+                    <label><input type="radio" name="gut_q2" value="주 3-5회"> 주 3-5회</label>
+                    <label><input type="radio" name="gut_q2" value="매일"> 매일</label>
+                </div></div>
+            </fieldset>
+
+            <fieldset>
+                <legend>멀티비타민 💊</legend>
+                <div class="form-group"><label>Q1. 어떤 목적이 가장 가까워요?</label><div class="checkbox-group">
+                    <label><input type="checkbox" name="multivitamin_q1" value="전반 밸런스"> 전반 밸런스</label>
+                    <label><input type="checkbox" name="multivitamin_q1" value="피로 관리"> 피로 관리</label>
+                    <label><input type="checkbox" name="multivitamin_q1" value="면역 보강"> 면역 보강</label>
+                    <label><input type="checkbox" name="multivitamin_q1" value="모발/피부"> 모발/피부</label>
+                    <label><input type="checkbox" name="multivitamin_q1" value="집중/컨디션"> 집중/컨디션</label>
+                    <label><input type="checkbox" name="multivitamin_q1" value="잘 모르겠어요"> 잘 모르겠어요</label>
+                </div></div>
+                <div class="form-group"><label>Q2. 피하고 싶은 성분이 있나요?</label><div class="radio-group">
+                    <label><input type="radio" name="multivitamin_q2" value="카페인"> 카페인</label>
+                    <label><input type="radio" name="multivitamin_q2" value="철분"> 철분</label>
+                    <label><input type="radio" name="multivitamin_q2" value="요오드"> 요오드</label>
+                    <label><input type="radio" name="multivitamin_q2" value="비오틴"> 비오틴</label>
+                    <label><input type="radio" name="multivitamin_q2" value="없음/모름"> 없음/모름</label>
+                </div></div>
+            </fieldset>
+
+            <fieldset>
+                <legend>비타민 D ☀️</legend>
+                <div class="form-group"><label>Q1. 햇빛 노출(팔/다리 기준)은 어느 정도인가요?</label><div class="radio-group">
+                    <label><input type="radio" name="vitamind_q1" value="거의 없음"> 거의 없음</label>
+                    <label><input type="radio" name="vitamind_q1" value="주 1-2회"> 주 1-2회</label>
+                    <label><input type="radio" name="vitamind_q1" value="주 3-5회"> 주 3-5회</label>
+                    <label><input type="radio" name="vitamind_q1" value="매일 15분+"> 매일 15분+</label>
+                </div></div>
+                <div class="form-group"><label>Q2. 칼슘/유제품 섭취는요?</label><div class="radio-group">
+                    <label><input type="radio" name="vitamind_q2" value="거의 없음"> 거의 없음</label>
+                    <label><input type="radio" name="vitamind_q2" value="가끔"> 가끔</label>
+                    <label><input type="radio" name="vitamind_q2" value="자주"> 자주</label>
+                    <label><input type="radio" name="vitamind_q2" value="매일"> 매일</label>
+                </div></div>
+            </fieldset>
+
+            <fieldset>
+                <legend>피부/항산화 ✨</legend>
+                <div class="form-group"><label>Q1. 가장 신경 쓰이는 피부 고민은요?</label><div class="checkbox-group">
+                    <label><input type="checkbox" name="skin_q1" value="건조/당김"> 건조/당김</label>
+                    <label><input type="checkbox" name="skin_q1" value="탄력 저하"> 탄력 저하</label>
+                    <label><input type="checkbox" name="skin_q1" value="칙칙/광채"> 칙칙/광채</label>
+                    <label><input type="checkbox" name="skin_q1" value="트러블"> 트러블</label>
+                    <label><input type="checkbox" name="skin_q1" value="색소/잡티"> 색소/잡티</label>
+                    <label><input type="checkbox" name="skin_q1" value="잘 모르겠어요"> 잘 모르겠어요</label>
+                </div></div>
+                <div class="form-group"><label>Q2. 원하는 결과 느낌을 골라주세요.</label><div class="radio-group">
+                    <label><input type="radio" name="skin_q2" value="촉촉"> 촉촉</label>
+                    <label><input type="radio" name="skin_q2" value="맑음"> 맑음</label>
+                    <label><input type="radio" name="skin_q2" value="탱탱"> 탱탱</label>
+                    <label><input type="radio" name="skin_q2" value="진정"> 진정</label>
+                    <label><input type="radio" name="skin_q2" value="보호(항산화)"> 보호(항산화)</label>
+                </div></div>
+            </fieldset>
+
+            <fieldset>
+                <legend>활력/피로 ⚡️</legend>
+                <div class="form-group"><label>Q1. 요즘 가장 불편한 증상은 무엇인가요?</label><div class="radio-group">
+                    <label><input type="radio" name="energy_q1" value="오전"> 오전</label>
+                    <label><input type="radio" name="energy_q1" value="점심 이후"> 점심 이후</label>
+                    <label><input type="radio" name="energy_q1" value="저녁"> 저녁</label>
+                    <label><input type="radio" name="energy_q1" value="상시"> 상시</label>
+                </div></div>
+                <div class="form-group"><label>Q2. 피로의 주된 원인은 무엇이라 생각하세요?</label><div class="radio-group">
+                    <label><input type="radio" name="energy_q2" value="수면 부족"> 수면 부족</label>
+                    <label><input type="radio" name="energy_q2" value="스트레스"> 스트레스</label>
+                    <label><input type="radio" name="energy_q2" value="불규칙 식사"> 불규칙 식사</label>
+                    <label><input type="radio" name="energy_q2" value="운동 부족"> 운동 부족</label>
+                    <label><input type="radio" name="energy_q2" value="모름"> 모름</label>
+                </div></div>
+            </fieldset>
+
+            <fieldset>
+                <legend>면역력 🛡️</legend>
+                <div class="form-group"><label>Q1. 최근 3개월간 감기에 걸린 횟수는?</label><div class="radio-group">
+                    <label><input type="radio" name="immunity_q1" value="없음"> 없음</label>
+                    <label><input type="radio" name="immunity_q1" value="1-2회"> 1-2회</label>
+                    <label><input type="radio" name="immunity_q1" value="3회+"> 3회+</label>
+                    <label><input type="radio" name="immunity_q1" value="모름"> 모름</label>
+                </div></div>
+                <div class="form-group"><label>Q2. 면역력 저하의 주된 원인은 무엇이라 생각하세요?</label><div class="radio-group">
+                    <label><input type="radio" name="immunity_q2" value="수면 부족"> 수면 부족</label>
+                    <label><input type="radio" name="immunity_q2" value="과로"> 과로</label>
+                    <label><input type="radio" name="immunity_q2" value="운동 부족"> 운동 부족</label>
+                    <label><input type="radio" name="immunity_q2" value="영양 불균형"> 영양 불균형</label>
+                    <label><input type="radio" name="immunity_q2" value="스트레스"> 스트레스</label>
+                </div></div>
+            </fieldset>
+
+            <fieldset>
+                <legend>체지방 관리 ⚖️</legend>
+                <div class="form-group"><label>Q1. 현재 목표를 골라주세요.</label><div class="radio-group">
+                    <label><input type="radio" name="bodyfat_q1" value="체중 감량"> 체중 감량</label>
+                    <label><input type="radio" name="bodyfat_q1" value="체지방↓ 근육↑"> 체지방↓ 근육↑</label>
+                    <label><input type="radio" name="bodyfat_q1" value="유지/탄력"> 유지/탄력</label>
+                    <label><input type="radio" name="bodyfat_q1" value="잘 모르겠어요"> 잘 모르겠어요</label>
+                </div></div>
+                <div class="form-group"><label>Q2. 식사/활동 패턴</label><div class="checkbox-group">
+                    <label><input type="checkbox" name="bodyfat_q2" value="탄수 위주"> 탄수 위주</label>
+                    <label><input type="checkbox" name="bodyfat_q2" value="단백질 부족"> 단백질 부족</label>
+                    <label><input type="checkbox" name="bodyfat_q2" value="간식 잦음"> 간식 잦음</label>
+                    <label><input type="checkbox" name="bodyfat_q2" value="운동 주 3회+"> 운동 주 3회+</label>
+                    <label><input type="checkbox" name="bodyfat_q2" value="운동 거의 없음"> 운동 거의 없음</label>
+                </div></div>
+            </fieldset>
+
+            <fieldset>
+                <legend>스포츠 영양 🏃‍♀️</legend>
+                <div class="form-group"><label>Q1. 운동 종류/빈도</label><div class="checkbox-group">
+                    <label><input type="checkbox" name="sports_q1" value="근력"> 근력</label>
+                    <label><input type="checkbox" name="sports_q1" value="유산소"> 유산소</label>
+                    <label><input type="checkbox" name="sports_q1" value="스포츠"> 스포츠</label>
+                    <label><input type="checkbox" name="sports_q1" value="혼합"> 혼합</label>
+                    <label><input type="checkbox" name="sports_q1" value="주 1-2회"> 주 1-2회</label>
+                    <label><input type="checkbox" name="sports_q1" value="주 3-5회"> 주 3-5회</label>
+                    <label><input type="checkbox" name="sports_q1" value="매일"> 매일</label>
+                </div></div>
+                <div class="form-group"><label>Q2. 보강하고 싶은 부분</label><div class="checkbox-group">
+                    <label><input type="checkbox" name="sports_q2" value="펌프/근성장"> 펌프/근성장</label>
+                    <label><input type="checkbox" name="sports_q2" value="회복/피로"> 회복/피로</label>
+                    <label><input type="checkbox" name="sports_q2" value="지구력"> 지구력</label>
+                    <label><input type="checkbox" name="sports_q2" value="체지방↓"> 체지방↓</label>
+                    <label><input type="checkbox" name="sports_q2" value="집중"> 집중</label>
+                </div></div>
+            </fieldset>
 
             <button type="submit" class="submit-btn">가입 및 설문 완료하기</button>
             <p class="password-notice">파일럿 테스트 중입니다. 모든 계정 비밀번호는 1234로 통일됩니다.</p>
@@ -104,13 +231,8 @@
 
             const formData = new FormData(form);
             let data = {};
-            // FormData를 객체로 변환 (체크박스 등 다중 값 처리 포함)
             for (let [key, value] of formData.entries()) {
-                if (key.endsWith('[]')) { // For potential future multi-select
-                    let name = key.slice(0, -2);
-                    if (!data[name]) data[name] = [];
-                    data[name].push(value);
-                } else if (data[key]) {
+                if (data[key]) {
                     if (!Array.isArray(data[key])) {
                         data[key] = [data[key]];
                     }
@@ -119,7 +241,6 @@
                     data[key] = value;
                 }
             }
-            // 배열인 값들을 콤마로 구분된 문자열로 변환
             for (let key in data) {
                 if (Array.isArray(data[key])) {
                     data[key] = data[key].join(', ');
@@ -133,10 +254,16 @@
 
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
-                body: JSON.stringify(data),
+                body: JSON.stringify({data: data}), // Apps Script V8 엔진은 이중 객체로 감싸야 할 수 있음
                 headers: { 'Content-Type': 'application/json' }
             })
-            .then(response => response.json()) // 서버로부터의 응답을 JSON으로 파싱
+            .then(response => {
+                if(response.status === 200){
+                    return response.json();
+                }
+                // 200이 아니면 CORS 관련 리디렉션일 가능성이 높음
+                throw new Error("Network response was not ok. Check for CORS issues.");
+            })
             .then(res => {
                 console.log('Success:', res);
                 alert("가입해주셔서 감사합니다. 곧 더 나은 서비스를 준비하겠습니다.");
