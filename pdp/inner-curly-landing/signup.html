@@ -24,6 +24,7 @@
     <div class="signup-container">
         <h1>회원가입 & 설문</h1>
         <form id="signupForm">
+            <!-- Form Fields... (same as before) -->
             <div class="form-group">
                 <label>[기본 정보]</label>
                 <input type="text" id="name" name="name" placeholder="이름 (필수)" required>
@@ -80,11 +81,9 @@
             const email = form.email.value;
             localStorage.setItem('userEmail', email);
 
-            // 1. FormData를 일반 객체로 변환
             const formData = new FormData(form);
             const data = {};
             for (let [key, value] of formData.entries()) {
-                // 같은 이름의 체크박스 값을 콤마로 연결
                 if (data[key]) {
                     data[key] += ", " + value;
                 } else {
@@ -92,20 +91,15 @@
                 }
             }
 
-            // 2. 고정 비밀번호와 타임스탬프 추가
             data.password = "1234";
             data.timestamp = new Date().toISOString();
 
-            // 3. URLSearchParams 형식으로 변환하여 전송
-            const body = new URLSearchParams(data);
-
-            console.log("Sending signup data:", Object.fromEntries(body));
+            console.log("Sending signup data as JSON:", data);
 
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: body,
-                mode: 'no-cors'
+                body: JSON.stringify(data), // 데이터를 JSON 문자열로 전송
+                mode: 'no-cors' // 서버 응답을 읽지 않음
             })
             .then(() => {
                 alert("가입해주셔서 감사합니다. 곧 더 나은 서비스를 준비하겠습니다.");
