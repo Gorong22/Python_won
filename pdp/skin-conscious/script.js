@@ -4,9 +4,58 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!quizBox) return;
   
     // ===============================
-    // 질문 데이터
+    // 질문 데이터 (복구)
     // ===============================
-    const questions = [/* ... 기존 질문 그대로 ... */];
+    const questions = [
+      {
+        question: "아침에 일어났을 때 피부 상태는 어떤가요?",
+        answers: [
+          { text: "맑고 생기 있어요", scores: { glow: 2 } },
+          { text: "건조하거나 푸석해요", scores: { detox: 1, condition: 1 } },
+          { text: "붓거나 칙칙해요", scores: { slim: 1, condition: 1 } },
+        ],
+      },
+      {
+        question: "스트레스를 받을 때 나는?",
+        answers: [
+          { text: "피부에 트러블이 생겨요", scores: { condition: 2 } },
+          { text: "식습관이 불규칙해져요", scores: { detox: 1, slim: 1 } },
+          { text: "컨디션이 떨어지고 피로해요", scores: { condition: 2 } },
+        ],
+      },
+      {
+        question: "평소 물 섭취량은?",
+        answers: [
+          { text: "2L 이상 꾸준히 마신다", scores: { glow: 1, detox: 1 } },
+          { text: "1L 이하로 마신다", scores: { condition: 2 } },
+          { text: "생각날 때만 마신다", scores: { detox: 1, condition: 1 } },
+        ],
+      },
+      {
+        question: "하루 식사 패턴은 어떤가요?",
+        answers: [
+          { text: "규칙적인 식사와 가벼운 간식", scores: { glow: 2, slim: 1 } },
+          { text: "하루 한 끼나 불규칙한 식사", scores: { detox: 2 } },
+          { text: "단짠·자극적인 음식이 많아요", scores: { condition: 2 } },
+        ],
+      },
+      {
+        question: "요즘 가장 필요한 루틴은?",
+        answers: [
+          { text: "광채·피부 회복", scores: { glow: 2 } },
+          { text: "체중·밸런스 관리", scores: { slim: 2 } },
+          { text: "순환·피로 회복", scores: { detox: 2, condition: 1 } },
+        ],
+      },
+      {
+        question: "자기 전 습관은 어떤가요?",
+        answers: [
+          { text: "핸드폰보다 일찍 잠든다", scores: { glow: 1, slim: 1 } },
+          { text: "늦게까지 스마트폰을 본다", scores: { condition: 2 } },
+          { text: "스트레칭이나 차 한잔으로 마무리한다", scores: { detox: 2 } },
+        ],
+      },
+    ];
   
     let currentQuestionIndex = 0;
     let userScores = { glow: 0, slim: 0, detox: 0, condition: 0 };
@@ -20,10 +69,12 @@ document.addEventListener("DOMContentLoaded", () => {
       quizBox.innerHTML = `
         <h2>${q.question}</h2>
         <div class="answers">
-          ${q.answers.map(
-            (a, i) =>
-              `<button class="answer-btn" data-index="${i}">${a.text}</button>`
-          ).join("")}
+          ${q.answers
+            .map(
+              (a, i) =>
+                `<button class="answer-btn" data-index="${i}">${a.text}</button>`
+            )
+            .join("")}
         </div>
       `;
       updateProgress();
@@ -43,12 +94,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const chosen = questions[currentQuestionIndex].answers[idx];
         userAnswers.push({
           question: questions[currentQuestionIndex].question,
-          answer: chosen.text
+          answer: chosen.text,
         });
         for (const type in chosen.scores) userScores[type] += chosen.scores[type];
   
         currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) showQuestion(currentQuestionIndex);
+        if (currentQuestionIndex < questions.length)
+          showQuestion(currentQuestionIndex);
         else showSubmitForm();
       }
     });
@@ -80,11 +132,13 @@ document.addEventListener("DOMContentLoaded", () => {
         <button id="submitBtn" class="btn-start">결과 확인하기</button>
       `;
   
-      document.getElementById("submitBtn").addEventListener("click", handleSubmit);
+      document
+        .getElementById("submitBtn")
+        .addEventListener("click", handleSubmit);
     }
   
     // ===============================
-    // ✅ 로딩 오버레이 (추가)
+    // ✅ 로딩 오버레이
     // ===============================
     function showLoadingOverlay() {
       const overlay = document.createElement("div");
@@ -115,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
   
-      showLoadingOverlay(); // ✅ 로딩 오버레이 표시
+      showLoadingOverlay();
   
       let resultType = Object.keys(userScores).reduce((a, b) =>
         userScores[a] > userScores[b] ? a : b
@@ -149,12 +203,12 @@ document.addEventListener("DOMContentLoaded", () => {
       )
         .then((res) => res.json())
         .then(() => {
-          hideLoadingOverlay(); // ✅ 로딩 오버레이 제거
+          hideLoadingOverlay();
           alert("결과가 이메일로 전송되었습니다! 📩");
           window.location.href = `result-${resultType}.html`;
         })
         .catch((err) => {
-          hideLoadingOverlay(); // ✅ 실패 시 제거
+          hideLoadingOverlay();
           console.error(err);
           alert("전송 중 오류가 발생했습니다. 다시 시도해주세요.");
         });
