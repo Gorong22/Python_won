@@ -1584,27 +1584,26 @@ body.plate-condition .btn-cta:hover {
 
 .hero-section {
   position: relative;
-  /* 섹션 자체는 가운데 정렬 + 적절 높이 */
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 수직 중앙 정렬 */
+  align-items: center;
   text-align: center;
-  padding: clamp(40px, 10vh, 80px) 0;
+  min-height: 80vh; /* 높이 확보 */
+  padding: 0; /* ✅ 불필요한 여백 제거 */
+  margin: 0;
+  overflow: hidden;
 }
 
-/* 배경 이미지를 카드처럼 중앙에 배치 (폭 제한) */
 .hero-section__bg {
   position: absolute;
-  top: 0;
+  top: 50%; /* ✅ 이미지 중앙 기준으로 */
   left: 50%;
-  transform: translateX(-50%);
-  /* 양옆 여백: 뷰포트 기준 92vw를 넘지 않고, 최대 1140px */
-  width: min(92vw, 1140px);
-  height: clamp(360px, 60vh, 560px);
-
-  /* border-radius: 24px; */
-  overflow: hidden;
-  z-index: -1; /* 텍스트 뒤로 */
-  background: url("../assets/hero-banner.png") center / cover no-repeat;
+  transform: translate(-50%, -50%); /* 완전 정중앙 배치 */
+  width: 100%;
+  height: 100%;
+  background: url("../assets/hero-banner.png") center center / cover no-repeat;
+  z-index: -1;
 }
 
 /* 밝기 조절은 필터 대신 오버레이로 (선명도 유지) */
@@ -1631,12 +1630,208 @@ body.plate-condition .btn-cta:hover {
   }
 }
 
+
+/* ✅ 경로 및 로고/배경 복원 수정 */
+.hero-section__bg {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(92vw, 1140px);
+  height: clamp(360px, 60vh, 560px);
+  overflow: hidden;
+  z-index: -1;
+  background: url("../assets/hero-banner.png") center / cover no-repeat;
+}
+.hero-section__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+}
 .nav__logo {
   display: block;
   width: 132px;
   height: 56px;
-  background: url("/assets/logo-innerkurly-purple.png") no-repeat center/contain;
-  text-indent: -9999px; /* 텍스트 시각적으로 숨김 */
-  white-space: nowrap;
+  background: url("../assets/logo-innerkurly-purple.png") no-repeat center/contain;
+  text-indent: -9999px;
   overflow: hidden;
+}
+
+/* 이미지 경로 정정 */
+.plate-card img,
+.insight-news__media img,
+.app-section__visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* CTA 버튼 영역 보정 */
+.cta__container {
+  background: #f9f9fb;
+  border-radius: 16px;
+  padding: 60px 20px;
+  text-align: center;
+}
+.cta__title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--color-primary);
+}
+.cta__actions .btn--primary {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+.cta__actions .btn--primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* 심리테스트 카드 복원 스타일 */
+.ik-test-section {
+  background: #fff;
+  padding: 100px 20px;
+  text-align: center;
+}
+.ik-test-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+}
+.ik-test-card {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+  padding: 32px 24px;
+  text-decoration: none;
+  color: var(--color-text);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.ik-test-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+.ik-test-card h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--color-primary);
+}
+.ik-test-card p {
+  font-size: 0.95rem;
+  color: var(--color-muted);
+  margin-bottom: 16px;
+}
+
+/* --- 심리테스트 섹션 (이미지 없는 버전) --- */
+.ik-test-section {
+  background: #fff;
+  padding: 100px 20px;
+  text-align: center;
+}
+
+.ik-test-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.ik-test-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+  padding: 32px 24px;
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ik-test-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.ik-test-card h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #6A1B9A;
+  margin-bottom: 16px;
+}
+
+.ik-test-card p {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.ik-test-link {
+  font-weight: 600;
+  color: #333;
+  display: inline-block;
+  margin-top: 8px;
+}
+/* ✅ 공통 */
+.supplement {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  padding: 60px 20px;
+  margin: 60px auto;
+  max-width: 1100px;
+  text-align: center;
+}
+
+.section__subtitle {
+  color: #777;
+  font-size: 15px;
+  margin-top: -10px;
+  margin-bottom: 40px;
+}
+
+.supplement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.supplement-card {
+  background: #faf8fc;
+  border-radius: 16px;
+  padding: 28px 20px;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  transition: transform 0.2s ease;
+}
+
+.supplement-card:hover {
+  transform: translateY(-5px);
+}
+
+.supplement-card h3 {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.supplement-card p {
+  color: #555;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ✅ 플레이트별 컬러 테마 */
+.glow-supplement h3 { color: #9C27B0; }      /* 보라빛 – 피부광채 */
+.slim-supplement h3 { color: #E91E63; }      /* 핑크 – 슬림바디 */
+.balance-supplement h3 { color: #2196F3; }   /* 블루 – 밸런스 */
+.detox-supplement h3 { color: #4CAF50; }     /* 그린 – 디톡스 */
+
+/* ✅ 상단 여백 조정 (Plate 전용 header 보정) */
+body[class*="plate-"] header {
+  height: 72px !important;
 }

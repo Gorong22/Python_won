@@ -9,6 +9,22 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./css/styles.css" />
+    <!-- ✅ 공통 Header (inner-curly-landing 기준) -->
+<header class="ik-header">
+  <a href="index.html" class="ik-header-logo">
+    <img src="./assets/logo-innerkurly-purple.png" alt="Inner Kurly Logo" />
+  </a>
+
+  <nav class="ik-header-nav">
+    <a href="membership.html">멤버십</a>
+    <a href="index.html#plates">플레이트</a>
+    <a href="cart.html">장바구니</a>
+    <a href="signup.html">회원가입</a>
+  </nav>
+
+  <button class="ik-hamburger" id="hamburgerBtn">☰</button>
+</header>
+
   </head>
   <body class="plate-detox pdp-main">
     <!-- HERO -->
@@ -69,6 +85,27 @@
       </div>
     </section>
 
+    <section class="section supplement detox-supplement">
+      <h2 class="section__title">함께 제공되는 영양제</h2>
+      <p class="section__subtitle">Detox Plate의 클린 & 리셋을 위한 영양 설계</p>
+    
+      <div class="supplement-grid">
+        <div class="supplement-card">
+          <h3>🍋 밀크씨슬 + 비타민 E</h3>
+          <p>간 해독과 항산화 작용으로 체내 노폐물 배출을 돕습니다.</p>
+        </div>
+        <div class="supplement-card">
+          <h3>🥦 클로렐라 + 스피루리나</h3>
+          <p>중금속과 독소 제거를 촉진하며 영양 밸런스를 유지합니다.</p>
+        </div>
+        <div class="supplement-card">
+          <h3>💦 식이섬유 + 프로바이오틱스</h3>
+          <p>장 환경을 개선하고 순환을 원활하게 유지합니다.</p>
+        </div>
+      </div>
+    </section>
+    
+
     <!-- 영양 성분 -->
     <section class="section nutrition">
       <h2 class="section__title">영양 성분 (1일 제공량)</h2>
@@ -86,15 +123,15 @@
     <section class="section pricing">
       <h2 class="section__title">구독 옵션</h2>
       <div class="pricing__grid">
-        <div class="pricing-card" data-total-price="59000" data-days="7">
-          <h3 class="pricing-card__title">Weekly Plan (7일)</h3>
-          <p class="pricing-card__price">59,000원</p>
+        <div class="pricing-card" data-total-price="73000" data-days="7">
+          <h3 class="pricing-card__title">Weekly 5 DAYS</h3>
+          <p class="pricing-card__price">73,000원</p>
           <p class="pricing-card__daily"></p>
           <button class="btn btn--primary" data-product="detox-weekly" data-action="subscribe">주간 구독하기</button>
         </div>
-        <div class="pricing-card" data-total-price="199000" data-days="28">
-          <h3 class="pricing-card__title">Monthly Plan (4주)</h3>
-          <p class="pricing-card__price">199,000원</p>
+        <div class="pricing-card" data-total-price="280000" data-days="28">
+          <h3 class="pricing-card__title">Monthly ROUTINE</h3>
+          <p class="pricing-card__price">280,000원</p>
           <p class="pricing-card__daily"></p>
           <button class="btn btn--primary" data-product="detox-monthly" data-action="subscribe">월간 구독하기</button>
         </div>
@@ -155,16 +192,7 @@
       </div>
     </div>
 
-    <script>
-      document.querySelectorAll(".pricing-card").forEach((card) => {
-        const total = parseInt(card.dataset.totalPrice, 10);
-        const days = parseInt(card.dataset.days, 10);
-        const daily = Math.round(total / days);
-        card.querySelector(".pricing-card__daily").textContent = `하루 약 ${daily.toLocaleString()}원`;
-      });
-      const minPrice = Math.min(...[...document.querySelectorAll(".pricing-card")].map((c) => parseInt(c.dataset.totalPrice, 10) / parseInt(c.dataset.days, 10)));
-      document.querySelector(".footer-price").textContent = `하루 약 ${Math.round(minPrice).toLocaleString()}원부터`;
-    </script>
+    
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrNJF9zOe87chhdAwlb0tVnO3Qk6eeqzo71fb7udZ8lzSbBgYvTKI-NyqCpTqY9e6V/exec";
 
@@ -200,5 +228,233 @@
             button.addEventListener('click', handleActionClick);
         });
     </script>
-  </body>
+  <!-- IK_REDESIGN_PATCH_FINAL -->
+<style>
+:root {
+    --ik-purple: #6A1B9A;
+    --ik-purple-hover: #4b0067;
+    --ik-text-sub: #777;
+    --ik-bg: #faf8fc;
+    --ik-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    --ik-radius: 12px;
+}
+html { scroll-behavior: smooth; }
+body {
+    background-color: var(--ik-bg);
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+}
+h1, h2, h3 { word-break: keep-all; hyphens: auto; line-height: 1.2; font-weight: 700; }
+h1 { font-size: 32px; }
+h2 { font-size: 24px; }
+@media (min-width: 768px) {
+    h1 { font-size: 40px; }
+    h2 { font-size: 28px; }
+}
+@media (min-width: 1024px) {
+    h1 { font-size: 56px; }
+    h2 { font-size: 32px; }
+}
+.btn {
+    display: inline-block;
+    background: var(--ik-purple);
+    color: #fff !important;
+    border-radius: var(--ik-radius);
+    padding: 14px 28px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.btn:hover { background: var(--ik-purple-hover); }
+
+/* Header */
+.ik-header {
+    position: sticky; top: 0; z-index: 999;
+    background: #fff;
+    padding: 0 16px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #f0f0f0;
+}
+.ik-header-logo img { height: 30px; }
+.ik-header-nav { display: none; }
+.ik-hamburger { display: none; background: none; border: none; font-size: 28px; cursor: pointer; }
+@media (max-width: 768px) {
+    .ik-hamburger { display: block; }
+    .ik-header-nav {
+        display: none;
+        position: absolute;
+        top: 64px; left: 0; right: 0;
+        background: white;
+        box-shadow: var(--ik-shadow);
+    }
+    .ik-header-nav.is-open { display: block; }
+    .ik-header-nav a { display: block; padding: 16px; text-decoration: none; color: #333; }
+}
+@media (min-width: 769px) {
+    .ik-header { height: 72px; padding: 0 24px; }
+    .ik-header-nav { display: flex; gap: 24px; }
+    .ik-header-nav a { text-decoration: none; color: #333; font-weight: 500; }
+}
+
+/* Hero Section */
+.ik-hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    position: relative;
+    text-align: center;
+    color: white;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.ik-hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.ik-hero-content h1 { text-shadow: 0 2px 12px rgba(0,0,0,.25); }
+
+/* Pricing Section */
+.ik-pricing-section { padding: 60px 16px; }
+.ik-pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 24px auto 0; }
+.ik-price-card { background: #fff; border-radius: 16px; padding: 24px; box-shadow: var(--ik-shadow); text-align: center; }
+
+/* Test Section */
+.ik-test-section { padding: 60px 16px; text-align: center; }
+.ik-test-grid { display: grid; grid-template-columns: 1fr; gap: 24px; max-width: 700px; margin: 24px auto 0; }
+.ik-test-card { background: #fff; border-radius: 16px; padding: 32px; box-shadow: var(--ik-shadow); text-decoration: none; color: inherit; transition: transform 0.2s ease; }
+.ik-test-card:hover { transform: scale(1.05); }
+@media (min-width: 768px) { .ik-test-grid { grid-template-columns: 1fr 1fr; } }
+
+/* Final CTA */
+#cta { display: none; }
+</style>
+<script>
+(function() {
+    if (window.IK_REDESIGN_APPLIED_FINAL) return;
+    window.IK_REDESIGN_APPLIED_FINAL = true;
+
+    const $ = (s) => document.querySelector(s);
+    const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+    function setupGlobal() {
+        const header = $('header') || document.body.prepend(document.createElement('header'));
+        header.className = 'ik-header';
+        header.innerHTML = `
+            <a href="index.html" class="ik-header-logo"><img src="assets/logo-innerkurly-purple.png" alt="InnerKurly Logo"></a>
+            <nav class="ik-header-nav">
+                <a href="membership.html">멤버십</a>
+                <a href="index.html#plates">플레이트</a>
+                <a href="cart.html">장바구니</a>
+                <a href="signup.html">회원가입</a>
+            </nav>
+            <button class="ik-hamburger">☰</button>
+        `;
+        $('.ik-hamburger').addEventListener('click', () => $('.ik-header-nav').classList.toggle('is-open'));
+
+        const finalCTA = $('#cta');
+        if(finalCTA) finalCTA.style.display = 'none';
+    }
+
+    function setupHero() {
+        const hero = $('.hero-section');
+        if (hero) {
+            hero.classList.add('ik-hero');
+            hero.style.backgroundImage = "url('assets/hero-banner.png')";
+            hero.innerHTML = `<div class="ik-hero-content"><h1>하루 한 끼, 나를 위한 건강한 투자</h1><a href="#pricing" class="btn">구독 시작하기</a></div>`;
+        }
+    }
+
+    function setupMembershipPage() {
+        if (!location.pathname.includes('membership.html')) return;
+        const title = $('.membership-hero-section__title');
+        if (title) title.innerHTML = 'Kurly Membership<br><span style="font-size:24px;color:var(--ik-purple)">&times;</span><br>InnerKurly';
+        
+        const subtitle = $('.membership-hero-section__subtitle');
+        if (subtitle) subtitle.textContent = '월 1,900원 멤버십 + 이너컬리 구독으로 더 큰 혜택을.';
+
+        const cta = $('.membership-hero-section .btn');
+        if (cta) {
+            cta.href = 'https://www.kurly.com/member/membership';
+            cta.target = '_blank';
+            cta.rel = 'noopener';
+        }
+        
+        $$('main > .section').forEach((sec, i) => { if (i > 0) sec.remove(); });
+
+        const testSection = document.createElement('section');
+        testSection.className = 'ik-test-section';
+        testSection.innerHTML = `
+            <h2>나에게 맞는 이너뷰티 루틴을 찾아보세요</h2>
+            <div class="ik-test-grid">
+                <a href="https://lifestyle-conscious.netlify.app/" target="_blank" rel="noopener" class="ik-test-card"><h3>Lifestyle Type Test</h3><p>생활 습관으로 건강 상태를 진단하고 맞춤 솔루션을 추천받으세요.</p><span class="btn">루틴 테스트 시작하기</span></a>
+                <a href="https://skin-conscious.netlify.app/" target="_blank" rel="noopener" class="ik-test-card"><h3>Skin Personality Test</h3><p>피부 고민과 성향으로 가장 효과적인 성분을 찾아보세요.</p><span class="btn">피부 루틴 알아보기</span></a>
+            </div>`;
+        $('main').appendChild(testSection);
+    }
+
+    function setupPlatePages() {
+        if (!location.pathname.match(/plate-/)) return;
+        
+        $$('.pricing, #pricing').forEach(s => s.remove());
+
+        const pricingHTML = `
+            <h2 style="text-align:center;">플레이트 구독 가격</h2>
+            <div class="ik-pricing-grid">
+                <div class="ik-price-card"><h3>Trial Routine</h3><p>무료 (3일)</p></div>
+                <div class="ik-price-card"><h3>Weekly 3 Days</h3><p>₩45,000 / 주 (1일 ₩15,000)</p></div>
+                <div class="ik-price-card"><h3>Weekly 5 Days</h3><p>₩73,000 / 주 (1일 ₩14,600)</p></div>
+                <div class="ik-price-card"><h3>Monthly Routine</h3><p>₩280,000 / 월 (1일 ₩14,000)</p></div>
+            </div>`;
+        const pricingSection = document.createElement('section');
+        pricingSection.className = 'ik-pricing-section';
+        pricingSection.innerHTML = pricingHTML;
+        $('main').appendChild(pricingSection);
+
+        const ctas = { slim: '가벼운 루틴', glow: '빛나는 하루', balance: '균형의 시작', detox: '비우자' };
+        for (const plate in ctas) {
+            if (location.pathname.includes(`plate-${plate}`)) {
+                const btn = $('.pdp-hero-section__actions .btn--primary');
+                if (btn) btn.textContent = ctas[plate];
+            }
+        }
+    }
+    
+    function setupIndexPage() {
+        if (!location.pathname.includes('index.html')) return;
+        const ctaSection = $('#cta');
+        if (ctaSection) {
+            const testSection = document.createElement('section');
+            testSection.className = 'ik-test-section';
+            testSection.innerHTML = `
+                <h2>나에게 맞는 이너뷰티 루틴을 찾아보세요</h2>
+                <div class="ik-test-grid">
+                    <a href="https://lifestyle-conscious.netlify.app/" target="_blank" rel="noopener" class="ik-test-card"><h3>Lifestyle Type Test</h3><p>생활 습관으로 건강 상태를 진단하고 맞춤 솔루션을 추천받으세요.</p><span class="btn">루틴 테스트 시작하기</span></a>
+                    <a href="https://skin-conscious.netlify.app/" target="_blank" rel="noopener" class="ik-test-card"><h3>Skin Personality Test</h3><p>피부 고민과 성향으로 가장 효과적인 성분을 찾아보세요.</p><span class="btn">피부 루틴 알아보기</span></a>
+                </div>`;
+            ctaSection.parentElement.insertBefore(testSection, ctaSection);
+            ctaSection.remove();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setupGlobal();
+        setupHero();
+        setupMembershipPage();
+        setupPlatePages();
+        setupIndexPage();
+    });
+})();
+</script>
+</body>
 </html>

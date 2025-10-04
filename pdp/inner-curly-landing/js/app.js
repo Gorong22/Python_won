@@ -263,3 +263,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+document.querySelectorAll('.app-badge').forEach((badge) => {
+    badge.addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('📱 루션 앱은 현재 준비 중입니다. 곧 만나보세요!');
+    });
+  });
+  

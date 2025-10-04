@@ -1,125 +1,167 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const quizBox = document.getElementById('quiz-box');
-    const progressBar = document.querySelector('.progress');
-
-    if (!quizBox) return; // Not on the quiz page
-
+document.addEventListener("DOMContentLoaded", () => {
+    const quizBox = document.getElementById("quiz-box");
+    const progressBar = document.querySelector(".progress");
+    const submitForm = document.getElementById("submit-form");
+    const submitBtn = document.getElementById("submitBtn");
+  
+    if (!quizBox) return;
+  
     const questions = [
-        {
-            question: "운동을 얼마나 자주 하시나요?",
-            answers: [
-                { text: "주 3회 이상 꾸준히 한다", scores: { healthy: 2 } },
-                { text: "주 1~2회 정도 한다", scores: { busy: 1, basic: 1 } },
-                { text: "거의 하지 않는다", scores: { stress: 1, busy: 1 } },
-            ]
-        },
-        {
-            question: "하루 평균 수면 시간은?",
-            answers: [
-                { text: "7시간 이상 충분히 잔다", scores: { healthy: 2, stress: -1 } },
-                { text: "5~6시간 정도 잔다", scores: { busy: 2, stress: 1 } },
-                { text: "5시간 미만으로 잔다", scores: { stress: 2, basic: 1 } },
-            ]
-        },
-        {
-            question: "스트레스를 풀기 위해 무엇을 하시나요?",
-            answers: [
-                { text: "운동, 명상 등 건강한 활동", scores: { healthy: 2 } },
-                { text: "음주, 흡연, 자극적인 음식 섭취", scores: { stress: 2 } },
-                { text: "주로 혼자 쉰다 (유튜브, 게임 등)", scores: { busy: 1, basic: 1 } },
-                { text: "특별히 하는 것이 없다", scores: { stress: 1, basic: 1 } },
-            ]
-        },
-        {
-            question: "아침 식사는 얼마나 자주 하시나요?",
-            answers: [
-                { text: "거의 매일 챙겨 먹는다", scores: { healthy: 2 } },
-                { text: "주 2~3회 정도 먹는다", scores: { basic: 1 } },
-                { text: "거의 먹지 않는다", scores: { busy: 2, stress: 1 } },
-            ]
-        },
-        {
-            question: "주말 패턴은 평일과 비교해 어떤가요?",
-            answers: [
-                { text: "규칙적이고, 주로 휴식한다", scores: { healthy: 1, stress: -1 } },
-                { text: "불규칙하고, 약속이 많다", scores: { busy: 2, stress: 1 } },
-                { text: "평일과 거의 비슷하다", scores: { basic: 1 } },
-            ]
-        },
-        {
-            question: "최근 가장 고민되는 것은?",
-            answers: [
-                { text: "업무/학업 스트레스", scores: { stress: 2 } },
-                { text: "체력 저하 및 피로감", scores: { busy: 1, condition: 2 } },
-                { text: "불규칙한 생활 패턴", scores: { basic: 2 } },
-                { text: "특별한 고민 없음", scores: { healthy: 1 } },
-            ]
-        }
+      {
+        question: "운동을 얼마나 자주 하시나요?",
+        answers: [
+          { text: "주 3회 이상 꾸준히 한다", scores: { healthy: 2 } },
+          { text: "주 1~2회 정도 한다", scores: { busy: 1, basic: 1 } },
+          { text: "거의 하지 않는다", scores: { stress: 1, busy: 1 } },
+        ],
+      },
+      {
+        question: "하루 평균 수면 시간은?",
+        answers: [
+          { text: "7시간 이상 충분히 잔다", scores: { healthy: 2, stress: -1 } },
+          { text: "5~6시간 정도 잔다", scores: { busy: 2, stress: 1 } },
+          { text: "5시간 미만으로 잔다", scores: { stress: 2, basic: 1 } },
+        ],
+      },
+      {
+        question: "스트레스를 풀기 위해 무엇을 하시나요?",
+        answers: [
+          { text: "운동, 명상 등 건강한 활동", scores: { healthy: 2 } },
+          { text: "음주, 흡연, 자극적인 음식 섭취", scores: { stress: 2 } },
+          { text: "유튜브·게임 등 혼자 쉰다", scores: { busy: 1, basic: 1 } },
+          { text: "특별히 하는 것이 없다", scores: { stress: 1, basic: 1 } },
+        ],
+      },
+      {
+        question: "아침 식사는 얼마나 자주 하시나요?",
+        answers: [
+          { text: "거의 매일 챙겨 먹는다", scores: { healthy: 2 } },
+          { text: "주 2~3회 정도 먹는다", scores: { basic: 1 } },
+          { text: "거의 먹지 않는다", scores: { busy: 2, stress: 1 } },
+        ],
+      },
+      {
+        question: "주말 패턴은 평일과 비교해 어떤가요?",
+        answers: [
+          { text: "규칙적이고, 주로 휴식한다", scores: { healthy: 1, stress: -1 } },
+          { text: "불규칙하고, 약속이 많다", scores: { busy: 2, stress: 1 } },
+          { text: "평일과 거의 비슷하다", scores: { basic: 1 } },
+        ],
+      },
     ];
-
+  
     let currentQuestionIndex = 0;
-    let userScores = { healthy: 0, busy: 0, stress: 0, basic: 0, condition: 0 };
-
+    let userScores = { healthy: 0, busy: 0, stress: 0, basic: 0 };
+    let userAnswers = []; // ✅ 선택한 답변 저장
+  
     function showQuestion(index) {
-        const questionData = questions[index];
-        quizBox.innerHTML = `
-            <h2>${questionData.question}</h2>
-            <div class="answers">
-                ${questionData.answers.map((answer, i) => `
-                    <button class="answer-btn" data-index="${i}">${answer.text}</button>
-                `).join('')}
-            </div>
-        `;
-        updateProgressBar();
+      const q = questions[index];
+      quizBox.innerHTML = `
+        <h2>${q.question}</h2>
+        <div class="answers">
+          ${q.answers
+            .map(
+              (a, i) => `<button class="answer-btn" data-index="${i}">${a.text}</button>`
+            )
+            .join("")}
+        </div>
+      `;
+      updateProgress();
     }
-
-    function updateProgressBar() {
-        const progress = ((currentQuestionIndex) / questions.length) * 100;
-        progressBar.style.width = `${progress}%`;
+  
+    function updateProgress() {
+      const progress = (currentQuestionIndex / questions.length) * 100;
+      progressBar.style.width = `${progress}%`;
     }
-
-    quizBox.addEventListener('click', (e) => {
-        if (e.target.classList.contains('answer-btn')) {
-            const answerIndex = parseInt(e.target.dataset.index, 10);
-            const chosenAnswer = questions[currentQuestionIndex].answers[answerIndex];
-
-            for (const type in chosenAnswer.scores) {
-                if (userScores.hasOwnProperty(type)) {
-                    userScores[type] += chosenAnswer.scores[type];
-                }
-            }
-
-            currentQuestionIndex++;
-
-            if (currentQuestionIndex < questions.length) {
-                showQuestion(currentQuestionIndex);
-            } else {
-                showResult();
-            }
+  
+    quizBox.addEventListener("click", (e) => {
+      if (e.target.classList.contains("answer-btn")) {
+        const idx = parseInt(e.target.dataset.index, 10);
+        const chosen = questions[currentQuestionIndex].answers[idx];
+  
+        // ✅ 답변 기록
+        userAnswers.push({
+          question: questions[currentQuestionIndex].question,
+          answer: chosen.text,
+        });
+  
+        // ✅ 점수 반영
+        for (const type in chosen.scores) {
+          userScores[type] += chosen.scores[type];
         }
+  
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+          showQuestion(currentQuestionIndex);
+        } else {
+          showSubmitForm();
+        }
+      }
     });
-
-    function showResult() {
-        progressBar.style.width = '100%';
-        
-        // The user mentioned result-condition.html, but the result types are healthy, busy, stress, basic.
-        // I will map the 'condition' score to the 'stress' or 'busy' type for simplicity.
-        userScores.stress += userScores.condition;
-
-        let highestScore = -Infinity;
-        let resultType = 'basic'; // Default result
-
-        // Only check for the 4 valid result types
-        const validResultTypes = ['healthy', 'busy', 'stress', 'basic'];
-        for (const type of validResultTypes) {
-            if (userScores[type] > highestScore) {
-                highestScore = userScores[type];
-                resultType = type;
-            }
-        }
-
-        window.location.href = `result-${resultType}.html`;
+  
+    function showSubmitForm() {
+      quizBox.style.display = "none";
+      submitForm.style.display = "block";
+      progressBar.style.width = "100%";
     }
-
+  
+    submitBtn.addEventListener("click", () => {
+      const name = document.getElementById("name").value.trim();
+      const gender = document.getElementById("gender").value.trim();
+      const age = document.getElementById("age").value.trim();
+      const email = document.getElementById("email").value.trim();
+  
+      if (!name || !gender || !age || !email) {
+        alert("모든 정보를 입력해주세요.");
+        return;
+      }
+  
+      // ✅ 결과 타입 계산
+      let maxScore = -Infinity;
+      let resultType = "basic";
+      for (const type in userScores) {
+        if (userScores[type] > maxScore) {
+          maxScore = userScores[type];
+          resultType = type;
+        }
+      }
+  
+      // ✅ 전송
+      sendResult({ name, gender, age, email, resultType, userAnswers });
+    });
+  
+    function sendResult({ name, gender, age, email, resultType, userAnswers }) {
+      const formData = new URLSearchParams();
+      formData.append("timestamp", new Date().toLocaleString());
+      formData.append("name", name);
+      formData.append("gender", gender);
+      formData.append("age", age);
+      formData.append("email", email);
+      formData.append("resultType", resultType);
+  
+      // ✅ 모든 문항 답변 함께 전송
+      userAnswers.forEach((item, i) => {
+        formData.append(`Q${i + 1}`, `${item.question} → ${item.answer}`);
+      });
+  
+      fetch(
+        "https://script.google.com/macros/s/AKfycbxZScNptUwcBi3ts1no4YOpkvIbz_MIcCUzvRCAK0PSNbtk7h9DikAqcbws-I3hVuKZ3Q/exec",
+        {
+          method: "POST",
+          body: formData, // ⚠️ 절대 header 추가하지 마세요 (CORS 방지)
+        }
+      )
+        .then((res) => res.json())
+        .then(() => {
+          alert("결과가 이메일로 전송되었습니다! 📩");
+          window.location.href = `result-${resultType}.html`;
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("제출 중 오류가 발생했습니다. 다시 시도해주세요.");
+        });
+    }
+  
     showQuestion(currentQuestionIndex);
-});
+  });
+  

@@ -1,83 +1,108 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로그인 | 이너컬리</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/styles.css">
-</head>
-<body>
+  <head>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src =
+          "https://www.googletagmanager.com/gtm.js?id=GTM-KWL72ML2" + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-KWL72ML2");
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>이너컬리 | 매일, 나를 위해 건강한 습관의 시작</title>
+    <meta
+      name="description"
+      content="식단과 이너뷰티가 만나는 푸디케이션, 이너컬리. 건강한 루틴을 위한 프리미엄 식단과 앱 서비스를 만나보세요."
+    />
+
+    <!-- SEO & Open Graph -->
+    <meta property="og:title" content="이너컬리 | 매일, 나를 위한 건강한 습관의 시작" />
+    <meta property="og:description" content="한 끼를 먹더라도, 내 몸과 피부가 진짜로 원하는 것을 채워야 하니까요. 컬리가 새롭게 제안하는 이너뷰티 루틴." />
+    <meta property="og:image" content="./assets/og-image.png" />
+    <meta property="og:image:alt" content="이너컬리 프리미엄 식단" />
+    <meta property="og:url" content="https://inner-kurly.example.com" />
+    <meta property="og:type" content="website" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Swiper.js CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./css/styles.css" />
+
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-CR9VXF0VLH"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-CR9VXF0VLH");
+    </script>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "이너컬리 구독 서비스",
+        "description": "프리미엄 이너뷰티 식단 구독 서비스",
+        "brand": {
+          "@type": "Brand",
+          "name": "Inner Kurly"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-KWL72ML2"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <!-- Header -->
     <header class="header">
-        <nav class="nav container">
-            <a href="index.html" class="nav__logo">Inner Kurly</a>
-            <ul class="nav__menu">
-                <li class="nav__item"><a href="index.html#plates">이너플레이트</a></li>
-                <li class="nav__item"><a href="index.html#reviews">후기</a></li>
-                <li class="nav__item"><a href="index.html#app">루션 앱</a></li>
-                <li class="nav__item"><a href="index.html#challenge">챌린지</a></li>
-                <li class="nav__item"><a href="index.html#members">멤버스</a></li>
-                <li class="nav__item"><a href="index.html#faq">FAQ</a></li>
-            </ul>
-            <div class="header__util">
-                <a href="login.html" class="btn btn--ghost btn--small">로그인</a>
-                <a href="signup.html" class="btn btn--ghost btn--small">회원가입</a>
-                <a href="cart.html" class="btn btn--ghost btn--small cart-btn">
-                    <span class="cart-badge">0</span>
-                </a>
-            </div>
-            <button class="nav__toggle" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
-        </nav>
-    </header>
-
-    <main>
-        <section class="auth-section section">
-            <div class="auth-form-container">
-                <h2 class="section__title">로그인</h2>
-                <form class="auth-form">
-                    <div class="form-group">
-                        <label for="email">이메일</label>
-                        <input type="email" id="email" placeholder="이메일을 입력하세요" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">비밀번호</label>
-                        <input type="password" id="password" placeholder="비밀번호를 입력하세요" required>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn--primary">로그인</button>
-                    </div>
-                </form>
-                <div class="social-login">
-                    <p class="social-login__title">SNS 계정으로 간편 로그인</p>
-                    <div class="social-login__buttons">
-                        <button class="social-btn social-btn--kakao" aria-label="카카오 로그인">
-                            <svg viewBox="0 0 32 32"><path d="M16 4.64c-6.96 0-12.64 4.48-12.64 10.08 0 3.52 2.24 6.624 5.76 8.48l-2.08 7.52 8.064-4.16c.96.16 1.92.256 2.88.256 6.96 0 12.64-4.48 12.64-10.08S22.96 4.64 16 4.64z"></path></svg>
-                        </button>
-                        <button class="social-btn social-btn--naver" aria-label="네이버 로그인">
-                            <svg viewBox="0 0 32 32"><path d="M21.514 19.2H10.486V12.8h11.028v6.4z M16 4.64L4.64 4.64v22.72h11.36V19.2h-4.48V12.8h4.48V4.64h6.88l6.88 6.88v15.44h-4.48V19.2h4.48v-8.64L20.48 4.64H16z"></path></svg>
-                        </button>
-                        <button class="social-btn social-btn--google" aria-label="구글 로그인">
-                            <svg viewBox="0 0 32 32"><path d="M16.96 17.216h7.808c.128.832.192 1.6.192 2.56 0 7.488-4.8 12.224-8 12.224-7.04 0-12.8-5.76-12.8-12.8s5.76-12.8 12.8-12.8c3.84 0 6.4 1.6 7.936 3.072l-2.56 2.496c-1.152-.96-2.816-1.92-5.376-1.92-4.416 0-7.616 3.648-7.616 8.128s3.2 8.128 7.616 8.128c5.056 0 6.976-3.264 7.232-4.928H16.96v-3.584z"></path></svg>
-                        </button>
-                    </div>
-                </div>
-                <p class="auth-link">아직 회원이 아니신가요? <a href="signup.html">회원가입</a></p>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <div class="footer__container container">
-            <p>&copy; 2025 Inner Kurly. All rights reserved.</p>
-            <div class="footer__links">
-                <a href="#">이용약관</a>
-                <a href="#">개인정보처리방침</a>
-            </div>
-        </div>
-    </footer>
-
-    <script src="./js/app.js" defer></script>
-</body>
-</html>
+      <nav class="nav container">
+        <a href="index.html" class="nav__logo">Inner Kurly</a>
+        <ul class="nav__menu">
+          <li class="nav__item"><a href="#plates" class="nav__link">추천 식단</a></li>
+          <li class="nav__item"><a href="#pricing" class="nav__link">구독 상품</a></li>
+          <li class="nav__item"><a href="#reviews" class="nav__link">고객 후기</a></li>
+          <li class="nav__item"><a href="#challenge" class="nav__link">챌린지</a></li>
+        </ul>
+        <div class="header__util">
+          <a href="login.html" class="btn btn--ghost btn--small">로그인</a>
+          <a href="signup.html" class="btn btn--ghost btn--small">회원가입</a>
+          <a href="cart.html" class="btn btn--ghost btn--small cart-btn">
+            🛒 <span class="
