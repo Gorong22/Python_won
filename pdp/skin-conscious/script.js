@@ -1,117 +1,193 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const quizBox = document.getElementById('quiz-box');
-    const progressBar = document.querySelector('.progress');
-
-    if (!quizBox) return; // Not on the quiz page
-
+document.addEventListener("DOMContentLoaded", () => {
+    const quizBox = document.getElementById("quiz-box");
+    const progressBar = document.querySelector(".progress");
+  
+    if (!quizBox) return;
+  
+    // ===============================
+    // 1️⃣ 질문 데이터
+    // ===============================
     const questions = [
-        {
-            question: "평소 영양제를 얼마나 챙겨드시나요?",
-            answers: [
-                { text: "매일 꾸준히 챙겨 먹는다", scores: { glow: 2, condition: 1 } },
-                { text: "생각날 때 가끔 먹는다", scores: { slim: 1, detox: 1 } },
-                { text: "거의 먹지 않는다", scores: { detox: 2, condition: 1 } },
-            ]
-        },
-        {
-            question: "가장 신경 쓰이는 피부 고민은 무엇인가요?",
-            answers: [
-                { text: "칙칙함, 광채 부족", scores: { glow: 2 } },
-                { text: "건조하고 당기는 느낌", scores: { detox: 1, glow: 1 } },
-                { text: "탄력 저하, 잔주름", scores: { slim: 2 } },
-                { text: "잦은 트러블, 예민함", scores: { condition: 2 } },
-            ]
-        },
-        {
-            question: "하루에 물을 얼마나 마시나요?",
-            answers: [
-                { text: "2L 이상 충분히 마신다", scores: { glow: 1, detox: 2 } },
-                { text: "1L 내외로 마신다", scores: { slim: 1, condition: 1 } },
-                { text: "거의 마시지 않는다", scores: { condition: 2 } },
-            ]
-        },
-        {
-            question: "자기 전 루틴은 어떤가요?",
-            answers: [
-                { text: "가벼운 스트레칭과 명상을 한다", scores: { glow: 1, slim: 1 } },
-                { text: "스마트폰을 보거나 바로 잠든다", scores: { condition: 2, stress: 1 } },
-                { text: "따뜻한 차를 마시며 쉰다", scores: { detox: 2 } },
-            ]
-        },
-        {
-            question: "점심 식단은 주로 어떻게 선택하시나요?",
-            answers: [
-                { text: "샐러드나 건강식 위주로 선택한다", scores: { slim: 2, glow: 1 } },
-                { text: "구내식당이나 일반 식당을 이용한다", scores: { basic: 1, condition: 1 } },
-                { text: "간편한 패스트푸드나 편의점 음식을 선호한다", scores: { detox: 2, stress: 1 } },
-            ]
-        },
-        {
-            question: "최근 피부 컨디션은 어떤가요?",
-            answers: [
-                { text: "대체로 만족스럽다", scores: { glow: 2 } },
-                { text: "푸석하고 지쳐 보인다", scores: { condition: 2, detox: 1 } },
-                { text: "트러블이 자주 올라온다", scores: { stress: 2 } },
-            ]
-        }
+      {
+        question: "아침에 일어났을 때 피부 상태는 어떤가요?",
+        answers: [
+          { text: "맑고 생기 있어요", scores: { glow: 2 } },
+          { text: "건조하거나 푸석해요", scores: { detox: 1, condition: 1 } },
+          { text: "붓거나 칙칙해요", scores: { slim: 1, condition: 1 } },
+        ],
+      },
+      {
+        question: "스트레스를 받을 때 나는?",
+        answers: [
+          { text: "피부에 트러블이 생겨요", scores: { condition: 2 } },
+          { text: "식습관이 불규칙해져요", scores: { detox: 1, slim: 1 } },
+          { text: "컨디션이 떨어지고 피로해요", scores: { condition: 2 } },
+        ],
+      },
+      {
+        question: "평소 물 섭취량은?",
+        answers: [
+          { text: "2L 이상 꾸준히 마신다", scores: { glow: 1, detox: 1 } },
+          { text: "1L 이하로 마신다", scores: { condition: 2 } },
+          { text: "생각날 때만 마신다", scores: { detox: 1, condition: 1 } },
+        ],
+      },
+      {
+        question: "하루 식사 패턴은 어떤가요?",
+        answers: [
+          { text: "규칙적인 식사와 가벼운 간식", scores: { glow: 2, slim: 1 } },
+          { text: "하루 한 끼나 불규칙한 식사", scores: { detox: 2 } },
+          { text: "단짠·자극적인 음식이 많아요", scores: { condition: 2 } },
+        ],
+      },
+      {
+        question: "요즘 가장 필요한 루틴은?",
+        answers: [
+          { text: "광채·피부 회복", scores: { glow: 2 } },
+          { text: "체중·밸런스 관리", scores: { slim: 2 } },
+          { text: "순환·피로 회복", scores: { detox: 2, condition: 1 } },
+        ],
+      },
+      {
+        question: "자기 전 습관은 어떤가요?",
+        answers: [
+          { text: "핸드폰보다 일찍 잠든다", scores: { glow: 1, slim: 1 } },
+          { text: "늦게까지 스마트폰을 본다", scores: { condition: 2 } },
+          { text: "스트레칭이나 차 한잔으로 마무리한다", scores: { detox: 2 } },
+        ],
+      },
     ];
-
+  
+    // ===============================
+    // 2️⃣ 상태 변수
+    // ===============================
     let currentQuestionIndex = 0;
     let userScores = { glow: 0, slim: 0, detox: 0, condition: 0 };
-
+    let userAnswers = [];
+  
+    // ===============================
+    // 3️⃣ 질문 표시 함수
+    // ===============================
     function showQuestion(index) {
-        const questionData = questions[index];
-        quizBox.innerHTML = `
-            <h2>${questionData.question}</h2>
-            <div class="answers">
-                ${questionData.answers.map((answer, i) => `
-                    <button class="answer-btn" data-index="${i}">${answer.text}</button>
-                `).join('')}
-            </div>
-        `;
-        updateProgressBar();
+      const q = questions[index];
+      quizBox.innerHTML = `
+        <h2>${q.question}</h2>
+        <div class="answers">
+          ${q.answers
+            .map(
+              (a, i) => `<button class="answer-btn" data-index="${i}">${a.text}</button>`
+            )
+            .join("")}
+        </div>
+      `;
+      updateProgress();
     }
-
-    function updateProgressBar() {
-        const progress = ((currentQuestionIndex) / questions.length) * 100;
-        progressBar.style.width = `${progress}%`;
+  
+    // ===============================
+    // 4️⃣ 진행바 업데이트
+    // ===============================
+    function updateProgress() {
+      const progress = (currentQuestionIndex / questions.length) * 100;
+      progressBar.style.width = `${progress}%`;
     }
-
-    quizBox.addEventListener('click', (e) => {
-        if (e.target.classList.contains('answer-btn')) {
-            const answerIndex = parseInt(e.target.dataset.index, 10);
-            const chosenAnswer = questions[currentQuestionIndex].answers[answerIndex];
-
-            for (const type in chosenAnswer.scores) {
-                if (userScores.hasOwnProperty(type)) {
-                    userScores[type] += chosenAnswer.scores[type];
-                }
-            }
-
-            currentQuestionIndex++;
-
-            if (currentQuestionIndex < questions.length) {
-                showQuestion(currentQuestionIndex);
-            } else {
-                showResult();
-            }
-        }
+  
+    // ===============================
+    // 5️⃣ 선택 처리
+    // ===============================
+    quizBox.addEventListener("click", (e) => {
+      if (e.target.classList.contains("answer-btn")) {
+        const idx = parseInt(e.target.dataset.index, 10);
+        const chosen = questions[currentQuestionIndex].answers[idx];
+        userAnswers.push({ question: questions[currentQuestionIndex].question, answer: chosen.text });
+  
+        // 점수 반영
+        for (const type in chosen.scores) userScores[type] += chosen.scores[type];
+  
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) showQuestion(currentQuestionIndex);
+        else showSubmitForm();
+      }
     });
-
-    function showResult() {
-        progressBar.style.width = '100%';
-        let highestScore = -1;
-        let resultType = 'condition'; // Default result
-
-        for (const type in userScores) {
-            if (userScores[type] > highestScore) {
-                highestScore = userScores[type];
-                resultType = type;
-            }
-        }
-
-        window.location.href = `result-${resultType}.html`;
+  
+    // ===============================
+    // 6️⃣ 마지막 입력 폼 표시
+    // ===============================
+    function showSubmitForm() {
+      quizBox.innerHTML = `
+        <h2>결과를 받아볼 정보를 입력해주세요 📩</h2>
+        <p class="privacy-note">이름은 가명이어도 괜찮아요. 입력하신 정보는 5일 내 자동 폐기됩니다.</p>
+        <input type="text" id="name" placeholder="이름 (가명 가능)" required />
+        <input type="text" id="gender" placeholder="성별" required />
+        <input type="number" id="age" placeholder="나이" required />
+        <input type="email" id="email" placeholder="이메일" required />
+        <button id="submitBtn" class="btn-start">결과 메일 받기</button>
+        <p id="loading" style="display:none; margin-top:10px; color:#666;">결과 전송 중입니다...</p>
+      `;
+  
+      document.getElementById("submitBtn").addEventListener("click", handleSubmit);
     }
-
+  
+    // ===============================
+    // 7️⃣ 제출 처리
+    // ===============================
+    function handleSubmit() {
+      const name = document.getElementById("name").value.trim();
+      const gender = document.getElementById("gender").value.trim();
+      const age = document.getElementById("age").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const loading = document.getElementById("loading");
+  
+      if (!name || !gender || !age || !email) {
+        alert("모든 정보를 입력해주세요.");
+        return;
+      }
+  
+      loading.style.display = "block";
+  
+      // 결과 계산
+      let resultType = Object.keys(userScores).reduce((a, b) =>
+        userScores[a] > userScores[b] ? a : b
+      );
+  
+      // 전송
+      sendResult({ name, gender, age, email, resultType, userAnswers });
+    }
+  
+    // ===============================
+    // 8️⃣ Google Apps Script 전송
+    // ===============================
+    function sendResult({ name, gender, age, email, resultType, userAnswers }) {
+      const formData = new URLSearchParams();
+      formData.append("timestamp", new Date().toLocaleString());
+      formData.append("name", name);
+      formData.append("gender", gender);
+      formData.append("age", age);
+      formData.append("email", email);
+      formData.append("resultType", resultType);
+  
+      userAnswers.forEach((a, i) => {
+        formData.append(`Q${i + 1}`, `${a.question} → ${a.answer}`);
+      });
+  
+      fetch(
+        "https://script.google.com/macros/s/AKfycbwaVK_znQ32CTyMFEEP0ZZoiby8YEAsg1KzWRem6cIcUphbHEA8x6JKo0nM-rH46pEc/exec",
+        {
+          method: "POST",
+          body: formData, // CORS 우회: 절대 headers 추가하지 말기
+        }
+      )
+        .then((res) => res.json())
+        .then(() => {
+          alert("결과가 이메일로 발송되었습니다! 📩");
+          window.location.href = `result-${resultType}.html`;
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("오류가 발생했습니다. 다시 시도해주세요.");
+        });
+    }
+  
+    // 초기 질문 표시
     showQuestion(currentQuestionIndex);
-});
+  });
+  
