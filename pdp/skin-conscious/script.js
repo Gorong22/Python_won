@@ -1,11 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
     const quizBox = document.getElementById("quiz-box");
     const progressBar = document.querySelector(".progress");
-  
     if (!quizBox) return;
   
     // ===============================
-    // 1️⃣ 질문 데이터
+    // 질문 데이터
     // ===============================
     const questions = [
       {
@@ -58,49 +57,40 @@ document.addEventListener("DOMContentLoaded", () => {
       },
     ];
   
-    // ===============================
-    // 2️⃣ 상태 변수
-    // ===============================
     let currentQuestionIndex = 0;
     let userScores = { glow: 0, slim: 0, detox: 0, condition: 0 };
     let userAnswers = [];
   
     // ===============================
-    // 3️⃣ 질문 표시 함수
+    // 질문 표시
     // ===============================
     function showQuestion(index) {
       const q = questions[index];
       quizBox.innerHTML = `
         <h2>${q.question}</h2>
         <div class="answers">
-          ${q.answers
-            .map(
-              (a, i) => `<button class="answer-btn" data-index="${i}">${a.text}</button>`
-            )
-            .join("")}
+          ${q.answers.map(
+            (a, i) =>
+              `<button class="answer-btn" data-index="${i}">${a.text}</button>`
+          ).join("")}
         </div>
       `;
       updateProgress();
     }
   
-    // ===============================
-    // 4️⃣ 진행바 업데이트
-    // ===============================
     function updateProgress() {
       const progress = (currentQuestionIndex / questions.length) * 100;
       progressBar.style.width = `${progress}%`;
     }
   
     // ===============================
-    // 5️⃣ 선택 처리
+    // 선택 처리
     // ===============================
     quizBox.addEventListener("click", (e) => {
       if (e.target.classList.contains("answer-btn")) {
         const idx = parseInt(e.target.dataset.index, 10);
         const chosen = questions[currentQuestionIndex].answers[idx];
         userAnswers.push({ question: questions[currentQuestionIndex].question, answer: chosen.text });
-  
-        // 점수 반영
         for (const type in chosen.scores) userScores[type] += chosen.scores[type];
   
         currentQuestionIndex++;
@@ -110,12 +100,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   
     // ===============================
-    // 6️⃣ 마지막 입력 폼 표시
+    // 마지막 폼
     // ===============================
     function showSubmitForm() {
       quizBox.innerHTML = `
-        <h2>결과를 받아볼 정보를 입력해주세요 📩</h2>
-        <p class="privacy-note">이름은 가명이어도 괜찮아요. 입력하신 정보는 5일 내 자동 폐기됩니다.</p>
+        <h2>결과를 이메일로 받아보세요 📩</h2>
+        <p class="privacy-note">
+          입력하신 정보는 결과 안내 및 통계 분석 목적으로만 사용되며,<br />
+          <strong>5일 이내 자동 폐기됩니다.</strong><br />
+          제출 시 입력하신 메일로 결과와 맞춤 루틴 가이드를 보내드립니다.
+        </p>
         <input type="text" id="name" placeholder="이름 (가명 가능)" required />
         <input type="text" id="gender" placeholder="성별" required />
         <input type="number" id="age" placeholder="나이" required />
@@ -128,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   
     // ===============================
-    // 7️⃣ 제출 처리
+    // 제출 처리
     // ===============================
     function handleSubmit() {
       const name = document.getElementById("name").value.trim();
@@ -144,17 +138,15 @@ document.addEventListener("DOMContentLoaded", () => {
   
       loading.style.display = "block";
   
-      // 결과 계산
       let resultType = Object.keys(userScores).reduce((a, b) =>
         userScores[a] > userScores[b] ? a : b
       );
   
-      // 전송
       sendResult({ name, gender, age, email, resultType, userAnswers });
     }
   
     // ===============================
-    // 8️⃣ Google Apps Script 전송
+    // Google Apps Script로 전송
     // ===============================
     function sendResult({ name, gender, age, email, resultType, userAnswers }) {
       const formData = new URLSearchParams();
@@ -173,21 +165,20 @@ document.addEventListener("DOMContentLoaded", () => {
         "https://script.google.com/macros/s/AKfycbwaVK_znQ32CTyMFEEP0ZZoiby8YEAsg1KzWRem6cIcUphbHEA8x6JKo0nM-rH46pEc/exec",
         {
           method: "POST",
-          body: formData, // CORS 우회: 절대 headers 추가하지 말기
+          body: formData,
         }
       )
         .then((res) => res.json())
         .then(() => {
-          alert("결과가 이메일로 발송되었습니다! 📩");
+          alert("결과가 이메일로 전송되었습니다! 📩");
           window.location.href = `result-${resultType}.html`;
         })
         .catch((err) => {
           console.error(err);
-          alert("오류가 발생했습니다. 다시 시도해주세요.");
+          alert("전송 중 오류가 발생했습니다. 다시 시도해주세요.");
         });
     }
   
-    // 초기 질문 표시
     showQuestion(currentQuestionIndex);
   });
   
