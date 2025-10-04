@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const progressBar = document.querySelector(".progress");
     const submitForm = document.getElementById("submit-form");
     const submitBtn = document.getElementById("submitBtn");
-    const loadingOverlay = document.getElementById("loading-overlay");
   
     if (!quizBox) return;
   
@@ -102,9 +101,22 @@ document.addEventListener("DOMContentLoaded", () => {
       quizBox.style.display = "none";
       submitForm.style.display = "block";
       progressBar.style.width = "100%";
-      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   
+    // ✅ 로딩 화면
+    function showLoading() {
+      const loader = document.createElement("div");
+      loader.className = "loading-overlay";
+      loader.innerHTML = `<div class="loader"></div><p>결과를 전송 중입니다...</p>`;
+      document.body.appendChild(loader);
+    }
+  
+    function hideLoading() {
+      const loader = document.querySelector(".loading-overlay");
+      if (loader) loader.remove();
+    }
+  
+    // ✅ 전송 버튼 클릭
     submitBtn.addEventListener("click", () => {
       const name = document.getElementById("name").value.trim();
       const gender = document.getElementById("gender").value.trim();
@@ -125,10 +137,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
   
-      sendResult({ name, gender, age, email, resultType, userAnswers });
-    });
+      showLoading();
   
-    function sendResult({ name, gender, age, email, resultType, userAnswers }) {
       const formData = new URLSearchParams();
       formData.append("timestamp", new Date().toLocaleString());
       formData.append("name", name);
@@ -141,27 +151,24 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append(`Q${i + 1}`, `${item.question} → ${item.answer}`);
       });
   
-      // 로딩 활성화
-      loadingOverlay.classList.add("active");
-  
-      fetch("https://script.google.com/macros/s/AKfycbxZScNptUwcBi3ts1no4YOpkvIbz_MIcCUzvRCAK0PSNbtk7h9DikAqcbws-I3hVuKZ3Q/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbyek8uEfcyFsCXGK3mH8FE3-Rno96JaxLFGWILU7I2Xl5cLii1j9hiss0hAL1tDvlx2YA/exec", {
         method: "POST",
         body: formData,
       })
         .then((res) => res.json())
         .then(() => {
-          setTimeout(() => {
-            loadingOverlay.classList.remove("active");
-            window.location.href = `result-${resultType}.html`;
-          }, 2500); // 2.5초 후 결과 페이지 이동
+          hideLoading();
+          alert("결과가 이메일로 전송되었습니다!");
+          window.location.href = `result-${resultType}.html`;
         })
         .catch((err) => {
+          hideLoading();
           console.error(err);
-          loadingOverlay.classList.remove("active");
           alert("제출 중 오류가 발생했습니다. 다시 시도해주세요.");
         });
-    }
+    });
   
     showQuestion(currentQuestionIndex);
   });
+  
   
