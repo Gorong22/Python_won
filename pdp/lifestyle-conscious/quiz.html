@@ -1,22 +1,48 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>나의 생활습관은? - 이너컬리 테스트</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>나의 생활습관 테스트</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <div class="quiz-container">
-            <div class="progress-bar">
-                <div class="progress"></div>
-            </div>
-            <div id="quiz-box">
-                <!-- Questions will be injected by script.js -->
-            </div>
+  <div class="container">
+    <div class="quiz-container">
+      <div class="progress-bar">
+        <div class="progress"></div>
+      </div>
+
+      <!-- 퀴즈 영역 -->
+      <div id="quiz-box"></div>
+
+      <!-- 마지막 제출 폼 -->
+      <div id="submit-form" style="display:none;">
+        <h2>결과를 이메일로 받아보세요 📩</h2>
+        <p class="privacy-note">
+          입력하신 정보는 결과 안내 및 통계 분석 목적으로만 사용되며,<br>
+          <strong>5일 이내 자동 폐기됩니다.</strong><br>
+          제출 시, 입력하신 메일로 나의 결과 리포트를 보내드립니다.
+        </p>
+
+        <input type="text" id="name" placeholder="이름 (가명도 좋아요 :))" required />
+
+        <div class="gender-select">
+          <label for="gender">성별</label>
+          <select id="gender" required>
+            <option value="">선택해주세요</option>
+            <option value="여성">여성</option>
+            <option value="남성">남성</option>
+          </select>
         </div>
+
+        <input type="number" id="age" placeholder="나이" required />
+        <input type="email" id="email" placeholder="이메일" required />
+        <button id="submitBtn" class="btn-start">결과 확인하기</button>
+      </div>
     </div>
-    <script src="script.js"></script>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

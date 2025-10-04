@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const progressBar = document.querySelector(".progress");
     const submitForm = document.getElementById("submit-form");
     const submitBtn = document.getElementById("submitBtn");
+    const loadingOverlay = document.getElementById("loading-overlay");
   
     if (!quizBox) return;
   
@@ -52,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     let currentQuestionIndex = 0;
     let userScores = { healthy: 0, busy: 0, stress: 0, basic: 0 };
-    let userAnswers = []; // ✅ 선택한 답변 저장
+    let userAnswers = [];
   
     function showQuestion(index) {
       const q = questions[index];
@@ -79,13 +80,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const idx = parseInt(e.target.dataset.index, 10);
         const chosen = questions[currentQuestionIndex].answers[idx];
   
-        // ✅ 답변 기록
         userAnswers.push({
           question: questions[currentQuestionIndex].question,
           answer: chosen.text,
         });
   
-        // ✅ 점수 반영
         for (const type in chosen.scores) {
           userScores[type] += chosen.scores[type];
         }
@@ -103,6 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
       quizBox.style.display = "none";
       submitForm.style.display = "block";
       progressBar.style.width = "100%";
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   
     submitBtn.addEventListener("click", () => {
@@ -116,7 +116,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
   
-      // ✅ 결과 타입 계산
       let maxScore = -Infinity;
       let resultType = "basic";
       for (const type in userScores) {
@@ -126,7 +125,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
   
-      // ✅ 전송
       sendResult({ name, gender, age, email, resultType, userAnswers });
     });
   
@@ -139,25 +137,27 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.append("email", email);
       formData.append("resultType", resultType);
   
-      // ✅ 모든 문항 답변 함께 전송
       userAnswers.forEach((item, i) => {
         formData.append(`Q${i + 1}`, `${item.question} → ${item.answer}`);
       });
   
-      fetch(
-        "https://script.google.com/macros/s/AKfycbxZScNptUwcBi3ts1no4YOpkvIbz_MIcCUzvRCAK0PSNbtk7h9DikAqcbws-I3hVuKZ3Q/exec",
-        {
-          method: "POST",
-          body: formData, // ⚠️ 절대 header 추가하지 마세요 (CORS 방지)
-        }
-      )
+      // 로딩 활성화
+      loadingOverlay.classList.add("active");
+  
+      fetch("https://script.google.com/macros/s/AKfycbxZScNptUwcBi3ts1no4YOpkvIbz_MIcCUzvRCAK0PSNbtk7h9DikAqcbws-I3hVuKZ3Q/exec", {
+        method: "POST",
+        body: formData,
+      })
         .then((res) => res.json())
         .then(() => {
-          alert("결과가 이메일로 전송되었습니다! 📩");
-          window.location.href = `result-${resultType}.html`;
+          setTimeout(() => {
+            loadingOverlay.classList.remove("active");
+            window.location.href = `result-${resultType}.html`;
+          }, 2500); // 2.5초 후 결과 페이지 이동
         })
         .catch((err) => {
           console.error(err);
+          loadingOverlay.classList.remove("active");
           alert("제출 중 오류가 발생했습니다. 다시 시도해주세요.");
         });
     }
