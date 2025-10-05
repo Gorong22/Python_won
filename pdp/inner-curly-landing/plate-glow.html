@@ -9,24 +9,43 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./css/styles.css" />
-    <!-- ✅ 공통 Header (inner-curly-landing 기준) -->
-<header class="ik-header">
-  <a href="index.html" class="ik-header-logo">
-    <img src="./assets/logo-innerkurly-purple.png" alt="Inner Kurly Logo" />
-  </a>
-
-  <nav class="ik-header-nav">
-    <a href="membership.html">멤버십</a>
-    <a href="index.html#plates">플레이트</a>
-    <a href="cart.html">장바구니</a>
-    <a href="signup.html">회원가입</a>
-  </nav>
-
-  <button class="ik-hamburger" id="hamburgerBtn">☰</button>
-</header>
-
   </head>
   <body class="plate-glow pdp-main">
+         <!-- ✅ index.html의 Header 자동 로드 -->
+<div id="global-header"></div>
+<script>
+(function () {
+  // index.html에는 이미 헤더가 있으니 스킵
+  if (/index\.html?$/i.test(location.pathname)) return;
+
+  const mount = document.getElementById("global-header");
+  if (!mount) return;
+
+  fetch("index.html")
+    .then((res) => res.text())
+    .then((html) => {
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      const header = doc.querySelector("header");
+      mount.innerHTML = header ? header.outerHTML : "";
+
+      // 🔧 헤더가 DOM에 붙은 후에 이벤트 다시 연결
+      const toggle = mount.querySelector(".nav__toggle");
+      const menu   = mount.querySelector(".nav__menu");
+      if (toggle && menu) {
+        toggle.addEventListener("click", () => {
+          toggle.classList.toggle("is-open");
+          menu.classList.toggle("is-open");
+          // (선택) 메뉴 열릴 때 스크롤 잠그기
+          document.body.classList.toggle(
+            "no-scroll",
+            menu.classList.contains("is-open")
+          );
+        }, { passive: true });
+      }
+    })
+    .catch((err) => console.error("헤더 로드 실패:", err));
+})();
+</script>
     <!-- HERO -->
     <section class="pdp-hero-section">
       <div class="pdp-hero-section__image-wrapper">

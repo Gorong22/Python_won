@@ -1831,7 +1831,33 @@ body.plate-condition .btn-cta:hover {
 .balance-supplement h3 { color: #2196F3; }   /* 블루 – 밸런스 */
 .detox-supplement h3 { color: #4CAF50; }     /* 그린 – 디톡스 */
 
-/* ✅ 상단 여백 조정 (Plate 전용 header 보정) */
-body[class*="plate-"] header {
-  height: 72px !important;
+/* ✅ 기본 index.html은 기존 헤더 유지 */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 999;
 }
+
+/* ✅ plate-* 페이지 전용 헤더 정렬 수정 */
+body[class*="plate-"] header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0;
+  width: 100%;
+  z-index: 9999 !important;
+}
+
+/* ✅ plate-* 전용 여백 제거 */
+body[class*="plate-"] {
+  margin-top: 0 !important;
+  padding-top: 64px; /* header 높이에 맞게 조정 */
+}
+
+/* ✅ 햄버거 버튼 클릭 문제 해결 */
+body[class*="plate-"] .nav__toggle {
+  position: relative;
+  z-index: 10000;
+  cursor: pointer;
+}
+
+
