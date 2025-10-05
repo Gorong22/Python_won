@@ -1,108 +1,94 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-    <!-- Google Tag Manager -->
-    <script>
-      (function (w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != "dataLayer" ? "&l=" + l : "";
-        j.async = true;
-        j.src =
-          "https://www.googletagmanager.com/gtm.js?id=GTM-KWL72ML2" + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, "script", "dataLayer", "GTM-KWL72ML2");
-    </script>
-    <!-- End Google Tag Manager -->
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>이너컬리 | 매일, 나를 위해 건강한 습관의 시작</title>
-    <meta
-      name="description"
-      content="식단과 이너뷰티가 만나는 푸디케이션, 이너컬리. 건강한 루틴을 위한 프리미엄 식단과 앱 서비스를 만나보세요."
-    />
+    <title>로그인 | 이너컬리</title>
 
-    <!-- SEO & Open Graph -->
-    <meta property="og:title" content="이너컬리 | 매일, 나를 위한 건강한 습관의 시작" />
-    <meta property="og:description" content="한 끼를 먹더라도, 내 몸과 피부가 진짜로 원하는 것을 채워야 하니까요. 컬리가 새롭게 제안하는 이너뷰티 루틴." />
-    <meta property="og:image" content="./assets/og-image.png" />
-    <meta property="og:image:alt" content="이너컬리 프리미엄 식단" />
-    <meta property="og:url" content="https://inner-kurly.example.com" />
-    <meta property="og:type" content="website" />
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Font & Main Styles -->
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-
-    <!-- Swiper.js CDN -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-    />
-
-    <!-- CSS -->
     <link rel="stylesheet" href="./css/styles.css" />
-
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-CR9VXF0VLH"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "G-CR9VXF0VLH");
-    </script>
-
-    <!-- Structured Data (JSON-LD) -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Product",
-        "name": "이너컬리 구독 서비스",
-        "description": "프리미엄 이너뷰티 식단 구독 서비스",
-        "brand": {
-          "@type": "Brand",
-          "name": "Inner Kurly"
-        }
-      }
-    </script>
   </head>
 
   <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-      <iframe
-        src="https://www.googletagmanager.com/ns.html?id=GTM-KWL72ML2"
-        height="0"
-        width="0"
-        style="display: none; visibility: hidden"
-      ></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
-
-    <!-- Header -->
+    <!-- Header (공통) -->
     <header class="header">
       <nav class="nav container">
         <a href="index.html" class="nav__logo">Inner Kurly</a>
         <ul class="nav__menu">
-          <li class="nav__item"><a href="#plates" class="nav__link">추천 식단</a></li>
-          <li class="nav__item"><a href="#pricing" class="nav__link">구독 상품</a></li>
-          <li class="nav__item"><a href="#reviews" class="nav__link">고객 후기</a></li>
-          <li class="nav__item"><a href="#challenge" class="nav__link">챌린지</a></li>
+          <li class="nav__item"><a href="index.html#plates" class="nav__link">추천 식단</a></li>
+          <li class="nav__item"><a href="index.html#pricing" class="nav__link">구독 상품</a></li>
+          <li class="nav__item"><a href="index.html#reviews" class="nav__link">고객 후기</a></li>
+          <li class="nav__item"><a href="index.html#challenge" class="nav__link">챌린지</a></li>
         </ul>
         <div class="header__util">
           <a href="login.html" class="btn btn--ghost btn--small">로그인</a>
           <a href="signup.html" class="btn btn--ghost btn--small">회원가입</a>
-          <a href="cart.html" class="btn btn--ghost btn--small cart-btn">
-            🛒 <span class="
+          <a href="cart.html" class="btn btn--ghost btn--small cart-btn">🛒 <span class="cart-badge">0</span></a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- ✅ 로그인 페이지 본문 -->
+    <section class="auth-section">
+      <div class="auth-form-container">
+        <h1 class="section__title" style="margin-bottom: 20px;">로그인</h1>
+        <p class="section__subtitle" style="margin-bottom: 40px;">
+          건강한 루틴의 시작, 이너컬리 멤버가 되어보세요.
+        </p>
+
+        <form class="auth-form">
+          <div class="form-group">
+            <label for="email">이메일</label>
+            <input type="email" id="email" name="email" placeholder="이메일을 입력하세요" required />
+          </div>
+
+          <div class="form-group">
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required />
+          </div>
+
+          <div class="form-group--checkbox">
+            <input type="checkbox" id="remember" name="remember" />
+            <label for="remember">로그인 상태 유지</label>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn--primary btn--large">로그인</button>
+          </div>
+        </form>
+
+        <!-- 소셜 로그인 -->
+        <div class="social-login">
+          <p class="social-login__title">또는 SNS 계정으로 로그인</p>
+          <div class="social-login__buttons">
+            <button class="social-btn social-btn--kakao" aria-label="카카오 로그인">
+              <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#FEE500"/></svg>
+            </button>
+            <button class="social-btn social-btn--naver" aria-label="네이버 로그인">
+              <svg viewBox="0 0 32 32"><path d="M7 7h6l6 9V7h6v18h-6l-6-9v9H7z" /></svg>
+            </button>
+            <button class="social-btn social-btn--google" aria-label="구글 로그인">
+              <svg viewBox="0 0 32 32"><path fill="#4285F4" d="M16 13v6h8a7 7 0 1 0-2-7z"/><path fill="#34A853" d="M7 19a9 9 0 0 0 14 5l-4-3a5 5 0 1 1 0-8l4-3A9 9 0 0 0 7 19z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- 회원가입 링크 -->
+        <div class="auth-link">
+          계정이 없으신가요? <a href="signup.html">회원가입</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer__container">
+        <p>© 2025 Inner Kurly. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>
