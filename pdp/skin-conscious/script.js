@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   
       fetch(
-        "https://script.google.com/macros/s/AKfycbwaVK_znQ32CTyMFEEP0ZZoiby8YEAsg1KzWRem6cIcUphbHEA8x6JKo0nM-rH46pEc/exec",
+        "https://script.google.com/macros/s/AKfycbwoOz3YvipIlTVTIsWnKw3uUpIpHy2_WtFVkFHKPZbYxaCh7AIQgqjs-oiMsTxXSq5o/exec",
         {
           method: "POST",
           body: formData,
