@@ -395,13 +395,13 @@ console.log("Sending signup data:", data);
       
         // ✅ 로딩 화면 표시
         loadingOverlay.style.display = "flex";
-      
         fetch(GOOGLE_SCRIPT_URL, {
-            redirect: "follow",
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams(data),
-          })
+  method: "POST",
+  headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+  body: Object.keys(data)
+    .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(data[k]))
+    .join("&")
+})
           .then(response => {
             loadingOverlay.style.display = "none"; // 로딩 숨기기
             if (response.ok) return response.json();
