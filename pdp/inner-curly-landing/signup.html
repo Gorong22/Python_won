@@ -371,23 +371,27 @@
         localStorage.setItem('userEmail', email);
       
         const formData = new FormData(form);
-        let data = {};
-        for (let [key, value] of formData.entries()) {
-          if (data[key]) {
-            if (!Array.isArray(data[key])) data[key] = [data[key]];
-            data[key].push(value);
-          } else {
-            data[key] = value;
-          }
-        }
-        for (let key in data) {
-          if (Array.isArray(data[key])) data[key] = data[key].join(', ');
-        }
-      
-        data.password = "1234";
-        data.timestamp = new Date().toISOString();
-      
-        console.log("Sending signup data:", data);
+let data = {};
+
+// 모든 필드를 강제 포함 (비어있어도 key가 전송됨)
+[
+  "name", "gender", "age", "email", "password",
+  "stress_q1", "stress_q2", "sleep_q1", "sleep_q2",
+  "gut_q1", "gut_q2", "supplement_q1", "supplement_q2",
+  "skin_q1", "skin_q2", "service_q1", "service_q2",
+  "brand_q1", "brand_q2", "content_q1", "content_q2",
+  "ai_q1", "ai_q2", "future_q1", "future_q2"
+].forEach(k => {
+  const val = formData.getAll(k);
+  data[k] = val.length ? val.join(", ") : "";
+});
+
+data.password = "1234";
+data.timestamp = new Date().toISOString();
+
+console.log("Sending signup data:", data);
+
+
       
         // ✅ 로딩 화면 표시
         loadingOverlay.style.display = "flex";
