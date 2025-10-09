@@ -1861,4 +1861,51 @@ body[class*="plate-"] .nav__toggle {
   cursor: pointer;
 }
 
+.about-innerkurly {
+  padding: 80px 20px;
+  background-color: #faf9fc;
+  display: flex;
+  justify-content: center;
+}
+
+.brand-box {
+  max-width: 720px;
+  background: #ffffff;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  padding: 40px 48px;
+  box-shadow: 0 4px 16px rgba(95, 0, 128, 0.08);
+  text-align: center;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+.brand-box h2 {
+  font-size: 1.6rem;
+  color: #5f0080;
+  margin-bottom: 1rem;
+}
+
+.brand-box p {
+  line-height: 1.8;
+  color: #333;
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+.kurly-highlight {
+  color: #7b3fe4;
+  font-weight: 600;
+}
+
+.edu-note {
+  display: inline-block;
+  background: #f5efff;
+  color: #7b3fe4;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+
 
