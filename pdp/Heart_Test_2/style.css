@@ -438,6 +438,7 @@ footer {
   /* ===============================
    📌 주관식 팝업 스타일
 ================================*/
+
 .popup-overlay {
   position: fixed;
   inset: 0;
@@ -465,7 +466,6 @@ footer {
   margin-bottom: 12px;
   color: #5a4b6b;
   font-weight: 600;
-  line-height: 1.4;
 }
 
 .popup-box p {
@@ -503,4 +503,20 @@ footer {
 
 .popup-btn.outline {
   background: #fff;
-  border:
+  border: 1.5px solid #b18cc6;
+  color: #b18cc6;
+}
+
+.popup-btn.outline:hover {
+  background: #f6f0fa;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; } 
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(15px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

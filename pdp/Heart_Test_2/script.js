@@ -210,7 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="popup-box">
           <h3>조금만 더 자세히 적어주실 수 있을까요? 💭</h3>
           <p>여러분의 진심 어린 답변은 연구에 큰 도움이 됩니다.<br>
-          약소하지만 추첨을 통해 <strong>커피 쿠폰</strong>을 보내드려요 ☕</p>
+          약소하지만, 추첨을 통해 <strong>커피 쿠폰</strong>을 보내드려요 ☕</p>
           <div class="popup-buttons">
             <button id="keepWriting" class="popup-btn outline">더 적을래요</button>
             <button id="submitAnyway" class="popup-btn filled">그냥 제출할게요</button>
@@ -219,11 +219,11 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
     document.body.insertAdjacentHTML("beforeend", popupHTML);
-
+  
     document.getElementById("keepWriting").addEventListener("click", () => {
       document.querySelector(".popup-overlay").remove();
     });
-
+  
     document.getElementById("submitAnyway").addEventListener("click", () => {
       const answer = document.getElementById("openAnswer").value.trim();
       userAnswers.push({ question: questions[currentQuestionIndex].question, answer });
