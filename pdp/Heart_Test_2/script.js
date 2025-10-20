@@ -283,41 +283,42 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.append(`Q${i + 1}`, `${item.question} → ${item.answer}`);
     });
 
-    fetch("https://script.google.com/macros/s/AKfycbx-JFCMtn-za3Z_2Mhsw3AaPd45uiRVU6g_YA_hvti5_m3NPfJNEV_ZwGZEDl-xJavCQg/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbyDpWzGrZngzCXTuviAcNb4QE2uIzelKp3OCgluG5w4BLYXVsCTcvwVhDhMprFAO7Op0g/exec", {
       method: "POST",
       body: formData,
     })
       .then(async (res) => {
-        const text = await res.text(); // JSON이든 HTML이든 우선 text로 받기
+        const text = await res.text(); // JSON 형태일 것으로 기대
+        let data;
+    
         try {
-          const json = JSON.parse(text); // JSON 파싱 시도
-          if (json.status === "success") {
-            hideLoading();
-            alert("결과가 이메일로 전송되었습니다!\n잠시 후 결과 요약 페이지로 이동합니다.");
-            const resultPage = {
-              fatigue: "Routine Burnout.html",
-              void: "Emotional Numbness.html",
-              balance: "Routine Balance.html",
-              recovery: "Ritual Recovery.html",
-            }[resultType];
-            window.location.href = resultPage;
-          } else {
-            hideLoading();
-            alert("예상치 못한 응답이 반환되었습니다. 다시 시도해주세요.");
-          }
-        } catch {
-          // JSON 파싱 실패 → HTML 응답 (중복 안내 등)
+          data = JSON.parse(text);
+        } catch (err) {
+          console.error("⚠️ JSON 파싱 실패, 응답 내용:", text);
+          alert("서버 응답을 해석할 수 없습니다. 다시 시도해주세요.");
           hideLoading();
-          document.body.innerHTML = text; // HTML 그대로 화면에 표시
+          return;
+        }
+    
+        hideLoading();
+    
+        if (data.status === "success") {
+          alert("결과가 이메일로 전송되었습니다!\n잠시 후 결과 요약 페이지로 이동합니다.");
+          const resultPage = {
+            fatigue: "Routine Burnout.html",
+            void: "Emotional Numbness.html",
+            balance: "Routine Balance.html",
+            recovery: "Ritual Recovery.html",
+          }[resultType];
+          window.location.href = resultPage;
+        } else if (data.status === "duplicate") {
+          alert(data.message);
+        } else {
+          alert("예상치 못한 응답이 반환되었습니다. 다시 시도해주세요.");
         }
       })
       .catch((err) => {
         hideLoading();
-        console.error(err);
+        console.error("❌ Fetch Error:", err);
         alert("제출 중 오류가 발생했습니다. 다시 시도해주세요.");
       });
-  });
-
-  // 시작
-  showQuestion(currentQuestionIndex);
-});
