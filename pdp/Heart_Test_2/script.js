@@ -283,21 +283,33 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.append(`Q${i + 1}`, `${item.question} → ${item.answer}`);
     });
 
-    fetch("https://script.google.com/macros/s/AKfycbw6j6So56wSDZ7Td51vWA5XzN5H2_fcyyCbCG5M0eTdo50ZaZ7gNzhqRoInYdMVjokqyg/exec", {
+    fetch("https://script.google.com/macros/s/AKfyc.../exec", {
       method: "POST",
       body: formData,
     })
-      .then((res) => res.json())
-      .then(() => {
-        hideLoading();
-        alert("결과가 이메일로 전송되었습니다!\n잠시 후 결과 요약 페이지로 이동합니다.");
-        const resultPage = {
-          fatigue: "Routine Burnout.html",
-          void: "Emotional Numbness.html",
-          balance: "Routine Balance.html",
-          recovery: "Ritual Recovery.html",
-        }[resultType];
-        window.location.href = resultPage;
+      .then(async (res) => {
+        const text = await res.text(); // JSON이든 HTML이든 우선 text로 받기
+        try {
+          const json = JSON.parse(text); // JSON 파싱 시도
+          if (json.status === "success") {
+            hideLoading();
+            alert("결과가 이메일로 전송되었습니다!\n잠시 후 결과 요약 페이지로 이동합니다.");
+            const resultPage = {
+              fatigue: "Routine Burnout.html",
+              void: "Emotional Numbness.html",
+              balance: "Routine Balance.html",
+              recovery: "Ritual Recovery.html",
+            }[resultType];
+            window.location.href = resultPage;
+          } else {
+            hideLoading();
+            alert("예상치 못한 응답이 반환되었습니다. 다시 시도해주세요.");
+          }
+        } catch {
+          // JSON 파싱 실패 → HTML 응답 (중복 안내 등)
+          hideLoading();
+          document.body.innerHTML = text; // HTML 그대로 화면에 표시
+        }
       })
       .catch((err) => {
         hideLoading();
