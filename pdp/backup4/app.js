@@ -194,12 +194,69 @@ document.addEventListener('DOMContentLoaded', () => {
         render();
     }
 
+    // --- Signup Form Submit (추가된 부분) ---
+    function initSignupForm() {
+        const form = document.querySelector(".auth-form");
+        if (!form) return;
+
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/★★★YOUR_EXEC_URL★★★/exec"; // 배포한 Web App URL 넣기
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("name")?.value?.trim() || "";
+            const email = document.getElementById("email")?.value?.trim() || "";
+            const pw    = document.getElementById("password")?.value || "";
+            const pw2   = document.getElementById("confirm-password")?.value || "";
+            const agree = document.getElementById("terms")?.checked;
+
+            if (!agree) {
+                alert("이용약관 및 개인정보처리방침에 동의해주세요.");
+                return;
+            }
+            if (!name || !email) {
+                alert("이름과 이메일을 입력해주세요.");
+                return;
+            }
+            if (pw !== pw2) {
+                alert("비밀번호가 일치하지 않습니다.");
+                return;
+            }
+
+            // 파일럿 정책: 비밀번호가 비어있으면 1234 사용
+            const password = pw || "1234";
+
+            const payload = {
+                timestamp: new Date().toISOString(),
+                name,
+                email,
+                password
+            };
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                body: new URLSearchParams(payload) // JSON 아님!
+            })
+            .then(() => {
+                alert("가입해주셔서 감사합니다!");
+                try { localStorage.setItem("userEmail", email); } catch (_) {}
+                window.location.href = "index.html";
+            })
+            .catch((err) => {
+                console.error(err);
+                alert("오류가 발생했습니다. 다시 시도해주세요.");
+            });
+        });
+    }
+
     // --- INITIALIZE ALL ---
     initMobileNav();
     initSwipers();
     initFaqAccordion();
     initScrollAnimations();
     initCart();
+    initSignupForm();
+
     if (document.querySelector('.cart-section')) {
         document.body.classList.add('cart-page');
         renderCartPage();
