@@ -283,7 +283,7 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.append(`Q${i + 1}`, `${item.question} → ${item.answer}`);
     });
 
-    fetch("https://script.google.com/macros/s/AKfycbwVHoLAHxp2uk_lmz9LD5zf1aKTl35RZ3PcVtp4InUutVfkT37Hq148Jsha-GU82St6bg/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbw6j6So56wSDZ7Td51vWA5XzN5H2_fcyyCbCG5M0eTdo50ZaZ7gNzhqRoInYdMVjokqyg/exec", {
       method: "POST",
       body: formData,
     })
