@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // 💬 감정 리듬 테스트 문항 (총 16문항)
   // ===============================
   const questions = [
-    // [A] 하루의 리듬
     { question: "아침에 일어날 때 가장 먼저 드는 생각은 무엇인가요?",
       answers: [
         { text: "오늘도 해야 할 일이 많다", scores: { fatigue: 2 } },
@@ -39,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
         { text: "허무함", scores: { void: 2 } },
         { text: "아무 감정이 없다", scores: { void: 2 } },
       ] },
-    // [B] 자기관리의 피로
     { question: "‘나를 위해 뭔가 해야지’라는 생각이 들 때 어떤 느낌이 드시나요?",
       answers: [
         { text: "설렌다, 해보고 싶다", scores: { recovery: 2 } },
@@ -68,7 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
         { text: "귀찮음", scores: { void: 1 } },
         { text: "의무", scores: { fatigue: 1, void: 1 } },
       ] },
-    // [C] 여유의 감정
     { question: "하루 중 ‘여유’를 느끼는 순간이 있나요?",
       answers: [
         { text: "출퇴근길 음악 들을 때", scores: { balance: 1 } },
@@ -97,7 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
         { text: "잘 모르겠다 — 그냥 하루하루 지나간다", scores: { fatigue: 2 } },
         { text: "아니다 — 나를 챙길 여유가 없다", scores: { void: 2 } },
       ] },
-    // [D] 감정 리듬
     { question: "요즘 내 하루는 어떤가요?",
       answers: [
         { text: "안정적이고 균형 있다", scores: { balance: 2 } },
@@ -119,7 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
         { text: "나를 위해 쓰는 게 낯설어서", scores: { void: 2 } },
         { text: "그냥 너무 피곤해서", scores: { fatigue: 2 } },
       ] },
-    // [E] 주관식
     { question: "요즘 ‘나를 챙겨야 하는데 못 챙긴다’고 느낀 순간이 있다면, 언제였나요?",
       answers: [
         { text: "주관식 입력", isOpen: true }
@@ -132,35 +127,34 @@ document.addEventListener("DOMContentLoaded", () => {
   let userAnswers = [];
 
   // ===============================
-  // 질문 표시 함수
+  // 질문 표시
   // ===============================
   function showQuestion(index) {
     const q = questions[index];
     if (q.answers[0].isOpen) {
       quizBox.innerHTML = `
         <h2>${q.question}</h2>
-        <textarea id="openAnswer" rows="5" placeholder="예: 퇴근 후 아무것도 할 힘이 없을 때\n예: 식사를 미루고 커피로 버틸 때\n예: 주말에도 일 걱정이 떠나지 않을 때"
-        style="width:100%; padding:12px; border-radius:10px; border:1.5px solid #ccc; resize:none; font-size:0.95rem; line-height:1.5;"></textarea>
-        <button class="answer-btn next-btn">제출하기</button>
-      `;
+        <textarea id="openAnswer" rows="5"
+          placeholder="예: 퇴근 후 아무것도 할 힘이 없을 때\n예: 식사를 미루고 커피로 버틸 때"
+          style="width:100%; padding:12px; border-radius:10px; border:1.5px solid #ccc; resize:none; font-size:0.95rem; line-height:1.5;"></textarea>
+        <button class="answer-btn next-btn">제출하기</button>`;
     } else {
       quizBox.innerHTML = `
         <h2>${q.question}</h2>
         <div class="answers">
           ${q.answers.map((a, i) => `<button class="answer-btn" data-index="${i}">${a.text}</button>`).join("")}
-        </div>
-      `;
+        </div>`;
     }
     updateProgress();
   }
 
   function updateProgress() {
-    const progress = (currentQuestionIndex / questions.length) * 100;
+    const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
     progressBar.style.width = `${progress}%`;
   }
 
   // ===============================
-  // 답변 선택 + 주관식 검증
+  // 응답 처리
   // ===============================
   quizBox.addEventListener("click", (e) => {
     if (!e.target.classList.contains("answer-btn")) return;
@@ -168,13 +162,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (q.answers[0].isOpen) {
       const answer = document.getElementById("openAnswer").value.trim();
-
-      // 글자 수 제한 검증
       if (answer.length < 5) {
         showPopup();
         return;
       }
-
       userAnswers.push({ question: q.question, answer });
       goNext();
     } else {
@@ -186,9 +177,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ===============================
-  // 다음 질문으로 이동
-  // ===============================
   function goNext() {
     currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) showQuestion(currentQuestionIndex);
@@ -202,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===============================
-  // 팝업 함수
+  // 팝업
   // ===============================
   function showPopup() {
     const popupHTML = `
@@ -210,14 +198,13 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="popup-box">
           <h3>조금만 더 자세히 적어주실 수 있을까요? 💭</h3>
           <p>여러분의 진심 어린 답변은 연구에 큰 도움이 됩니다.<br>
-          약소하지만, 추첨을 통해 <strong>커피 쿠폰</strong>을 보내드려요 ☕</p>
+          추첨을 통해 <strong>커피 쿠폰</strong>을 보내드려요 ☕</p>
           <div class="popup-buttons">
             <button id="keepWriting" class="popup-btn outline">더 적을래요</button>
             <button id="submitAnyway" class="popup-btn filled">그냥 제출할게요</button>
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
     document.body.insertAdjacentHTML("beforeend", popupHTML);
   
     document.getElementById("keepWriting").addEventListener("click", () => {
@@ -247,7 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===============================
-  // 제출 및 결과 페이지 이동
+  // 제출
   // ===============================
   submitBtn.addEventListener("click", () => {
     const name = document.getElementById("name").value.trim();
@@ -288,20 +275,19 @@ document.addEventListener("DOMContentLoaded", () => {
       body: formData,
     })
       .then(async (res) => {
-        const text = await res.text(); // JSON 형태일 것으로 기대
+        const text = await res.text();
         let data;
-    
         try {
           data = JSON.parse(text);
         } catch (err) {
-          console.error("⚠️ JSON 파싱 실패, 응답 내용:", text);
+          console.error("⚠️ JSON 파싱 실패:", text);
           alert("서버 응답을 해석할 수 없습니다. 다시 시도해주세요.");
           hideLoading();
           return;
         }
-    
+
         hideLoading();
-    
+
         if (data.status === "success") {
           alert("결과가 이메일로 전송되었습니다!\n잠시 후 결과 요약 페이지로 이동합니다.");
           const resultPage = {
@@ -312,7 +298,8 @@ document.addEventListener("DOMContentLoaded", () => {
           }[resultType];
           window.location.href = resultPage;
         } else if (data.status === "duplicate") {
-          alert(data.message);
+          hideLoading();
+          alert("☕ 이미 참여 완료된 이메일이에요!\n다른 주소로 참여해보세요 :)");
         } else {
           alert("예상치 못한 응답이 반환되었습니다. 다시 시도해주세요.");
         }
@@ -322,3 +309,8 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("❌ Fetch Error:", err);
         alert("제출 중 오류가 발생했습니다. 다시 시도해주세요.");
       });
+  });
+
+  // 시작
+  showQuestion(currentQuestionIndex);
+});
