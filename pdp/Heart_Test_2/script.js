@@ -160,31 +160,76 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===============================
-  // 답변 선택
+  // 답변 선택 + 주관식 검증
   // ===============================
   quizBox.addEventListener("click", (e) => {
     if (!e.target.classList.contains("answer-btn")) return;
     const q = questions[currentQuestionIndex];
 
     if (q.answers[0].isOpen) {
-      const openText = document.getElementById("openAnswer").value.trim();
-      userAnswers.push({ question: q.question, answer: openText || "(미입력)" });
+      const answer = document.getElementById("openAnswer").value.trim();
+
+      // 글자 수 제한 검증
+      if (answer.length < 5) {
+        showPopup();
+        return;
+      }
+
+      userAnswers.push({ question: q.question, answer });
+      goNext();
     } else {
       const idx = parseInt(e.target.dataset.index, 10);
       const chosen = q.answers[idx];
       userAnswers.push({ question: q.question, answer: chosen.text });
       for (const type in chosen.scores) userScores[type] += chosen.scores[type];
+      goNext();
     }
+  });
 
+  // ===============================
+  // 다음 질문으로 이동
+  // ===============================
+  function goNext() {
     currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) showQuestion(currentQuestionIndex);
     else showSubmitForm();
-  });
+  }
 
   function showSubmitForm() {
     quizBox.style.display = "none";
     submitForm.style.display = "block";
     progressBar.style.width = "100%";
+  }
+
+  // ===============================
+  // 팝업 함수
+  // ===============================
+  function showPopup() {
+    const popupHTML = `
+      <div class="popup-overlay">
+        <div class="popup-box">
+          <h3>조금만 더 자세히 적어주실 수 있을까요? 💭</h3>
+          <p>여러분의 진심 어린 답변은 연구에 큰 도움이 됩니다.<br>
+          약소하지만 추첨을 통해 <strong>커피 쿠폰</strong>을 보내드려요 ☕</p>
+          <div class="popup-buttons">
+            <button id="keepWriting" class="popup-btn outline">더 적을래요</button>
+            <button id="submitAnyway" class="popup-btn filled">그냥 제출할게요</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML("beforeend", popupHTML);
+
+    document.getElementById("keepWriting").addEventListener("click", () => {
+      document.querySelector(".popup-overlay").remove();
+    });
+
+    document.getElementById("submitAnyway").addEventListener("click", () => {
+      const answer = document.getElementById("openAnswer").value.trim();
+      userAnswers.push({ question: questions[currentQuestionIndex].question, answer });
+      document.querySelector(".popup-overlay").remove();
+      goNext();
+    });
   }
 
   // ===============================
