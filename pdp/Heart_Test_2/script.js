@@ -12,10 +12,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const questions = [
     { question: "아침에 일어날 때 가장 먼저 드는 생각은 무엇인가요?",
       answers: [
-        { text: "오늘도 해야 할 일이 많다", scores: { fatigue: 2 } },
-        { text: "오늘은 좀 다르게 보내고 싶다", scores: { balance: 1 } },
-        { text: "그냥 또 하루가 시작됐다", scores: { void: 2 } },
-        { text: "아무 생각 없이 몸이 먼저 움직인다", scores: { void: 1 } },
+        { text: "알람을 여러 번 끄다 겨우 일어난다", scores: { fatigue: 2 } },
+        { text: "바로 일어나지만 피곤이 남아 있다", scores: { balance: 1 } },
+        { text: "가볍게 일어나 하루 계획을 떠올린다", scores: { void: 2 } },
+        { text: "자연스럽게 기상하고 기분이 괜찮다", scores: { void: 1 } },
       ] },
     { question: "일 시작 전, 당신의 마음 상태에 가장 가까운 건",
       answers: [
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
         { text: "이미 피곤하거나 집중이 안 된다", scores: { fatigue: 2 } },
         { text: "아무 감정 없이 그냥 일과를 시작한다", scores: { void: 1 } },
       ] },
-    { question: "퇴근 후 가장 먼저 하고 싶은 일은 무엇인가요?",
+    { question: "퇴근 후 가장 먼저 하는 일은 무엇인가요?",
       answers: [
         { text: "바로 쉬거나 눕기", scores: { fatigue: 2 } },
         { text: "간단히 운동·샤워하기", scores: { recovery: 2 } },
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
       answers: [
         { text: "대단하고 부럽다", scores: { balance: 1 } },
         { text: "나도 해야 하는데라는 압박감", scores: { fatigue: 1 } },
-        { text: "나는 왜 못하지? 라는 생각", scores: { recovery: 1 } },
+        { text: "바쁜 현실에 회의감이 든다", scores: { recovery: 1 } },
         { text: "딱히 아무 감정 없다", scores: { void: 2 } },
       ] },
     { question: "‘관리해야 한다’는 생각이 들 때 떠오르는 단어는?",
