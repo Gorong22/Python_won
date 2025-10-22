@@ -49,205 +49,56 @@
 </head>
 <body>
    <!-- Google Tag Manager (noscript) -->
-   <noscript
-   ><iframe
-     src="https://www.googletagmanager.com/ns.html?id=GTM-KWL72ML2"
-     height="0"
-     width="0"
-     style="display: none; visibility: hidden"
-   ></iframe
- ></noscript>
- <!-- End Google Tag Manager (noscript) -->
+   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWL72ML2" height="0" width="0" style="display: none; visibility: hidden"></iframe></noscript>
+
            <!-- ✅ index.html의 Header 자동 로드 -->
 <div id="global-header"></div>
 <script>
 (function () {
-  // index.html에는 이미 헤더가 있으니 스킵
   if (/index\.html?$/i.test(location.pathname)) return;
-
   const mount = document.getElementById("global-header");
   if (!mount) return;
-
   fetch("index.html")
     .then((res) => res.text())
     .then((html) => {
       const doc = new DOMParser().parseFromString(html, "text/html");
       const header = doc.querySelector("header");
       mount.innerHTML = header ? header.outerHTML : "";
-
-      // 🔧 헤더가 DOM에 붙은 후에 이벤트 다시 연결
-      const toggle = mount.querySelector(".nav__toggle");
-      const menu   = mount.querySelector(".nav__menu");
-      if (toggle && menu) {
-        toggle.addEventListener("click", () => {
-          toggle.classList.toggle("is-open");
-          menu.classList.toggle("is-open");
-          // (선택) 메뉴 열릴 때 스크롤 잠그기
-          document.body.classList.toggle(
-            "no-scroll",
-            menu.classList.contains("is-open")
-          );
-        }, { passive: true });
-      }
     })
     .catch((err) => console.error("헤더 로드 실패:", err));
 })();
 </script>
+
     <div class="signup-container">
         <h1>회원가입 & 설문</h1>
         <form id="signupForm">
-          <!-- 기본 정보 -->
           <div class="form-group">
             <label for="name">이름</label>
             <input type="text" id="name" name="name" placeholder="이름 입력" required />
           </div>
-      
+
           <div class="form-group">
             <label for="gender">성별</label>
             <div class="radio-group">
               <label><input type="radio" name="gender" value="여성" required /> 여성</label>
               <label><input type="radio" name="gender" value="남성" /> 남성</label>
-             
             </div>
           </div>
-      
+
           <div class="form-group">
             <label for="age">나이</label>
             <input type="number" id="age" name="age" placeholder="나이 입력 (예: 29)" required />
           </div>
-      
+
           <div class="form-group">
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="이메일 (필수)"
-              required
-            />
+            <input type="email" id="email" name="email" placeholder="이메일 (필수)" required />
           </div>
-    
-      
-      
-          <!-- 🩵 1. 스트레스 관리 -->
-          <fieldset>
-            <legend>스트레스 관리 😌</legend>
-            <div class="form-group">
-              <label>Q1. 요즘 가장 불편한 증상은 무엇인가요?</label>
-              <div class="checkbox-group">
-                <label><input type="checkbox" name="stress_q1" value="긴장/예민" /> 긴장/예민</label>
-                <label><input type="checkbox" name="stress_q1" value="집중 저하" /> 집중 저하</label>
-                <label><input type="checkbox" name="stress_q1" value="두통/뒷목 뻐근" /> 두통/뒷목 뻐근</label>
-                <label><input type="checkbox" name="stress_q1" value="소화 불편" /> 소화 불편</label>
-                <label><input type="checkbox" name="stress_q1" value="두근거림" /> 두근거림</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Q2. 스트레스가 가장 심해지는 시간대는 언제인가요?</label>
-              <div class="radio-group">
-                <label><input type="radio" name="stress_q2" value="오전" /> 오전</label>
-                <label><input type="radio" name="stress_q2" value="오후" /> 오후</label>
-                <label><input type="radio" name="stress_q2" value="저녁" /> 저녁</label>
-                <label><input type="radio" name="stress_q2" value="상시" /> 상시</label>
-              </div>
-            </div>
-          </fieldset>
-      
-          <!-- 🌙 2. 수면 -->
-          <fieldset>
-            <legend>수면 😴</legend>
-            <div class="form-group">
-              <label>Q3. 수면 중 가장 어려운 점은 무엇인가요?</label>
-              <div class="checkbox-group">
-                <label><input type="checkbox" name="sleep_q1" value="잠들기 어려움" /> 잠들기 어려움</label>
-                <label><input type="checkbox" name="sleep_q1" value="중간에 자주 깸" /> 중간에 자주 깸</label>
-                <label><input type="checkbox" name="sleep_q1" value="숙면감 부족" /> 숙면감 부족</label>
-                <label><input type="checkbox" name="sleep_q1" value="이른 각성" /> 이른 각성</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Q4. 하루 평균 수면 시간은요?</label>
-              <div class="radio-group">
-                <label><input type="radio" name="sleep_q2" value="5시간 이하" /> 5시간 이하</label>
-                <label><input type="radio" name="sleep_q2" value="6시간" /> 6시간</label>
-                <label><input type="radio" name="sleep_q2" value="7시간" /> 7시간</label>
-                <label><input type="radio" name="sleep_q2" value="8시간 이상" /> 8시간 이상</label>
-              </div>
-            </div>
-          </fieldset>
-      
-          <!-- 🦠 3. 장 건강 -->
-          <fieldset>
-            <legend>장 건강 🦠</legend>
-            <div class="form-group">
-              <label>Q5. 평소 장 건강 상태를 표현한다면?</label>
-              <div class="radio-group">
-                <label><input type="radio" name="gut_q1" value="규칙적" /> 규칙적</label>
-                <label><input type="radio" name="gut_q1" value="변비" /> 변비</label>
-                <label><input type="radio" name="gut_q1" value="묽은 변" /> 묽은 변</label>
-                <label><input type="radio" name="gut_q1" value="복부팽만" /> 복부팽만</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Q6. 유제품·발효식품 섭취 빈도는요?</label>
-              <div class="radio-group">
-                <label><input type="radio" name="gut_q2" value="거의 없음" /> 거의 없음</label>
-                <label><input type="radio" name="gut_q2" value="주 1-2회" /> 주 1-2회</label>
-                <label><input type="radio" name="gut_q2" value="주 3-5회" /> 주 3-5회</label>
-                <label><input type="radio" name="gut_q2" value="매일" /> 매일</label>
-              </div>
-            </div>
-          </fieldset>
-      
-          <!-- 💊 4. 영양제 목적 -->
-          <fieldset>
-            <legend>영양제 목적 💊</legend>
-            <div class="form-group">
-              <label>Q7. 영양제를 섭취하는 가장 큰 이유는?</label>
-              <div class="radio-group">
-                <label><input type="radio" name="supplement_q1" value="피로 관리" /> 피로 관리</label>
-                <label><input type="radio" name="supplement_q1" value="피부 개선" /> 피부 개선</label>
-                <label><input type="radio" name="supplement_q1" value="면역력 보강" /> 면역력 보강</label>
-                <label><input type="radio" name="supplement_q1" value="집중/컨디션" /> 집중/컨디션</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Q8. 하루 섭취 루틴을 얼마나 꾸준히 지키시나요?</label>
-              <div class="radio-group">
-                <label><input type="radio" name="supplement_q2" value="매일" /> 매일</label>
-                <label><input type="radio" name="supplement_q2" value="주 3~4회" /> 주 3~4회</label>
-                <label><input type="radio" name="supplement_q2" value="생각날 때만" /> 생각날 때만</label>
-              </div>
-            </div>
-          </fieldset>
-      
-          <!-- ✨ 5. 피부/항산화 -->
-          <fieldset>
-            <legend>피부 & 항산화 ✨</legend>
-            <div class="form-group">
-              <label>Q9. 가장 신경 쓰이는 피부 고민은?</label>
-              <div class="checkbox-group">
-                <label><input type="checkbox" name="skin_q1" value="건조/당김" /> 건조/당김</label>
-                <label><input type="checkbox" name="skin_q1" value="탄력 저하" /> 탄력 저하</label>
-                <label><input type="checkbox" name="skin_q1" value="칙칙함" /> 칙칙함</label>
-                <label><input type="checkbox" name="skin_q1" value="트러블" /> 트러블</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Q10. 원하는 피부 상태는 어떤 느낌인가요?</label>
-              <div class="radio-group">
-                <label><input type="radio" name="skin_q2" value="촉촉" /> 촉촉</label>
-                <label><input type="radio" name="skin_q2" value="맑음" /> 맑음</label>
-                <label><input type="radio" name="skin_q2" value="탱탱" /> 탱탱</label>
-                <label><input type="radio" name="skin_q2" value="진정" /> 진정</label>
-              </div>
-            </div>
-         
-      
-          <!-- 💬 6. 서비스 개선 -->
+
+          <!-- 💬 서비스 개선 -->
           <fieldset>
             <legend>이너컬리 서비스 개선 💬</legend>
             <div class="form-group">
-              <label>Q11. 이너컬리에 어떤 기능이 추가되면 좋을까요?</label>
+              <label>Q1. 어떤 기능이 추가되면 좋을까요?</label>
               <div class="checkbox-group">
                 <label><input type="checkbox" name="service_q1" value="루틴 알림" /> 루틴 알림</label>
                 <label><input type="checkbox" name="service_q1" value="AI 맞춤 추천" /> AI 맞춤 추천</label>
@@ -256,20 +107,30 @@
               </div>
             </div>
             <div class="form-group">
-              <label>Q12. 구독 서비스라면 적정한 월 지출 금액은?</label>
+              <label>Q2. 주 3회, 2주 기준(총 6회) 구독 시 84,000원의 가격은 어떻게 느껴지시나요?</label>
               <div class="radio-group">
-                <label><input type="radio" name="service_q2" value="3만원 이하" /> 3만원 이하</label>
-                <label><input type="radio" name="service_q2" value="5만원 내외" /> 5만원 내외</label>
-                <label><input type="radio" name="service_q2" value="7만원 이상" /> 7만원 이상</label>
+                <label><input type="radio" name="service_q2" value="합리적" /> 합리적</label>
+                <label><input type="radio" name="service_q2" value="약간 비싸다" /> 약간 비싸다</label>
+                <label><input type="radio" name="service_q2" value="너무 비싸다" /> 너무 비싸다</label>
               </div>
             </div>
+            <div class="form-group">
+              <label>Q3. 주 5회, 2주 기준(총 10회) 구독 시 139,000원의 가격은 어떻게 느껴지시나요?</label>
+              <div class="radio-group">
+                <label><input type="radio" name="service_q3" value="합리적" /> 합리적</label>
+                <label><input type="radio" name="service_q3" value="약간 비싸다" /> 약간 비싸다</label>
+                <label><input type="radio" name="service_q3" value="너무 비싸다" /> 너무 비싸다</label>
+              </div>
+            </div>
+
+
           </fieldset>
-      
-          <!-- 💡 7. 브랜드 경험 -->
+
+          <!-- 💡 브랜드 경험 -->
           <fieldset>
             <legend>브랜드 경험 💡</legend>
             <div class="form-group">
-              <label>Q13. 마켓컬리 대비 이너컬리에 기대하는 점은?</label>
+              <label>Q4. 이너컬리에 기대하는 점은?</label>
               <div class="checkbox-group">
                 <label><input type="checkbox" name="brand_q1" value="전문성" /> 전문성</label>
                 <label><input type="checkbox" name="brand_q1" value="프리미엄 이미지" /> 프리미엄 이미지</label>
@@ -278,7 +139,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label>Q14. 브랜드 이미지에 가장 어울리는 키워드는?</label>
+              <label>Q5. 브랜드 이미지에 어울리는 키워드는?</label>
               <div class="radio-group">
                 <label><input type="radio" name="brand_q2" value="웰니스" /> 웰니스</label>
                 <label><input type="radio" name="brand_q2" value="슬로우에이징" /> 슬로우에이징</label>
@@ -287,12 +148,12 @@
               </div>
             </div>
           </fieldset>
-      
-          <!-- 📱 8. 콘텐츠 & 커뮤니티 -->
+
+          <!-- 📱 콘텐츠 & 커뮤니티 -->
           <fieldset>
             <legend>콘텐츠 & 커뮤니티 📱</legend>
             <div class="form-group">
-              <label>Q15. 가장 자주 소비하는 콘텐츠 형식은?</label>
+              <label>Q6. 자주 소비하는 콘텐츠 형식은?</label>
               <div class="radio-group">
                 <label><input type="radio" name="content_q1" value="영상" /> 영상</label>
                 <label><input type="radio" name="content_q1" value="짧은 리포트" /> 짧은 리포트</label>
@@ -301,7 +162,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label>Q16. 커뮤니티가 생긴다면 어떤 주제에 참여하고 싶나요?</label>
+              <label>Q7. 커뮤니티가 생긴다면 어떤 주제에 참여하고 싶나요?</label>
               <div class="radio-group">
                 <label><input type="radio" name="content_q2" value="식단 공유" /> 식단 공유</label>
                 <label><input type="radio" name="content_q2" value="이너뷰티 루틴" /> 이너뷰티 루틴</label>
@@ -310,12 +171,12 @@
               </div>
             </div>
           </fieldset>
-      
-          <!-- 🔮 9. AI & 맞춤 -->
+
+          <!-- 🔮 AI 맞춤 경험 -->
           <fieldset>
             <legend>AI 맞춤 경험 🔮</legend>
             <div class="form-group">
-              <label>Q17. AI 루틴 추천 기능이 있다면 사용 의향이 있나요?</label>
+              <label>Q8. AI 루틴 추천 기능이 있다면 사용 의향이 있나요?</label>
               <div class="radio-group">
                 <label><input type="radio" name="ai_q1" value="매우 있다" /> 매우 있다</label>
                 <label><input type="radio" name="ai_q1" value="있다" /> 있다</label>
@@ -324,7 +185,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label>Q18. 개인 맞춤 추천 시 가장 중요하다고 생각하는 요소는?</label>
+              <label>Q9. 개인 맞춤 추천 시 중요한 요소는?</label>
               <div class="checkbox-group">
                 <label><input type="checkbox" name="ai_q2" value="섭취 이력" /> 섭취 이력</label>
                 <label><input type="checkbox" name="ai_q2" value="피부/컨디션 상태" /> 피부/컨디션 상태</label>
@@ -333,12 +194,12 @@
               </div>
             </div>
           </fieldset>
-      
-          <!-- 💬 10. 향후 관심 -->
+
+          <!-- 🔍 향후 관심 -->
           <fieldset>
             <legend>향후 관심 분야 🔍</legend>
             <div class="form-group">
-              <label>Q19. 앞으로 관심 있는 웰니스 분야는?</label>
+              <label>Q10. 앞으로 관심 있는 웰니스 분야는?</label>
               <div class="checkbox-group">
                 <label><input type="checkbox" name="future_q1" value="슬로우에이징" /> 슬로우에이징</label>
                 <label><input type="checkbox" name="future_q1" value="수면 개선" /> 수면 개선</label>
@@ -347,7 +208,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label>Q20. 이너컬리에서 가장 기대되는 서비스는?</label>
+              <label>Q11. 가장 기대되는 서비스는?</label>
               <div class="radio-group">
                 <label><input type="radio" name="future_q2" value="이너뷰티 구독" /> 이너뷰티 구독</label>
                 <label><input type="radio" name="future_q2" value="AI 루틴 코칭" /> AI 루틴 코칭</label>
@@ -357,15 +218,15 @@
             </div>
           </fieldset>
 
-            <button type="submit" class="submit-btn">가입 및 설문 완료하기</button>
-            <p class="password-notice">파일럿 테스트 중입니다. 모든 계정 비밀번호는 1234로 통일됩니다.</p>
+          <button type="submit" class="submit-btn">가입 및 설문 완료하기</button>
+          <p class="password-notice">파일럿 테스트 중입니다. 모든 계정 비밀번호는 1234로 통일됩니다.</p>
         </form>
     </div>
 
     <script>
       const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjDBgcESaxWMdWiR_7d1SljLIMAO6zlsIZY3LYJFEk1NkVYNix3Gk0KoqqSVGAZw0m/exec";
-      
-      // ✅ 로딩 오버레이 추가
+    
+      // 🔹 로딩 오버레이 설정
       const loadingOverlay = document.createElement('div');
       loadingOverlay.id = "loading-overlay";
       loadingOverlay.style.cssText = `
@@ -383,63 +244,54 @@
       `;
       loadingOverlay.innerText = "제출 중입니다. 잠시만 기다려주세요...";
       document.body.appendChild(loadingOverlay);
-      
+    
+      // 🔹 폼 제출 이벤트
       document.getElementById('signupForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const form = e.target;
-        const email = form.email.value;
-        localStorage.setItem('userEmail', email);
-      
         const formData = new FormData(form);
-let data = {};
-
-// 모든 필드를 강제 포함 (비어있어도 key가 전송됨)
-[
-  "name", "gender", "age", "email", "password",
-  "stress_q1", "stress_q2", "sleep_q1", "sleep_q2",
-  "gut_q1", "gut_q2", "supplement_q1", "supplement_q2",
-  "skin_q1", "skin_q2", "service_q1", "service_q2",
-  "brand_q1", "brand_q2", "content_q1", "content_q2",
-  "ai_q1", "ai_q2", "future_q1", "future_q2"
-].forEach(k => {
-  const val = formData.getAll(k);
-  data[k] = val.length ? val.join(", ") : "";
-});
-
-data.password = "1234";
-data.timestamp = new Date().toISOString();
-
-console.log("Sending signup data:", data);
-
-
-      
-        // ✅ 로딩 화면 표시
+    
+        let data = {};
+        [
+          "name", "gender", "age", "email",
+          "service_q1", "service_q2", "service_q3",
+          "brand_q1", "brand_q2",
+          "content_q1", "content_q2",
+          "ai_q1", "ai_q2",
+          "future_q1", "future_q2"
+        ].forEach(k => {
+          const val = formData.getAll(k);
+          data[k] = val.length ? val.join(", ") : "";
+        });
+    
+        data.password = "1234";
+        data.timestamp = new Date().toISOString();
+    
+        // 🔹 전송
         loadingOverlay.style.display = "flex";
         fetch(GOOGLE_SCRIPT_URL, {
-  method: "POST",
-  headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
-  body: Object.keys(data)
-    .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(data[k]))
-    .join("&")
-})
-          .then(response => {
-            loadingOverlay.style.display = "none"; // 로딩 숨기기
-            if (response.ok) return response.json();
-            throw new Error('Network response was not ok.');
-          })
-          .then(res => {
-            console.log('Success:', res);
-            alert("참여해주셔서 감사합니다.\n\n입력하신 메일로 설문 요약 결과가 전송될 예정입니다.");
-            form.reset();
-            window.location.href = 'index.html';
-          })
-          .catch(error => {
-            loadingOverlay.style.display = "none"; // 로딩 숨기기
-            console.error('Error:', error);
-            alert("오류가 발생했습니다. 다시 시도해주세요.");
-          });
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+          body: Object.keys(data)
+            .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(data[k]))
+            .join("&")
+        })
+        .then(response => {
+          loadingOverlay.style.display = "none";
+          if (response.ok) return response.json();
+          throw new Error('Network response was not ok.');
+        })
+        .then(res => {
+          alert("참여해주셔서 감사합니다! 설문이 정상적으로 제출되었습니다 😊");
+          form.reset();
+          window.location.href = 'index.html';
+        })
+        .catch(error => {
+          loadingOverlay.style.display = "none";
+          alert("오류가 발생했습니다. 다시 시도해주세요.");
+        });
       });
-      </script>
+    </script>
 
 <!-- IK_REDESIGN_PATCH_FINAL -->
 <style>
@@ -556,10 +408,8 @@ h2 { font-size: 24px; }
 (function() {
     if (window.IK_REDESIGN_APPLIED_FINAL) return;
     window.IK_REDESIGN_APPLIED_FINAL = true;
-
     const $ = (s) => document.querySelector(s);
     const $$ = (s) => Array.from(document.querySelectorAll(s));
-
     function setupGlobal() {
         const header = $('header') || document.body.prepend(document.createElement('header'));
         header.className = 'ik-header';
@@ -574,11 +424,9 @@ h2 { font-size: 24px; }
             <button class="ik-hamburger">☰</button>
         `;
         $('.ik-hamburger').addEventListener('click', () => $('.ik-header-nav').classList.toggle('is-open'));
-
         const finalCTA = $('#cta');
         if(finalCTA) finalCTA.style.display = 'none';
     }
-
     function setupHero() {
         const hero = $('.hero-section');
         if (hero) {
@@ -587,24 +435,19 @@ h2 { font-size: 24px; }
             hero.innerHTML = `<div class="ik-hero-content"><h1>하루 한 끼, 나를 위한 건강한 투자</h1><a href="#pricing" class="btn">구독 시작하기</a></div>`;
         }
     }
-
     function setupMembershipPage() {
         if (!location.pathname.includes('membership.html')) return;
         const title = $('.membership-hero-section__title');
         if (title) title.innerHTML = 'Kurly Membership<br><span style="font-size:24px;color:var(--ik-purple)">&times;</span><br>InnerKurly';
-        
         const subtitle = $('.membership-hero-section__subtitle');
         if (subtitle) subtitle.textContent = '월 1,900원 멤버십 + 이너컬리 구독으로 더 큰 혜택을.';
-
         const cta = $('.membership-hero-section .btn');
         if (cta) {
             cta.href = 'https://www.kurly.com/member/membership';
             cta.target = '_blank';
             cta.rel = 'noopener';
         }
-        
         $$('main > .section').forEach((sec, i) => { if (i > 0) sec.remove(); });
-
         const testSection = document.createElement('section');
         testSection.className = 'ik-test-section';
         testSection.innerHTML = `
@@ -615,12 +458,9 @@ h2 { font-size: 24px; }
             </div>`;
         $('main').appendChild(testSection);
     }
-
     function setupPlatePages() {
         if (!location.pathname.match(/plate-/)) return;
-        
         $$('.pricing, #pricing').forEach(s => s.remove());
-
         const pricingHTML = `
             <h2 style="text-align:center;">플레이트 구독 가격</h2>
             <div class="ik-pricing-grid">
@@ -633,16 +473,7 @@ h2 { font-size: 24px; }
         pricingSection.className = 'ik-pricing-section';
         pricingSection.innerHTML = pricingHTML;
         $('main').appendChild(pricingSection);
-
-        const ctas = { slim: '가벼운 루틴', glow: '빛나는 하루', balance: '균형의 시작', detox: '비우자' };
-        for (const plate in ctas) {
-            if (location.pathname.includes(`plate-${plate}`)) {
-                const btn = $('.pdp-hero-section__actions .btn--primary');
-                if (btn) btn.textContent = ctas[plate];
-            }
-        }
     }
-    
     function setupIndexPage() {
         if (!location.pathname.includes('index.html')) return;
         const ctaSection = $('#cta');
@@ -659,235 +490,6 @@ h2 { font-size: 24px; }
             ctaSection.remove();
         }
     }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        setupGlobal();
-        setupHero();
-        setupMembershipPage();
-        setupPlatePages();
-        setupIndexPage();
-    });
-})();
-</script>
-<!-- IK_REDESIGN_PATCH_FINAL -->
-<style>
-:root {
-    --ik-purple: #6A1B9A;
-    --ik-purple-hover: #4b0067;
-    --ik-text-sub: #777;
-    --ik-bg: #faf8fc;
-    --ik-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    --ik-radius: 12px;
-}
-html { scroll-behavior: smooth; }
-body {
-    background-color: var(--ik-bg);
-    font-family: "Noto Sans KR", sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-    color: #333;
-}
-h1, h2, h3 { word-break: keep-all; hyphens: auto; line-height: 1.2; font-weight: 700; }
-h1 { font-size: 32px; }
-h2 { font-size: 24px; }
-@media (min-width: 768px) {
-    h1 { font-size: 40px; }
-    h2 { font-size: 28px; }
-}
-@media (min-width: 1024px) {
-    h1 { font-size: 56px; }
-    h2 { font-size: 32px; }
-}
-.btn {
-    display: inline-block;
-    background: var(--ik-purple);
-    color: #fff !important;
-    border-radius: var(--ik-radius);
-    padding: 14px 28px;
-    font-weight: 600;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-.btn:hover { background: var(--ik-purple-hover); }
-
-/* Header */
-.ik-header {
-    position: sticky; top: 0; z-index: 999;
-    background: #fff;
-    padding: 0 16px;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #f0f0f0;
-}
-.ik-header-logo img { height: 30px; }
-.ik-header-nav { display: none; }
-.ik-hamburger { display: none; background: none; border: none; font-size: 28px; cursor: pointer; }
-@media (max-width: 768px) {
-    .ik-hamburger { display: block; }
-    .ik-header-nav {
-        display: none;
-        position: absolute;
-        top: 64px; left: 0; right: 0;
-        background: white;
-        box-shadow: var(--ik-shadow);
-    }
-    .ik-header-nav.is-open { display: block; }
-    .ik-header-nav a { display: block; padding: 16px; text-decoration: none; color: #333; }
-}
-@media (min-width: 769px) {
-    .ik-header { height: 72px; padding: 0 24px; }
-    .ik-header-nav { display: flex; gap: 24px; }
-    .ik-header-nav a { text-decoration: none; color: #333; font-weight: 500; }
-}
-
-/* Hero Section */
-.ik-hero {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    position: relative;
-    text-align: center;
-    color: white;
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-.ik-hero-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-.ik-hero-content h1 { text-shadow: 0 2px 12px rgba(0,0,0,.25); }
-
-/* Pricing Section */
-.ik-pricing-section { padding: 60px 16px; }
-.ik-pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 24px auto 0; }
-.ik-price-card { background: #fff; border-radius: 16px; padding: 24px; box-shadow: var(--ik-shadow); text-align: center; }
-
-/* Test Section */
-.ik-test-section { padding: 60px 16px; text-align: center; }
-.ik-test-grid { display: grid; grid-template-columns: 1fr; gap: 24px; max-width: 700px; margin: 24px auto 0; }
-.ik-test-card { background: #fff; border-radius: 16px; padding: 32px; box-shadow: var(--ik-shadow); text-decoration: none; color: inherit; transition: transform 0.2s ease; }
-.ik-test-card:hover { transform: scale(1.05); }
-@media (min-width: 768px) { .ik-test-grid { grid-template-columns: 1fr 1fr; } }
-
-/* Final CTA */
-#cta { display: none; }
-</style>
-<script>
-(function() {
-    if (window.IK_REDESIGN_APPLIED_FINAL) return;
-    window.IK_REDESIGN_APPLIED_FINAL = true;
-
-    const $ = (s) => document.querySelector(s);
-    const $$ = (s) => Array.from(document.querySelectorAll(s));
-
-    function setupGlobal() {
-        const header = $('header') || document.body.prepend(document.createElement('header'));
-        header.className = 'ik-header';
-        header.innerHTML = `
-            <a href="index.html" class="ik-header-logo"><img src="assets/logo-innerkurly-purple.png" alt="InnerKurly Logo"></a>
-            <nav class="ik-header-nav">
-                <a href="membership.html">멤버십</a>
-                <a href="index.html#plates">플레이트</a>
-                <a href="cart.html">장바구니</a>
-                <a href="signup.html">회원가입</a>
-            </nav>
-            <button class="ik-hamburger">☰</button>
-        `;
-        $('.ik-hamburger').addEventListener('click', () => $('.ik-header-nav').classList.toggle('is-open'));
-
-        const finalCTA = $('#cta');
-        if(finalCTA) finalCTA.style.display = 'none';
-    }
-
-    function setupHero() {
-        const hero = $('.hero-section');
-        if (hero) {
-            hero.classList.add('ik-hero');
-            hero.style.backgroundImage = "url('assets/hero-banner.png')";
-            hero.innerHTML = `<div class="ik-hero-content"><h1>하루 한 끼, 나를 위한 건강한 투자</h1><a href="#pricing" class="btn">구독 시작하기</a></div>`;
-        }
-    }
-
-    function setupMembershipPage() {
-        if (!location.pathname.includes('membership.html')) return;
-        const title = $('.membership-hero-section__title');
-        if (title) title.innerHTML = 'Kurly Membership<br><span style="font-size:24px;color:var(--ik-purple)">&times;</span><br>InnerKurly';
-        
-        const subtitle = $('.membership-hero-section__subtitle');
-        if (subtitle) subtitle.textContent = '월 1,900원 멤버십 + 이너컬리 구독으로 더 큰 혜택을.';
-
-        const cta = $('.membership-hero-section .btn');
-        if (cta) {
-            cta.href = 'https://www.kurly.com/member/membership';
-            cta.target = '_blank';
-            cta.rel = 'noopener';
-        }
-        
-        $$('main > .section').forEach((sec, i) => { if (i > 0) sec.remove(); });
-
-        const testSection = document.createElement('section');
-        testSection.className = 'ik-test-section';
-        testSection.innerHTML = `
-            <h2>나에게 맞는 이너뷰티 루틴을 찾아보세요</h2>
-            <div class="ik-test-grid">
-                <a href="https://lifestyle-conscious.netlify.app/" target="_blank" rel="noopener" class="ik-test-card"><h3>Lifestyle Type Test</h3><p>생활 습관으로 건강 상태를 진단하고 맞춤 솔루션을 추천받으세요.</p><span class="btn">루틴 테스트 시작하기</span></a>
-                <a href="https://skin-conscious.netlify.app/" target="_blank" rel="noopener" class="ik-test-card"><h3>Skin Personality Test</h3><p>피부 고민과 성향으로 가장 효과적인 성분을 찾아보세요.</p><span class="btn">피부 루틴 알아보기</span></a>
-            </div>`;
-        $('main').appendChild(testSection);
-    }
-
-    function setupPlatePages() {
-        if (!location.pathname.match(/plate-/)) return;
-        
-        $$('.pricing, #pricing').forEach(s => s.remove());
-
-        const pricingHTML = `
-            <h2 style="text-align:center;">플레이트 구독 가격</h2>
-            <div class="ik-pricing-grid">
-                <div class="ik-price-card"><h3>Trial Routine</h3><p>무료 (3일)</p></div>
-                <div class="ik-price-card"><h3>Weekly 3 Days</h3><p>₩45,000 / 주 (1일 ₩15,000)</p></div>
-                <div class="ik-price-card"><h3>Weekly 5 Days</h3><p>₩73,000 / 주 (1일 ₩14,600)</p></div>
-                <div class="ik-price-card"><h3>Monthly Routine</h3><p>₩280,000 / 월 (1일 ₩14,000)</p></div>
-            </div>`;
-        const pricingSection = document.createElement('section');
-        pricingSection.className = 'ik-pricing-section';
-        pricingSection.innerHTML = pricingHTML;
-        $('main').appendChild(pricingSection);
-
-        const ctas = { slim: '가벼운 루틴', glow: '빛나는 하루', balance: '균형의 시작', detox: '비우자' };
-        for (const plate in ctas) {
-            if (location.pathname.includes(`plate-${plate}`)) {
-                const btn = $('.pdp-hero-section__actions .btn--primary');
-                if (btn) btn.textContent = ctas[plate];
-            }
-        }
-    }
-    
-    function setupIndexPage() {
-        if (!location.pathname.includes('index.html')) return;
-        const ctaSection = $('#cta');
-        if (ctaSection) {
-            const testSection = document.createElement('section');
-            testSection.className = 'ik-test-section';
-            testSection.innerHTML = `
-                <h2>나에게 맞는 이너뷰티 루틴을 찾아보세요</h2>
-                <div class="ik-test-grid">
-                    <a href="https://lifestyle-conscious.netlify.app/" target="_blank" rel="noopener" class="ik-test-card"><h3>Lifestyle Type Test</h3><p>생활 습관으로 건강 상태를 진단하고 맞춤 솔루션을 추천받으세요.</p><span class="btn">루틴 테스트 시작하기</span></a>
-                    <a href="https://skin-conscious.netlify.app/" target="_blank" rel="noopener" class="ik-test-card"><h3>Skin Personality Test</h3><p>피부 고민과 성향으로 가장 효과적인 성분을 찾아보세요.</p><span class="btn">피부 루틴 알아보기</span></a>
-                </div>`;
-            ctaSection.parentElement.insertBefore(testSection, ctaSection);
-            ctaSection.remove();
-        }
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
         setupGlobal();
         setupHero();
