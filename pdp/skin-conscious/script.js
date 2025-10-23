@@ -109,33 +109,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // 마지막 폼
     // ===============================
     function showSubmitForm() {
-      quizBox.innerHTML = `
-        <h2>결과를 이메일로 받아보세요 📩</h2>
-        <p class="privacy-note">
-          입력하신 정보는 결과 안내 및 통계 분석 목적으로만 사용되며,<br />
-          <strong>5일 이내 자동 폐기됩니다.</strong><br />
-          제출 시, 입력하신 메일로 나의 결과와 루틴 리포트를 보내드립니다.
-        </p>
-  
-        <input type="text" id="name" placeholder="이름 (가명 가능)" required />
-  
-        <label for="gender" class="input-label">성별</label>
-        <select id="gender" required>
-          <option value="">선택해주세요</option>
-          <option value="남성">남성</option>
-          <option value="여성">여성</option>
-        </select>
-  
-        <input type="number" id="age" placeholder="나이" required />
-        <input type="email" id="email" placeholder="이메일" required />
-  
-        <button id="submitBtn" class="btn-start">결과 확인하기</button>
-      `;
-  
-      document
-        .getElementById("submitBtn")
-        .addEventListener("click", handleSubmit);
+      // 퀴즈 박스 내용 비우기 (기존 질문 제거)
+      const quizBox = document.getElementById("quiz-box");
+      quizBox.innerHTML = "";
+    
+      // 제출 폼 보여주기
+      const submitForm = document.getElementById("submit-form");
+      submitForm.style.display = "block";
+    
+      // 이벤트 리스너 등록
+      document.getElementById("submitBtn").addEventListener("click", handleSubmit);
     }
+    
   
     // ===============================
     // ✅ 로딩 오버레이
