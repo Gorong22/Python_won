@@ -44,138 +44,66 @@
             <!-- Gemini Prompt: 규칙적 운동과 샐러드, 긍정적 여성 일러스트 -->
             <p class="result-description">규칙적인 운동과 충분한 수면으로 이상적인 라이프스타일을 살고 있어요. 지금처럼 꾸준히 관리하며 건강한 에너지를 유지해 보세요.</p>
             <a href="https://innerkurly.netlify.app/plate-balance.html?utm_source=test&utm_medium=quiz&utm_campaign=lifestyle-conscious" class="btn-result">🥗 규칙적인 루틴 더 알아보기</a>
-            <a href="index.html" class="btn-retry">테스트 다시하기</a>
-        </div>
-    </div>
-      <!-- ✅ 자동 결과 공유 섹션 -->
-<section class="share-section">
-    <h2 class="section__title">공유하기</h2>
-    <p class="share-section__subtitle">당신의 결과를 친구들과 함께 나눠보세요 💜</p>
-    <div class="share-buttons">
-      <button class="btn-share" id="share-result">📤 결과 공유하기</button>
-      <button class="btn-share ghost" id="share-test">💌 테스트 공유하기</button>
-    </div>
-  </section>
-  
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const pageURL = window.location.href;
-    let shareTitle = "";
-    let shareDesc = "";
-    let shareImage = "";
-  
-    // ✅ 파일명 기반 자동 감지
-if (pageURL.includes("result-basic")) {
-  shareTitle = "💫 나에게 필요한 건 '기본 루틴' | 이너컬리 라이프스타일 테스트";
-  shareDesc = "무엇부터 시작해야 할지 막막하다면, '기본 루틴'으로 에너지의 균형을 찾아보세요. 나도 여기가 시작이었어요.";
-  shareImage = "https://images.unsplash.com/photo-1556228724-4a3aa6b9c387?auto=format&fit=crop&w=1200&q=80"; // 아침 햇살, 균형 이미지
-
-} else if (pageURL.includes("result-burnout")) {
-  shareTitle = "🔥 멈춰야 다시 달릴 수 있어 | 이너컬리 라이프스타일 테스트";
-  shareDesc = "늘 해야 할 일만 쫓는 나, 지쳐버린 건 어쩌면 당연했어요. 번아웃에서 벗어날 힌트를 찾았어요.";
-  shareImage = "https://images.unsplash.com/photo-1504366260192-1a3cb1a1b5cc?auto=format&fit=crop&w=1200&q=80"; // 피로감/불빛/밤 감성
-
-} else if (pageURL.includes("result-healthy")) {
-  shareTitle = "🌿 루틴이 삶이 되는 순간 | 이너컬리 라이프스타일 테스트";
-  shareDesc = "나는 이미 나답게 건강을 관리하고 있었어요. 일상의 루틴이 나를 단단하게 만들고 있었네요.";
-  shareImage = "https://images.unsplash.com/photo-1556229010-aa3a095d4b2b?auto=format&fit=crop&w=1200&q=80"; // 푸른빛, 여유, 건강한 분위기
-
-} else if (pageURL.includes("result-numb")) {
-  shareTitle = "🌫️ 아무 감정도 없는 하루, 나도 그런 적 있나요? | 이너컬리 라이프스타일 테스트";
-  shareDesc = "감정이 무뎌진 건 나약해서가 아니라, 너무 오래 버텨왔기 때문이에요. 나를 다시 느끼게 해주는 루틴이 필요했어요.";
-  shareImage = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80"; // 흐릿한 바다/감정적 이미지
-
-} else {
-  // 기본값
-  shareTitle = "💜 나의 루틴 타입은? | 이너컬리 라이프스타일 심리테스트";
-  shareDesc = "하루의 리듬 속에 숨은 나의 라이프스타일 패턴, 지금 바로 확인해보세요!";
-  shareImage = "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80";
-}
-    // ✅ 결과 공유
-    document.getElementById("share-result").addEventListener("click", async () => {
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: shareTitle,
-            text: shareDesc,
-            url: pageURL,
-          });
-        } catch (err) {
-          console.log("공유 취소됨:", err);
-        }
-      } else {
-        navigator.clipboard.writeText(pageURL);
-        alert("📎 결과 링크가 복사되었습니다!");
-      }
-    });
-  
-    // ✅ 테스트 공유 (메인 테스트 페이지)
-    document.getElementById("share-test").addEventListener("click", async () => {
-      const testURL = "https://lifestyle-conscious.netlify.app/";
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: "이너컬리 라이프스타일 심리테스트",
-            text: "당신의 라이프스타일 루틴은 어떤 타입인가요? 💜",
-            url: testURL,
-          });
-        } catch (err) {
-          console.log("공유 취소됨:", err);
-        }
-      } else {
-        navigator.clipboard.writeText(testURL);
-        alert("💌 테스트 링크가 복사되었습니다!");
-      }
-    });
-  });
-  </script>
-  
-  <style>
-  .share-section {
-    text-align: center;
-    background: #faf8fc;
-    border-radius: 16px;
-    padding: 60px 16px;
-    margin: 60px auto;
-    max-width: 600px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  }
-  .share-section__subtitle {
-    font-size: 15px;
-    color: #777;
-    margin-top: 8px;
-  }
-  .share-buttons {
-    margin-top: 24px;
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  .btn-share {
-    background: #6A1B9A;
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    padding: 14px 28px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background 0.2s;
-  }
-  .btn-share:hover { background: #4b0067; }
-  .btn-share.ghost {
-    background: #fff;
-    color: #6A1B9A;
-    border: 2px solid #6A1B9A;
-  }
-  .btn-share.ghost:hover {
-    background: #6A1B9A;
-    color: #fff;
-  }
-  @media (max-width: 480px) {
-    .share-buttons { flex-direction: column; gap: 12px; }
-    .btn-share { width: 100%; }
-  }
-  </style>
+            <!-- ✅ 테스트 공유 버튼을 테스트 다시하기 위로 배치 -->
+         <button class="btn-share ghost" id="share-test">💌 테스트 공유하기</button>
+   
+         <a href="index.html" class="btn-retry">테스트 다시하기</a>
+       </div>
+     </div>
+   
+     <script>
+     document.addEventListener("DOMContentLoaded", () => {
+       const testURL = "https://lifestyle-conscious.netlify.app/";
+   
+       document.getElementById("share-test").addEventListener("click", async () => {
+         if (navigator.share) {
+           try {
+             await navigator.share({
+               title: "이너컬리 라이프스타일 심리테스트",
+               text: "요즘 내 하루는 괜찮을까? 지금 바로 나의 루틴 타입을 알아보세요 💜",
+               url: testURL,
+             });
+           } catch (err) {
+             console.log("공유 취소됨:", err);
+           }
+         } else {
+           navigator.clipboard.writeText(testURL);
+           alert("💌 테스트 링크가 복사되었습니다!");
+         }
+       });
+     });
+     </script>
+   
+     <style>
+     .result-card {
+       text-align: center;
+       background: #fff;
+       border-radius: 16px;
+       padding: 40px 20px;
+       margin: 60px auto;
+       max-width: 600px;
+       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+     }
+     .btn-result, .btn-retry {
+       display: block;
+       margin: 16px auto;
+       max-width: 280px;
+     }
+     .btn-share {
+       margin-top: 16px;
+       background: #fff;
+       color: #6A1B9A;
+       border: 2px solid #6A1B9A;
+       border-radius: 12px;
+       padding: 14px 28px;
+       cursor: pointer;
+       font-weight: 600;
+       transition: background 0.2s;
+     }
+     .btn-share:hover {
+       background: #6A1B9A;
+       color: #fff;
+     }
+     </style>
 </body>
 </html>
