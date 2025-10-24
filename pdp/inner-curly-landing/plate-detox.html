@@ -568,7 +568,7 @@ form.addEventListener("submit", function(e) {
     plate: document.title || "Unknown Plate"
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbzvfdYbHMHhZ-L_9COgd2BrPV54oCEX9CAzvCu2u91PKPl4zeiy5SYJU6q_zzKkjqnNug/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbySsQcyV86fNYkN0u9ixlCOmqFwqxm6o51b5mvp1MoGSfol1pK6vMeZVpHeYacGQwqFig/exec", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams(formData)
@@ -615,7 +615,7 @@ function maskEmail(email) {
 async function loadReviews(limit = currentLimit) {
   try {
     const plateName = document.title || "Unknown Plate";
-    const res = await fetch(`https://script.google.com/macros/s/AKfycby98mH_JoPndWTV9Xwq4zjM3yMmDYf5bUzqXMr0NFKnV-nEG7-AMfNAs6Gp5aVuDnr4Ig/exec?limit=${limit}&plate=${encodeURIComponent(plateName)}`);
+    const res = await fetch(`https://script.google.com/macros/s/AKfycbySsQcyV86fNYkN0u9ixlCOmqFwqxm6o51b5mvp1MoGSfol1pK6vMeZVpHeYacGQwqFig/exec?limit=${limit}&plate=${encodeURIComponent(plateName)}`);
     const data = await res.json();
 
     const container = document.getElementById("reviewList");
