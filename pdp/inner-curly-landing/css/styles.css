@@ -2056,6 +2056,118 @@ body[class*="plate-"] .nav__toggle {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* ✅ 후기 보기 영역 공통 스타일 (review-section 과 겹치지 않음) */
+.review-display {
+  background-color: #f9f7fb;
+  border-radius: 16px;
+  padding: 36px 24px;
+  margin: 60px auto;
+  box-shadow: 0 3px 14px rgba(180, 150, 200, 0.12);
+  max-width: 600px;
+  width: 92%;
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+  box-sizing: border-box;
+}
+
+.review-display h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #5b377e;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.average-rating {
+  text-align: center;
+  font-size: 1rem;
+  color: #4e3a78;
+  margin-bottom: 22px;
+  font-weight: 500;
+}
+
+/* 각 후기 카드 */
+.review-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  border: 1px solid #e7def5;
+  box-shadow: 0 2px 6px rgba(170, 130, 210, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.review-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(170, 130, 210, 0.15);
+}
+
+/* 후기 카드 내부 */
+.review-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.review-top strong {
+  color: #6b4aa4;
+  font-weight: 700;
+}
+
+.review-email {
+  font-size: 0.85rem;
+  color: #aaa;
+  font-style: italic;
+}
+
+.review-text {
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 8px 0;
+}
+
+.review-date {
+  font-size: 0.8rem;
+  color: #9a8cb5;
+  text-align: right;
+  display: block;
+}
+
+/* 후기 더보기 버튼 */
+.load-more {
+  display: block;
+  background-color: #7d5fb2;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+.load-more:hover {
+  background-color: #6b4aa4;
+  transform: translateY(-1px);
+}
+
+/* ✅ 반응형 대응 */
+@media (max-width: 768px) {
+  .review-display {
+    padding: 28px 18px;
+    width: 92%;
+  }
+  .review-text {
+    font-size: 1rem;
+  }
+  .load-more {
+    font-size: 0.95rem;
+    padding: 12px;
+  }
+}
+
 
 
 
