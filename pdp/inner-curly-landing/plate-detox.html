@@ -538,11 +538,13 @@ h2 { font-size: 24px; }
     <button type="submit" id="submitBtn">후기 제출</button>
   </form>
 
+  <!-- ✅ 로딩 상태 -->
   <div id="loadingSpinner" class="loading-spinner" style="display:none;">
     <div class="spinner"></div>
     <p>후기 전송 중입니다...</p>
   </div>
 
+  <!-- ✅ 완료 메시지 -->
   <p id="resultMessage"></p>
 </section>
 
@@ -567,30 +569,37 @@ form.addEventListener("submit", function(e) {
   };
 
   fetch("https://script.google.com/macros/s/AKfycbzvfdYbHMHhZ-L_9COgd2BrPV54oCEX9CAzvCu2u91PKPl4zeiy5SYJU6q_zzKkjqnNug/exec", {
-  method: "POST",
-  headers: { "Content-Type": "application/x-www-form-urlencoded" },
-  body: new URLSearchParams(formData)
-})
-  .then(res => res.json()) // ✅ 응답을 읽을 수 있게 변경
-  .then(() => {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams(formData)
+  })
+  .then(res => res.json())
+  .then(data => {
     loadingSpinner.style.display = "none";
     submitBtn.disabled = false;
-    form.reset();
 
-    msg.innerText = "💜 후기 작성이 완료되었습니다. 감사합니다!";
+    if (data.status === "success") {
+      form.reset();
+      msg.innerText = "💜 후기 작성이 완료되었습니다. 감사합니다!";
+    } else {
+      msg.innerText = "❌ 오류: " + (data.message || "전송 실패");
+    }
+
     msg.style.opacity = "0";
     msg.style.transition = "opacity 0.5s ease";
     setTimeout(() => (msg.style.opacity = "1"), 100);
     setTimeout(() => (msg.style.opacity = "0"), 4000);
 
-    // ✅ 새 후기 등록 후 목록 새로고침
     loadReviews();
   })
-  .catch(() => {
+  .catch(err => {
+    console.error("전송 중 오류:", err);
     loadingSpinner.style.display = "none";
     submitBtn.disabled = false;
     msg.innerText = "❌ 오류가 발생했습니다. 다시 시도해주세요.";
   });
+});
+
 
 // ✅ 후기 보기 + 평균 + 더보기
 let currentLimit = 3;
@@ -605,7 +614,7 @@ function maskEmail(email) {
 
 async function loadReviews(limit = currentLimit) {
   try {
-    const plateName = document.title || "Unknown Plate"; // ✅ 현재 페이지(플레이트명)
+    const plateName = document.title || "Unknown Plate";
     const res = await fetch(`https://script.google.com/macros/s/AKfycby98mH_JoPndWTV9Xwq4zjM3yMmDYf5bUzqXMr0NFKnV-nEG7-AMfNAs6Gp5aVuDnr4Ig/exec?limit=${limit}&plate=${encodeURIComponent(plateName)}`);
     const data = await res.json();
 
@@ -621,47 +630,21 @@ async function loadReviews(limit = currentLimit) {
       return;
     }
 
-    container.innerHTML = data.reviews
-      .map(r => {
-        const maskedEmail = maskEmail(r.email);
-        return `
-          <div class="review-card">
-            <div class="review-header">
-              <div class="review-top">
-                <strong>${r.rating}점</strong>
-                <span class="review-email">${maskedEmail}</span>
-              </div>
-              <p class="review-text">"${r.review}"</p>
-              <span class="review-date">${new Date(r.timestamp).toLocaleDateString()}</span>
+    container.innerHTML = data.reviews.map(r => {
+      const maskedEmail = maskEmail(r.email);
+      return `
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-top">
+              <strong>${r.rating}점</strong>
+              <span class="review-email">${maskedEmail}</span>
             </div>
+            <p class="review-text">"${r.review}"</p>
+            <span class="review-date">${new Date(r.timestamp).toLocaleDateString()}</span>
           </div>
-        `;
-      })
-      .join("");
-
-    btn.style.display = (data.reviews.length < limit) ? "none" : "block";
-  } catch (err) {
-    console.error("후기 불러오기 실패:", err);
-  }
-}
-
-    container.innerHTML = data.reviews
-      .map(r => {
-        const maskedEmail = maskEmail(r.email);
-        return `
-          <div class="review-card">
-            <div class="review-header">
-              <div class="review-top">
-                <strong>${r.rating}점</strong>
-                <span class="review-email">${maskedEmail}</span>
-              </div>
-              <p class="review-text">"${r.review}"</p>
-              <span class="review-date">${new Date(r.timestamp).toLocaleDateString()}</span>
-            </div>
-          </div>
-        `;
-      })
-      .join("");
+        </div>
+      `;
+    }).join("");
 
     btn.style.display = (data.reviews.length < limit) ? "none" : "block";
   } catch (err) {
@@ -676,5 +659,6 @@ document.getElementById("loadMoreBtn").addEventListener("click", () => {
 
 window.addEventListener("DOMContentLoaded", () => loadReviews());
 </script>
+
 </body>
 </html>
