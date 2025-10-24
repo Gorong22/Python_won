@@ -566,12 +566,13 @@ form.addEventListener("submit", function(e) {
     plate: document.title || "Unknown Plate"
   };
 
-  fetch("https://script.google.com/macros/s/AKfycby98mH_JoPndWTV9Xwq4zjM3yMmDYf5bUzqXMr0NFKnV-nEG7-AMfNAs6Gp5aVuDnr4Ig/exec", {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams(formData)
-  }).then(() => {
+  fetch("https://script.google.com/macros/s/AKfycbzvfdYbHMHhZ-L_9COgd2BrPV54oCEX9CAzvCu2u91PKPl4zeiy5SYJU6q_zzKkjqnNug/exec", {
+  method: "POST",
+  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  body: new URLSearchParams(formData)
+})
+  .then(res => res.json()) // ✅ 응답을 읽을 수 있게 변경
+  .then(() => {
     loadingSpinner.style.display = "none";
     submitBtn.disabled = false;
     form.reset();
@@ -582,10 +583,14 @@ form.addEventListener("submit", function(e) {
     setTimeout(() => (msg.style.opacity = "1"), 100);
     setTimeout(() => (msg.style.opacity = "0"), 4000);
 
-    // 새 후기 등록 후 목록 새로고침
+    // ✅ 새 후기 등록 후 목록 새로고침
     loadReviews();
+  })
+  .catch(() => {
+    loadingSpinner.style.display = "none";
+    submitBtn.disabled = false;
+    msg.innerText = "❌ 오류가 발생했습니다. 다시 시도해주세요.";
   });
-});
 
 // ✅ 후기 보기 + 평균 + 더보기
 let currentLimit = 3;
