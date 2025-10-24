@@ -507,5 +507,78 @@ h2 { font-size: 24px; }
     });
 })();
 </script>
+<section class="review-section">
+  <h3>✨ 후기 남기기</h3>
+  <form id="reviewForm">
+    <label for="email">이메일</label>
+    <input type="email" id="email" name="email" required placeholder="your@email.com">
+
+    <label for="rating">평점</label>
+    <select id="rating" name="rating" required>
+      <option value="">선택해주세요</option>
+      <option value="5">5점 (매우 만족)</option>
+      <option value="4">4점 (만족)</option>
+      <option value="3">3점 (보통)</option>
+      <option value="2">2점 (불만족)</option>
+      <option value="1">1점 (매우 불만족)</option>
+    </select>
+
+    <label for="review">후기</label>
+    <textarea id="review" name="review" rows="4" placeholder="후기를 입력해주세요" required></textarea>
+
+    <button type="submit" id="submitBtn">후기 제출</button>
+  </form>
+
+  <!-- 로딩 스피너 -->
+  <div id="loadingSpinner" class="loading-spinner" style="display:none;">
+    <div class="spinner"></div>
+    <p>후기 전송 중입니다...</p>
+  </div>
+
+  <p id="resultMessage"></p>
+</section>
+
+<script>
+const form = document.getElementById("reviewForm");
+const loadingSpinner = document.getElementById("loadingSpinner");
+const msg = document.getElementById("resultMessage");
+const submitBtn = document.getElementById("submitBtn");
+
+form.addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  // ✅ 폼 비활성화 & 로딩 시작
+  submitBtn.disabled = true;
+  loadingSpinner.style.display = "flex";
+  msg.innerText = "";
+
+  const formData = {
+    email: document.getElementById("email").value,
+    rating: document.getElementById("rating").value,
+    review: document.getElementById("review").value,
+    plate: document.title || "Unknown Plate"
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycbwAGUoohN9RWdZ8b_s_5Cm7SzLa3gSVvznia3_OFf4V0W-B6zAsKVeEu4yJWrFGstM6qQ/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams(formData)
+  }).then(() => {
+    // ✅ 로딩 종료
+    loadingSpinner.style.display = "none";
+    submitBtn.disabled = false;
+    form.reset();
+
+    // ✅ 메시지 표시
+    msg.innerText = "💜 후기 작성이 완료되었습니다. 감사합니다!";
+    msg.style.opacity = "0";
+    msg.style.transition = "opacity 0.5s ease";
+    setTimeout(() => (msg.style.opacity = "1"), 100);
+
+    setTimeout(() => (msg.style.opacity = "0"), 4000);
+  });
+});
+</script>
 </body>
 </html>

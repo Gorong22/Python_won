@@ -1907,5 +1907,155 @@ body[class*="plate-"] .nav__toggle {
   font-size: 0.95rem;
 }
 
+<style>
+.review-section {
+  background-color: #faf8fb;
+  border-radius: 16px;
+  padding: 36px 24px;
+  margin: 80px auto 120px auto; /* ✅ 위·아래 여백 충분히 확보 */
+  box-shadow: 0 4px 18px rgba(180, 150, 200, 0.15);
+  max-width: 480px;
+  width: 92%;
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.review-section h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #5b377e;
+  margin-bottom: 26px;
+  text-align: center;
+  letter-spacing: -0.3px;
+}
+
+.review-section form {
+  width: 100%;
+}
+
+.review-section label {
+  display: block;
+  margin-bottom: 6px;
+  color: #3f3f3f;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.review-section input[type="email"],
+.review-section select,
+.review-section textarea {
+  width: 100%;
+  border: 1px solid #d8cde9;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  margin-bottom: 14px;
+}
+
+.review-section input:focus,
+.review-section select:focus,
+.review-section textarea:focus {
+  outline: none;
+  border-color: #a37de9;
+  box-shadow: 0 0 4px rgba(163, 125, 233, 0.3);
+}
+
+.review-section textarea {
+  resize: none;
+}
+
+.review-section button {
+  background-color: #7d5fb2;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.review-section button:hover {
+  background-color: #6b4aa4;
+  transform: translateY(-1px);
+}
+
+#resultMessage {
+  margin-top: 14px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #6b4aa4;
+  text-align: center;
+}
+
+/* ✅ 모바일 반응형 */
+@media (max-width: 768px) {
+  .review-section {
+    width: 92%;
+    padding: 28px 18px;
+    margin: 60px auto 100px auto; /* 아래 여백 확보로 버튼과 겹침 방지 */
+  }
+
+  .review-section input,
+  .review-section select,
+  .review-section textarea {
+    font-size: 1rem;
+  }
+
+  .review-section button {
+    font-size: 1rem;
+    padding: 12px 16px;
+  }
+}
+
+/* ✅ iPhone 하단 safe-area 대응 */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .review-section {
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+}
+</style>
+
+/* ✅ 로딩 스피너 */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+  color: #7d5fb2;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #d8cde9;
+  border-top: 3px solid #7d5fb2;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+  margin-bottom: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 
 
