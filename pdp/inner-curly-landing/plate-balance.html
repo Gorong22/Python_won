@@ -677,6 +677,183 @@ document.getElementById("loadMoreBtn").addEventListener("click", () => {
 
 window.addEventListener("DOMContentLoaded", () => loadReviews());
 </script>
+
+<!-- ================= 다른 플레이트 둘러보기 ================= -->
+<section class="other-plates-section">
+  <h3>🍽️ 다른 플레이트 둘러보기</h3>
+  <p class="other-plates-subtitle">나에게 맞는 다른 플레이트를 확인해보세요</p>
+  <div id="otherPlatesList" class="other-plates-grid">
+    <!-- 자동으로 생성됩니다 -->
+  </div>
+</section>
+
+<style>
+.other-plates-section {
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 40px 20px;
+  text-align: center;
+  background: linear-gradient(135deg, #f5f0ff 0%, #faf5ff 100%);
+  border-radius: 20px;
+}
+
+.other-plates-section h3 {
+  color: #9b6bcc;
+  font-size: 1.8em;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.other-plates-subtitle {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 0.95em;
+}
+
+.other-plates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.plate-card {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border: 2px solid transparent;
+}
+
+.plate-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(155,107,204,0.2);
+  border-color: #9b6bcc;
+}
+
+.plate-card-icon {
+  font-size: 3em;
+  margin-bottom: 15px;
+}
+
+.plate-card h4 {
+  color: #9b6bcc;
+  font-size: 1.3em;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.plate-card-tagline {
+  color: #666;
+  font-size: 0.9em;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.plate-card-features {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.plate-tag {
+  background: #f0e6ff;
+  color: #7d4fa8;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .other-plates-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .other-plates-section {
+    margin: 40px 15px;
+    padding: 30px 15px;
+  }
+}
+</style>
+
+<script>
+// 플레이트 정보 데이터
+const platesData = {
+  balance: {
+    name: 'Balance Plate',
+    icon: '⚖️',
+    tagline: '영양 밸런스를 위한 가장 기본의 선택',
+    tags: ['균형영양', '심플라이프', '매일건강'],
+    url: 'plate-balance.html'
+  },
+  detox: {
+    name: 'Detox Plate',
+    icon: '🌿',
+    tagline: '가벼움으로 채우는 하루',
+    tags: ['디톡스', '가벼움', '클렌징'],
+    url: 'plate-detox.html'
+  },
+  glow: {
+    name: 'Glow Plate',
+    icon: '✨',
+    tagline: '안에서 빛나는 피부',
+    tags: ['피부건강', '안티에이징', '광채'],
+    url: 'plate-glow.html'
+  },
+  slim: {
+    name: 'Slim Plate',
+    icon: '🎯',
+    tagline: '건강하게 가볍게',
+    tags: ['체중관리', '저칼로리', '포만감'],
+    url: 'plate-slim.html'
+  }
+};
+
+// 현재 페이지 감지 및 다른 플레이트 표시
+function loadOtherPlates() {
+  const currentPath = window.location.pathname;
+  let currentPlate = '';
+  
+  // 현재 플레이트 감지
+  if (currentPath.includes('balance')) currentPlate = 'balance';
+  else if (currentPath.includes('detox')) currentPlate = 'detox';
+  else if (currentPath.includes('glow')) currentPlate = 'glow';
+  else if (currentPath.includes('slim')) currentPlate = 'slim';
+  
+  const container = document.getElementById('otherPlatesList');
+  if (!container) return;
+  
+  // 현재 플레이트 제외한 나머지 표시
+  let html = '';
+  for (const [key, plate] of Object.entries(platesData)) {
+    if (key !== currentPlate) {
+      html += `
+        <a href="${plate.url}" class="plate-card">
+          <div class="plate-card-icon">${plate.icon}</div>
+          <h4>${plate.name}</h4>
+          <p class="plate-card-tagline">${plate.tagline}</p>
+          <div class="plate-card-features">
+            ${plate.tags.map(tag => `<span class="plate-tag">#${tag}</span>`).join('')}
+          </div>
+        </a>
+      `;
+    }
+  }
+  
+  container.innerHTML = html;
+}
+
+// 페이지 로드 시 실행
+window.addEventListener('DOMContentLoaded', loadOtherPlates);
+</script>
+
 <!-- 팝업 (전체 내용 한 번에 보기) -->
 <div id="mainPopup" class="popup-overlay" style="display:none;">
   <div class="popup-content-scrollable">
