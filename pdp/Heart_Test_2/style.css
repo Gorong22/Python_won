@@ -564,3 +564,77 @@ input[type="number"] {
   white-space: pre-line;
   opacity: 0.9;
 }
+
+<style>
+body, html {
+  text-align: center;
+}
+
+header, main {
+  text-align: center;
+}
+
+.event-info {
+  background: linear-gradient(135deg, #f5f0ff 0%, #faf5ff 100%);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 15px auto;
+  border-left: 4px solid #9b6bcc;
+  max-width: 600px;
+  text-align: left;
+}
+
+.event-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #e9d5ff;
+}
+
+.event-row:last-child {
+  border-bottom: none;
+}
+
+.event-icon {
+  font-size: 24px;
+  margin-right: 12px;
+  min-width: 30px;
+}
+
+.event-content {
+  flex: 1;
+  line-height: 1.5;
+}
+
+.event-title {
+  font-weight: 600;
+  color: #6b21a8;
+  margin-bottom: 3px;
+}
+
+.event-desc {
+  color: #333;
+  font-size: 0.95em;
+}
+
+.event-notice {
+  background: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.85em;
+  color: #666;
+}
+
+.intro ul {
+  list-style: none;
+  padding-left: 0;
+  text-align: center;
+}
+
+.intro ul li {
+  font-size: 1.1em;
+  margin: 10px 0;
+}
+</style>
