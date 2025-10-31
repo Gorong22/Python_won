@@ -1630,3 +1630,12 @@ img {
     transform: translateY(0);
   }
 }
+.info-box {
+  background: #faf8fb;
+  border-radius: 10px;
+  padding: 16px;
+  margin: 10px 0;
+  text-align: left;
+  font-size: 15px;
+  line-height: 1.8;
+}

@@ -28,12 +28,36 @@
       gtag("js", new Date());
       gtag("config", "G-XXXXXXX");
     </script>
+
+    <style>
+      /* ✅ 추가된 마이페이지 전용 CSS */
+      .info-box {
+        background: #faf8fb;
+        border-radius: 10px;
+        padding: 16px;
+        margin: 10px 0;
+        text-align: left;
+        font-size: 15px;
+        line-height: 1.8;
+      }
+
+      .mypage .card {
+        margin-bottom: 20px;
+      }
+
+      .mypage .h2,
+      .mypage .h3 {
+        color: #5f0080;
+        margin-bottom: 10px;
+      }
+    </style>
   </head>
+
   <body data-active="my">
     <div class="mobile-wrap">
       <!-- ======================
          HEADER
-    ======================= -->
+      ======================= -->
       <header class="app-header">
         <button
           class="icon-btn"
@@ -62,17 +86,19 @@
 
       <!-- ======================
          MAIN
-    ======================= -->
+      ======================= -->
       <main class="container mypage">
-        <!-- ① 프로필 카드 -->
+        <!-- ① 내 정보 -->
         <section class="card pad center" id="section-profile">
           <h2 class="h2">내 정보</h2>
-          <div id="user-info" class="text user-info-box">
-            <!-- JS에서 사용자 정보 렌더링 -->
-          </div>
-          <div class="row" style="justify-content: center">
-            <button id="btn-logout" class="btn btn--ghost">로그아웃</button>
-          </div>
+          <div id="user-info" class="text user-info-box"></div>
+          <button
+            id="btn-logout"
+            class="btn btn--secondary"
+            style="margin-top: 12px"
+          >
+            로그아웃
+          </button>
         </section>
 
         <!-- ② 서베이 결과 -->
@@ -94,7 +120,7 @@
 
       <!-- ======================
          FOOTER
-    ======================= -->
+      ======================= -->
       <footer class="app-footer">
         <div class="pay-row">
           <img src="./assets/payment-icons.png" alt="결제수단" />
@@ -104,7 +130,7 @@
 
       <!-- ======================
          BOTTOM NAV
-    ======================= -->
+      ======================= -->
       <nav class="bottom-nav">
         <a href="./index.html" data-key="home"><span>🏠</span><em>홈</em></a>
         <a href="./plates.html" data-key="plates"
@@ -116,46 +142,36 @@
         <a href="./cart.html" data-key="cart"
           ><span>🛒</span><em>장바구니</em></a
         >
-        <a href="./mypage.html" data-key="my"><span>👤</span><em>마이</em></a>
+        <a href="./mypage.html" data-key="my" class="active"
+          ><span>👤</span><em>마이</em></a
+        >
       </nav>
-
-      <script>
-        (function () {
-          const k = document.body.getAttribute("data-active");
-          document.querySelectorAll(".bottom-nav a").forEach((a) => {
-            if (a.dataset.key === k) a.classList.add("active");
-          });
-        })();
-      </script>
     </div>
 
     <!-- ======================
        SCRIPTS
-  ======================= -->
+    ======================= -->
     <script src="./scripts/common.js"></script>
 
     <script>
-      // scripts/mypage.js 통합 버전
+      // ✅ scripts/mypage.js 통합
       document.addEventListener("DOMContentLoaded", async () => {
-        const u = Auth.current(); // common.js의 Auth 객체 사용
+        const u = Auth.current();
         const userBox = document.getElementById("user-info");
         const surveyBox = document.getElementById("survey-result");
         const plateBox = document.getElementById("plate-recommend");
         const loader = document.getElementById("app-loader");
 
-        // 로딩 시작
         loader.classList.add("active");
 
-        // 로그인 상태 확인
         if (u && u.email) {
           userBox.innerHTML = `
-            <p><strong>이름:</strong> ${u.name || "-"}</p>
-            <p><strong>이메일:</strong> ${u.email}</p>
-            <p><strong>성별:</strong> ${u.gender || "-"}</p>
-            <p><strong>나이:</strong> ${u.age || "-"}</p>
+            <div class="info-box">
+              <p><strong>이름:</strong> ${u.name || "-"}</p>
+              <p><strong>이메일:</strong> ${u.email}</p>
+            </div>
           `;
 
-          // ✅ 서베이 결과 불러오기
           try {
             const res = await fetch(
               \`https://script.google.com/macros/s/AKfycbxxxxxxxxxxxxxx/exec?email=\${encodeURIComponent(
@@ -165,20 +181,18 @@
             const data = await res.json();
 
             if (data && data.resultType) {
-              // 결과 표시
               surveyBox.innerHTML = `
-                <p>회원님의 서베이 결과는 <strong>${data.resultType}</strong> 유형이에요 💫</p>
-                <a href="plate-${data.resultType.toLowerCase()}.html" class="btn btn--primary small">
-                  추천 플레이트 보러가기
+                <p>${u.name || "회원"}님의 결과는 <strong>${data.resultType}</strong> 유형이에요 💜</p>
+                <a href="plate-${data.resultType.toLowerCase()}.html" class="btn btn--primary small" style="margin-top:8px;">
+                  추천 플레이트 보기
                 </a>
               `;
 
-              // 추천 문구 표시
               const plateMsg = getPlateMessage(data.resultType);
               plateBox.innerHTML = `<p>${plateMsg}</p>`;
             } else {
               surveyBox.innerHTML = `
-                아직 설문 결과가 없습니다.<br />
+                <p>아직 설문을 완료하지 않으셨어요.</p>
                 <a href="./tests.html" class="btn btn--primary small">설문하러 가기</a>
               `;
               plateBox.innerHTML = `
@@ -191,23 +205,16 @@
             plateBox.innerHTML = `<p>추천 정보를 불러올 수 없습니다.</p>`;
           }
         } else {
-          // 로그인 안 된 상태
           userBox.innerHTML = `
             <p>로그인이 필요합니다.</p>
             <a href="./login.html" class="btn btn--primary small">로그인</a>
           `;
-          surveyBox.innerHTML = `
-            <p>서베이 결과를 보려면 로그인 해주세요.</p>
-          `;
-          plateBox.innerHTML = `
-            <p>로그인 후 맞춤 플레이트를 확인할 수 있습니다.</p>
-          `;
+          surveyBox.innerHTML = `<p>서베이 결과를 보려면 로그인 해주세요.</p>`;
+          plateBox.innerHTML = `<p>로그인 후 맞춤 플레이트를 확인할 수 있습니다.</p>`;
         }
 
-        // 로딩 종료
         loader.classList.remove("active");
 
-        // ✅ 로그아웃 버튼 클릭 이벤트
         document.addEventListener("click", (e) => {
           if (e.target && e.target.id === "btn-logout") {
             Auth.logout();
