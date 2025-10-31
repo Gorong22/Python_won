@@ -6,8 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const submitBtn = form.querySelector('button[type="submit"]');
 
   /* -------------------------------
-       ✅ 로딩 상태 토글
-    --------------------------------*/
+         ✅ 로딩 상태 토글
+      --------------------------------*/
   function setLoading(isLoading) {
     if (!submitBtn) return;
     submitBtn.disabled = isLoading;
@@ -22,8 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* -------------------------------
-       ✅ 비밀번호 해시 (SHA-256)
-    --------------------------------*/
+         ✅ 비밀번호 해시 (SHA-256)
+      --------------------------------*/
   async function hashPassword(password) {
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
@@ -33,8 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* -------------------------------
-       ✅ fetch 타임아웃 유틸
-    --------------------------------*/
+         ✅ fetch 타임아웃 유틸
+      --------------------------------*/
   async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeoutMs);
@@ -49,8 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* -------------------------------
-       ✅ GA4 이벤트 유틸
-    --------------------------------*/
+         ✅ GA4 이벤트 유틸
+      --------------------------------*/
   function gaEvent(name, params = {}) {
     if (typeof window.gtag === "function") {
       window.gtag("event", name, params);
@@ -58,8 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* -------------------------------
-       ✅ 로그인 폼 제출 이벤트
-    --------------------------------*/
+         ✅ 로그인 폼 제출 이벤트
+      --------------------------------*/
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
     gaEvent("login_attempt", { page_title: document.title || "login" });
 
     try {
-      // 비밀번호 해시 처리
+      // ✅ 비밀번호 해시 처리
       const hashedPw = await hashPassword(password);
 
       const payload = {
@@ -98,9 +98,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
 
+      /* -------------------------------
+           ✅ 로그인 성공 처리
+        --------------------------------*/
       if (data.status === "success" && data.user) {
-        // ✅ 로그인 성공
         Auth.login(data.user);
+        localStorage.setItem("justLoggedIn", "1"); // 🔥 플래그 추가
 
         gaEvent("login_success", {
           page_title: document.title || "login",
@@ -108,10 +111,15 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         toast(`${data.user.name || "회원"}님, 환영합니다!`);
-        setTimeout(() => (window.location.href = "./mypage.html"), 400);
+
+        // ✅ 즉시 페이지 이동
+        window.location.href = "./mypage.html";
         return;
       }
 
+      /* -------------------------------
+           ❌ 로그인 실패 처리
+        --------------------------------*/
       if (data.status === "fail") {
         gaEvent("login_failed", { reason: data.message || "invalid_cred" });
         alert("이메일 또는 비밀번호가 일치하지 않습니다.");

@@ -15,11 +15,10 @@
   const LS_USER = "user";
   const LS_CART = "ik_cart";
   const LS_REV = "ik_reviews";
-  const LS_SURVEY = "surveyResult"; // 설문 결과 로컬 저장용
+  const LS_SURVEY = "surveyResult";
 
   /****************************************************
-   * ✅ Auth Utility (확장)
-   * - 회원가입 / 로그인 / 로그아웃 / 현재 사용자
+   * ✅ Auth Utility (로그인 / 로그아웃 / 현재 사용자)
    ****************************************************/
   window.Auth = {
     current() {
@@ -33,11 +32,13 @@
     saveUser(userObj) {
       if (!userObj || !userObj.email) return;
       localStorage.setItem(LS_USER, JSON.stringify(userObj));
+      updateHeader();
     },
 
     login(data) {
-      // data = {name, gender, age, email, plate?}
+      if (!data || !data.email) return;
       localStorage.setItem(LS_USER, JSON.stringify(data));
+      localStorage.setItem("justLoggedIn", "1"); // ✅ 플래그 저장
       toast(`${data.name || "회원"}님, 환영합니다!`);
       updateHeader();
       return data;
@@ -142,21 +143,25 @@
         await navigator.clipboard.writeText(url);
         toast("링크가 복사되었습니다");
       }
-    } catch {
-      /* cancelled */
-    }
+    } catch {}
   };
 })();
 
 /****************************************************
- * ✅ 로그인 상태 감지 및 헤더 토글 (공통)
+ * ✅ 로그인 상태 감지 및 헤더 토글
  ****************************************************/
 document.addEventListener("DOMContentLoaded", () => {
   updateHeader();
+
+  // ✅ 로그인 직후 헤더 재렌더링 보정
+  if (localStorage.getItem("justLoggedIn")) {
+    localStorage.removeItem("justLoggedIn");
+    setTimeout(updateHeader, 200);
+  }
 });
 
 function updateHeader() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user") || "null");
   const nav = document.querySelector(".nav");
   if (!nav) return;
 
@@ -223,7 +228,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target === modal) closeModal();
   });
 
-  // 클릭 이벤트 감지 (버튼 텍스트 기반)
   document.body.addEventListener("click", (e) => {
     const t = e.target.closest("button, a");
     if (!t) return;
