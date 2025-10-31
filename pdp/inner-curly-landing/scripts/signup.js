@@ -1,86 +1,175 @@
+// scripts/signup.js
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("signup-form");
+  if (!form) return;
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
+  // ======= 비밀번호 안내 문구 삽입 =======
+  const pwInput = form.querySelector('input[name="password"]');
+  if (pwInput) {
+    const notice = document.createElement("p");
+    notice.textContent = "※ 모든 비밀번호는 암호화되어 안전하게 저장됩니다.";
+    notice.style.fontSize = "12px";
+    notice.style.color = "#666";
+    notice.style.marginTop = "4px";
+    pwInput.insertAdjacentElement("afterend", notice);
+  }
 
-    const name = form.name.value.trim();
-    const gender = form.gender.value;
-    const age = form.age.value.trim();
-    const email = form.email.value.trim();
+  const submitBtn = form.querySelector('button[type="submit"]');
 
-    if (!name || !gender || !age || !email) {
-      alert("모든 항목을 입력해주세요!");
-      return;
+  // ======= 유틸: 버튼 로딩 상태 토글 =======
+  function setLoading(isLoading) {
+    if (!submitBtn) return;
+    submitBtn.disabled = isLoading;
+    submitBtn.dataset.loading = isLoading ? "1" : "0";
+    if (isLoading) {
+      submitBtn._origText = submitBtn.textContent;
+      submitBtn.textContent = "처리 중...";
+    } else {
+      submitBtn.textContent = submitBtn._origText || "다음";
     }
+  }
 
-    // ✅ localStorage 저장
-    localStorage.setItem(
-      "signupData",
-      JSON.stringify({ name, gender, age, email })
-    );
+  // ======= 유틸: 기본 검증 =======
+  const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  const isValidAge = (v) => {
+    const n = Number(v);
+    return Number.isInteger(n) && n >= 10 && n <= 100;
+  };
 
-    // ✅ survey.html로 이동
-    window.location.href = "./survey.html";
-  });
-});
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("signup-form");
+  // ======= 유틸: SHA-256 해시 함수 =======
+  async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
 
+  // ======= 유틸: GA4 이벤트 =======
+  function gaEvent(name, params = {}) {
+    if (typeof window.gtag === "function") {
+      window.gtag("event", name, params);
+    }
+  }
+
+  // ======= 유틸: fetch 타임아웃 =======
+  async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(url, { ...options, signal: controller.signal });
+      clearTimeout(id);
+      return res;
+    } catch (e) {
+      clearTimeout(id);
+      throw e;
+    }
+  }
+
+  // ======= 폼 제출 =======
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const name = form.name.value.trim();
-    const gender = form.gender.value;
-    const age = form.age.value.trim();
-    const email = form.email.value.trim();
+    const name = (form.name?.value || "").trim();
+    const gender = form.gender?.value || "";
+    const age = (form.age?.value || "").trim();
+    const email = (form.email?.value || "").trim();
+    const password = (form.password?.value || "").trim();
 
-    if (!name || !gender || !age || !email) {
-      alert("모든 항목을 입력해주세요!");
+    // ======= 1차 검증 =======
+    if (!name || !gender || !age || !email || !password) {
+      alert("모든 항목을 입력해주세요.");
+      return;
+    }
+    if (!isValidAge(age)) {
+      alert("나이는 10~100 사이의 정수로 입력해주세요.");
+      return;
+    }
+    if (!isEmail(email)) {
+      alert("올바른 이메일 형식이 아닙니다.");
+      return;
+    }
+    // ======= 비밀번호 검증 (6자 + 숫자 + 특수문자) =======
+    if (password.length < 6) {
+      alert("비밀번호는 최소 6자 이상 입력해주세요.");
+      return;
+    }
+    if (!/[0-9]/.test(password)) {
+      alert("비밀번호에 숫자를 1자 이상 포함해주세요.");
+      return;
+    }
+    if (!/[!@#$%^&*(),.?\":{}|<>]/.test(password)) {
+      alert("비밀번호에 특수문자를 1자 이상 포함해주세요.");
       return;
     }
 
-    // ✅ 회원가입 데이터 구성
-    const signupData = {
+    // ======= 비밀번호 해시 변환 =======
+    const hashedPw = await hashPassword(password);
+
+    // ======= 전송 데이터 구성 =======
+    const payload = {
       action: "signup",
       name,
       gender,
       age,
       email,
-      plate: "pending", // 아직 설문 전이므로 임시 저장
-      answers: JSON.stringify([]), // 추후 survey.js에서 업데이트 예정
+      password: hashedPw, // 해시값 저장
+      plate: "pending", // 설문 전
+      answers: JSON.stringify([]),
     };
 
+    setLoading(true);
+    gaEvent("signup_submit_clicked", {
+      page_title: document.title || "signup",
+      method: "web_form",
+    });
+
     try {
-      // ✅ Google Apps Script Web App 호출
-      const res = await fetch(
-        "https://script.google.com/macros/s/AKfycbzjitiIfs34h98FrAQLKkzTa9_4ZhAv_2K4xfJu0CY9S9dy2R0RoWfyLM_iDKRYycUOmg/exec",
+      const res = await fetchWithTimeout(
+        "https://script.google.com/macros/s/AKfycbyOLUb6htNaFYStyEJ2evTdOf_ZhekMP8RipDg02wB7CdP-XOzZZX5wL-UbvCu_JDHcKg/exec",
         {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams(signupData),
-        }
+          body: new URLSearchParams(payload),
+        },
+        15000
       );
 
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
 
       if (data.status === "success") {
-        // ✅ 로컬스토리지 저장 (다음 설문 단계에서 재사용)
         localStorage.setItem(
           "signupData",
           JSON.stringify({ name, gender, age, email })
         );
 
-        alert(`${name}님, 회원가입이 완료되었습니다!`);
-        window.location.href = "./survey.html"; // 다음 단계로 이동
-      } else if (data.status === "duplicate") {
-        alert("이미 가입된 이메일입니다.");
-      } else {
-        alert("오류 발생: " + (data.message || "등록 실패"));
+        gaEvent("signup_success", { page_title: document.title || "signup" });
+        alert(`${name}님, 회원가입이 완료되었습니다.`);
+        window.location.href = "./survey.html";
+        return;
       }
+
+      if (data.status === "duplicate") {
+        gaEvent("signup_duplicate", {
+          email_domain: email.split("@")[1] || "",
+        });
+        alert("이미 가입된 이메일입니다. 로그인해 주세요.");
+        return;
+      }
+
+      gaEvent("signup_failed", { reason: data.message || "unknown" });
+      alert("오류가 발생했습니다: " + (data.message || "등록 실패"));
     } catch (err) {
-      console.error("서버 통신 오류:", err);
-      alert("서버와의 통신에 실패했습니다. 잠시 후 다시 시도해주세요.");
+      console.error(err);
+      gaEvent("signup_network_error", { message: String(err?.message || err) });
+      if (err?.name === "AbortError") {
+        alert("서버 응답이 지연되고 있습니다. 잠시 후 다시 시도해주세요.");
+      } else {
+        alert("서버 통신 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+      }
+    } finally {
+      setLoading(false);
     }
   });
 });
