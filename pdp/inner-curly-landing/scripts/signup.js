@@ -89,7 +89,6 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("올바른 이메일 형식이 아닙니다.");
       return;
     }
-    // ======= 비밀번호 검증 (6자 + 숫자 + 특수문자) =======
     if (password.length < 6) {
       alert("비밀번호는 최소 6자 이상 입력해주세요.");
       return;
@@ -113,8 +112,8 @@ document.addEventListener("DOMContentLoaded", () => {
       gender,
       age,
       email,
-      password: hashedPw, // 해시값 저장
-      plate: "pending", // 설문 전
+      password: hashedPw,
+      plate: "pending",
       answers: JSON.stringify([]),
     };
 
@@ -139,14 +138,20 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
 
       if (data.status === "success") {
+        // ✅ localStorage에 user 정보 저장 (자동 로그인용)
         localStorage.setItem(
-          "signupData",
+          "user",
           JSON.stringify({ name, gender, age, email })
         );
 
         gaEvent("signup_success", { page_title: document.title || "signup" });
         alert(`${name}님, 회원가입이 완료되었습니다.`);
-        window.location.href = "./survey.html";
+
+        // ✅ 약간의 딜레이 후 마이페이지 이동 (헤더 반영 위해)
+        setTimeout(() => {
+          window.location.href = "./mypage.html";
+        }, 300);
+
         return;
       }
 
@@ -173,21 +178,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-// scripts/signup.js
-function signupUser(event) {
-  event.preventDefault();
-
-  const form = document.getElementById("signup-form");
-  const formData = new FormData(form);
-  const user = Object.fromEntries(formData.entries());
-
-  // ✅ localStorage 저장
-  localStorage.setItem("user", JSON.stringify(user));
-
-  alert("회원가입이 완료되었습니다!");
-
-  // ✅ 살짝 딜레이 후 마이페이지로 이동 (common.js가 로드될 시간 확보)
-  setTimeout(() => {
-    window.location.href = "mypage.html";
-  }, 300);
-}

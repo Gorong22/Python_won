@@ -1466,3 +1466,124 @@ img {
     font-size: 13px;
   }
 }
+/* ----------------------------------------------------
+   22. MY PAGE (마이페이지)
+   ---------------------------------------------------- */
+
+/* 전체 페이지 구조 */
+.mypage .card {
+  margin-bottom: 18px;
+}
+
+/* 내 정보 */
+#section-profile {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+#section-profile h2 {
+  color: var(--kurly);
+  font-weight: 800;
+}
+#user-info {
+  background: #fbf9fd;
+  border: 1px solid #eee3f3;
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-top: 12px;
+  text-align: left;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+  box-shadow: 0 3px 10px rgba(95, 0, 128, 0.05);
+}
+#user-info h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--kurly);
+}
+
+/* 로그아웃 버튼 */
+#btn-logout {
+  margin-top: 12px;
+  border: 1.5px solid var(--kurly);
+  color: var(--kurly);
+  background: #fff;
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(95, 0, 128, 0.1);
+  transition: all 0.15s ease;
+}
+#btn-logout:hover {
+  background: var(--kurly);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(95, 0, 128, 0.2);
+}
+
+/* 서베이 결과 */
+#section-survey {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+#section-survey h3 {
+  color: var(--kurly);
+  font-weight: 800;
+  text-align: left;
+  margin-bottom: 12px;
+}
+#survey-result {
+  background: #fbf9fd;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 14px;
+  color: #333;
+  text-align: left;
+  line-height: 1.6;
+  border: 1px solid #eee3f3;
+}
+#survey-result .btn {
+  margin-top: 10px;
+}
+
+/* 추천 플레이트 */
+#section-plate {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+#section-plate h3 {
+  color: var(--kurly);
+  font-weight: 800;
+  text-align: left;
+  margin-bottom: 12px;
+}
+#plate-recommend {
+  background: #fbf9fd;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 14px;
+  color: #333;
+  border: 1px solid #eee3f3;
+  line-height: 1.6;
+}
+#plate-recommend p {
+  margin: 0;
+}
+
+/* 반응형 (모바일 전용 보완) */
+@media (max-width: 480px) {
+  #user-info,
+  #survey-result,
+  #plate-recommend {
+    font-size: 13px;
+    padding: 12px 14px;
+  }
+  #btn-logout {
+    width: 100%;
+  }
+}

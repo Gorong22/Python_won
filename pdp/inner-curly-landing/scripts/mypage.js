@@ -1,37 +1,32 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const u = Auth.current();
-  const box = document.getElementById("user-info");
-  box.textContent = u ? `${u.name} (${u.email})` : "로그인이 필요합니다.";
-  document.getElementById("btn-logout").addEventListener("click", () => {
-    Auth.logout();
-    location.href = "./index.html";
-  });
-});
 // scripts/mypage.js
 document.addEventListener("DOMContentLoaded", () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const container = document.querySelector(".mypage-info");
+  const u = Auth.current(); // common.js의 Auth 객체 사용
+  const box = document.getElementById("user-info");
 
-  if (user && user.email) {
-    container.innerHTML = `
+  // 로그인 상태에 따라 표시
+  if (u && u.email) {
+    box.innerHTML = `
       <h3>내 정보</h3>
-      <p><strong>이름:</strong> ${user.name}</p>
-      <p><strong>이메일:</strong> ${user.email}</p>
-      <p><strong>성별:</strong> ${user.gender || "-"}</p>
-      <p><strong>나이:</strong> ${user.age || "-"}</p>
-      <button class="btn btn--secondary" id="logout-btn">로그아웃</button>
+      <p><strong>이름:</strong> ${u.name}</p>
+      <p><strong>이메일:</strong> ${u.email}</p>
+      <p><strong>성별:</strong> ${u.gender || "-"}</p>
+      <p><strong>나이:</strong> ${u.age || "-"}</p>
+      <button id="btn-logout" class="btn btn--secondary">로그아웃</button>
     `;
-
-    document.getElementById("logout-btn").addEventListener("click", () => {
-      localStorage.removeItem("user");
-      alert("로그아웃 되었습니다.");
-      window.location.href = "index.html";
-    });
   } else {
-    container.innerHTML = `
+    box.innerHTML = `
       <h3>내 정보</h3>
       <p>로그인이 필요합니다.</p>
       <a href="login.html" class="btn btn--primary">로그인</a>
     `;
   }
+
+  // 로그아웃 이벤트
+  document.addEventListener("click", (e) => {
+    if (e.target && e.target.id === "btn-logout") {
+      Auth.logout();
+      alert("로그아웃 되었습니다.");
+      location.href = "./index.html";
+    }
+  });
 });

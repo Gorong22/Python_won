@@ -1,57 +1,141 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>마이페이지</title>
-  <meta name="theme-color" content="#5F0080"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css"/>
-  
-<!-- GA4 placeholder -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-XXXXXXX');
-</script>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>마이페이지 | Inner Kurly</title>
+    <meta name="theme-color" content="#5F0080" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
 
-</head>
-<body data-active="my">
-<div class="mobile-wrap">
-  <header class="app-header">
-    <button class="icon-btn" onclick="if(history.length>1)history.back();else location.href='./index.html';" aria-label="뒤로가기">←</button>
-    <a class="logo" href="./index.html"><img src="./assets/logo-innerkurly-purple.png" alt="Inner Kurly" class="logo-img"/></a>
-    <nav class="nav"><a href="./signup.html">회원가입</a><a href="./login.html">로그인</a></nav>
-  </header>
-  <div id="app-loader" class="loader active"><div class="spinner"></div></div>
+    <!-- GA4 placeholder -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-XXXXXXX");
+    </script>
+  </head>
+  <body data-active="my">
+    <div class="mobile-wrap">
+      <!-- ======================
+         HEADER
+    ======================= -->
+      <header class="app-header">
+        <button
+          class="icon-btn"
+          onclick="if(history.length>1)history.back();else location.href='./index.html';"
+          aria-label="뒤로가기"
+        >
+          ←
+        </button>
+        <a class="logo" href="./index.html">
+          <img
+            src="./assets/logo-innerkurly-purple.png"
+            alt="Inner Kurly"
+            class="logo-img"
+          />
+        </a>
+        <nav class="nav">
+          <a href="./signup.html">회원가입</a>
+          <a href="./login.html">로그인</a>
+        </nav>
+      </header>
 
-<main class="container">
-  <section class="card pad center">
-    <h2 class="h2">내 정보</h2>
-    <div id="user-info" class="text"></div>
-    <div class="row" style="justify-content:center"><button id="btn-logout" class="btn btn--ghost">로그아웃</button></div>
-  </section>
-</main>
+      <!-- 로딩 스피너 -->
+      <div id="app-loader" class="loader active">
+        <div class="spinner"></div>
+      </div>
 
-  <footer class="app-footer">
-    <div class="pay-row"><img src="./assets/payment-icons.png" alt="결제수단"/></div>
-    <p>© Inner Kurly · Daily Premium Gift</p>
-  </footer>
-  
-<nav class="bottom-nav">
-  <a href="./index.html" data-key="home"><span>🏠</span><em>홈</em></a>
-  <a href="./plates.html" data-key="plates"><span>🍽️</span><em>플레이트</em></a>
-  <a href="./tests.html" data-key="test"><span>🧪</span><em>테스트</em></a>
-  <a href="./cart.html" data-key="cart"><span>🛒</span><em>장바구니</em></a>
-  <a href="./mypage.html" data-key="my"><span>👤</span><em>마이</em></a>
-</nav>
-<script>(function(){const k=document.body.getAttribute('data-active');document.querySelectorAll('.bottom-nav a').forEach(a=>{if(a.dataset.key===k)a.classList.add('active')});})();</script>
+      <!-- ======================
+         MAIN
+    ======================= -->
+      <main class="container mypage">
+        <!-- ① 프로필 카드 -->
+        <section class="card pad center" id="section-profile">
+          <h2 class="h2">내 정보</h2>
+          <div id="user-info" class="text user-info-box">
+            <!-- JS에서 사용자 정보 렌더링 -->
+          </div>
+          <div class="row" style="justify-content: center">
+            <button id="btn-logout" class="btn btn--ghost">로그아웃</button>
+          </div>
+        </section>
 
-</div>
-<script src="./scripts/common.js"></script>
-<script src="./scripts/mypage.js"></script>
-</body>
+        <!-- ② 서베이 결과 -->
+        <section class="card pad" id="section-survey">
+          <h3 class="h3">나의 서베이 결과</h3>
+          <div id="survey-result" class="text small">
+            아직 설문 결과가 없습니다.<br />
+            <a href="./tests.html" class="btn btn--primary small"
+              >설문하러 가기</a
+            >
+          </div>
+        </section>
+
+        <!-- ③ 추천 플레이트 -->
+        <section class="card pad" id="section-plate">
+          <h3 class="h3">추천 플레이트</h3>
+          <div id="plate-recommend" class="text small">
+            <p>회원님의 서베이 결과에 따라 맞춤 플레이트를 준비 중이에요 🍽️</p>
+          </div>
+        </section>
+      </main>
+
+      <!-- ======================
+         FOOTER
+    ======================= -->
+      <footer class="app-footer">
+        <div class="pay-row">
+          <img src="./assets/payment-icons.png" alt="결제수단" />
+        </div>
+        <p>© Inner Kurly · Daily Premium Gift</p>
+      </footer>
+
+      <!-- ======================
+         BOTTOM NAV
+    ======================= -->
+      <nav class="bottom-nav">
+        <a href="./index.html" data-key="home"><span>🏠</span><em>홈</em></a>
+        <a href="./plates.html" data-key="plates"
+          ><span>🍽️</span><em>플레이트</em></a
+        >
+        <a href="./tests.html" data-key="test"
+          ><span>🧪</span><em>테스트</em></a
+        >
+        <a href="./cart.html" data-key="cart"
+          ><span>🛒</span><em>장바구니</em></a
+        >
+        <a href="./mypage.html" data-key="my"><span>👤</span><em>마이</em></a>
+      </nav>
+
+      <script>
+        (function () {
+          const k = document.body.getAttribute("data-active");
+          document.querySelectorAll(".bottom-nav a").forEach((a) => {
+            if (a.dataset.key === k) a.classList.add("active");
+          });
+        })();
+      </script>
+    </div>
+
+    <!-- ======================
+       SCRIPTS
+  ======================= -->
+    <script src="./scripts/common.js"></script>
+    <script src="./scripts/mypage.js"></script>
+  </body>
 </html>
