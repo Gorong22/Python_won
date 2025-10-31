@@ -15,8 +15,12 @@
   const LS_USER = "user";
   const LS_CART = "ik_cart";
   const LS_REV = "ik_reviews";
+  const LS_SURVEY = "surveyResult"; // 설문 결과 로컬 저장용
 
-  // ✅ Auth Utility
+  /****************************************************
+   * ✅ Auth Utility (확장)
+   * - 회원가입 / 로그인 / 로그아웃 / 현재 사용자
+   ****************************************************/
   window.Auth = {
     current() {
       try {
@@ -25,17 +29,30 @@
         return null;
       }
     },
-    login(email, name) {
-      const u = { email, name };
-      localStorage.setItem(LS_USER, JSON.stringify(u));
-      return u;
+
+    saveUser(userObj) {
+      if (!userObj || !userObj.email) return;
+      localStorage.setItem(LS_USER, JSON.stringify(userObj));
     },
+
+    login(data) {
+      // data = {name, gender, age, email, plate?}
+      localStorage.setItem(LS_USER, JSON.stringify(data));
+      toast(`${data.name || "회원"}님, 환영합니다!`);
+      return data;
+    },
+
     logout() {
       localStorage.removeItem(LS_USER);
+      localStorage.removeItem(LS_SURVEY);
+      alert("로그아웃 되었습니다.");
+      location.href = "./index.html";
     },
   };
 
-  // ✅ Cart Utility
+  /****************************************************
+   * ✅ Cart Utility
+   ****************************************************/
   window.Cart = {
     list() {
       try {
@@ -55,7 +72,9 @@
     },
   };
 
-  // ✅ Reviews Utility
+  /****************************************************
+   * ✅ Reviews Utility
+   ****************************************************/
   window.Reviews = {
     key: LS_REV,
     list(plate) {
@@ -73,7 +92,9 @@
     },
   };
 
-  // ✅ Toast Notification
+  /****************************************************
+   * ✅ Toast Notification
+   ****************************************************/
   window.toast = (msg) => {
     let t = document.querySelector(".toast");
     if (!t) {
@@ -86,7 +107,9 @@
     setTimeout(() => t.classList.remove("show"), 1400);
   };
 
-  // ✅ Slider (자동 전환 + 클릭)
+  /****************************************************
+   * ✅ Slider (자동 전환 + 클릭)
+   ****************************************************/
   window.initSlider = (sel) => {
     const el = document.querySelector(sel);
     if (!el) return;
@@ -106,7 +129,9 @@
     go(0);
   };
 
-  // ✅ 공유 기능
+  /****************************************************
+   * ✅ 공유 기능
+   ****************************************************/
   window.sharePage = async (title = document.title, url = location.href) => {
     try {
       if (navigator.share) {
@@ -146,9 +171,7 @@ function updateHeader() {
     logoutLink.href = "#";
     logoutLink.textContent = "로그아웃";
     logoutLink.addEventListener("click", () => {
-      localStorage.removeItem("user");
-      alert("로그아웃 되었습니다.");
-      location.href = "index.html";
+      Auth.logout();
     });
 
     nav.appendChild(myLink);
@@ -167,3 +190,58 @@ function updateHeader() {
     nav.appendChild(login);
   }
 }
+/****************************************************
+ * ✅ 공통: 구매/결제 관련 버튼 전역 팝업 처리
+ ****************************************************/
+document.addEventListener("DOMContentLoaded", () => {
+  // 모달 HTML 동적 삽입 (없으면 추가)
+  if (!document.getElementById("demo-modal")) {
+    const modalHTML = `
+      <div id="demo-modal" class="modal-backdrop" style="display:none;">
+        <div class="modal">
+          <header>💜 Inner Kurly Demo</header>
+          <div class="body">
+            <p style="line-height:1.6;font-size:15px;">
+              현재는 <strong>데모 버전</strong>입니다.<br/>
+              정식 출시 후 더욱 편리한 서비스를 만나보실 수 있습니다 ✨
+            </p>
+          </div>
+          <div class="footer">
+            <button class="btn btn--primary" id="close-demo">확인</button>
+          </div>
+        </div>
+      </div>`;
+    document.body.insertAdjacentHTML("beforeend", modalHTML);
+  }
+
+  const modal = document.getElementById("demo-modal");
+  const closeBtn = document.getElementById("close-demo");
+
+  // 모달 닫기
+  const closeModal = () => (modal.style.display = "none");
+  closeBtn.addEventListener("click", closeModal);
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  // 클릭 이벤트 감지 (버튼 텍스트 기반)
+  document.body.addEventListener("click", (e) => {
+    const t = e.target;
+    if (!t || !t.closest("button, a")) return;
+    const text = (t.textContent || "").trim();
+
+    // 구매/결제 관련 키워드 감지
+    const triggerWords = [
+      "구매",
+      "결제",
+      "장바구니",
+      "구독",
+      "주문",
+      "정기배송",
+    ];
+    if (triggerWords.some((w) => text.includes(w))) {
+      e.preventDefault();
+      modal.style.display = "flex";
+    }
+  });
+});

@@ -3,9 +3,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const u = Auth.current(); // common.js의 Auth 객체 사용
   const box = document.getElementById("user-info");
   const surveyBox = document.getElementById("survey-result");
-  // ✅ HTML의 id와 일치시킴: plate-recommend
   const plateBox = document.getElementById("plate-recommend");
 
+  // ✅ 루션 체험 버튼 영역 동적 추가
+  const lutionSection = document.createElement("section");
+  lutionSection.classList.add("card", "pad", "center");
+  lutionSection.id = "lution-section";
+  document.querySelector("main.container").appendChild(lutionSection);
+
+  /* -------------------------------
+     ✅ 로그인 상태일 때
+  --------------------------------*/
   if (u && u.email) {
     box.innerHTML = `
       <h3>내 정보</h3>
@@ -16,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <button id="btn-logout" class="btn btn--secondary">로그아웃</button>
     `;
 
-    // ✅ 시트 호출 ❌ → 로컬스토리지 ✅
+    // ✅ 로컬 스토리지에서 설문 결과 가져오기
     const surveyData = JSON.parse(localStorage.getItem("surveyResult") || "{}");
     const plate =
       surveyData.plate || (u.plate ? String(u.plate).toLowerCase() : "");
@@ -24,17 +32,48 @@ document.addEventListener("DOMContentLoaded", () => {
     if (plate) {
       surveyBox.innerHTML = `
         <p>회원님의 서베이 결과는 <strong>${plate}</strong> Plate 입니다 💫</p>
-        <a href="plate-${plate}.html" class="btn btn--primary">추천 플레이트 보러가기</a>
+        <a href="plate-${plate}.html" class="btn btn--primary">
+          추천 플레이트 보러가기
+        </a>
       `;
       plateBox.innerHTML = `<p>${getPlateMessage(plate)}</p>`;
+
+      // ✅ 루션 체험 버튼 활성화
+      lutionSection.innerHTML = `
+        <h3 class="h3">루션 앱 체험</h3>
+        <p class="text small">회원님의 ${plate} 루틴에 맞는 루션 체험을 시작해보세요 🌿</p>
+        <button id="btn-lution" class="btn btn--primary">루션 체험하러 가기</button>
+      `;
+
+      document.getElementById("btn-lution").addEventListener("click", () => {
+        // 로그인 보호 + 세그멘테이션 기반 이동
+        localStorage.setItem(
+          "lutionAccess",
+          JSON.stringify({
+            email: u.email,
+            plate,
+            timestamp: new Date().toISOString(),
+          })
+        );
+        window.location.href = "./lution.html";
+      });
     } else {
       surveyBox.innerHTML = `
         <p>아직 설문 결과가 없습니다.</p>
         <a href="survey.html" class="btn btn--primary">설문하러 가기</a>
       `;
       plateBox.innerHTML = `<p>회원님의 서베이 결과에 따라 맞춤 플레이트를 준비 중이에요 🍱</p>`;
+      lutionSection.innerHTML = `
+        <h3 class="h3">루션 앱 체험</h3>
+        <p class="text small">설문을 완료하시면 루션 체험이 열립니다 ✨</p>
+        <button class="btn btn--ghost" disabled>설문 먼저 진행해주세요</button>
+      `;
     }
   } else {
+
+  /* -------------------------------
+     ❌ 비로그인 상태
+  --------------------------------*/
     box.innerHTML = `
       <h3>내 정보</h3>
       <p>로그인이 필요합니다.</p>
@@ -42,18 +81,26 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     surveyBox.innerHTML = `<p>서베이 결과를 보려면 로그인 해주세요.</p>`;
     plateBox.innerHTML = `<p>로그인 후 맞춤 플레이트를 확인할 수 있습니다.</p>`;
+    lutionSection.innerHTML = `
+      <h3 class="h3">루션 앱 체험</h3>
+      <p class="text small">로그인 후 루션 체험을 이용하실 수 있습니다.</p>
+      <a href="login.html" class="btn btn--primary">로그인하러 가기</a>
+    `;
   }
 
-  // 로그아웃
+  /* -------------------------------
+     ✅ 로그아웃 이벤트
+  --------------------------------*/
   document.addEventListener("click", (e) => {
     if (e.target && e.target.id === "btn-logout") {
       Auth.logout();
-      alert("로그아웃 되었습니다.");
-      location.href = "./index.html";
     }
   });
 });
 
+/****************************************************
+ * ✅ 플레이트별 문구
+ ****************************************************/
 function getPlateMessage(type) {
   const t = String(type).toLowerCase();
   if (t === "glow") return "활력을 되찾고 싶은 분께 Glow Plate를 추천드려요 ✨";

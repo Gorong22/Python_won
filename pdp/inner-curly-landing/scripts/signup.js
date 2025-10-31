@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const submitBtn = form.querySelector('button[type="submit"]');
 
   /* -------------------------------
-     ✅ 유틸: 로딩 상태 토글
+     ✅ 로딩 상태 토글
   --------------------------------*/
   function setLoading(isLoading) {
     if (!submitBtn) return;
@@ -150,21 +150,21 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
 
+      // ---------------- 성공 처리 ----------------
       if (data.status === "success") {
-        // ✅ localStorage 저장 (자동 로그인 + 이후 서베이 연결)
+        // ✅ Auth 구조 반영 (자동 로그인)
         const userData = { name, gender, age, email };
-        localStorage.setItem("user", JSON.stringify(userData));
+        Auth.saveUser(userData);
 
         gaEvent("signup_success", { page_title: document.title || "signup" });
         alert(
-          `${name}님, 회원가입이 완료되었습니다.\n지금 바로 심리 테스트를 진행해볼까요?`
+          `${name}님, 회원가입이 완료되었습니다.\n지금 바로 설문을 진행해볼까요?`
         );
 
-        // ✅ 회원가입 후 → survey.html 로 이동
+        // ✅ 다음 단계: survey.html 이동
         setTimeout(() => {
           window.location.href = "./survey.html";
-        }, 300);
-
+        }, 400);
         return;
       }
 
@@ -174,6 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
           email_domain: email.split("@")[1] || "",
         });
         alert("이미 가입된 이메일입니다. 로그인해 주세요.");
+        location.href = "./login.html";
         return;
       }
 
