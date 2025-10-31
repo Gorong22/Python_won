@@ -14,8 +14,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const solution = document.getElementById("result-solution");
   const goPlate = document.getElementById("go-plate");
 
+  // ✅ 회원가입 정보 불러오기
   const signupData = JSON.parse(localStorage.getItem("signupData")) || {};
   const name = signupData.name || "회원님";
+  const email =
+    signupData.email || prompt("회원가입 시 사용한 이메일을 입력해주세요");
 
   // 질문 세트
   const questions = [
@@ -93,9 +96,10 @@ document.addEventListener("DOMContentLoaded", () => {
         options.forEach((el) => el.classList.remove("selected"));
         opt.classList.add("selected");
 
-        // ✅ 선택한 텍스트로 저장
+        // ✅ 실제 선택지 텍스트 저장
         answers[current] = q.a[parseInt(opt.dataset.index)];
 
+        // 클릭 후 다음 문항으로 이동
         setTimeout(() => {
           if (current < questions.length - 1) {
             current++;
@@ -119,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function showResult() {
-    const sum = answers.reduce((a, _, i) => a + i, 0); // 단순 점수 계산
+    const sum = answers.reduce((a, _, i) => a + i, 0);
     let plate = "glow";
 
     if (sum >= 15) plate = "balance";
@@ -177,15 +181,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     modal.style.display = "flex";
 
-    // ✅ 로컬스토리지 저장 (마이페이지용)
+    // ✅ localStorage에 결과 저장 (마이페이지용)
     localStorage.setItem("surveyResult", JSON.stringify({ plate, answers }));
 
-    // ✅ Apps Script로 설문결과 전송 (백엔드 저장)
-    if (signupData.email) {
-      sendSurveyResult(signupData.email, plate, answers);
+    // ✅ Apps Script로 설문 결과 전송 (시트 업데이트)
+    if (email) {
+      sendSurveyResult(email, plate, answers);
     }
 
-    // ✅ 이동 버튼
+    // ✅ 플레이트 페이지 이동 버튼
     goPlate.onclick = () => {
       window.location.href = `./plate-${plate}.html`;
     };
