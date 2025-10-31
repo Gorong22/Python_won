@@ -15,7 +15,7 @@
     />
     <link rel="stylesheet" href="./styles.css" />
 
-    <!-- GA4 placeholder -->
+    <!-- GA4 -->
     <script
       async
       src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"
@@ -29,8 +29,10 @@
       gtag("config", "G-XXXXXXX");
     </script>
   </head>
+
   <body data-active="home">
     <div class="mobile-wrap">
+      <!-- HEADER -->
       <header class="app-header">
         <button
           class="icon-btn"
@@ -39,20 +41,27 @@
         >
           ←
         </button>
-        <a class="logo" href="./index.html"
-          ><img
+
+        <a class="logo" href="./index.html">
+          <img
             src="./assets/logo-innerkurly-purple.png"
             alt="Inner Kurly"
             class="logo-img"
-        /></a>
+          />
+        </a>
+
         <nav class="nav">
-          <a href="./signup.html">회원가입</a><a href="./login.html">로그인</a>
+          <a href="./signup.html">회원가입</a>
+          <a id="login-btn" href="./login.html">로그인</a>
+          <a id="logout-btn" href="#" style="display: none">로그아웃</a>
         </nav>
       </header>
+
       <div id="app-loader" class="loader active">
         <div class="spinner"></div>
       </div>
 
+      <!-- MAIN -->
       <main class="container">
         <section class="slider" id="hero">
           <div class="slides">
@@ -70,10 +79,6 @@
             </div>
           </div>
         </section>
-        <div
-          class="row"
-          style="justify-content: space-between; margin: 8px 0 14px"
-        ></div>
 
         <section class="card pad center">
           <span class="badge">5분 심리·루틴 테스트</span>
@@ -93,9 +98,10 @@
             공유
           </button>
         </div>
+
         <section class="grid-2">
-          <a class="card" href="./plate-glow.html"
-            ><img
+          <a class="card" href="./plate-glow.html">
+            <img
               class="compact-img"
               src="./assets/plate-glow-hero.png"
               alt="Glow"
@@ -103,10 +109,11 @@
             <div class="pad">
               <h3 class="h3">Glow</h3>
               <p class="small">피부 컨디션 케어</p>
-            </div></a
-          >
-          <a class="card" href="./plate-slim.html"
-            ><img
+            </div>
+          </a>
+
+          <a class="card" href="./plate-slim.html">
+            <img
               class="compact-img"
               src="./assets/plate-slim-hero.png"
               alt="Slim"
@@ -114,10 +121,11 @@
             <div class="pad">
               <h3 class="h3">Slim</h3>
               <p class="small">가벼운 컨디션</p>
-            </div></a
-          >
-          <a class="card" href="./plate-detox.html"
-            ><img
+            </div>
+          </a>
+
+          <a class="card" href="./plate-detox.html">
+            <img
               class="compact-img"
               src="./assets/plate-detox-hero.png"
               alt="Detox"
@@ -125,10 +133,11 @@
             <div class="pad">
               <h3 class="h3">Detox</h3>
               <p class="small">정화/리셋</p>
-            </div></a
-          >
-          <a class="card" href="./plate-balance.html"
-            ><img
+            </div>
+          </a>
+
+          <a class="card" href="./plate-balance.html">
+            <img
               class="compact-img"
               src="./assets/plate-balance-hero.png"
               alt="Balance"
@@ -136,14 +145,13 @@
             <div class="pad">
               <h3 class="h3">Balance</h3>
               <p class="small">일상 균형</p>
-            </div></a
-          >
+            </div>
+          </a>
         </section>
 
         <section class="subscription-section">
           <h2 class="h2">구독 플랜</h2>
           <div class="plan-grid">
-            <!-- Trial -->
             <div class="plan-card">
               <h3>TRIAL ROUTINE</h3>
               <p class="price highlight">무료 (3일)</p>
@@ -155,7 +163,6 @@
               </div>
             </div>
 
-            <!-- Weekly 3 -->
             <div class="plan-card">
               <h3>WEEKLY 3 DAYS</h3>
               <p class="price">84,000원 <span>/ 2주</span></p>
@@ -169,7 +176,6 @@
               </div>
             </div>
 
-            <!-- Weekly 5 -->
             <div class="plan-card">
               <h3>WEEKLY 5 DAYS</h3>
               <p class="price">130,000원 <span>/ 2주</span></p>
@@ -183,7 +189,6 @@
               </div>
             </div>
 
-            <!-- Monthly -->
             <div class="plan-card">
               <h3>MONTHLY ROUTINE</h3>
               <p class="price">240,000원 <span>/ 월</span></p>
@@ -235,7 +240,6 @@
           </div>
         </section>
       </main>
-      <div class="toast" aria-live="polite"></div>
 
       <footer class="app-footer">
         <div class="pay-row">
@@ -257,19 +261,17 @@
         >
         <a href="./mypage.html" data-key="my"><span>👤</span><em>마이</em></a>
       </nav>
-      <script>
-        (function () {
-          const k = document.body.getAttribute("data-active");
-          document.querySelectorAll(".bottom-nav a").forEach((a) => {
-            if (a.dataset.key === k) a.classList.add("active");
-          });
-        })();
-      </script>
     </div>
 
+    <!-- ✅ 공통 스크립트 -->
     <script src="./scripts/common.js"></script>
     <script>
-      initSlider("#hero");
+      (function () {
+        const k = document.body.getAttribute("data-active");
+        document.querySelectorAll(".bottom-nav a").forEach((a) => {
+          if (a.dataset.key === k) a.classList.add("active");
+        });
+      })();
     </script>
   </body>
 </html>

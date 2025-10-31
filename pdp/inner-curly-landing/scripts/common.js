@@ -172,3 +172,32 @@ function initSlider(selector) {
   goToSlide(0);
   startAuto();
 }
+/****************************************************
+ * ✅ 로그인 상태 감지 및 버튼 토글 (모든 HTML 공통)
+ ****************************************************/
+document.addEventListener("DOMContentLoaded", () => {
+  const loginBtn = document.getElementById("login-btn");
+  const logoutBtn = document.getElementById("logout-btn");
+
+  // 로그인 상태 확인 (localStorage)
+  const userData = JSON.parse(localStorage.getItem("signupData") || "null");
+
+  if (userData && userData.email) {
+    // 로그인 상태 → 로그아웃 버튼 표시
+    if (loginBtn) loginBtn.style.display = "none";
+    if (logoutBtn) logoutBtn.style.display = "inline-block";
+  } else {
+    // 로그아웃 상태 → 로그인 버튼 표시
+    if (loginBtn) loginBtn.style.display = "inline-block";
+    if (logoutBtn) logoutBtn.style.display = "none";
+  }
+
+  // 로그아웃 클릭 시
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("signupData");
+      alert("로그아웃 되었습니다.");
+      location.reload();
+    });
+  }
+});
