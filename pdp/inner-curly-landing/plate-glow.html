@@ -1,1078 +1,321 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Glow Plate | 이너컬리</title>
-    <script>
-      (function(h,o,t,j,a,r){
-          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-          h._hjSettings={hjid:6535845,hjsv:6};
-          a=o.getElementsByTagName('head')[0];
-          r=o.createElement('script');r.async=1;
-          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-          a.appendChild(r);
-      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-    </script>
-       <!-- ✅ Google Tag Manager -->
-       <script>
-        (function(w,d,s,l,i){
-          w[l]=w[l]||[];
-          w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
-          var f=d.getElementsByTagName(s)[0],
-              j=d.createElement(s),
-              dl=l!='dataLayer'?'&l='+l:'';
-          j.async=true;
-          j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-          f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-KWL72ML2');
-      </script>
-      <!-- End Google Tag Manager -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Glow — 플레이트</title>
+    <meta name="theme-color" content="#5F0080" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./css/styles.css" />
-  </head>
-  <body class="plate-glow pdp-main">
-     <!-- ✅ Google Tag Manager (noscript) -->
-     <noscript>
-      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWL72ML2"
-      height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
-         <!-- ✅ index.html의 Header 자동 로드 -->
-<div id="global-header"></div>
-<script>
-(function () {
-  // index.html에는 이미 헤더가 있으니 스킵
-  if (/index\.html?$/i.test(location.pathname)) return;
+    <link rel="stylesheet" href="./styles.css" />
 
-  const mount = document.getElementById("global-header");
-  if (!mount) return;
-
-  fetch("index.html")
-    .then((res) => res.text())
-    .then((html) => {
-      const doc = new DOMParser().parseFromString(html, "text/html");
-      const header = doc.querySelector("header");
-      mount.innerHTML = header ? header.outerHTML : "";
-
-      // 🔧 헤더가 DOM에 붙은 후에 이벤트 다시 연결
-      const toggle = mount.querySelector(".nav__toggle");
-      const menu   = mount.querySelector(".nav__menu");
-      if (toggle && menu) {
-        toggle.addEventListener("click", () => {
-          toggle.classList.toggle("is-open");
-          menu.classList.toggle("is-open");
-          // (선택) 메뉴 열릴 때 스크롤 잠그기
-          document.body.classList.toggle(
-            "no-scroll",
-            menu.classList.contains("is-open")
-          );
-        }, { passive: true });
+    <!-- GA4 placeholder -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
       }
-    })
-    .catch((err) => console.error("헤더 로드 실패:", err));
-})();
-</script>
-    <!-- HERO -->
-    <section class="pdp-hero-section">
-      <div class="pdp-hero-section__image-wrapper">
-        <img
-          src="./images/glow-hero.jpg"
-          alt="Glow Plate 대표 이미지"
-          class="pdp-hero-section__image"
-        />
-      </div>
-      <div class="pdp-hero-section__content">
-        <h1 class="pdp-hero-section__title">Glow Plate</h1>
-        <p class="pdp-hero-section__tagline">피부 속부터 차오르는 광채</p>
-        <p class="pdp-hero-section__description">
-          하루 한 끼, Glow Plate로 피부 탄력과 촉촉함을 관리하세요.<br />
-          콜라겐, 오메가3, 항산화 성분으로 피부 건강을 케어하는 맞춤형
-          플레이트입니다.
-        </p>
-        <div class="pdp-hero-section__actions">
-          <button class="btn btn--primary" data-product="glow-hero" data-action="subscribe">구독 시작하기</button>
-          <button class="btn btn--ghost">식단표 다운로드</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- USP -->
-    <section class="section">
-      <h2 class="section__title">Glow Plate는 이런 분께 추천합니다</h2>
-      <div class="hashtags">
-        <span>#피부탄력</span>
-        <span>#촉촉보습</span>
-        <span>#항산화케어</span>
-      </div>
-    </section>
-
-    <!-- 메뉴 -->
-    <section class="section menu">
-      <h2 class="section__title">오늘의 식단 구성</h2>
-      <div class="menu-list">
-        <div class="menu-item">
-          <img src="./images/glow-salad.jpg" alt="콜라겐 샐러드" />
-          <h4>콜라겐 샐러드</h4>
-          <p>320 kcal · 콜라겐 + 비타민C 과일</p>
-          <span class="tag">피부 탄력</span>
-        </div>
-        <div class="menu-item">
-          <img src="./images/glow-salmon.jpg" alt="연어 현미 플레이트" />
-          <h4>연어 현미 플레이트</h4>
-          <p>450 kcal · 연어 + 아보카도 + 현미밥</p>
-          <span class="tag">보습 & 오메가3</span>
-        </div>
-        <div class="menu-item">
-          <img src="./images/glow-pome.jpg" alt="석류 요거트" />
-          <h4>석류 요거트</h4>
-          <p>180 kcal · 석류 + 플레인 요거트</p>
-          <span class="tag">피부톤 개선</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- 영양 성분 -->
-    <section class="section nutrition">
-      <h2 class="section__title">영양 성분 (1일 제공량)</h2>
-      <table class="nutrition-table">
-        <tr><th>칼로리</th><td>950 kcal</td></tr>
-        <tr><th>단백질</th><td>42 g</td></tr>
-        <tr><th>탄수화물</th><td>95 g</td></tr>
-        <tr><th>지방</th><td>38 g</td></tr>
-        <tr><th>비타민 C</th><td>120% RDA</td></tr>
-        <tr><th>콜라겐</th><td>5,000 mg</td></tr>
-      </table>
-    </section>
-
-     <!-- 영양제  -->
-    <section class="section supplement glow-supplement">
-      <h2 class="section__title">함께 제공되는 영양제</h2>
-      <p class="section__subtitle">Glow Plate의 이너뷰티 시너지를 위한 영양 설계</p>
-    
-      <div class="supplement-grid">
-        <div class="supplement-card">
-          <h3>🍊 비타민 C + 콜라겐</h3>
-          <p>피부 탄력과 콜라겐 합성을 촉진해 촉촉한 피부를 유지합니다.</p>
-        </div>
-        <div class="supplement-card">
-          <h3>🫶 오메가3 (rTG형)</h3>
-          <p>피부 보습막을 강화하고 염증을 완화하여 균형 잡힌 유분·수분을 유지합니다.</p>
-        </div>
-        <div class="supplement-card">
-          <h3>💧 히알루론산 + 세라마이드</h3>
-          <p>수분 저장 능력을 높여 하루 종일 건강한 피부 컨디션을 유지합니다.</p>
-        </div>
-      </div>
-    </section>
-    
-
-           <!-- 구독 옵션 -->
-    <section class="section pricing">
-      <h2 class="section__title">구독 옵션</h2>
-      <div class="pricing__grid">
-        <div class="pricing-card" data-total-price="73000" data-days="7">
-          <h3 class="pricing-card__title">Weekly  3 DAYS(2주) </h3>
-          <p class="pricing-card__price">84,000원</p>
-          <ul class="pricing-card__features">
-            <li>주 3회, 원하는 요일 선택</li>
-            <li>첫 습관의 시작</li>
-          <p class="pricing-card__daily"></p>
-          <button class="btn btn--primary" data-product="balance-weekly" data-action="subscribe">주 3회 구독하기</button>
-        </div>
-        <div class="pricing-card" data-total-price="280000" data-days="28">
-          <h3 class="pricing-card__title">Weekly 5 DAYS <br>(2주 집중 정기 구독 (주 5회))</h3>
-          <p class="pricing-card__price">130,000원</p>
-          <ul class="pricing-card__features">
-            <li>주 5회, 평일 집중 관리</li>
-            <li>꾸준한 루틴 형성에 최적</li>
-          <p class="pricing-card__daily"></p>
-          <button class="btn btn--primary" data-product="balance-monthly" data-action="subscribe">주 5회 구독하기</button>
-        </div>
-        <div class="pricing-card" data-total-price="280000" data-days="28">
-          <h3 class="pricing-card__title">Monthly Plan <br>(4주치 일시 결제 금액 | 가장 높은 할인 적용!)</h3>
-          <p class="pricing-card__price">240,000원</p>
-          <ul class="pricing-card__features">
-            <li>주 5회 총 20회 하루라도 놓치기 싫다면</li>
-            <li>장기적인 변화를 원할 때</li>
-          <p class="pricing-card__daily"></p>
-          <button class="btn btn--primary" data-product="balance-monthly" data-action="subscribe">월간(주5회) 구독하기</button>
-        </div>
-      </div>
-    </section>
-
-
-    <!-- ✅ 챌린지 & 리워드 -->
-    <section class="section challenge">
-      <h2 class="section__title">30일 챌린지 & 리워드</h2>
-      <div class="challenge-rewards">
-        <div class="reward-card"><div class="reward-card__icon">🥗</div><h3 class="reward-card__title">30일 완주</h3><p>Glow Plate 30일 기록하면<br />뷰티 샘플팩 증정</p></div>
-        <div class="reward-card"><div class="reward-card__icon">💎</div><h3 class="reward-card__title">60일 완주</h3><p>Glow Plate 60일 완주 시<br />이너컬리 포인트 적립</p></div>
-        <div class="reward-card"><div class="reward-card__icon">🏆</div><h3 class="reward-card__title">90일 완주</h3><p>Glow Plate 90일 달성 시<br />스페셜 리워드 박스 제공</p></div>
-      </div>
-      <div class="challenge__cta">
-        <button class="btn btn--primary">챌린지 참여하기</button>
-        <p class="challenge__app-info">* 챌린지는 이너컬리 앱에서 자동 기록됩니다.</p>
-      </div>
-    </section>
-
-    <!-- 후기 -->
-    <section class="section reviews">
-      <h2 class="section__title">고객 후기</h2>
-      <div class="review-card">
-        <div class="review-card__header"><img src="./images/user1.jpg" alt="user" class="review-card__avatar"/><div class="review-card__info"><h4>김민지 (34세)</h4><p>⭐️⭐️⭐️⭐️⭐️</p></div></div>
-        <p class="review-card__quote">"2주 동안 꾸준히 먹으니 피부가 촉촉해지고 화장이 잘 먹습니다."</p>
-      </div>
-      <div class="review-card">
-        <div class="review-card__header"><img src="./images/user2.jpg" alt="user" class="review-card__avatar"/><div class="review-card__info"><h4>이서윤 (29세)</h4><p>⭐️⭐️⭐️⭐️</p></div></div>
-        <p class="review-card__quote">"아침 대용으로 챙기는데 하루 종일 피부 당김이 줄었어요."</p>
-      </div>
-    </section>
-
-    <!-- 멤버십 -->
-    <section class="section members">
-      <h2 class="section__title">이너컬리 멤버스 혜택</h2>
-      <ul class="members__badges">
-        <li>첫 구독 30% 할인</li>
-        <li>이너컬리 한정판 보냉백 증정</li>
-        <li>AI 맞춤 리포트</li>
-      </ul>
-      <div class="members__cta">
-        <button class="btn btn--primary" data-product="membership" data-action="subscribe">멤버십 구독하기</button>
-      </div>
-    </section>
-
-    <!-- Sticky CTA -->
-    <div class="sticky-footer-bar">
-      <div class="sticky-footer-bar__container">
-        <div class="sticky-footer-bar__text">
-          <strong>Glow Plate 구독</strong>
-          <span class="footer-price"></span>
-        </div>
-        <div class="sticky-footer-bar__actions">
-          <button class="btn btn--primary" data-product="glow-sticky" data-action="cart">장바구니 담기</button>
-          <button class="btn btn--ghost" data-product="glow-sticky" data-action="subscribe">바로 구매</button>
-        </div>
-      </div>
-    </div>
-
-    <script>
-     
+      gtag("js", new Date());
+      gtag("config", "G-XXXXXXX");
     </script>
-    <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrNJF9zOe87chhdAwlb0tVnO3Qk6eeqzo71fb7udZ8lzSbBgYvTKI-NyqCpTqY9e6V/exec";
+  </head>
 
-        const handleActionClick = (e) => {
-            const button = e.currentTarget;
-            const product = button.dataset.product;
-            const action = button.dataset.action;
-            const userEmail = localStorage.getItem('userEmail');
+  <body data-active="plates">
+    <div class="mobile-wrap">
+      <!-- HEADER -->
+      <header class="app-header">
+        <button
+          class="icon-btn"
+          onclick="if(history.length>1)history.back();else location.href='./index.html';"
+          aria-label="뒤로가기"
+        >
+          ←
+        </button>
+        <a class="logo" href="./index.html"
+          ><img
+            src="./assets/logo-innerkurly-purple.png"
+            alt="Inner Kurly"
+            class="logo-img"
+        /></a>
+        <nav class="nav">
+          <a href="./signup.html">회원가입</a>
+          <a href="./login.html">로그인</a>
+        </nav>
+      </header>
 
-            if (!userEmail) {
-                alert('회원가입 후 이용해주세요.');
-                window.location.href = 'signup.html';
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append("timestamp", new Date().toISOString());
-            formData.append("email", userEmail);
-            formData.append("product", product);
-            formData.append("action", action);
-
-            console.log("Sending click data:");
-            for (let [key, value] of formData.entries()) {
-                console.log(`${key}: ${value}`);
-            }
-
-            fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: formData, mode: 'no-cors' })
-            .then(() => alert('감사합니다! 선택하신 내용이 저장되었습니다.'))
-            .catch(error => console.error('Error:', error));
-        };
-
-        document.querySelectorAll('[data-product]').forEach(button => {
-            button.addEventListener('click', handleActionClick);
-        });
-    </script>
-  <!-- IK_REDESIGN_PATCH_FINAL -->
-<style>
-:root {
-    --ik-purple: #6A1B9A;
-    --ik-purple-hover: #4b0067;
-    --ik-text-sub: #777;
-    --ik-bg: #faf8fc;
-    --ik-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    --ik-radius: 12px;
-}
-html { scroll-behavior: smooth; }
-body {
-    background-color: var(--ik-bg);
-    font-family: "Noto Sans KR", sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-    color: #333;
-}
-h1, h2, h3 { word-break: keep-all; hyphens: auto; line-height: 1.2; font-weight: 700; }
-h1 { font-size: 32px; }
-h2 { font-size: 24px; }
-@media (min-width: 768px) {
-    h1 { font-size: 40px; }
-    h2 { font-size: 28px; }
-}
-@media (min-width: 1024px) {
-    h1 { font-size: 56px; }
-    h2 { font-size: 32px; }
-}
-.btn {
-    display: inline-block;
-    background: var(--ik-purple);
-    color: #fff !important;
-    border-radius: var(--ik-radius);
-    padding: 14px 28px;
-    font-weight: 600;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-.btn:hover { background: var(--ik-purple-hover); }
-
-/* Header */
-.ik-header {
-    position: sticky; top: 0; z-index: 999;
-    background: #fff;
-    padding: 0 16px;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #f0f0f0;
-}
-.ik-header-logo img { height: 30px; }
-.ik-header-nav { display: none; }
-.ik-hamburger { display: none; background: none; border: none; font-size: 28px; cursor: pointer; }
-@media (max-width: 768px) {
-    .ik-hamburger { display: block; }
-    .ik-header-nav {
-        display: none;
-        position: absolute;
-        top: 64px; left: 0; right: 0;
-        background: white;
-        box-shadow: var(--ik-shadow);
-    }
-    .ik-header-nav.is-open { display: block; }
-    .ik-header-nav a { display: block; padding: 16px; text-decoration: none; color: #333; }
-}
-@media (min-width: 769px) {
-    .ik-header { height: 72px; padding: 0 24px; }
-    .ik-header-nav { display: flex; gap: 24px; }
-    .ik-header-nav a { text-decoration: none; color: #333; font-weight: 500; }
-}
-
-/* Hero Section */
-.ik-hero {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    position: relative;
-    text-align: center;
-    color: white;
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-.ik-hero-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-.ik-hero-content h1 { text-shadow: 0 2px 12px rgba(0,0,0,.25); }
-
-/* Pricing Section */
-.ik-pricing-section { padding: 60px 16px; }
-.ik-pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 24px auto 0; }
-.ik-price-card { background: #fff; border-radius: 16px; padding: 24px; box-shadow: var(--ik-shadow); text-align: center; }
-
-/* Test Section */
-.ik-test-section { padding: 60px 16px; text-align: center; }
-.ik-test-grid { display: grid; grid-template-columns: 1fr; gap: 24px; max-width: 700px; margin: 24px auto 0; }
-.ik-test-card { background: #fff; border-radius: 16px; padding: 32px; box-shadow: var(--ik-shadow); text-decoration: none; color: inherit; transition: transform 0.2s ease; }
-.ik-test-card:hover { transform: scale(1.05); }
-@media (min-width: 768px) { .ik-test-grid { grid-template-columns: 1fr 1fr; } }
-
-/* Final CTA */
-#cta { display: none; }
-</style>
-<script>
-(function() {
-    if (window.IK_REDESIGN_APPLIED_FINAL) return;
-    window.IK_REDESIGN_APPLIED_FINAL = true;
-
-    const $ = (s) => document.querySelector(s);
-    const $$ = (s) => Array.from(document.querySelectorAll(s));
-
-    function setupGlobal() {
-        const header = $('header') || document.body.prepend(document.createElement('header'));
-        header.className = 'ik-header';
-        header.innerHTML = `
-            <a href="index.html" class="ik-header-logo"><img src="assets/logo-innerkurly-purple.png" alt="InnerKurly Logo"></a>
-            <nav class="ik-header-nav">
-                <a href="membership.html">멤버십</a>
-                <a href="index.html#plates">플레이트</a>
-                <a href="cart.html">장바구니</a>
-                <a href="signup.html">회원가입</a>
-            </nav>
-            <button class="ik-hamburger">☰</button>
-        `;
-        $('.ik-hamburger').addEventListener('click', () => $('.ik-header-nav').classList.toggle('is-open'));
-
-        const finalCTA = $('#cta');
-        if(finalCTA) finalCTA.style.display = 'none';
-    }
-
-    function setupHero() {
-        const hero = $('.hero-section');
-        if (hero) {
-            hero.classList.add('ik-hero');
-            hero.style.backgroundImage = "url('assets/hero-banner.png')";
-            hero.innerHTML = `<div class="ik-hero-content"><h1>하루 한 끼, 나를 위한 건강한 투자</h1><a href="#pricing" class="btn">구독 시작하기</a></div>`;
-        }
-    }
-
-    function setupMembershipPage() {
-        if (!location.pathname.includes('membership.html')) return;
-        const title = $('.membership-hero-section__title');
-        if (title) title.innerHTML = 'Kurly Membership<br><span style="font-size:24px;color:var(--ik-purple)">&times;</span><br>InnerKurly';
-        
-        const subtitle = $('.membership-hero-section__subtitle');
-        if (subtitle) subtitle.textContent = '월 1,900원 멤버십 + 이너컬리 구독으로 더 큰 혜택을.';
-
-        const cta = $('.membership-hero-section .btn');
-        if (cta) {
-            cta.href = 'https://www.kurly.com/member/membership';
-            cta.target = '_blank';
-            cta.rel = 'noopener';
-        }
-        
-        $$('main > .section').forEach((sec, i) => { if (i > 0) sec.remove(); });
-
-        const testSection = document.createElement('section');
-        testSection.className = 'ik-test-section';
-        testSection.innerHTML = `
-            <h2>나에게 맞는 이너뷰티 루틴을 찾아보세요</h2>
-            <div class="ik-test-grid">
-                <a href="https://lifestyle-conscious.netlify.app/" target="_blank" rel="noopener" class="ik-test-card"><h3>Lifestyle Type Test</h3><p>생활 습관으로 건강 상태를 진단하고 맞춤 솔루션을 추천받으세요.</p><span class="btn">루틴 테스트 시작하기</span></a>
-                <a href="https://skin-conscious.netlify.app/" target="_blank" rel="noopener" class="ik-test-card"><h3>Skin Personality Test</h3><p>피부 고민과 성향으로 가장 효과적인 성분을 찾아보세요.</p><span class="btn">피부 루틴 알아보기</span></a>
-            </div>`;
-        $('main').appendChild(testSection);
-    }
-
-    function setupPlatePages() {
-        if (!location.pathname.match(/plate-/)) return;
-        
-        $$('.pricing, #pricing').forEach(s => s.remove());
-
-        const pricingHTML = `
-            <h2 style="text-align:center;">플레이트 구독 가격</h2>
-            <div class="ik-pricing-grid">
-                <div class="ik-price-card"><h3>Trial Routine</h3><p>무료 (3일)</p></div>
-                <div class="ik-price-card"><h3>Weekly 3 Days</h3><p>₩45,000 / 주 (1일 ₩15,000)</p></div>
-                <div class="ik-price-card"><h3>Weekly 5 Days</h3><p>₩73,000 / 주 (1일 ₩14,600)</p></div>
-                <div class="ik-price-card"><h3>Monthly Routine</h3><p>₩280,000 / 월 (1일 ₩14,000)</p></div>
-            </div>`;
-        const pricingSection = document.createElement('section');
-        pricingSection.className = 'ik-pricing-section';
-        pricingSection.innerHTML = pricingHTML;
-        $('main').appendChild(pricingSection);
-
-        const ctas = { slim: '가벼운 루틴', glow: '빛나는 하루', balance: '균형의 시작', detox: '비우자' };
-        for (const plate in ctas) {
-            if (location.pathname.includes(`plate-${plate}`)) {
-                const btn = $('.pdp-hero-section__actions .btn--primary');
-                if (btn) btn.textContent = ctas[plate];
-            }
-        }
-    }
-    
-    function setupIndexPage() {
-        if (!location.pathname.includes('index.html')) return;
-        const ctaSection = $('#cta');
-        if (ctaSection) {
-            const testSection = document.createElement('section');
-            testSection.className = 'ik-test-section';
-            testSection.innerHTML = `
-                <h2>나에게 맞는 이너뷰티 루틴을 찾아보세요</h2>
-                <div class="ik-test-grid">
-                    <a href="https://lifestyle-conscious.netlify.app/" target="_blank" rel="noopener" class="ik-test-card"><h3>Lifestyle Type Test</h3><p>생활 습관으로 건강 상태를 진단하고 맞춤 솔루션을 추천받으세요.</p><span class="btn">루틴 테스트 시작하기</span></a>
-                    <a href="https://skin-conscious.netlify.app/" target="_blank" rel="noopener" class="ik-test-card"><h3>Skin Personality Test</h3><p>피부 고민과 성향으로 가장 효과적인 성분을 찾아보세요.</p><span class="btn">피부 루틴 알아보기</span></a>
-                </div>`;
-            ctaSection.parentElement.insertBefore(testSection, ctaSection);
-            ctaSection.remove();
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        setupGlobal();
-        setupHero();
-        setupMembershipPage();
-        setupPlatePages();
-        setupIndexPage();
-    });
-})();
-</script>
-<!-- ================= 후기 보기 섹션 (위) ================= -->
-<section class="review-display">
-  <h3>💬 고객 후기</h3>
-  <p id="averageRating" class="average-rating">평균 평점 계산 중...</p>
-  <div id="reviewList">로딩 중...</div>
-  <button id="loadMoreBtn" class="load-more">후기 더보기</button>
-</section>
-
-<!-- ================= 후기 작성 섹션 (아래) ================= -->
-<section class="review-section">
-  <h3>✨ 후기 남기기</h3>
-  <form id="reviewForm">
-    <label for="email">이메일</label>
-    <input type="email" id="email" name="email" required placeholder="your@email.com">
-
-    <label for="rating">평점</label>
-    <select id="rating" name="rating" required>
-      <option value="">선택해주세요</option>
-      <option value="5">5점 (매우 만족)</option>
-      <option value="4">4점 (만족)</option>
-      <option value="3">3점 (보통)</option>
-      <option value="2">2점 (불만족)</option>
-      <option value="1">1점 (매우 불만족)</option>
-    </select>
-
-    <label for="review">후기</label>
-    <textarea id="review" name="review" rows="4" placeholder="후기를 입력해주세요" required></textarea>
-
-    <button type="submit" id="submitBtn">후기 제출</button>
-  </form>
-
-  <!-- ✅ 로딩 상태 -->
-  <div id="loadingSpinner" class="loading-spinner" style="display:none;">
-    <div class="spinner"></div>
-    <p>후기 전송 중입니다...</p>
-  </div>
-
-  <!-- ✅ 완료 메시지 -->
-  <p id="resultMessage"></p>
-</section>
-
-<script>
-const form = document.getElementById("reviewForm");
-const loadingSpinner = document.getElementById("loadingSpinner");
-const msg = document.getElementById("resultMessage");
-const submitBtn = document.getElementById("submitBtn");
-
-// ✅ 후기 등록
-form.addEventListener("submit", function(e) {
-  e.preventDefault();
-  submitBtn.disabled = true;
-  loadingSpinner.style.display = "flex";
-  msg.innerText = "";
-
-  const formData = {
-    email: document.getElementById("email").value,
-    rating: document.getElementById("rating").value,
-    review: document.getElementById("review").value,
-    plate: document.title || "Unknown Plate"
-  };
-
-  fetch("https://script.google.com/macros/s/AKfycbySsQcyV86fNYkN0u9ixlCOmqFwqxm6o51b5mvp1MoGSfol1pK6vMeZVpHeYacGQwqFig/exec", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams(formData)
-  })
-  .then(res => res.json())
-  .then(data => {
-    loadingSpinner.style.display = "none";
-    submitBtn.disabled = false;
-
-    if (data.status === "success") {
-      form.reset();
-      msg.innerText = "💜 후기 작성이 완료되었습니다. 감사합니다!";
-    } else {
-      msg.innerText = "❌ 오류: " + (data.message || "전송 실패");
-    }
-
-    msg.style.opacity = "0";
-    msg.style.transition = "opacity 0.5s ease";
-    setTimeout(() => (msg.style.opacity = "1"), 100);
-    setTimeout(() => (msg.style.opacity = "0"), 4000);
-
-    loadReviews();
-  })
-  .catch(err => {
-    console.error("전송 중 오류:", err);
-    loadingSpinner.style.display = "none";
-    submitBtn.disabled = false;
-    msg.innerText = "❌ 오류가 발생했습니다. 다시 시도해주세요.";
-  });
-});
-
-
-// ✅ 후기 보기 + 평균 + 더보기
-let currentLimit = 3;
-
-// ✅ 이메일 익명 처리 함수
-function maskEmail(email) {
-  if (!email.includes("@")) return email;
-  const [user, domain] = email.split("@");
-  const maskedUser = user.slice(0, 4) + "****";
-  return maskedUser + "@" + domain;
-}
-
-async function loadReviews(limit = currentLimit) {
-  try {
-    const plateName = document.title || "Unknown Plate";
-    const res = await fetch(`https://script.google.com/macros/s/AKfycbySsQcyV86fNYkN0u9ixlCOmqFwqxm6o51b5mvp1MoGSfol1pK6vMeZVpHeYacGQwqFig/exec?limit=${limit}&plate=${encodeURIComponent(plateName)}`);
-    const data = await res.json();
-
-    const container = document.getElementById("reviewList");
-    const avg = document.getElementById("averageRating");
-    const btn = document.getElementById("loadMoreBtn");
-
-    avg.textContent = `⭐ 평균 평점: ${data.avgRating}점`;
-
-    if (data.reviews.length === 0) {
-      container.innerHTML = "<p>아직 등록된 후기가 없습니다.</p>";
-      btn.style.display = "none";
-      return;
-    }
-
-    container.innerHTML = data.reviews.map(r => {
-      const maskedEmail = maskEmail(r.email);
-      return `
-        <div class="review-card">
-          <div class="review-header">
-            <div class="review-top">
-              <strong>${r.rating}점</strong>
-              <span class="review-email">${maskedEmail}</span>
+      <main class="container pdp" data-plate="Glow">
+        <!-- PRODUCT HERO -->
+        <section class="card pad">
+          <div class="row" style="gap: 12px; align-items: center">
+            <img
+              class="compact-img"
+              src="./assets/plate-glow-hero.png"
+              alt="Glow"
+              style="width: 45%"
+            />
+            <div class="col" style="flex: 1">
+              <h1 class="h2">Glow</h1>
+              <p class="text">피부 컨디션을 위한 데일리 루틴</p>
+              <div class="row">
+                <a class="btn btn--primary" href="#plans">구독하기</a>
+                <button
+                  class="btn"
+                  onclick="sharePage(document.title, location.href)"
+                >
+                  공유
+                </button>
+                <button
+                  class="btn"
+                  onclick="Cart.add({sku:'PLATE-glow-W3',name:'Glow W3',price:84000,plan:'W3'})"
+                >
+                  장바구니
+                </button>
+              </div>
             </div>
-            <p class="review-text">"${r.review}"</p>
-            <span class="review-date">${new Date(r.timestamp).toLocaleDateString()}</span>
           </div>
-        </div>
-      `;
-    }).join("");
+        </section>
 
-    btn.style.display = (data.reviews.length < limit) ? "none" : "block";
-  } catch (err) {
-    console.error("후기 불러오기 실패:", err);
-  }
-}
+        <!-- 구독 플랜 -->
+        <section class="card pad">
+          <h2 class="h2 center">구독 플랜</h2>
+          <div id="plans">
+            <div class="plan">
+              <h4>TRIAL ROUTINE</h4>
+              <div class="p">무료 <span class="small">(3일)</span></div>
+              <div class="sub">멤버스 가입 시 자동 제공</div>
+              <div class="desc">웰컴키트·보냉팩 포함</div>
+              <div class="actions">
+                <button class="btn" disabled>이벤트 제공</button>
+              </div>
+            </div>
+            <div class="plan">
+              <h4>WEEKLY 3 DAYS</h4>
+              <div class="p">84,000원 <span class="small">/ 2주</span></div>
+              <div class="sub">(1회 14,000원)</div>
+              <div class="desc">주 3회, 원하는 요일 선택 · 첫 습관 시작</div>
+              <div class="actions">
+                <button class="btn btn--primary">구독하기</button>
+                <button class="btn">장바구니</button>
+              </div>
+            </div>
+            <div class="plan">
+              <h4>WEEKLY 5 DAYS</h4>
+              <div class="p">130,000원 <span class="small">/ 2주</span></div>
+              <div class="sub">(1일 13,000원)</div>
+              <div class="desc">주 5회, 집중 관리 · 꾸준한 루틴 형성</div>
+              <div class="actions">
+                <button class="btn btn--primary">구독하기</button>
+                <button class="btn">장바구니</button>
+              </div>
+            </div>
+            <div class="plan">
+              <h4>MONTHLY ROUTINE</h4>
+              <div class="p">240,000원 <span class="small">/ 월</span></div>
+              <div class="sub">(1일 12,000원)</div>
+              <div class="desc">주 5회 총 20회 · 장기 변화 목표</div>
+              <div class="actions">
+                <button class="btn btn--primary">구독하기</button>
+                <button class="btn">장바구니</button>
+              </div>
+            </div>
+          </div>
+        </section>
 
-document.getElementById("loadMoreBtn").addEventListener("click", () => {
-  currentLimit += 3;
-  loadReviews(currentLimit);
-});
+      <!-- ✨ Glow 하이라이트 섹션 -->
+<section class="card pad">
+  <h2 class="h2">이런 점이 좋아요!</h2>
 
-window.addEventListener("DOMContentLoaded", () => loadReviews());
-</script>
-<!-- ================= 다른 플레이트 둘러보기 ================= -->
-<section class="other-plates-section">
-  <h3>🍽️ 다른 플레이트 둘러보기</h3>
-  <p class="other-plates-subtitle">나에게 맞는 다른 플레이트를 확인해보세요</p>
-  <div id="otherPlatesList" class="other-plates-grid">
-    <!-- 자동으로 생성됩니다 -->
+  <!-- 🥗 플레이트 구성 -->
+  <div class="highlight-group">
+    <h3 class="highlight-title">🍱 플레이트 구성</h3>
+    <div class="highlight-grid">
+      <div class="highlight-item" onclick="openDetail('meal1')">
+        <img src="./assets/glow-meal-salmon.png" alt="연어 스테이크" />
+        <p>연어 스테이크</p>
+      </div>
+      <div class="highlight-item" onclick="openDetail('meal2')">
+        <img src="./assets/glow-meal-pumpkin.png" alt="단호박 리조또" />
+        <p>단호박 리조또</p>
+      </div>
+      <div class="highlight-item" onclick="openDetail('meal3')">
+        <img src="./assets/glow-meal-yogurt.png" alt="블루베리 요거트볼" />
+        <p>블루베리 요거트볼</p>
+      </div>
+    </div>
   </div>
+
+  <!-- 💊 영양제 구성 -->
+  <div class="highlight-group">
+    <h3 class="highlight-title">💊 영양제 구성</h3>
+    <div class="highlight-grid">
+      <div class="highlight-item" onclick="openDetail('supp1')">
+        <img src="./assets/glow-supp-collagen.png" alt="콜라겐 펩타이드" />
+        <p>콜라겐 펩타이드</p>
+      </div>
+      <div class="highlight-item" onclick="openDetail('supp2')">
+        <img src="./assets/glow-supp-vitaminC.png" alt="비타민 C" />
+        <p>비타민 C</p>
+      </div>
+      <div class="highlight-item" onclick="openDetail('supp3')">
+        <img src="./assets/glow-supp-hyaluronic.png" alt="히알루론산" />
+        <p>히알루론산</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📊 설계 철학 -->
+  <div class="info-card pretty">
+    <h3>📊 설계 철학</h3>
+    <p>
+      피부는 단순한 미용이 아니라 <strong>영양 대사</strong>의 결과입니다.<br />
+      Glow 플레이트는 <strong>단백질 기반 식단</strong>에 수분·항산화 밸런스를 더해  
+      <strong>피부장벽·탄력·모공</strong>을 안정화시키는 루틴으로 설계되었습니다.  
+      이너컬리와 협력 병원이 함께 연구한 데이터 기반의 조합이에요.
+    </p>
+  </div>
+
+  <button class="btn-diet" id="openDiet">식단표 보기</button>
+  <p class="small center" style="margin-top:10px; color:#777">
+    ※ 3일·5일 플랜은 선택 요일 기준으로 자동 조정됩니다.
+  </p>
 </section>
 
-<style>
-.other-plates-section {
-  max-width: 1200px;
-  margin: 60px auto;
-  padding: 40px 20px;
-  text-align: center;
-  background: linear-gradient(135deg, #f5f0ff 0%, #faf5ff 100%);
-  border-radius: 20px;
-}
-
-.other-plates-section h3 {
-  color: #9b6bcc;
-  font-size: 1.8em;
-  margin-bottom: 10px;
-  font-weight: 700;
-}
-
-.other-plates-subtitle {
-  color: #666;
-  margin-bottom: 30px;
-  font-size: 0.95em;
-}
-
-.other-plates-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.plate-card {
-  background: white;
-  border-radius: 15px;
-  padding: 25px;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  border: 2px solid transparent;
-}
-
-.plate-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(155,107,204,0.2);
-  border-color: #9b6bcc;
-}
-
-.plate-card-icon {
-  font-size: 3em;
-  margin-bottom: 15px;
-}
-
-.plate-card h4 {
-  color: #9b6bcc;
-  font-size: 1.3em;
-  margin-bottom: 10px;
-  font-weight: 700;
-}
-
-.plate-card-tagline {
-  color: #666;
-  font-size: 0.9em;
-  margin-bottom: 15px;
-  line-height: 1.5;
-}
-
-.plate-card-features {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.plate-tag {
-  background: #f0e6ff;
-  color: #7d4fa8;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 0.8em;
-  font-weight: 500;
-}
-
-@media (max-width: 768px) {
-  .other-plates-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-  
-  .other-plates-section {
-    margin: 40px 15px;
-    padding: 30px 15px;
-  }
-}
-</style>
-
-<script>
-// 플레이트 정보 데이터
-const platesData = {
-  balance: {
-    name: 'Balance Plate',
-    icon: '⚖️',
-    tagline: '영양 밸런스를 위한 가장 기본의 선택',
-    tags: ['균형영양', '심플라이프', '매일건강'],
-    url: 'plate-balance.html'
-  },
-  detox: {
-    name: 'Detox Plate',
-    icon: '🌿',
-    tagline: '가벼움으로 채우는 하루',
-    tags: ['디톡스', '가벼움', '클렌징'],
-    url: 'plate-detox.html'
-  },
-  glow: {
-    name: 'Glow Plate',
-    icon: '✨',
-    tagline: '안에서 빛나는 피부',
-    tags: ['피부건강', '안티에이징', '광채'],
-    url: 'plate-glow.html'
-  },
-  slim: {
-    name: 'Slim Plate',
-    icon: '🎯',
-    tagline: '건강하게 가볍게',
-    tags: ['체중관리', '저칼로리', '포만감'],
-    url: 'plate-slim.html'
-  }
-};
-
-// 현재 페이지 감지 및 다른 플레이트 표시
-function loadOtherPlates() {
-  const currentPath = window.location.pathname;
-  let currentPlate = '';
-  
-  // 현재 플레이트 감지
-  if (currentPath.includes('balance')) currentPlate = 'balance';
-  else if (currentPath.includes('detox')) currentPlate = 'detox';
-  else if (currentPath.includes('glow')) currentPlate = 'glow';
-  else if (currentPath.includes('slim')) currentPlate = 'slim';
-  
-  const container = document.getElementById('otherPlatesList');
-  if (!container) return;
-  
-  // 현재 플레이트 제외한 나머지 표시
-  let html = '';
-  for (const [key, plate] of Object.entries(platesData)) {
-    if (key !== currentPlate) {
-      html += `
-        <a href="${plate.url}" class="plate-card">
-          <div class="plate-card-icon">${plate.icon}</div>
-          <h4>${plate.name}</h4>
-          <p class="plate-card-tagline">${plate.tagline}</p>
-          <div class="plate-card-features">
-            ${plate.tags.map(tag => `<span class="plate-tag">#${tag}</span>`).join('')}
-          </div>
-        </a>
-      `;
-    }
-  }
-  
-  container.innerHTML = html;
-}
-
-// 페이지 로드 시 실행
-window.addEventListener('DOMContentLoaded', loadOtherPlates);
-</script>
-<!-- 팝업 (전체 내용 한 번에 보기) -->
-<div id="mainPopup" class="popup-overlay" style="display:none;">
-  <div class="popup-content-scrollable">
-    <div class="popup-section">
-      <h3>📝 플레이트 후기 작성 안내</h3>
-      <p>플레이트를 보고 느낀 점을<br>자유롭게 작성해 주시면 됩니다.</p>
-    </div>
-
-    <div class="popup-divider"></div>
-
-    <div class="popup-section">
-      <h3>⚠️ 가상 사이트 안내</h3>
-      <p>해당 사이트는 <strong>가상의 사이트</strong>입니다.<br>
-      실제로 물건을 받지는 못하지만,<br>
-      플레이트 설명을 보시고<br>
-      어떤 점을 느끼셨는지<br>
-      후기로 작성 부탁드립니다.</p>
-    </div>
-
-    <div class="popup-divider"></div>
-
-    <div class="popup-section">
-      <h3>☕ 이벤트 안내</h3>
-      <p><strong>자세히 작성해 주시면</strong><br>
-      추첨을 통해 총 10분께<br>
-      아메리카노 기프티콘을 드립니다!</p>
-    </div>
-
-    <div class="popup-divider"></div>
-
-    <div class="popup-section">
-      <h3>📧 당첨자 발표</h3>
-      <p>메일 계정을 통해<br>
-      <strong>11월 6일 일괄적으로</strong><br>
-      당첨 사실을 말씀드리며,<br><br>
-      영업일 기준 3일 내에<br>
-      당첨자 분들에게 이메일로<br>
-      커피쿠폰을 드리겠습니다.</p>
-    </div>
-
-    <button class="popup-close-btn" onclick="closePopup()">확인했습니다</button>
+<!-- 팝업 (음식/영양제 상세 설명 공용) -->
+<div class="diet-popup" id="detailPopup">
+  <div class="diet-box">
+    <h3 id="popupTitle">Glow 세부 구성</h3>
+    <p id="popupText" style="text-align:left; line-height:1.6; margin-top:6px;">
+      로딩 중...
+    </p>
+    <p style="margin-top:18px; font-size:13px; color:#666;">
+      💡 이 조합은 이너컬리와 국내 영양학 연구진이 공동으로 설계한 조합이에요.<br />
+      식품임상학적 데이터를 바탕으로 피부 컨디션에 최적화되었어요.
+    </p>
+    <button class="btn btn--primary" id="closeDetail" style="margin-top:14px;">닫기</button>
   </div>
 </div>
 
-<!-- 팝업 스타일 -->
-<style>
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.85);
-  z-index: 99999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  overflow-y: auto;
-}
 
-.popup-content-scrollable {
-  background: white;
-  border-radius: 20px;
-  max-width: 500px;
-  width: 100%;
-  max-height: 85vh;
-  overflow-y: auto;
-  padding: 40px 30px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-  animation: popupSlide 0.4s ease;
-}
+          <button class="btn-diet" id="openDiet">식단표 보기</button>
+          <p class="small center" style="margin-top: 10px; color: #777">
+            ※ 3일·5일 플랜의 경우 선택한 요일에 따라 해당 날짜 식단으로
+            구성됩니다.
+          </p>
+        </section>
 
-@keyframes popupSlide {
-  from {
-    transform: translateY(-30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
+        <!-- 📅 식단표 팝업 -->
+        <div class="diet-popup" id="dietPopup">
+          <div class="diet-box">
+            <h3 style="color: var(--kurly); font-weight: 800">
+              Glow 식단표 (7일)
+            </h3>
+            <ul
+              style="
+                text-align: left;
+                font-size: 14px;
+                line-height: 1.6;
+                margin-top: 10px;
+              "
+            >
+              <li><strong>DAY 1:</strong> 연어 스테이크 + 단호박 리조또</li>
+              <li><strong>DAY 2:</strong> 통귀리 샐러드 + 요거트볼</li>
+              <li><strong>DAY 3:</strong> 두부스테이크 + 아보카도 소스</li>
+              <li><strong>DAY 4:</strong> 블루베리 요거트볼 + 치아씨드</li>
+              <li><strong>DAY 5:</strong> 병아리콩 샐러드 + 콜라겐 워터</li>
+              <li><strong>DAY 6:</strong> 단호박 리조또 + 닭가슴살</li>
+              <li><strong>DAY 7:</strong> 귀리샐러드 + 비타민C 워터</li>
+            </ul>
+            <p style="margin-top: 16px; color: #555; font-size: 13px">
+              💡 첫 7일은 프리뷰로 제공되며,<br />
+              이후 전체 루틴은 <strong>루션앱</strong>에서 확인하실 수 있습니다.
+            </p>
+            <button
+              class="btn btn--primary"
+              id="closeDiet"
+              style="margin-top: 14px"
+            >
+              닫기
+            </button>
+          </div>
+        </div>
 
-.popup-section {
-  text-align: center;
-  padding: 20px 0;
-}
+        <!-- 리뷰 섹션 -->
+        <section class="card pad">
+          <h2 class="h2">리뷰</h2>
+          <div class="reviews">
+            <div class="review-head">
+              <div class="center">
+                <div class="h1" style="margin: 0">4.9</div>
+                <div class="small">리뷰 <span id="rev-count">0</span>개</div>
+              </div>
+            </div>
+            <div class="center" style="margin: 12px 0">
+              <button class="btn btn--primary" id="btn-write">
+                내 리뷰 작성하기
+              </button>
+            </div>
+          </div>
+        </section>
 
-.popup-section h3 {
-  color: #9b6bcc;
-  font-size: 1.3em;
-  margin-bottom: 15px;
-  font-weight: 700;
-}
+        <!-- 루션앱 챌린지 -->
+        <section class="card pad app-section">
+          <h2 class="h2">루션앱 챌린지</h2>
+          <div class="grid-3">
+            <div class="challenge-card">
+              <h3>30일</h3>
+              <p>5천원 쿠폰</p>
+            </div>
+            <div class="challenge-card">
+              <h3>60일</h3>
+              <p>팩 세트</p>
+            </div>
+            <div class="challenge-card">
+              <h3>90일</h3>
+              <p>시크릿</p>
+            </div>
+          </div>
+          <button
+            class="btn-experience"
+            onclick="location.href='./lusion.html'"
+          >
+            체험하러 가기
+          </button>
+        </section>
+      </main>
 
-.popup-section p {
-  line-height: 1.8;
-  color: #333;
-  font-size: 0.95em;
-}
+      <footer class="app-footer">
+        <div class="pay-row">
+          <img src="./assets/payment-icons.png" alt="결제수단" />
+        </div>
+        <p>© Inner Kurly · Daily Premium Gift</p>
+      </footer>
 
-.popup-section strong {
-  color: #9b6bcc;
-  font-weight: 600;
-}
+      <nav class="bottom-nav">
+        <a href="./index.html" data-key="home"><span>🏠</span><em>홈</em></a>
+        <a href="./plates.html" data-key="plates" class="active"
+          ><span>🍽️</span><em>플레이트</em></a
+        >
+        <a href="./tests.html" data-key="test"
+          ><span>🧪</span><em>테스트</em></a
+        >
+        <a href="./cart.html" data-key="cart"
+          ><span>🛒</span><em>장바구니</em></a
+        >
+        <a href="./mypage.html" data-key="my"><span>👤</span><em>마이</em></a>
+      </nav>
+    </div>
 
-.popup-divider {
-  height: 1px;
-  background: linear-gradient(to right, transparent, #e0d4f0, transparent);
-  margin: 20px 0;
-}
-
-.popup-close-btn {
-  width: 100%;
-  padding: 15px;
-  background: #9b6bcc;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
-  margin-top: 30px;
-  transition: all 0.3s;
-}
-
-.popup-close-btn:hover {
-  background: #7d4fa8;
-  transform: scale(1.02);
-}
-
-/* 스크롤바 스타일 */
-.popup-content-scrollable::-webkit-scrollbar {
-  width: 8px;
-}
-
-.popup-content-scrollable::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-.popup-content-scrollable::-webkit-scrollbar-thumb {
-  background: #9b6bcc;
-  border-radius: 10px;
-}
-
-.popup-content-scrollable::-webkit-scrollbar-thumb:hover {
-  background: #7d4fa8;
-}
-
-/* 모바일 최적화 */
-@media (max-width: 480px) {
-  .popup-content-scrollable {
-    padding: 30px 20px;
-    max-height: 80vh;
-  }
-  
-  .popup-section h3 {
-    font-size: 1.1em;
-  }
-  
-  .popup-section p {
-    font-size: 0.9em;
-  }
-}
-</style>
-
-<!-- 팝업 스크립트 -->
-<script>
-// plate-로 시작하는 페이지에서만 팝업 실행
-(function() {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initPopup);
-  } else {
-    initPopup();
-  }
-
-  function initPopup() {
-    const currentPath = window.location.pathname;
-    console.log('현재 경로:', currentPath);
-    
-    if (currentPath.includes('plate-')) {
-      console.log('plate 페이지 감지, 팝업 표시');
-      setTimeout(function() {
-        const popup = document.getElementById('mainPopup');
-        if (popup) {
-          popup.style.display = 'flex';
-          // body 스크롤 방지
-          document.body.style.overflow = 'hidden';
-        } else {
-          console.error('mainPopup 요소를 찾을 수 없습니다.');
-        }
-      }, 300);
-    }
-  }
-})();
-
-function closePopup() {
-  const popup = document.getElementById('mainPopup');
-  if (popup) {
-    popup.style.display = 'none';
-    // body 스크롤 복구
-    document.body.style.overflow = '';
-  }
-}
-
-// ESC 키로도 닫기
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    closePopup();
-  }
-});
-
-// 배경 클릭시 닫기
-document.getElementById('mainPopup')?.addEventListener('click', function(e) {
-  if (e.target === this) {
-    closePopup();
-  }
-});
-</script>
-
-</body>
+    <script src="./scripts/common.js"></script>
+    <script src="./scripts/pdp.js"></script>
+  </body>
 </html>

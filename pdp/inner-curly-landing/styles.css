@@ -1,0 +1,1293 @@
+/* =====================================================================
+   INNER KURLY - STYLESHEET v3.4
+   Designed for mobile-first 420px fixed layout
+   Brand tone: Calm, Minimal, Premium (#5F0080)
+   ===================================================================== */
+
+/* ----------------------------------------------------
+   1. ROOT VARIABLES
+   ---------------------------------------------------- */
+:root {
+  --kurly: #5f0080;
+  --ink: #111;
+  --muted: #6b6b6b;
+  --line: #ede7f3;
+  --bg: #fafafc;
+  --radius: 18px;
+  --space: 16px;
+  --shadow: 0 8px 24px rgba(17, 17, 17, 0.06);
+}
+
+/* ----------------------------------------------------
+     2. BASE & TYPOGRAPHY
+     ---------------------------------------------------- */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Pretendard, system-ui, -apple-system, Segoe UI, Roboto,
+    Apple SD Gothic Neo, Noto Sans KR, sans-serif;
+  line-height: 1.55;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.h1,
+.h2,
+.h3 {
+  text-align: center;
+}
+.h1 {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 6px 0 12px;
+}
+.h2 {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 18px 0 12px;
+}
+.h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 10px 0 8px;
+}
+.text {
+  font-size: 15px;
+}
+.small {
+  font-size: 12px;
+  color: var(--muted);
+}
+.center {
+  text-align: center;
+}
+
+/* ----------------------------------------------------
+     3. WRAPPER & LAYOUT
+     ---------------------------------------------------- */
+.mobile-wrap {
+  max-width: 420px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #fff;
+  border-left: 1px solid #f0eef3;
+  border-right: 1px solid #f0eef3;
+  padding-bottom: 84px;
+}
+.container {
+  padding: var(--space);
+}
+
+/* ----------------------------------------------------
+     4. HEADER
+     ---------------------------------------------------- */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-bottom: 1px solid #f1eef6;
+  padding: 8px var(--space);
+}
+.logo-img {
+  height: 20px;
+}
+.nav a {
+  margin-left: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.icon-btn {
+  border: 1px solid #ededed;
+  background: #fff;
+  border-radius: 12px;
+  padding: 6px 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* ----------------------------------------------------
+     5. BUTTONS & BADGES
+     ---------------------------------------------------- */
+.btn {
+  display: inline-block;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #ece2f3;
+  background: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.2s ease;
+}
+.btn:active {
+  transform: scale(0.98);
+}
+.btn--primary {
+  background: var(--kurly);
+  border-color: var(--kurly);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(95, 0, 128, 0.22);
+}
+.btn--ghost {
+  color: var(--kurly);
+  border-color: var(--kurly);
+  background: #fff;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f7f2fa;
+  color: var(--kurly);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* ----------------------------------------------------
+     6. GRID SYSTEM
+     ---------------------------------------------------- */
+.grid-1 {
+  display: grid;
+  gap: 12px;
+}
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+/* ----------------------------------------------------
+     7. GENERAL COMPONENTS
+     ---------------------------------------------------- */
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin: 12px;
+}
+.pad {
+  padding: var(--space);
+}
+.divider {
+  border: 0;
+  border-top: 1px solid #efeaf4;
+  margin: 12px 0;
+}
+
+/* ----------------------------------------------------
+     8. SLIDER
+     ---------------------------------------------------- */
+.slider {
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+.slides {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+.slide {
+  min-width: 100%;
+  position: relative;
+}
+.slide img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+.caption {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  background: rgba(0, 0, 0, 0.38);
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+/* ----------------------------------------------------
+     9. PLATES GRID (2x2 Layout)
+     ---------------------------------------------------- */
+.plates-container {
+  padding: 0 var(--space) var(--space);
+}
+.plate-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding-top: 8px;
+}
+.plate-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.22s ease;
+}
+.plate-card:hover {
+  box-shadow: 0 10px 28px rgba(17, 17, 17, 0.1);
+}
+.plate-card:active {
+  transform: scale(0.99);
+}
+
+.plate-card .media {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+.plate-card .media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+.plate-card .body {
+  padding: 14px 12px 18px;
+  text-align: center;
+}
+.plate-card .title {
+  font-weight: 800;
+  font-size: 16px;
+  margin: 8px 0 4px;
+}
+.plate-card .subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0;
+}
+
+/* ----------------------------------------------------
+     10. SHARE BUTTON (Floating)
+     ---------------------------------------------------- */
+.fab-share {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  background: var(--kurly);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(95, 0, 128, 0.25);
+  z-index: 100;
+  cursor: pointer;
+}
+.fab-share:active {
+  transform: scale(0.96);
+}
+.fab-share:hover {
+  box-shadow: 0 10px 28px rgba(95, 0, 128, 0.35);
+}
+
+/* ----------------------------------------------------
+     11. CHALLENGE SECTION (30·60·90일)
+     ---------------------------------------------------- */
+.challenge-section {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin: 18px var(--space);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.challenge-section h2 {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+.challenge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.challenge-card {
+  border: 1px solid #eee3f3;
+  border-radius: 16px;
+  background: #fbf9fd;
+  padding: 18px 10px;
+  box-shadow: 0 4px 12px rgba(95, 0, 128, 0.05);
+  transition: transform 0.15s ease, box-shadow 0.25s ease;
+}
+.challenge-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(95, 0, 128, 0.12);
+}
+.challenge-card h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--kurly);
+}
+.challenge-card p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ----------------------------------------------------
+     12. FOOTER / NAVIGATION
+     ---------------------------------------------------- */
+.bottom-nav {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(8px);
+  border: 1px solid #eee3f3;
+  border-bottom: none;
+  border-radius: 18px 18px 0 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 -10px 24px rgba(17, 17, 17, 0.08);
+  z-index: 50;
+}
+.bottom-nav a {
+  padding: 10px 6px;
+  text-align: center;
+  color: #666;
+  display: grid;
+  place-items: center;
+  gap: 4px;
+}
+.bottom-nav a.active {
+  color: var(--kurly);
+  font-weight: 800;
+}
+
+/* ----------------------------------------------------
+     13. UTILITY: TOAST / LOADER / MODAL
+     ---------------------------------------------------- */
+.loader {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  z-index: 70;
+}
+.loader.active {
+  display: flex;
+}
+.spinner {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 3px solid #ddd;
+  border-top-color: var(--kurly);
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 96px;
+  background: #111;
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 80;
+}
+.toast.show {
+  opacity: 1;
+}
+
+/* ----------------------------------------------------
+     14. ACCESSIBILITY (REDUCE MOTION)
+     ---------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ----------------------------------------------------
+   15. LUSION APP PROMO SECTION
+   ---------------------------------------------------- */
+.app-section {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin: 18px var(--space);
+  padding: 22px 20px 26px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.app-preview {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 8px 22px rgba(17, 17, 17, 0.08);
+  margin-bottom: 18px;
+}
+#review-modal {
+  display: none;
+}
+#review-modal.active {
+  display: flex;
+}
+
+.app-card h2 {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.app-card .subtext {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+/* ----------------------------------------------------
+   16. LUSION APP PROMO CARD (체험하러 가기)
+   ---------------------------------------------------- */
+
+//* ----------------------------------------------------
+16. LUSION APP PROMO CARD (중앙 정렬 수정)
+   ---------------------------------------------------- */
+
+/* 이미지: hover 효과 포함 */
+.app-mockup {
+  width: 48%;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(17, 17, 17, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.app-mockup:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(17, 17, 17, 0.12);
+}
+
+/* 버튼 */
+.btn-experience {
+  display: inline-block;
+  padding: 12px 26px;
+  border-radius: 14px;
+  border: none;
+  background: var(--kurly);
+  color: #fff;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 8px 18px rgba(95, 0, 128, 0.18);
+  transition: all 0.25s ease;
+}
+.btn-experience:hover {
+  background: #6a12a2;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(95, 0, 128, 0.28);
+}
+.btn-experience:active {
+  transform: scale(0.97);
+}
+
+/* 텍스트 영역 중앙 정렬 */
+.card.pad .col {
+  text-align: center;
+}
+
+/* 반응형 (420px 이하) */
+@media (max-width: 480px) {
+  .app-mockup {
+    width: 100%;
+    margin-bottom: 14px;
+  }
+  .card.pad .row {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* ----------------------------------------------------
+   17. SUBSCRIPTION PLANS (Inner Kurly)
+   ---------------------------------------------------- */
+.subscription-section {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px 16px 26px;
+  box-shadow: var(--shadow);
+  margin: 22px var(--space);
+}
+
+.subscription-section .h2 {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 18px;
+}
+
+/* grid 2열 */
+.plan-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* 카드 디자인 */
+.plan-card {
+  border: 1px solid #eae2f2;
+  border-radius: 16px;
+  padding: 16px 14px 18px;
+  background: #fbf9fd;
+  box-shadow: 0 6px 16px rgba(17, 17, 17, 0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease, box-shadow 0.25s ease;
+}
+.plan-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px rgba(17, 17, 17, 0.08);
+}
+
+/* 텍스트 */
+.plan-card h3 {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+.plan-card .price {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--kurly);
+  margin: 0;
+}
+.plan-card .price span {
+  font-size: 12px;
+  color: var(--muted);
+  margin-left: 4px;
+}
+.plan-card .unit {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 2px 0 6px;
+}
+.plan-card .desc {
+  font-size: 13px;
+  color: #333;
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+
+/* 버튼 한 줄 정렬 */
+.actions-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+}
+
+/* 버튼 공통 */
+.btn-primary,
+.btn-outline,
+.btn-disabled {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* 각 타입 */
+.btn-primary {
+  background: var(--kurly);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(95, 0, 128, 0.2);
+}
+.btn-primary:hover {
+  background: #6a12a2;
+}
+.btn-outline {
+  background: #fff;
+  color: var(--kurly);
+  border: 1px solid var(--kurly);
+}
+.btn-disabled {
+  background: #f6f3fa;
+  color: #bbb2c8;
+  border: 1px solid #eae2f2;
+  cursor: not-allowed;
+}
+
+/* 반응형 */
+@media (max-width: 480px) {
+  .plan-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* ----------------------------------------------------
+   18. SIGNUP PAGE
+   ---------------------------------------------------- */
+.signup-section {
+  max-width: 380px;
+  margin: 40px auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  background: #fff;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.signup-form input[type="text"],
+.signup-form input[type="email"],
+.signup-form input[type="number"] {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #e8e0f2;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.signup-form input:focus {
+  outline: none;
+  border-color: var(--kurly);
+  box-shadow: 0 0 0 2px rgba(95, 0, 128, 0.12);
+}
+
+.gender-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.gender-row label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.btn.btn--primary {
+  margin-top: 8px;
+  font-size: 15px;
+  padding: 12px;
+}
+/* ----------------------------------------------------
+   19. SURVEY PAGE
+   ---------------------------------------------------- */
+.q-card {
+  margin-top: 18px;
+  text-align: left;
+}
+
+.q-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.q-card .option {
+  border: 1px solid #ece2f3;
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.q-card .option:hover {
+  background: #f8f4fb;
+}
+.q-card .option.selected {
+  background: var(--kurly);
+  color: #fff;
+  border-color: var(--kurly);
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  width: 90%;
+  max-width: 360px;
+  padding: 20px;
+  text-align: center;
+}
+
+.modal header {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--kurly);
+  margin-bottom: 10px;
+}
+
+.modal .body {
+  margin-bottom: 16px;
+}
+.modal .footer {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+/* ----------------------------------------------------
+   20. LOGIN PAGE
+   ---------------------------------------------------- */
+
+.login-section {
+  max-width: 380px;
+  margin: 60px auto;
+  border-radius: 20px;
+  background: #fff;
+  padding: 32px 24px;
+  box-shadow: 0 6px 18px rgba(95, 0, 128, 0.08);
+  text-align: center;
+}
+
+.login-section h2 {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: var(--ink);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.login-form label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"] {
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px 14px;
+  border: 1px solid #e4d9f2;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: var(--kurly);
+  box-shadow: 0 0 0 2px rgba(95, 0, 128, 0.15);
+}
+
+.login-btn {
+  margin-top: 14px;
+  padding: 12px;
+  background: var(--kurly);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 3px 8px rgba(95, 0, 128, 0.25);
+  transition: all 0.2s ease;
+}
+.login-btn:hover {
+  background: #4a0069;
+  transform: translateY(-1px);
+}
+
+/* 소셜 로그인 버튼 그룹 */
+.social-login {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.social-login button {
+  flex: 1;
+  border: 1.5px solid var(--kurly);
+  border-radius: 30px;
+  padding: 10px 0;
+  font-weight: 700;
+  font-size: 14px;
+  background: #fff;
+  color: var(--kurly);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.social-login button:hover {
+  background: var(--kurly);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(95, 0, 128, 0.15);
+}
+/* 21. 로그인 입력 필드 정렬 */
+.login-form .form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  margin-bottom: 12px;
+}
+
+.login-form label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #e4d9f2;
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: var(--kurly);
+  box-shadow: 0 0 0 2px rgba(95, 0, 128, 0.12);
+}
+
+/* ----------------------------------------------------
+   21. PLATE DETAIL PAGE (PDP)
+   ---------------------------------------------------- */
+
+/* 상단 이미지 + 정보 카드 */
+.pdp .card.pad {
+  box-shadow: 0 6px 16px rgba(17, 17, 17, 0.05);
+  border-radius: 20px;
+  margin: 18px var(--space);
+  background: #fff;
+}
+
+/* 구독 플랜 */
+#plans .plan {
+  border: 1px solid #eee3f3;
+  border-radius: 16px;
+  background: #fbf9fd;
+  padding: 18px 14px 20px;
+  margin-bottom: 14px;
+  box-shadow: 0 6px 16px rgba(17, 17, 17, 0.04);
+  transition: all 0.2s ease;
+}
+#plans .plan:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(17, 17, 17, 0.08);
+}
+#plans .plan h4 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+}
+#plans .plan .p {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--kurly);
+}
+#plans .plan .sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+#plans .plan .desc {
+  font-size: 13px;
+  color: #333;
+  line-height: 1.45;
+}
+#plans .plan .actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* 루틴 가이드 */
+.balloons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+.balloon {
+  background: #f7f2fa;
+  border: 1px solid #eee3f3;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  color: #333;
+}
+
+/* 리뷰 섹션 */
+.reviews {
+  margin-top: 20px;
+  text-align: center;
+  color: #6a12a2;
+}
+.review-head {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+.review-head .score {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--kurly);
+  line-height: 1;
+}
+.review-head .meta {
+  font-size: 13px;
+  color: var(--muted);
+}
+.review-bars {
+  text-align: left;
+}
+.review-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  margin: 4px 0;
+}
+.review-bar span:first-child {
+  width: 70px;
+  text-align: right;
+  color: #555;
+}
+.review-bar .meter {
+  flex: 1;
+  height: 6px;
+  background: #f2e8fa;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.review-bar .meter i {
+  display: block;
+  height: 100%;
+  background: var(--kurly);
+}
+.stars {
+  color: #ffb400;
+  margin: 4px 0;
+  font-size: 15px;
+}
+#btn-write {
+  display: inline-block;
+  margin: 14px auto 6px;
+  background: var(--kurly);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 22px;
+  font-weight: 800;
+  box-shadow: 0 6px 18px rgba(95, 0, 128, 0.2);
+}
+
+/* 앱 챌린지 섹션 보완 */
+.card.pad .grid-3 .card {
+  border: 1px solid #eee3f3;
+  background: #fbf9fd;
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 4px 12px rgba(95, 0, 128, 0.05);
+  transition: all 0.2s ease;
+}
+.card.pad .grid-3 .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(95, 0, 128, 0.12);
+}
+
+/* 하단 여백 */
+.app-footer {
+  text-align: center;
+  padding: 20px 0 80px;
+  color: var(--muted);
+  font-size: 12px;
+}
+/* ----------------------------------------------------
+   ALERT POPUP (회원 전용 기능 안내)
+   ---------------------------------------------------- */
+.alert-popup {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 200;
+}
+
+.alert-box {
+  background: #fff;
+  border-radius: 18px;
+  padding: 26px 22px;
+  width: 86%;
+  max-width: 340px;
+  box-shadow: 0 10px 30px rgba(17, 17, 17, 0.18);
+  text-align: center;
+  animation: popup-fade 0.25s ease;
+}
+
+.alert-box h3 {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--kurly);
+  margin-bottom: 8px;
+}
+
+.alert-box p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 18px;
+}
+
+@keyframes popup-fade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ============================
+   PLATE DETAIL CUSTOM STYLE
+   ============================ */
+
+/* 구성 카드 */
+.plate-info {
+  display: grid;
+  gap: 16px;
+  margin-top: 12px;
+}
+.info-card {
+  border: 1px solid #e8dff1;
+  border-radius: 16px;
+  background: #fbf9fd;
+  padding: 18px 20px;
+  box-shadow: 0 4px 14px rgba(95, 0, 128, 0.05);
+}
+.info-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--kurly, #5f0080);
+  margin-bottom: 6px;
+}
+.info-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* 식단표 버튼 */
+.btn-diet {
+  width: 100%;
+  margin-top: 18px;
+  background: var(--kurly, #5f0080);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 12px;
+  font-weight: 700;
+  font-size: 15px;
+  box-shadow: 0 8px 22px rgba(95, 0, 128, 0.18);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-diet:hover {
+  background: #6c10a0;
+  transform: translateY(-2px);
+}
+
+/* 식단표 팝업 */
+.diet-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+.diet-popup.active {
+  display: flex;
+}
+.diet-box {
+  background: #fff;
+  border-radius: 18px;
+  padding: 22px 24px;
+  width: 90%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  text-align: center;
+  box-shadow: 0 10px 28px rgba(17, 17, 17, 0.18);
+}
+.diet-box h3 {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--kurly, #5f0080);
+  margin-bottom: 10px;
+}
+.diet-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+.diet-box li {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 4px;
+}
+.diet-box p {
+  font-size: 13px;
+  color: #555;
+  margin-top: 12px;
+  line-height: 1.6;
+}
+/* ============================
+   GLOW HIGHLIGHT SECTION
+   ============================ */
+
+.highlight-group {
+  margin-bottom: 24px;
+}
+.highlight-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--kurly, #5f0080);
+  margin-bottom: 10px;
+}
+.highlight-grid {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+.highlight-item {
+  flex: 1;
+  text-align: center;
+  background: #faf8fc;
+  border-radius: 14px;
+  padding: 12px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(95, 0, 128, 0.08);
+}
+.highlight-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(95, 0, 128, 0.18);
+}
+.highlight-item img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 6px;
+}
+.highlight-item p {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+/* 철학 카드 */
+.info-card.pretty {
+  border: 1.5px solid #f0e4f7;
+  background: #fbf9ff;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 4px 12px rgba(95, 0, 128, 0.06);
+}
+.info-card.pretty h3 {
+  color: var(--kurly, #5f0080);
+  margin-bottom: 6px;
+}
+
+/* 팝업 (공용) */
+#detailPopup {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 300;
+}
+#detailPopup.active {
+  display: flex;
+}

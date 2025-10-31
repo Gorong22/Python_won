@@ -1,503 +1,134 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <script>
-    (function(h,o,t,j,a,r){
-        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-        h._hjSettings={hjid:6535845,hjsv:6};
-        a=o.getElementsByTagName('head')[0];
-        r=o.createElement('script');r.async=1;
-        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-        a.appendChild(r);
-    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-  </script>
-    <!-- Google Tag Manager -->
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>회원가입 | Inner Kurly</title>
+    <meta name="theme-color" content="#5F0080" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <!-- GA4 placeholder -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"
+    ></script>
     <script>
-      (function (w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != "dataLayer" ? "&l=" + l : "";
-        j.async = true;
-        j.src = "https://www.googletagmanager.com/gtm.js?id=GTM-KWL72ML2" + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, "script", "dataLayer", "GTM-KWL72ML2");
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-XXXXXXX");
     </script>
-    <!-- End Google Tag Manager -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>이너컬리 회원가입</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <style>
-        body { background-color: #f9f9f9; }
-        .signup-container { max-width: 700px; margin: 50px auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        @media (min-width: 768px) { .signup-container { padding: 40px; } }
-        .signup-container h1 { text-align: center; margin-bottom: 30px; font-size: 28px; color: #333; }
-        fieldset { border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 25px; }
-        legend { font-size: 1.2rem; font-weight: bold; margin-left: 10px; padding: 0 10px; color: var(--color-primary); }
-        .form-group { margin-bottom: 20px; }
-        .form-group:last-child { margin-bottom: 0; }
-        .form-group label { display: block; margin-bottom: 10px; font-weight: 600; font-size: 1rem; }
-        .input-group, .radio-group, .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px 15px; }
-        .checkbox-group label, .radio-group label { font-weight: normal; display: flex; align-items: center; gap: 5px; font-size: 0.95rem; }
-        input[type="text"], input[type="email"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; }
-        .submit-btn { width: 100%; padding: 15px; background-color: #5f0080; color: white; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background-color 0.3s; }
-        .submit-btn:hover { background-color: #4b0066; }
-        .password-notice { text-align: center; margin-top: 20px; font-size: 0.9rem; color: #888; }
-    </style>
-</head>
-<body>
-   <!-- Google Tag Manager (noscript) -->
-   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWL72ML2" height="0" width="0" style="display: none; visibility: hidden"></iframe></noscript>
+  </head>
+  <body data-active="my">
+    <div class="mobile-wrap">
+      <!-- HEADER -->
+      <header class="app-header">
+        <button
+          class="icon-btn"
+          onclick="if(history.length>1)history.back();else location.href='./index.html';"
+          aria-label="뒤로가기"
+        >
+          ←
+        </button>
+        <a class="logo" href="./index.html">
+          <img
+            src="./assets/logo-innerkurly-purple.png"
+            alt="Inner Kurly"
+            class="logo-img"
+          />
+        </a>
+        <nav class="nav">
+          <a href="./signup.html">회원가입</a>
+          <a href="./login.html">로그인</a>
+        </nav>
+      </header>
 
-           <!-- ✅ index.html의 Header 자동 로드 -->
-<div id="global-header"></div>
-<script>
-(function () {
-  if (/index\.html?$/i.test(location.pathname)) return;
-  const mount = document.getElementById("global-header");
-  if (!mount) return;
-  fetch("index.html")
-    .then((res) => res.text())
-    .then((html) => {
-      const doc = new DOMParser().parseFromString(html, "text/html");
-      const header = doc.querySelector("header");
-      mount.innerHTML = header ? header.outerHTML : "";
-    })
-    .catch((err) => console.error("헤더 로드 실패:", err));
-})();
-</script>
+      <!-- MAIN -->
+      <main class="container">
+        <section class="card pad center signup-section">
+          <span class="badge">시작하기</span>
+          <h2 class="h2">회원가입</h2>
+          <p class="text small">
+            가입 후 테스트 / 설문 / 구독 서비스를 이용하실 수 있어요.
+          </p>
 
-    <div class="signup-container">
-        <h1>설문작성</h1>
-        <form id="signupForm">
-          <div class="form-group">
-            <label for="name">이름</label>
-            <input type="text" id="name" name="name" placeholder="이름 입력" required />
-          </div>
+          <!-- ✅ 회원가입 폼 -->
+          <form id="signup-form" class="signup-form">
+            <label>
+              <input type="text" name="name" placeholder="이름" required />
+            </label>
 
-          <div class="form-group">
-            <label for="gender">성별</label>
-            <div class="radio-group">
-              <label><input type="radio" name="gender" value="여성" required /> 여성</label>
-              <label><input type="radio" name="gender" value="남성" /> 남성</label>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="age">나이</label>
-            <input type="number" id="age" name="age" placeholder="나이 입력 (예: 29)" required />
-          </div>
-
-          <div class="form-group">
-            <input type="email" id="email" name="email" placeholder="이메일 (필수)" required />
-          </div>
-
-          <!-- 💬 서비스 개선 -->
-          <fieldset>
-            <legend>이너컬리 서비스 개선 💬</legend>
-            <div class="form-group">
-              <label>Q1. 어떤 기능이 추가되면 좋을까요?</label>
-              <div class="checkbox-group">
-                <label><input type="checkbox" name="service_q1" value="루틴 알림" /> 루틴 알림</label>
-                <label><input type="checkbox" name="service_q1" value="AI 맞춤 추천" /> AI 맞춤 추천</label>
-                <label><input type="checkbox" name="service_q1" value="영양 리포트" /> 영양 리포트</label>
-                <label><input type="checkbox" name="service_q1" value="커뮤니티" /> 커뮤니티</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Q2. 주 3회, 2주 기준(총 6회) 구독 시 84,000원의 가격은 어떻게 느껴지시나요?</label>
-              <div class="radio-group">
-                <label><input type="radio" name="service_q2" value="합리적" /> 합리적</label>
-                <label><input type="radio" name="service_q2" value="약간 비싸다" /> 약간 비싸다</label>
-                <label><input type="radio" name="service_q2" value="너무 비싸다" /> 너무 비싸다</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Q3. 주 5회, 2주 기준(총 10회) 구독 시 139,000원의 가격은 어떻게 느껴지시나요?</label>
-              <div class="radio-group">
-                <label><input type="radio" name="service_q3" value="합리적" /> 합리적</label>
-                <label><input type="radio" name="service_q3" value="약간 비싸다" /> 약간 비싸다</label>
-                <label><input type="radio" name="service_q3" value="너무 비싸다" /> 너무 비싸다</label>
-              </div>
+            <div class="gender-row">
+              <label>
+                <input type="radio" name="gender" value="남성" required />
+                남성
+              </label>
+              <label>
+                <input type="radio" name="gender" value="여성" required />
+                여성
+              </label>
             </div>
 
+            <label>
+              <input
+                type="number"
+                name="age"
+                placeholder="나이"
+                min="10"
+                max="100"
+                required
+              />
+            </label>
 
-          </fieldset>
+            <label>
+              <input type="email" name="email" placeholder="이메일" required />
+            </label>
 
-          <!-- 💡 브랜드 경험 -->
-          <fieldset>
-            <legend>브랜드 경험 💡</legend>
-            <div class="form-group">
-              <label>Q4. 이너컬리에 기대하는 점은?</label>
-              <div class="checkbox-group">
-                <label><input type="checkbox" name="brand_q1" value="전문성" /> 전문성</label>
-                <label><input type="checkbox" name="brand_q1" value="프리미엄 이미지" /> 프리미엄 이미지</label>
-                <label><input type="checkbox" name="brand_q1" value="신뢰도" /> 신뢰도</label>
-                <label><input type="checkbox" name="brand_q1" value="감성 디자인" /> 감성 디자인</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Q5. 브랜드 이미지에 어울리는 키워드는?</label>
-              <div class="radio-group">
-                <label><input type="radio" name="brand_q2" value="웰니스" /> 웰니스</label>
-                <label><input type="radio" name="brand_q2" value="슬로우에이징" /> 슬로우에이징</label>
-                <label><input type="radio" name="brand_q2" value="자기관리" /> 자기관리</label>
-                <label><input type="radio" name="brand_q2" value="프리미엄" /> 프리미엄</label>
-              </div>
-            </div>
-          </fieldset>
+            <button class="btn btn--primary" type="submit">다음</button>
+          </form>
+        </section>
+      </main>
 
-          <!-- 📱 콘텐츠 & 커뮤니티 -->
-          <fieldset>
-            <legend>콘텐츠 & 커뮤니티 📱</legend>
-            <div class="form-group">
-              <label>Q6. 자주 소비하는 콘텐츠 형식은?</label>
-              <div class="radio-group">
-                <label><input type="radio" name="content_q1" value="영상" /> 영상</label>
-                <label><input type="radio" name="content_q1" value="짧은 리포트" /> 짧은 리포트</label>
-                <label><input type="radio" name="content_q1" value="전문가 인터뷰" /> 전문가 인터뷰</label>
-                <label><input type="radio" name="content_q1" value="제품 비교" /> 제품 비교</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Q7. 커뮤니티가 생긴다면 어떤 주제에 참여하고 싶나요?</label>
-              <div class="radio-group">
-                <label><input type="radio" name="content_q2" value="식단 공유" /> 식단 공유</label>
-                <label><input type="radio" name="content_q2" value="이너뷰티 루틴" /> 이너뷰티 루틴</label>
-                <label><input type="radio" name="content_q2" value="건강 팁" /> 건강 팁</label>
-                <label><input type="radio" name="content_q2" value="제품 후기" /> 제품 후기</label>
-              </div>
-            </div>
-          </fieldset>
+      <!-- FOOTER -->
+      <footer class="app-footer">
+        <div class="pay-row">
+          <img src="./assets/payment-icons.png" alt="결제수단" />
+        </div>
+        <p>© Inner Kurly · Daily Premium Gift</p>
+      </footer>
 
-          <!-- 🔮 AI 맞춤 경험 -->
-          <fieldset>
-            <legend>AI 맞춤 경험 🔮</legend>
-            <div class="form-group">
-              <label>Q8. AI 루틴 추천 기능이 있다면 사용 의향이 있나요?</label>
-              <div class="radio-group">
-                <label><input type="radio" name="ai_q1" value="매우 있다" /> 매우 있다</label>
-                <label><input type="radio" name="ai_q1" value="있다" /> 있다</label>
-                <label><input type="radio" name="ai_q1" value="보통" /> 보통</label>
-                <label><input type="radio" name="ai_q1" value="없다" /> 없다</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Q9. 개인 맞춤 추천 시 중요한 요소는?</label>
-              <div class="checkbox-group">
-                <label><input type="checkbox" name="ai_q2" value="섭취 이력" /> 섭취 이력</label>
-                <label><input type="checkbox" name="ai_q2" value="피부/컨디션 상태" /> 피부/컨디션 상태</label>
-                <label><input type="checkbox" name="ai_q2" value="식습관" /> 식습관</label>
-                <label><input type="checkbox" name="ai_q2" value="날씨/환경" /> 날씨/환경</label>
-              </div>
-            </div>
-          </fieldset>
-
-          <!-- 🔍 향후 관심 -->
-          <fieldset>
-            <legend>향후 관심 분야 🔍</legend>
-            <div class="form-group">
-              <label>Q10. 앞으로 관심 있는 웰니스 분야는?</label>
-              <div class="checkbox-group">
-                <label><input type="checkbox" name="future_q1" value="슬로우에이징" /> 슬로우에이징</label>
-                <label><input type="checkbox" name="future_q1" value="수면 개선" /> 수면 개선</label>
-                <label><input type="checkbox" name="future_q1" value="호르몬 밸런스" /> 호르몬 밸런스</label>
-                <label><input type="checkbox" name="future_q1" value="피부 케어" /> 피부 케어</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Q11. 가장 기대되는 서비스는?</label>
-              <div class="radio-group">
-                <label><input type="radio" name="future_q2" value="이너뷰티 구독" /> 이너뷰티 구독</label>
-                <label><input type="radio" name="future_q2" value="AI 루틴 코칭" /> AI 루틴 코칭</label>
-                <label><input type="radio" name="future_q2" value="전문가 매칭" /> 전문가 매칭</label>
-                <label><input type="radio" name="future_q2" value="웰니스 큐레이션" /> 웰니스 큐레이션</label>
-              </div>
-            </div>
-          </fieldset>
-
-          <button type="submit" class="submit-btn">가입 및 설문 완료하기</button>
-          <p class="password-notice">파일럿 테스트 중입니다. 모든 계정 비밀번호는 1234로 통일됩니다.</p>
-        </form>
+      <nav class="bottom-nav">
+        <a href="./index.html" data-key="home"><span>🏠</span><em>홈</em></a>
+        <a href="./plates.html" data-key="plates"
+          ><span>🍽️</span><em>플레이트</em></a
+        >
+        <a href="./tests.html" data-key="test"
+          ><span>🧪</span><em>테스트</em></a
+        >
+        <a href="./cart.html" data-key="cart"
+          ><span>🛒</span><em>장바구니</em></a
+        >
+        <a href="./mypage.html" data-key="my"><span>👤</span><em>마이</em></a>
+      </nav>
+      <script>
+        (function () {
+          const k = document.body.getAttribute("data-active");
+          document.querySelectorAll(".bottom-nav a").forEach((a) => {
+            if (a.dataset.key === k) a.classList.add("active");
+          });
+        })();
+      </script>
     </div>
-
-    <script>
-      const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxAtM9W9dgnBbwDXkX8GE7RkXQcs7YVIO83kDbG9OxfaYCJBV-J4lxIZ7GbouReipOh/exec";
-    
-      // 🔹 로딩 오버레이 설정
-      const loadingOverlay = document.createElement('div');
-      loadingOverlay.id = "loading-overlay";
-      loadingOverlay.style.cssText = `
-        display:none;
-        position:fixed;
-        top:0; left:0;
-        width:100%; height:100%;
-        background:rgba(255,255,255,0.85);
-        z-index:9999;
-        justify-content:center;
-        align-items:center;
-        font-size:18px;
-        color:#5f0080;
-        font-weight:600;
-      `;
-      loadingOverlay.innerText = "제출 중입니다. 잠시만 기다려주세요...";
-      document.body.appendChild(loadingOverlay);
-    
-      // 🔹 폼 제출 이벤트
-      document.getElementById('signupForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const form = e.target;
-        const formData = new FormData(form);
-    
-        let data = {};
-        [
-          "name", "gender", "age", "email",
-          "service_q1", "service_q2", "service_q3",
-          "brand_q1", "brand_q2",
-          "content_q1", "content_q2",
-          "ai_q1", "ai_q2",
-          "future_q1", "future_q2"
-        ].forEach(k => {
-          const val = formData.getAll(k);
-          data[k] = val.length ? val.join(", ") : "";
-        });
-    
-        data.password = "1234";
-        data.timestamp = new Date().toISOString();
-    
-        // 🔹 전송
-        loadingOverlay.style.display = "flex";
-        fetch(GOOGLE_SCRIPT_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
-          body: Object.keys(data)
-            .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(data[k]))
-            .join("&")
-        })
-        .then(response => {
-          loadingOverlay.style.display = "none";
-          if (response.ok) return response.json();
-          throw new Error('Network response was not ok.');
-        })
-        .then(res => {
-          alert("참여해주셔서 감사합니다! 설문이 정상적으로 제출되었습니다 😊");
-          form.reset();
-          window.location.href = 'index.html';
-        })
-        .catch(error => {
-          loadingOverlay.style.display = "none";
-          alert("오류가 발생했습니다. 다시 시도해주세요.");
-        });
-      });
-    </script>
-
-<!-- IK_REDESIGN_PATCH_FINAL -->
-<style>
-:root {
-    --ik-purple: #6A1B9A;
-    --ik-purple-hover: #4b0067;
-    --ik-text-sub: #777;
-    --ik-bg: #faf8fc;
-    --ik-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    --ik-radius: 12px;
-}
-html { scroll-behavior: smooth; }
-body {
-    background-color: var(--ik-bg);
-    font-family: "Noto Sans KR", sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-    color: #333;
-}
-h1, h2, h3 { word-break: keep-all; hyphens: auto; line-height: 1.2; font-weight: 700; }
-h1 { font-size: 32px; }
-h2 { font-size: 24px; }
-@media (min-width: 768px) {
-    h1 { font-size: 40px; }
-    h2 { font-size: 28px; }
-}
-@media (min-width: 1024px) {
-    h1 { font-size: 56px; }
-    h2 { font-size: 32px; }
-}
-.btn {
-    display: inline-block;
-    background: var(--ik-purple);
-    color: #fff !important;
-    border-radius: var(--ik-radius);
-    padding: 14px 28px;
-    font-weight: 600;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-.btn:hover { background: var(--ik-purple-hover); }
-
-/* Header */
-.ik-header {
-    position: sticky; top: 0; z-index: 999;
-    background: #fff;
-    padding: 0 16px;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #f0f0f0;
-}
-.ik-header-logo img { height: 30px; }
-.ik-header-nav { display: none; }
-.ik-hamburger { display: none; background: none; border: none; font-size: 28px; cursor: pointer; }
-@media (max-width: 768px) {
-    .ik-hamburger { display: block; }
-    .ik-header-nav {
-        display: none;
-        position: absolute;
-        top: 64px; left: 0; right: 0;
-        background: white;
-        box-shadow: var(--ik-shadow);
-    }
-    .ik-header-nav.is-open { display: block; }
-    .ik-header-nav a { display: block; padding: 16px; text-decoration: none; color: #333; }
-}
-@media (min-width: 769px) {
-    .ik-header { height: 72px; padding: 0 24px; }
-    .ik-header-nav { display: flex; gap: 24px; }
-    .ik-header-nav a { text-decoration: none; color: #333; font-weight: 500; }
-}
-
-/* Hero Section */
-.ik-hero {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    position: relative;
-    text-align: center;
-    color: white;
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-.ik-hero-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-.ik-hero-content h1 { text-shadow: 0 2px 12px rgba(0,0,0,.25); }
-
-/* Pricing Section */
-.ik-pricing-section { padding: 60px 16px; }
-.ik-pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 24px auto 0; }
-.ik-price-card { background: #fff; border-radius: 16px; padding: 24px; box-shadow: var(--ik-shadow); text-align: center; }
-
-/* Test Section */
-.ik-test-section { padding: 60px 16px; text-align: center; }
-.ik-test-grid { display: grid; grid-template-columns: 1fr; gap: 24px; max-width: 700px; margin: 24px auto 0; }
-.ik-test-card { background: #fff; border-radius: 16px; padding: 32px; box-shadow: var(--ik-shadow); text-decoration: none; color: inherit; transition: transform 0.2s ease; }
-.ik-test-card:hover { transform: scale(1.05); }
-@media (min-width: 768px) { .ik-test-grid { grid-template-columns: 1fr 1fr; } }
-
-/* Final CTA */
-#cta { display: none; }
-</style>
-<script>
-(function() {
-    if (window.IK_REDESIGN_APPLIED_FINAL) return;
-    window.IK_REDESIGN_APPLIED_FINAL = true;
-    const $ = (s) => document.querySelector(s);
-    const $$ = (s) => Array.from(document.querySelectorAll(s));
-    function setupGlobal() {
-        const header = $('header') || document.body.prepend(document.createElement('header'));
-        header.className = 'ik-header';
-        header.innerHTML = `
-            <a href="index.html" class="ik-header-logo"><img src="assets/logo-innerkurly-purple.png" alt="InnerKurly Logo"></a>
-            <nav class="ik-header-nav">
-                <a href="membership.html">멤버십</a>
-                <a href="index.html#plates">플레이트</a>
-                <a href="cart.html">장바구니</a>
-                <a href="signup.html">회원가입</a>
-            </nav>
-            <button class="ik-hamburger">☰</button>
-        `;
-        $('.ik-hamburger').addEventListener('click', () => $('.ik-header-nav').classList.toggle('is-open'));
-        const finalCTA = $('#cta');
-        if(finalCTA) finalCTA.style.display = 'none';
-    }
-    function setupHero() {
-        const hero = $('.hero-section');
-        if (hero) {
-            hero.classList.add('ik-hero');
-            hero.style.backgroundImage = "url('assets/hero-banner.png')";
-            hero.innerHTML = `<div class="ik-hero-content"><h1>하루 한 끼, 나를 위한 건강한 투자</h1><a href="#pricing" class="btn">구독 시작하기</a></div>`;
-        }
-    }
-    function setupMembershipPage() {
-        if (!location.pathname.includes('membership.html')) return;
-        const title = $('.membership-hero-section__title');
-        if (title) title.innerHTML = 'Kurly Membership<br><span style="font-size:24px;color:var(--ik-purple)">&times;</span><br>InnerKurly';
-        const subtitle = $('.membership-hero-section__subtitle');
-        if (subtitle) subtitle.textContent = '월 1,900원 멤버십 + 이너컬리 구독으로 더 큰 혜택을.';
-        const cta = $('.membership-hero-section .btn');
-        if (cta) {
-            cta.href = 'https://www.kurly.com/member/membership';
-            cta.target = '_blank';
-            cta.rel = 'noopener';
-        }
-        $$('main > .section').forEach((sec, i) => { if (i > 0) sec.remove(); });
-        const testSection = document.createElement('section');
-        testSection.className = 'ik-test-section';
-        testSection.innerHTML = `
-            <h2>나에게 맞는 이너뷰티 루틴을 찾아보세요</h2>
-            <div class="ik-test-grid">
-                <a href="https://lifestyle-conscious.netlify.app/" target="_blank" rel="noopener" class="ik-test-card"><h3>Lifestyle Type Test</h3><p>생활 습관으로 건강 상태를 진단하고 맞춤 솔루션을 추천받으세요.</p><span class="btn">루틴 테스트 시작하기</span></a>
-                <a href="https://skin-conscious.netlify.app/" target="_blank" rel="noopener" class="ik-test-card"><h3>Skin Personality Test</h3><p>피부 고민과 성향으로 가장 효과적인 성분을 찾아보세요.</p><span class="btn">피부 루틴 알아보기</span></a>
-            </div>`;
-        $('main').appendChild(testSection);
-    }
-    function setupPlatePages() {
-        if (!location.pathname.match(/plate-/)) return;
-        $$('.pricing, #pricing').forEach(s => s.remove());
-        const pricingHTML = `
-            <h2 style="text-align:center;">플레이트 구독 가격</h2>
-            <div class="ik-pricing-grid">
-                <div class="ik-price-card"><h3>Trial Routine</h3><p>무료 (3일)</p></div>
-                <div class="ik-price-card"><h3>Weekly 3 Days</h3><p>₩45,000 / 주 (1일 ₩15,000)</p></div>
-                <div class="ik-price-card"><h3>Weekly 5 Days</h3><p>₩73,000 / 주 (1일 ₩14,600)</p></div>
-                <div class="ik-price-card"><h3>Monthly Routine</h3><p>₩280,000 / 월 (1일 ₩14,000)</p></div>
-            </div>`;
-        const pricingSection = document.createElement('section');
-        pricingSection.className = 'ik-pricing-section';
-        pricingSection.innerHTML = pricingHTML;
-        $('main').appendChild(pricingSection);
-    }
-    function setupIndexPage() {
-        if (!location.pathname.includes('index.html')) return;
-        const ctaSection = $('#cta');
-        if (ctaSection) {
-            const testSection = document.createElement('section');
-            testSection.className = 'ik-test-section';
-            testSection.innerHTML = `
-                <h2>나에게 맞는 이너뷰티 루틴을 찾아보세요</h2>
-                <div class="ik-test-grid">
-                    <a href="https://lifestyle-conscious.netlify.app/" target="_blank" rel="noopener" class="ik-test-card"><h3>Lifestyle Type Test</h3><p>생활 습관으로 건강 상태를 진단하고 맞춤 솔루션을 추천받으세요.</p><span class="btn">루틴 테스트 시작하기</span></a>
-                    <a href="https://skin-conscious.netlify.app/" target="_blank" rel="noopener" class="ik-test-card"><h3>Skin Personality Test</h3><p>피부 고민과 성향으로 가장 효과적인 성분을 찾아보세요.</p><span class="btn">피부 루틴 알아보기</span></a>
-                </div>`;
-            ctaSection.parentElement.insertBefore(testSection, ctaSection);
-            ctaSection.remove();
-        }
-    }
-    document.addEventListener('DOMContentLoaded', () => {
-        setupGlobal();
-        setupHero();
-        setupMembershipPage();
-        setupPlatePages();
-        setupIndexPage();
-    });
-})();
-</script>
-</body>
+    <script src="./scripts/common.js"></script>
+    <script src="./scripts/signup.js"></script>
+  </body>
 </html>

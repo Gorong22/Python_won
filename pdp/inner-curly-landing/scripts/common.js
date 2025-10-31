@@ -1,0 +1,174 @@
+(function () {
+  const loader = document.getElementById("app-loader");
+  window.addEventListener("load", () =>
+    setTimeout(() => loader && loader.classList.remove("active"), 150)
+  );
+  window.fireEvent = (n, p = {}) => {
+    try {
+      gtag("event", n, p);
+    } catch (e) {}
+  };
+  const LS_USER = "ik_user",
+    LS_CART = "ik_cart",
+    LS_REV = "ik_reviews";
+  window.Auth = {
+    current() {
+      try {
+        return JSON.parse(localStorage.getItem(LS_USER) || "null");
+      } catch (e) {
+        return null;
+      }
+    },
+    login(e, n) {
+      const u = { email: e, name: n };
+      localStorage.setItem(LS_USER, JSON.stringify(u));
+      return u;
+    },
+    logout() {
+      localStorage.removeItem(LS_USER);
+    },
+  };
+  window.Cart = {
+    list() {
+      try {
+        return JSON.parse(localStorage.getItem(LS_CART) || "[]");
+      } catch (e) {
+        return [];
+      }
+    },
+    save(x) {
+      localStorage.setItem(LS_CART, JSON.stringify(x));
+    },
+    add(it) {
+      const a = Cart.list();
+      a.push({ ...it, id: Date.now() });
+      Cart.save(a);
+      toast("장바구니에 담겼습니다");
+    },
+  };
+  window.Reviews = {
+    key: LS_REV,
+    list(plate) {
+      try {
+        return JSON.parse(localStorage.getItem(LS_REV) || "{}")[plate] || [];
+      } catch (e) {
+        return [];
+      }
+    },
+    add(plate, rev) {
+      const all = JSON.parse(localStorage.getItem(LS_REV) || "{}");
+      all[plate] = all[plate] || [];
+      all[plate].push(rev);
+      localStorage.setItem(LS_REV, JSON.stringify(all));
+    },
+  };
+  window.toast = (msg) => {
+    let t = document.querySelector(".toast");
+    if (!t) {
+      t = document.createElement("div");
+      t.className = "toast";
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 1400);
+  };
+  window.initSlider = (sel) => {
+    const el = document.querySelector(sel);
+    if (!el) return;
+    const track = el.querySelector(".slides"),
+      slides = [...el.querySelectorAll(".slide")],
+      dots = [...el.querySelectorAll(".dot")];
+    let i = 0;
+    const go = (n) => {
+      i = (n + slides.length) % slides.length;
+      track.style.transform = `translateX(-${i * 100}%)`;
+      dots.forEach((d, k) => d.classList.toggle("active", k === i));
+    };
+    el.querySelector("[data-prev]")?.addEventListener("click", () => go(i - 1));
+    el.querySelector("[data-next]")?.addEventListener("click", () => go(i + 1));
+    dots.forEach((d, k) => d.addEventListener("click", () => go(k)));
+    setInterval(() => go(i + 1), 4800);
+    go(0);
+  };
+
+  window.sharePage = async (title = document.title, url = location.href) => {
+    try {
+      if (navigator.share) {
+        await navigator.share({ title, url });
+        toast("공유했어요");
+      } else {
+        await navigator.clipboard.writeText(url);
+        toast("링크가 복사되었습니다");
+      }
+    } catch (e) {
+      /* cancelled */
+    }
+  };
+})();
+
+// 🔹 슬라이더 (자동 전환 + 드래그/스와이프 지원)
+function initSlider(selector) {
+  const slider = document.querySelector(selector);
+  if (!slider) return;
+
+  const slides = slider.querySelector(".slides");
+  const slideItems = slides.querySelectorAll(".slide");
+  const total = slideItems.length;
+
+  let index = 0;
+  let startX = 0;
+  let currentX = 0;
+  let isDragging = false;
+  let autoTimer;
+
+  // 이동 함수
+  function goToSlide(i) {
+    index = (i + total) % total;
+    slides.style.transform = `translateX(-${index * 100}%)`;
+  }
+
+  // 자동 슬라이드
+  function startAuto() {
+    autoTimer = setInterval(() => goToSlide(index + 1), 4000);
+  }
+  function stopAuto() {
+    clearInterval(autoTimer);
+  }
+
+  // 터치/드래그 이벤트
+  slider.addEventListener("touchstart", startDrag, { passive: true });
+  slider.addEventListener("mousedown", startDrag);
+  slider.addEventListener("touchmove", drag, { passive: true });
+  slider.addEventListener("mousemove", drag);
+  slider.addEventListener("touchend", endDrag);
+  slider.addEventListener("mouseup", endDrag);
+  slider.addEventListener("mouseleave", endDrag);
+
+  function startDrag(e) {
+    stopAuto();
+    isDragging = true;
+    startX = e.touches ? e.touches[0].clientX : e.clientX;
+  }
+
+  function drag(e) {
+    if (!isDragging) return;
+    currentX = e.touches ? e.touches[0].clientX : e.clientX;
+    const diff = currentX - startX;
+    slides.style.transform = `translateX(calc(-${index * 100}% + ${diff}px))`;
+  }
+
+  function endDrag(e) {
+    if (!isDragging) return;
+    isDragging = false;
+    const diff = currentX - startX;
+    if (diff > 50) goToSlide(index - 1);
+    else if (diff < -50) goToSlide(index + 1);
+    else goToSlide(index);
+    startAuto();
+  }
+
+  // 초기 시작
+  goToSlide(0);
+  startAuto();
+}

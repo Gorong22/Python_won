@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>장바구니</title>
+  <title>플레이트</title>
   <meta name="theme-color" content="#5F0080"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
@@ -19,7 +19,7 @@ gtag('config', 'G-XXXXXXX');
 </script>
 
 </head>
-<body data-active="cart">
+<body data-active="plates">
 <div class="mobile-wrap">
   <header class="app-header">
     <button class="icon-btn" onclick="if(history.length>1)history.back();else location.href='./index.html';" aria-label="뒤로가기">←</button>
@@ -29,14 +29,14 @@ gtag('config', 'G-XXXXXXX');
   <div id="app-loader" class="loader active"><div class="spinner"></div></div>
 
 <main class="container">
-  <section class="card pad center">
-    <h2 class="h2">장바구니</h2>
-    <div id="cart-items" class="col" style="text-align:left"></div>
-    <hr class="divider" />
-    <div class="row" style="justify-content:space-between"><strong>총액</strong><div class="price" id="cart-total">0원</div></div>
+  <h1 class="h1">플레이트</h1>
+  <section class="grid-2">
+    <a class="card" href="./plate-glow.html"><img class="compact-img" src="./assets/plate-glow-hero.png" alt="Glow"><div class="pad"><h3 class="h3">Glow</h3><p class="small">피부 컨디션 케어</p></div></a>
+    <a class="card" href="./plate-slim.html"><img class="compact-img" src="./assets/plate-slim-hero.png" alt="Slim"><div class="pad"><h3 class="h3">Slim</h3><p class="small">가벼운 컨디션</p></div></a>
+    <a class="card" href="./plate-detox.html"><img class="compact-img" src="./assets/plate-detox-hero.png" alt="Detox"><div class="pad"><h3 class="h3">Detox</h3><p class="small">정화/리셋</p></div></a>
+    <a class="card" href="./plate-balance.html"><img class="compact-img" src="./assets/plate-balance-hero.png" alt="Balance"><div class="pad"><h3 class="h3">Balance</h3><p class="small">일상 균형</p></div></a>
   </section>
 </main>
-<div class="toast" aria-live="polite"></div>
 
   <footer class="app-footer">
     <div class="pay-row"><img src="./assets/payment-icons.png" alt="결제수단"/></div>
@@ -54,6 +54,6 @@ gtag('config', 'G-XXXXXXX');
 
 </div>
 <script src="./scripts/common.js"></script>
-<script src="./scripts/cart.js"></script>
+
 </body>
 </html>
