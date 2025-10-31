@@ -201,3 +201,50 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+// scripts/common.js
+document.addEventListener("DOMContentLoaded", () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const nav = document.querySelector(".nav");
+  const loginLink = nav?.querySelector('a[href="./login.html"]');
+  const signupLink = nav?.querySelector('a[href="./signup.html"]');
+
+  // 이미 로그인한 경우
+  if (user && user.email) {
+    // 기존 로그인/회원가입 링크 제거
+    if (loginLink) loginLink.remove();
+    if (signupLink) signupLink.remove();
+
+    // 마이페이지 & 로그아웃 버튼 추가
+    const myLink = document.createElement("a");
+    myLink.href = "./mypage.html";
+    myLink.textContent = "마이페이지";
+
+    const logoutLink = document.createElement("a");
+    logoutLink.href = "#";
+    logoutLink.textContent = "로그아웃";
+    logoutLink.addEventListener("click", () => {
+      localStorage.removeItem("user");
+      alert("로그아웃 되었습니다.");
+      location.reload();
+    });
+
+    nav.appendChild(myLink);
+    nav.appendChild(logoutLink);
+  } else {
+    // 로그인 안 한 경우 → “회원가입 / 로그인” 유지
+    if (!loginLink && !signupLink) {
+      const signup = document.createElement("a");
+      signup.href = "./signup.html";
+      signup.textContent = "회원가입";
+
+      const login = document.createElement("a");
+      login.href = "./login.html";
+      login.textContent = "로그인";
+
+      nav.innerHTML = "";
+      nav.appendChild(signup);
+      nav.appendChild(login);
+    }
+  }
+});
