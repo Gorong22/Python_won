@@ -3,40 +3,47 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("signup-form");
   if (!form) return;
 
-  // ======= 비밀번호 안내 문구 삽입 =======
+  /* -------------------------------
+     ✅ 비밀번호 안내 문구 삽입
+  --------------------------------*/
   const pwInput = form.querySelector('input[name="password"]');
   if (pwInput) {
     const notice = document.createElement("p");
     notice.textContent = "※ 모든 비밀번호는 암호화되어 안전하게 저장됩니다.";
-    notice.style.fontSize = "12px";
-    notice.style.color = "#666";
-    notice.style.marginTop = "4px";
+    notice.classList.add("pw-notice");
     pwInput.insertAdjacentElement("afterend", notice);
   }
 
   const submitBtn = form.querySelector('button[type="submit"]');
 
-  // ======= 유틸: 버튼 로딩 상태 토글 =======
+  /* -------------------------------
+     ✅ 유틸: 로딩 상태 토글
+  --------------------------------*/
   function setLoading(isLoading) {
     if (!submitBtn) return;
     submitBtn.disabled = isLoading;
-    submitBtn.dataset.loading = isLoading ? "1" : "0";
     if (isLoading) {
+      submitBtn.dataset.loading = "1";
       submitBtn._origText = submitBtn.textContent;
       submitBtn.textContent = "처리 중...";
     } else {
-      submitBtn.textContent = submitBtn._origText || "다음";
+      submitBtn.dataset.loading = "0";
+      submitBtn.textContent = submitBtn._origText || "회원가입";
     }
   }
 
-  // ======= 유틸: 기본 검증 =======
+  /* -------------------------------
+     ✅ 기본 검증 유틸
+  --------------------------------*/
   const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   const isValidAge = (v) => {
     const n = Number(v);
     return Number.isInteger(n) && n >= 10 && n <= 100;
   };
 
-  // ======= 유틸: SHA-256 해시 함수 =======
+  /* -------------------------------
+     ✅ 비밀번호 해시(SHA-256)
+  --------------------------------*/
   async function hashPassword(password) {
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
@@ -45,14 +52,18 @@ document.addEventListener("DOMContentLoaded", () => {
     return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
   }
 
-  // ======= 유틸: GA4 이벤트 =======
+  /* -------------------------------
+     ✅ GA4 이벤트 유틸
+  --------------------------------*/
   function gaEvent(name, params = {}) {
     if (typeof window.gtag === "function") {
       window.gtag("event", name, params);
     }
   }
 
-  // ======= 유틸: fetch 타임아웃 =======
+  /* -------------------------------
+     ✅ fetch 타임아웃 유틸
+  --------------------------------*/
   async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeoutMs);
@@ -66,7 +77,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ======= 폼 제출 =======
+  /* -------------------------------
+     ✅ 폼 제출 이벤트
+  --------------------------------*/
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -76,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = (form.email?.value || "").trim();
     const password = (form.password?.value || "").trim();
 
-    // ======= 1차 검증 =======
+    // ---------------- 검증 ----------------
     if (!name || !gender || !age || !email || !password) {
       alert("모든 항목을 입력해주세요.");
       return;
@@ -102,10 +115,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // ======= 비밀번호 해시 변환 =======
+    // ---------------- 비밀번호 해시 처리 ----------------
     const hashedPw = await hashPassword(password);
 
-    // ======= 전송 데이터 구성 =======
+    // ---------------- 전송 데이터 구성 ----------------
     const payload = {
       action: "signup",
       name,
@@ -138,23 +151,24 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
 
       if (data.status === "success") {
-        // ✅ localStorage에 user 정보 저장 (자동 로그인용)
-        localStorage.setItem(
-          "user",
-          JSON.stringify({ name, gender, age, email })
-        );
+        // ✅ localStorage 저장 (자동 로그인 + 이후 서베이 연결)
+        const userData = { name, gender, age, email };
+        localStorage.setItem("user", JSON.stringify(userData));
 
         gaEvent("signup_success", { page_title: document.title || "signup" });
-        alert(`${name}님, 회원가입이 완료되었습니다.`);
+        alert(
+          `${name}님, 회원가입이 완료되었습니다.\n지금 바로 심리 테스트를 진행해볼까요?`
+        );
 
-        // ✅ 약간의 딜레이 후 마이페이지 이동 (헤더 반영 위해)
+        // ✅ 회원가입 후 → survey.html 로 이동
         setTimeout(() => {
-          window.location.href = "./mypage.html";
+          window.location.href = "./survey.html";
         }, 300);
 
         return;
       }
 
+      // ---------------- 중복 이메일 처리 ----------------
       if (data.status === "duplicate") {
         gaEvent("signup_duplicate", {
           email_domain: email.split("@")[1] || "",
@@ -163,6 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      // ---------------- 기타 에러 처리 ----------------
       gaEvent("signup_failed", { reason: data.message || "unknown" });
       alert("오류가 발생했습니다: " + (data.message || "등록 실패"));
     } catch (err) {
