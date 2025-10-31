@@ -79,10 +79,7 @@
         <section class="card pad" id="section-survey">
           <h3 class="h3">나의 서베이 결과</h3>
           <div id="survey-result" class="text small">
-            아직 설문 결과가 없습니다.<br />
-            <a href="./tests.html" class="btn btn--primary small"
-              >설문하러 가기</a
-            >
+            결과를 불러오는 중입니다...
           </div>
         </section>
 
@@ -136,6 +133,105 @@
        SCRIPTS
   ======================= -->
     <script src="./scripts/common.js"></script>
-    <script src="./scripts/mypage.js"></script>
+
+    <script>
+      // scripts/mypage.js 통합 버전
+      document.addEventListener("DOMContentLoaded", async () => {
+        const u = Auth.current(); // common.js의 Auth 객체 사용
+        const userBox = document.getElementById("user-info");
+        const surveyBox = document.getElementById("survey-result");
+        const plateBox = document.getElementById("plate-recommend");
+        const loader = document.getElementById("app-loader");
+
+        // 로딩 시작
+        loader.classList.add("active");
+
+        // 로그인 상태 확인
+        if (u && u.email) {
+          userBox.innerHTML = `
+            <p><strong>이름:</strong> ${u.name || "-"}</p>
+            <p><strong>이메일:</strong> ${u.email}</p>
+            <p><strong>성별:</strong> ${u.gender || "-"}</p>
+            <p><strong>나이:</strong> ${u.age || "-"}</p>
+          `;
+
+          // ✅ 서베이 결과 불러오기
+          try {
+            const res = await fetch(
+              \`https://script.google.com/macros/s/AKfycbxxxxxxxxxxxxxx/exec?email=\${encodeURIComponent(
+                u.email
+              )}\`
+            );
+            const data = await res.json();
+
+            if (data && data.resultType) {
+              // 결과 표시
+              surveyBox.innerHTML = `
+                <p>회원님의 서베이 결과는 <strong>${data.resultType}</strong> 유형이에요 💫</p>
+                <a href="plate-${data.resultType.toLowerCase()}.html" class="btn btn--primary small">
+                  추천 플레이트 보러가기
+                </a>
+              `;
+
+              // 추천 문구 표시
+              const plateMsg = getPlateMessage(data.resultType);
+              plateBox.innerHTML = `<p>${plateMsg}</p>`;
+            } else {
+              surveyBox.innerHTML = `
+                아직 설문 결과가 없습니다.<br />
+                <a href="./tests.html" class="btn btn--primary small">설문하러 가기</a>
+              `;
+              plateBox.innerHTML = `
+                <p>회원님의 서베이 결과에 따라 맞춤 플레이트를 준비 중이에요 🍽️</p>
+              `;
+            }
+          } catch (err) {
+            console.error(err);
+            surveyBox.innerHTML = `<p>결과를 불러오는 중 오류가 발생했습니다.</p>`;
+            plateBox.innerHTML = `<p>추천 정보를 불러올 수 없습니다.</p>`;
+          }
+        } else {
+          // 로그인 안 된 상태
+          userBox.innerHTML = `
+            <p>로그인이 필요합니다.</p>
+            <a href="./login.html" class="btn btn--primary small">로그인</a>
+          `;
+          surveyBox.innerHTML = `
+            <p>서베이 결과를 보려면 로그인 해주세요.</p>
+          `;
+          plateBox.innerHTML = `
+            <p>로그인 후 맞춤 플레이트를 확인할 수 있습니다.</p>
+          `;
+        }
+
+        // 로딩 종료
+        loader.classList.remove("active");
+
+        // ✅ 로그아웃 버튼 클릭 이벤트
+        document.addEventListener("click", (e) => {
+          if (e.target && e.target.id === "btn-logout") {
+            Auth.logout();
+            alert("로그아웃 되었습니다.");
+            location.href = "./index.html";
+          }
+        });
+      });
+
+      // ✅ 결과 유형별 추천 문구
+      function getPlateMessage(type) {
+        switch (type.toLowerCase()) {
+          case "burnout":
+            return "에너지가 고갈된 번아웃형에게는 Detox Plate가 잘 어울려요 🧘‍♀️";
+          case "recovery":
+            return "회복형인 당신께는 Glow Plate로 활력을 채워보세요 ✨";
+          case "balance":
+            return "균형형은 Balance Plate로 일상의 조화를 유지해보세요 ⚖️";
+          case "void":
+            return "공허형에게는 Slim Plate로 가볍게 리듬을 되찾는 걸 추천드려요 🌿";
+          default:
+            return "회원님의 결과에 맞는 플레이트를 준비 중이에요 🍱";
+        }
+      }
+    </script>
   </body>
 </html>

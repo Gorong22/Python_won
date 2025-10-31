@@ -1,9 +1,11 @@
 // scripts/mypage.js
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const u = Auth.current(); // common.js의 Auth 객체 사용
   const box = document.getElementById("user-info");
+  const surveyBox = document.getElementById("survey-result");
+  const plateBox = document.getElementById("recommended-plate");
 
-  // 로그인 상태에 따라 표시
+  // 로그인 상태 확인
   if (u && u.email) {
     box.innerHTML = `
       <h3>내 정보</h3>
@@ -13,15 +15,49 @@ document.addEventListener("DOMContentLoaded", () => {
       <p><strong>나이:</strong> ${u.age || "-"}</p>
       <button id="btn-logout" class="btn btn--secondary">로그아웃</button>
     `;
+
+    // ✅ 로컬스토리지에서 설문 결과 가져오기
+    const surveyData = JSON.parse(localStorage.getItem("surveyResult") || "{}");
+    const plate = surveyData.plate || u.plate || null;
+    const answers = surveyData.answers || [];
+
+    if (plate) {
+      // 결과 표시
+      surveyBox.innerHTML = `
+        <p>회원님의 서베이 결과는 <strong>${plate}</strong> Plate 입니다 💫</p>
+        <a href="plate-${plate.toLowerCase()}.html" class="btn btn--primary">
+          추천 플레이트 보러가기
+        </a>
+      `;
+
+      // 추천 문구
+      const plateMsg = getPlateMessage(plate);
+      plateBox.innerHTML = `<p>${plateMsg}</p>`;
+    } else {
+      surveyBox.innerHTML = `
+        <p>아직 설문 결과가 없습니다.</p>
+        <a href="survey.html" class="btn btn--primary">설문하러 가기</a>
+      `;
+      plateBox.innerHTML = `
+        <p>회원님의 서베이 결과에 따라 맞춤 플레이트를 준비 중이에요 🍱</p>
+      `;
+    }
   } else {
+    // 로그인 안 된 상태
     box.innerHTML = `
       <h3>내 정보</h3>
       <p>로그인이 필요합니다.</p>
       <a href="login.html" class="btn btn--primary">로그인</a>
     `;
+    surveyBox.innerHTML = `
+      <p>서베이 결과를 보려면 로그인 해주세요.</p>
+    `;
+    plateBox.innerHTML = `
+      <p>로그인 후 맞춤 플레이트를 확인할 수 있습니다.</p>
+    `;
   }
 
-  // 로그아웃 이벤트
+  // ✅ 로그아웃 이벤트
   document.addEventListener("click", (e) => {
     if (e.target && e.target.id === "btn-logout") {
       Auth.logout();
@@ -30,3 +66,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+// ✅ 타입별 추천 문구
+function getPlateMessage(type) {
+  switch (type.toLowerCase()) {
+    case "glow":
+      return "활력을 되찾고 싶은 분께 Glow Plate를 추천드려요 ✨";
+    case "slim":
+      return "꾸준한 라인 관리엔 Slim Plate가 어울려요 🧘‍♀️";
+    case "detox":
+      return "몸이 무겁다면 Detox Plate로 리셋하세요 🌿";
+    case "balance":
+      return "조화로운 루틴엔 Balance Plate가 완벽해요 ⚖️";
+    default:
+      return "회원님의 결과에 맞는 플레이트를 준비 중이에요 🍽️";
+  }
+}

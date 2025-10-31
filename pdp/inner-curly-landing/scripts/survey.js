@@ -1,3 +1,8 @@
+/****************************************************
+ * INNER KURLY - 회원 설문 페이지 (survey.html)
+ * 결과: localStorage 저장 + Apps Script 업데이트
+ ****************************************************/
+
 document.addEventListener("DOMContentLoaded", () => {
   const qwrap = document.getElementById("qwrap");
   const nextBtn = document.getElementById("next");
@@ -87,9 +92,10 @@ document.addEventListener("DOMContentLoaded", () => {
       opt.addEventListener("click", () => {
         options.forEach((el) => el.classList.remove("selected"));
         opt.classList.add("selected");
-        answers[current] = parseInt(opt.dataset.index);
 
-        // ✅ 클릭 후 자동으로 다음 문항으로 이동 (딜레이 추가로 자연스럽게)
+        // ✅ 선택한 텍스트로 저장
+        answers[current] = q.a[parseInt(opt.dataset.index)];
+
         setTimeout(() => {
           if (current < questions.length - 1) {
             current++;
@@ -102,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     prevBtn.style.display = current === 0 ? "none" : "inline-block";
-    nextBtn.style.display = "none"; // ❌ 다음 버튼 숨김
+    nextBtn.style.display = "none";
   }
 
   prevBtn.addEventListener("click", () => {
@@ -113,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function showResult() {
-    const sum = answers.reduce((a, b) => a + parseInt(b), 0);
+    const sum = answers.reduce((a, _, i) => a + i, 0); // 단순 점수 계산
     let plate = "glow";
 
     if (sum >= 15) plate = "balance";
@@ -171,6 +177,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     modal.style.display = "flex";
 
+    // ✅ 로컬스토리지 저장 (마이페이지용)
+    localStorage.setItem("surveyResult", JSON.stringify({ plate, answers }));
+
+    // ✅ Apps Script로 설문결과 전송 (백엔드 저장)
+    if (signupData.email) {
+      sendSurveyResult(signupData.email, plate, answers);
+    }
+
+    // ✅ 이동 버튼
     goPlate.onclick = () => {
       window.location.href = `./plate-${plate}.html`;
     };
@@ -180,10 +195,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /****************************************************
- * ✅ 설문 결과 전송 → Google Apps Script (Inner Kurly)
- * Endpoint: https://script.google.com/macros/s/AKfycby64_DR1ntrW761V-PfEPLV8aG3RmBr088LUMeZ1SSOgcanqSWLTbagePhq4CpkmDWIlw/exec
+ * ✅ 설문 결과 전송 → Google Apps Script
  ****************************************************/
-
 async function sendSurveyResult(email, plate, answers) {
   try {
     const payload = {
@@ -204,37 +217,7 @@ async function sendSurveyResult(email, plate, answers) {
 
     const data = await res.json();
     console.log("✅ 설문 결과 전송 완료:", data);
-
-    if (data.status === "success") {
-      console.log("설문결과가 시트에 성공적으로 저장되었습니다.");
-    } else {
-      console.warn("⚠️ 설문결과 저장 실패:", data.message);
-    }
   } catch (err) {
     console.error("🚨 설문결과 전송 오류:", err);
-  }
-}
-
-/****************************************************
- * ✅ 설문 완료 시 자동 호출 예시 (결과 표시 함수 내부에 추가)
- ****************************************************/
-
-function showResult(plate, answers) {
-  const result = plateResults[plate];
-  if (!result) return;
-
-  // 결과 표시
-  document.getElementById("result-title").innerText = result.title;
-  document.getElementById("result-reasons").innerHTML = result.reasons
-    .map((r) => `<li>${r}</li>`)
-    .join("");
-  document.getElementById("result-solution").innerText = result.solution;
-
-  // ✅ 회원가입 정보 불러오기
-  const signupData = JSON.parse(localStorage.getItem("signupData") || "{}");
-
-  if (signupData.email) {
-    // ✅ Apps Script로 전송
-    sendSurveyResult(signupData.email, plate, answers);
   }
 }
