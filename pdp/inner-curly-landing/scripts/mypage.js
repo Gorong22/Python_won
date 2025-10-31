@@ -1,4 +1,8 @@
-// scripts/mypage.js
+/****************************************************
+ * INNER KURLY - 마이페이지
+ * 회원 정보 / 설문 결과 / 플레이트 추천 / 루션 체험 연동
+ ****************************************************/
+
 document.addEventListener("DOMContentLoaded", () => {
   const u = Auth.current(); // common.js의 Auth 객체 사용
   const box = document.getElementById("user-info");
@@ -6,10 +10,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const plateBox = document.getElementById("plate-recommend");
 
   // ✅ 루션 체험 버튼 영역 동적 추가
+  const mainContainer = document.querySelector("main.container");
+  if (!mainContainer) return;
+
   const lutionSection = document.createElement("section");
   lutionSection.classList.add("card", "pad", "center");
   lutionSection.id = "lution-section";
-  document.querySelector("main.container").appendChild(lutionSection);
+  mainContainer.appendChild(lutionSection);
 
   /* -------------------------------
      ✅ 로그인 상태일 때
@@ -55,9 +62,12 @@ document.addEventListener("DOMContentLoaded", () => {
             timestamp: new Date().toISOString(),
           })
         );
+
+        // 로그인 상태 유지한 채 루션 페이지로
         window.location.href = "./lution.html";
       });
     } else {
+      // 설문 미완료
       surveyBox.innerHTML = `
         <p>아직 설문 결과가 없습니다.</p>
         <a href="survey.html" class="btn btn--primary">설문하러 가기</a>
@@ -70,10 +80,9 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
     }
   } else {
-
-  /* -------------------------------
-     ❌ 비로그인 상태
-  --------------------------------*/
+    /* -------------------------------
+       ❌ 비로그인 상태
+    --------------------------------*/
     box.innerHTML = `
       <h3>내 정보</h3>
       <p>로그인이 필요합니다.</p>

@@ -14,13 +14,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const solution = document.getElementById("result-solution");
   const goPlate = document.getElementById("go-plate");
 
-  // ✅ 회원가입 정보 불러오기
-  const signupData = JSON.parse(localStorage.getItem("signupData")) || {};
-  const name = signupData.name || "회원님";
+  // ✅ 현재 로그인된 사용자 정보
+  const user = Auth.current();
+  const name = user?.name || "회원님";
   const email =
-    signupData.email || prompt("회원가입 시 사용한 이메일을 입력해주세요");
+    user?.email || prompt("회원가입 시 사용한 이메일을 입력해주세요");
 
-  // 질문 세트
+  // ✅ 로그인 안 되어 있으면 차단
+  if (!email) {
+    alert("로그인 후 이용해주세요.");
+    location.href = "./login.html";
+    return;
+  }
+
+  // ✅ 질문 세트
   const questions = [
     {
       q: "하루 식사는 주로 어떤 방식으로 해결하시나요?",
@@ -96,10 +103,8 @@ document.addEventListener("DOMContentLoaded", () => {
         options.forEach((el) => el.classList.remove("selected"));
         opt.classList.add("selected");
 
-        // ✅ 실제 선택지 텍스트 저장
         answers[current] = q.a[parseInt(opt.dataset.index)];
 
-        // 클릭 후 다음 문항으로 이동
         setTimeout(() => {
           if (current < questions.length - 1) {
             current++;
@@ -125,11 +130,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function showResult() {
     const sum = answers.reduce((a, _, i) => a + i, 0);
     let plate = "glow";
-
     if (sum >= 15) plate = "balance";
     else if (sum >= 10) plate = "slim";
     else if (sum >= 6) plate = "detox";
-    else plate = "glow";
 
     const plateResults = {
       glow: {
@@ -140,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
           "에너지 루틴과 기본 영양 보충이 필요한 타입입니다.",
         ],
         solution:
-          "Glow Plate는 ‘활력 회복 루틴’을 위한 식단입니다. 항산화 과채 도시락과 비타민B·C, 마그네슘 루틴으로 몸의 리듬을 되살리고 하루 에너지를 회복하세요.",
+          "Glow Plate는 ‘활력 회복 루틴’을 위한 식단입니다. 항산화 과채 도시락과 비타민B·C, 마그네슘 루틴으로 하루 에너지를 회복하세요.",
       },
       slim: {
         title: "Slim Plate",
@@ -185,9 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("surveyResult", JSON.stringify({ plate, answers }));
 
     // ✅ Apps Script로 설문 결과 전송 (시트 업데이트)
-    if (email) {
-      sendSurveyResult(email, plate, answers);
-    }
+    sendSurveyResult(email, plate, answers);
 
     // ✅ 플레이트 페이지 이동 버튼
     goPlate.onclick = () => {

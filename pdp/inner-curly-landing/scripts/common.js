@@ -39,6 +39,7 @@
       // data = {name, gender, age, email, plate?}
       localStorage.setItem(LS_USER, JSON.stringify(data));
       toast(`${data.name || "회원"}님, 환영합니다!`);
+      updateHeader();
       return data;
     },
 
@@ -170,7 +171,8 @@ function updateHeader() {
     const logoutLink = document.createElement("a");
     logoutLink.href = "#";
     logoutLink.textContent = "로그아웃";
-    logoutLink.addEventListener("click", () => {
+    logoutLink.addEventListener("click", (e) => {
+      e.preventDefault();
       Auth.logout();
     });
 
@@ -190,24 +192,22 @@ function updateHeader() {
     nav.appendChild(login);
   }
 }
+
 /****************************************************
  * ✅ 공통: 구매/결제 관련 버튼 전역 팝업 처리
  ****************************************************/
 document.addEventListener("DOMContentLoaded", () => {
-  // 모달 HTML 동적 삽입 (없으면 추가)
   if (!document.getElementById("demo-modal")) {
     const modalHTML = `
-      <div id="demo-modal" class="modal-backdrop" style="display:none;">
-        <div class="modal">
-          <header>💜 Inner Kurly Demo</header>
-          <div class="body">
-            <p style="line-height:1.6;font-size:15px;">
-              현재는 <strong>데모 버전</strong>입니다.<br/>
-              정식 출시 후 더욱 편리한 서비스를 만나보실 수 있습니다 ✨
-            </p>
+      <div id="demo-modal" class="modal-backdrop" style="display:none;align-items:center;justify-content:center;">
+        <div class="modal" style="background:#fff;padding:24px;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.15);max-width:320px;text-align:center;">
+          <header style="font-weight:600;color:#5F0080;font-size:18px;margin-bottom:10px;">💜 Inner Kurly Demo</header>
+          <div class="body" style="font-size:14px;color:#333;line-height:1.6;margin-bottom:16px;">
+            현재는 <strong>데모 버전</strong>입니다.<br/>
+            정식 출시 후 더욱 편리한 서비스를 만나보실 수 있습니다 ✨
           </div>
           <div class="footer">
-            <button class="btn btn--primary" id="close-demo">확인</button>
+            <button class="btn btn--primary" id="close-demo" style="background:#5F0080;color:#fff;border:none;padding:8px 16px;border-radius:8px;">확인</button>
           </div>
         </div>
       </div>`;
@@ -217,7 +217,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("demo-modal");
   const closeBtn = document.getElementById("close-demo");
 
-  // 모달 닫기
   const closeModal = () => (modal.style.display = "none");
   closeBtn.addEventListener("click", closeModal);
   modal.addEventListener("click", (e) => {
@@ -226,11 +225,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 클릭 이벤트 감지 (버튼 텍스트 기반)
   document.body.addEventListener("click", (e) => {
-    const t = e.target;
-    if (!t || !t.closest("button, a")) return;
+    const t = e.target.closest("button, a");
+    if (!t) return;
     const text = (t.textContent || "").trim();
 
-    // 구매/결제 관련 키워드 감지
     const triggerWords = [
       "구매",
       "결제",
