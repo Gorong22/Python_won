@@ -173,3 +173,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+// scripts/signup.js
+function signupUser(event) {
+  event.preventDefault();
+
+  const form = document.getElementById("signup-form");
+  const formData = new FormData(form);
+  const user = Object.fromEntries(formData.entries());
+
+  // ✅ localStorage 저장
+  localStorage.setItem("user", JSON.stringify(user));
+
+  alert("회원가입이 완료되었습니다!");
+
+  // ✅ 살짝 딜레이 후 마이페이지로 이동 (common.js가 로드될 시간 확보)
+  setTimeout(() => {
+    window.location.href = "mypage.html";
+  }, 300);
+}

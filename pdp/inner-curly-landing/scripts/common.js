@@ -248,3 +248,32 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
+// scripts/common.js
+document.addEventListener("DOMContentLoaded", () => {
+  updateHeader();
+});
+
+function updateHeader() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const nav = document.querySelector(".nav");
+
+  if (!nav) return;
+  nav.innerHTML = "";
+
+  if (user && user.email) {
+    nav.innerHTML = `
+      <a href="./mypage.html">마이페이지</a>
+      <a href="#" id="logout-link">로그아웃</a>
+    `;
+    document.getElementById("logout-link").addEventListener("click", () => {
+      localStorage.removeItem("user");
+      alert("로그아웃 되었습니다.");
+      location.href = "index.html";
+    });
+  } else {
+    nav.innerHTML = `
+      <a href="./signup.html">회원가입</a>
+      <a href="./login.html">로그인</a>
+    `;
+  }
+}
