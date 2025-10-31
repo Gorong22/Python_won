@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const res = await fetchWithTimeout(
-        "https://script.google.com/macros/s/AKfycbyOLUb6htNaFYStyEJ2evTdOf_ZhekMP8RipDg02wB7CdP-XOzZZX5wL-UbvCu_JDHcKg/exec",
+        "https://script.google.com/macros/s/AKfycby64_DR1ntrW761V-PfEPLV8aG3RmBr088LUMeZ1SSOgcanqSWLTbagePhq4CpkmDWIlw/exec",
         {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },

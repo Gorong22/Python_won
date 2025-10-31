@@ -178,3 +178,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderQuestion();
 });
+
+/****************************************************
+ * ✅ 설문 결과 전송 → Google Apps Script (Inner Kurly)
+ * Endpoint: https://script.google.com/macros/s/AKfycby64_DR1ntrW761V-PfEPLV8aG3RmBr088LUMeZ1SSOgcanqSWLTbagePhq4CpkmDWIlw/exec
+ ****************************************************/
+
+async function sendSurveyResult(email, plate, answers) {
+  try {
+    const payload = {
+      action: "surveyUpdate",
+      email,
+      plate,
+      answers: JSON.stringify(answers),
+    };
+
+    const res = await fetch(
+      "https://script.google.com/macros/s/AKfycby64_DR1ntrW761V-PfEPLV8aG3RmBr088LUMeZ1SSOgcanqSWLTbagePhq4CpkmDWIlw/exec",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(payload),
+      }
+    );
+
+    const data = await res.json();
+    console.log("✅ 설문 결과 전송 완료:", data);
+
+    if (data.status === "success") {
+      console.log("설문결과가 시트에 성공적으로 저장되었습니다.");
+    } else {
+      console.warn("⚠️ 설문결과 저장 실패:", data.message);
+    }
+  } catch (err) {
+    console.error("🚨 설문결과 전송 오류:", err);
+  }
+}
+
+/****************************************************
+ * ✅ 설문 완료 시 자동 호출 예시 (결과 표시 함수 내부에 추가)
+ ****************************************************/
+
+function showResult(plate, answers) {
+  const result = plateResults[plate];
+  if (!result) return;
+
+  // 결과 표시
+  document.getElementById("result-title").innerText = result.title;
+  document.getElementById("result-reasons").innerHTML = result.reasons
+    .map((r) => `<li>${r}</li>`)
+    .join("");
+  document.getElementById("result-solution").innerText = result.solution;
+
+  // ✅ 회원가입 정보 불러오기
+  const signupData = JSON.parse(localStorage.getItem("signupData") || "{}");
+
+  if (signupData.email) {
+    // ✅ Apps Script로 전송
+    sendSurveyResult(signupData.email, plate, answers);
+  }
+}
