@@ -212,7 +212,7 @@ async function sendSurveyResult(email, plate, answers) {
     };
 
     const res = await fetch(
-      "https://script.google.com/macros/s/AKfycbzngqNeJai5fOzeCyjIAylyr7Fsf8ryND5Ih8on9OcM_MyzCoAdvIwU6qJIwutkW1FnSw/exec",
+      "https://script.google.com/macros/s/AKfycbxMUS024rVoh-LLyqReEjdTyDVLypxqrhsuqClBXZH_akycdwIOigihTpD_RS9YDWnj8Q/exec,
       {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
