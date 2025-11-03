@@ -1,63 +1,137 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>테스트</title>
-  <meta name="theme-color" content="#5F0080"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css"/>
-  
-<!-- GA4 placeholder -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-XXXXXXX');
-</script>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>테스트</title>
+    <meta name="theme-color" content="#5F0080" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
 
-</head>
-<body data-active="test">
-<div class="mobile-wrap">
-  <header class="app-header">
-    <button class="icon-btn" onclick="if(history.length>1)history.back();else location.href='./index.html';" aria-label="뒤로가기">←</button>
-    <a class="logo" href="./index.html"><img src="./assets/logo-innerkurly-purple.png" alt="Inner Kurly" class="logo-img"/></a>
-    <nav class="nav"><a href="./signup.html">회원가입</a><a href="./login.html">로그인</a></nav>
-  </header>
-  <div id="app-loader" class="loader active"><div class="spinner"></div></div>
+    <!-- GA4 placeholder -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-XXXXXXX");
+    </script>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-KWL72ML2");
+    </script>
+    <!-- End Google Tag Manager -->
+  </head>
+  <body data-active="test">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-KWL72ML2"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <div class="mobile-wrap">
+      <header class="app-header">
+        <button
+          class="icon-btn"
+          onclick="if(history.length>1)history.back();else location.href='./index.html';"
+          aria-label="뒤로가기"
+        >
+          ←
+        </button>
+        <a class="logo" href="./index.html"
+          ><img
+            src="./assets/logo-innerkurly-purple.png"
+            alt="Inner Kurly"
+            class="logo-img"
+        /></a>
+        <nav class="nav">
+          <a href="./signup.html">회원가입</a><a href="./login.html">로그인</a>
+        </nav>
+      </header>
+      <div id="app-loader" class="loader active">
+        <div class="spinner"></div>
+      </div>
 
-<main class="container">
-  <h1 class="h1">테스트</h1>
-  <section class="card pad center">
-    <h2 class="h2">라이프스타일 테스트</h2>
-    <p class="small">생활 패턴 기반 추천 가중치</p>
-    <a class="btn btn--primary" href="https://lifestyle-conscious.netlify.app/" target="_blank" rel="noopener">열기</a>
-  </section>
-  <section class="card pad center" style="margin-top:12px">
-    <h2 class="h2">스킨 컨디션 테스트</h2>
-    <p class="small">피부 컨디션·관리 목표 매칭</p>
-    <a class="btn btn--primary" href="https://skin-conscious.netlify.app/" target="_blank" rel="noopener">열기</a>
-  </section>
-</main>
+      <main class="container">
+        <h1 class="h1">테스트</h1>
+        <section class="card pad center">
+          <h2 class="h2">라이프스타일 테스트</h2>
+          <p class="small">생활 패턴 기반 추천 가중치</p>
+          <a
+            class="btn btn--primary"
+            href="https://lifestyle-conscious.netlify.app/"
+            target="_blank"
+            rel="noopener"
+            >열기</a
+          >
+        </section>
+        <section class="card pad center" style="margin-top: 12px">
+          <h2 class="h2">스킨 컨디션 테스트</h2>
+          <p class="small">피부 컨디션·관리 목표 매칭</p>
+          <a
+            class="btn btn--primary"
+            href="https://skin-conscious.netlify.app/"
+            target="_blank"
+            rel="noopener"
+            >열기</a
+          >
+        </section>
+      </main>
 
-  <footer class="app-footer">
-    <div class="pay-row"><img src="./assets/payment-icons.png" alt="결제수단"/></div>
-    <p>© Inner Kurly · Daily Premium Gift</p>
-  </footer>
-  
-<nav class="bottom-nav">
-  <a href="./index.html" data-key="home"><span>🏠</span><em>홈</em></a>
-  <a href="./plates.html" data-key="plates"><span>🍽️</span><em>플레이트</em></a>
-  <a href="./tests.html" data-key="test"><span>🧪</span><em>테스트</em></a>
-  <a href="./cart.html" data-key="cart"><span>🛒</span><em>장바구니</em></a>
-  <a href="./mypage.html" data-key="my"><span>👤</span><em>마이</em></a>
-</nav>
-<script>(function(){const k=document.body.getAttribute('data-active');document.querySelectorAll('.bottom-nav a').forEach(a=>{if(a.dataset.key===k)a.classList.add('active')});})();</script>
+      <footer class="app-footer">
+        <div class="pay-row">
+          <img src="./assets/payment-icons.png" alt="결제수단" />
+        </div>
+        <p>© Inner Kurly · Daily Premium Gift</p>
+      </footer>
 
-</div>
-<script src="./scripts/common.js"></script>
-
-</body>
+      <nav class="bottom-nav">
+        <a href="./index.html" data-key="home"><span>🏠</span><em>홈</em></a>
+        <a href="./plates.html" data-key="plates"
+          ><span>🍽️</span><em>플레이트</em></a
+        >
+        <a href="./tests.html" data-key="test"
+          ><span>🧪</span><em>테스트</em></a
+        >
+        <a href="./cart.html" data-key="cart"
+          ><span>🛒</span><em>장바구니</em></a
+        >
+        <a href="./mypage.html" data-key="my"><span>👤</span><em>마이</em></a>
+      </nav>
+      <script>
+        (function () {
+          const k = document.body.getAttribute("data-active");
+          document.querySelectorAll(".bottom-nav a").forEach((a) => {
+            if (a.dataset.key === k) a.classList.add("active");
+          });
+        })();
+      </script>
+    </div>
+    <script src="./scripts/common.js"></script>
+  </body>
 </html>
