@@ -42,14 +42,17 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   /* -------------------------------
-     ✅ 비밀번호 해시(SHA-256)
+     ✅ 비밀번호 해시(SHA-256, Base64)
+     - BE.me / Apps Script와 완전 동일한 구조
   --------------------------------*/
   async function hashPassword(password) {
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
     const hashBuffer = await crypto.subtle.digest("SHA-256", data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+    // ✅ Hex 대신 Base64 인코딩 (Apps Script Utilities.base64Encode()와 동일)
+    const base64 = btoa(String.fromCharCode.apply(null, hashArray));
+    return base64;
   }
 
   /* -------------------------------
