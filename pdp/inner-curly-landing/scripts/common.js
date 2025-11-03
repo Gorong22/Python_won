@@ -206,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalHTML = `
       <div id="demo-modal" class="modal-backdrop" style="display:none;align-items:center;justify-content:center;">
         <div class="modal" style="background:#fff;padding:24px;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,0.15);max-width:320px;text-align:center;">
-          <header style="font-weight:600;color:#5F0080;font-size:18px;margin-bottom:10px;">💜 Inner Kurly Demo</header>
+          <header style="font-weight:600;color:#ffffff;font-size:18px;margin-bottom:10px;">💜 Inner Kurly Demo</header>
           <div class="body" style="font-size:14px;color:#333;line-height:1.6;margin-bottom:16px;">
             현재는 <strong>데모 버전</strong>입니다.<br/>
             정식 출시 후 더욱 편리한 서비스를 만나보실 수 있습니다 ✨
