@@ -213,7 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!form) return;
 
     const GOOGLE_SCRIPT_URL =
-      "https://script.google.com/macros/s/AKfycbyrmlaadrrBfhOaXebxZiBwenOqoN6DwSYF4057lYKal7aRhRYl1Pb80ZwtcsGzIbefcQ/exec"; // 배포한 Web App URL 넣기
+      "https://script.google.com/macros/s/AKfycbyU9leJ8elcPFS-tR5LbVdrK3DagxQXA-Z1Cz-QZVdXG9ni8XjnRb3Jksyu2d427FoRCw/exec"; // 배포한 Web App URL 넣기
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();

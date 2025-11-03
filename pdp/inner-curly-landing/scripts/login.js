@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // ✅ Apps Script 호출
       const res = await fetchWithTimeout(
-        "https://script.google.com/macros/s/AKfycbyrmlaadrrBfhOaXebxZiBwenOqoN6DwSYF4057lYKal7aRhRYl1Pb80ZwtcsGzIbefcQ/exec",
+        "https://script.google.com/macros/s/AKfycbyU9leJ8elcPFS-tR5LbVdrK3DagxQXA-Z1Cz-QZVdXG9ni8XjnRb3Jksyu2d427FoRCw/exec",
         {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
