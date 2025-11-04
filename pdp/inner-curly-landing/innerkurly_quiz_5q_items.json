@@ -1,0 +1,192 @@
+[
+  {
+    "question_id": "Q1",
+    "question": "당장 가장 개선하고 싶은 목표를 고르세요.",
+    "choice_id": "A",
+    "choice_text": "붓기 완화·몸을 가볍게 정화하고 싶어요",
+    "detox_w": 2,
+    "slow_w": 0,
+    "slim_w": 0,
+    "protein_w": 0
+  },
+  {
+    "question_id": "Q1",
+    "question": "당장 가장 개선하고 싶은 목표를 고르세요.",
+    "choice_id": "B",
+    "choice_text": "피부 컨디션·광채를 높이고 싶어요",
+    "detox_w": 0,
+    "slow_w": 2,
+    "slim_w": 0,
+    "protein_w": 0
+  },
+  {
+    "question_id": "Q1",
+    "question": "당장 가장 개선하고 싶은 목표를 고르세요.",
+    "choice_id": "C",
+    "choice_text": "체지방 감량과 가벼움을 원해요",
+    "detox_w": 0,
+    "slow_w": 0,
+    "slim_w": 2,
+    "protein_w": 0
+  },
+  {
+    "question_id": "Q1",
+    "question": "당장 가장 개선하고 싶은 목표를 고르세요.",
+    "choice_id": "D",
+    "choice_text": "단백질 보충과 회복이 필요해요",
+    "detox_w": 0,
+    "slow_w": 0,
+    "slim_w": 0,
+    "protein_w": 2
+  },
+  {
+    "question_id": "Q2",
+    "question": "평소 식습관/불편에 가장 가까운 것을 고르세요.",
+    "choice_id": "A",
+    "choice_text": "짠 음식/외식이 잦아 부종이 걱정돼요",
+    "detox_w": 2,
+    "slow_w": 0,
+    "slim_w": 1,
+    "protein_w": 0
+  },
+  {
+    "question_id": "Q2",
+    "question": "평소 식습관/불편에 가장 가까운 것을 고르세요.",
+    "choice_id": "B",
+    "choice_text": "피부 트러블·건조가 잦아요",
+    "detox_w": 0,
+    "slow_w": 2,
+    "slim_w": 0,
+    "protein_w": 0
+  },
+  {
+    "question_id": "Q2",
+    "question": "평소 식습관/불편에 가장 가까운 것을 고르세요.",
+    "choice_id": "C",
+    "choice_text": "단·밀가루/야식 섭취가 잦아요",
+    "detox_w": 0,
+    "slow_w": 0,
+    "slim_w": 2,
+    "protein_w": 0
+  },
+  {
+    "question_id": "Q2",
+    "question": "평소 식습관/불편에 가장 가까운 것을 고르세요.",
+    "choice_id": "D",
+    "choice_text": "단백질 섭취가 부족하거나 근육 피로가 커요",
+    "detox_w": 0,
+    "slow_w": 0,
+    "slim_w": 0,
+    "protein_w": 2
+  },
+  {
+    "question_id": "Q3",
+    "question": "요즘 컨디션 신호에 가장 가까운 것은?",
+    "choice_id": "A",
+    "choice_text": "아침 부종·속 답답함",
+    "detox_w": 2,
+    "slow_w": 0,
+    "slim_w": 0,
+    "protein_w": 0
+  },
+  {
+    "question_id": "Q3",
+    "question": "요즘 컨디션 신호에 가장 가까운 것은?",
+    "choice_id": "B",
+    "choice_text": "피부 푸석/탄력 저하",
+    "detox_w": 0,
+    "slow_w": 2,
+    "slim_w": 0,
+    "protein_w": 0
+  },
+  {
+    "question_id": "Q3",
+    "question": "요즘 컨디션 신호에 가장 가까운 것은?",
+    "choice_id": "C",
+    "choice_text": "식곤증·무기력/체중 증가",
+    "detox_w": 0,
+    "slow_w": 0,
+    "slim_w": 2,
+    "protein_w": 0
+  },
+  {
+    "question_id": "Q3",
+    "question": "요즘 컨디션 신호에 가장 가까운 것은?",
+    "choice_id": "D",
+    "choice_text": "근육통·회복 지연",
+    "detox_w": 0,
+    "slow_w": 0,
+    "slim_w": 0,
+    "protein_w": 2
+  },
+  {
+    "question_id": "Q4",
+    "question": "운동/활동 수준은 어느 쪽에 가깝나요?",
+    "choice_id": "A",
+    "choice_text": "거의 안 함(주 0~1회)",
+    "detox_w": 1,
+    "slow_w": 1,
+    "slim_w": 0,
+    "protein_w": 0
+  },
+  {
+    "question_id": "Q4",
+    "question": "운동/활동 수준은 어느 쪽에 가깝나요?",
+    "choice_id": "B",
+    "choice_text": "가끔 함(주 2~3회)",
+    "detox_w": 0,
+    "slow_w": 0,
+    "slim_w": 1,
+    "protein_w": 1
+  },
+  {
+    "question_id": "Q4",
+    "question": "운동/활동 수준은 어느 쪽에 가깝나요?",
+    "choice_id": "C",
+    "choice_text": "꾸준히 함(주 4회 이상)",
+    "detox_w": 0,
+    "slow_w": 0,
+    "slim_w": 0,
+    "protein_w": 2
+  },
+  {
+    "question_id": "Q5",
+    "question": "식사 취향/스타일을 고르세요.",
+    "choice_id": "A",
+    "choice_text": "저염·맑은 맛(해조·케일·비트 등)",
+    "detox_w": 2,
+    "slow_w": 0,
+    "slim_w": 0,
+    "protein_w": 0
+  },
+  {
+    "question_id": "Q5",
+    "question": "식사 취향/스타일을 고르세요.",
+    "choice_id": "B",
+    "choice_text": "항산화 중심(연어·베리·올리브)",
+    "detox_w": 0,
+    "slow_w": 2,
+    "slim_w": 0,
+    "protein_w": 0
+  },
+  {
+    "question_id": "Q5",
+    "question": "식사 취향/스타일을 고르세요.",
+    "choice_id": "C",
+    "choice_text": "저당·가벼움(곤약·닭·메밀)",
+    "detox_w": 0,
+    "slow_w": 0,
+    "slim_w": 2,
+    "protein_w": 0
+  },
+  {
+    "question_id": "Q5",
+    "question": "식사 취향/스타일을 고르세요.",
+    "choice_id": "D",
+    "choice_text": "고단백(연어·치킨·두부·렌틸)",
+    "detox_w": 0,
+    "slow_w": 0,
+    "slim_w": 0,
+    "protein_w": 2
+  }
+]

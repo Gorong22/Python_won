@@ -104,7 +104,7 @@
             />
             <div class="col" style="flex: 1">
               <h1 class="h2">Detox</h1>
-              <p class="text">컨디션 정화와 리셋</p>
+              <p class="text">피로는 비우고, 에너지는 채우는 플레이트</p>
               <div class="row">
                 <a class="btn btn--primary" href="#plans">구독하기</a>
                 <button
@@ -218,7 +218,7 @@
             <div class="icon-card">
               <div class="icon">📱</div>
               <div>
-                <strong>루션앱 연동</strong>
+                <strong>be:me 앱 연동</strong>
                 <div class="small">체크인·리마인더·포인트</div>
               </div>
             </div>
@@ -228,17 +228,133 @@
         <section class="card pad">
           <h2 class="h2">루틴 가이드</h2>
           <div class="balloons">
+            <div class="balloon">① 아침/점심 한 끼를 간편 루틴으로</div>
             <div class="balloon">
-              1) 아침/점심 한 끼 치환 또는 간편 루틴으로.
+              ② W3로 시작 → W5 루틴화 → Monthly 장기 변화
             </div>
             <div class="balloon">
-              2) W3로 시작 → W5 루틴화 → Monthly 장기 변화.
-            </div>
-            <div class="balloon">
-              3) 루션앱 체크인으로 리마인더·포인트 적립.
+              ③ be:me 앱 체크인으로 리마인더·포인트 적립
             </div>
           </div>
         </section>
+
+        <!-- ✨ Detox 하이라이트 -->
+        <section class="card pad">
+          <!-- 🍱 플레이트 구성 -->
+          <div class="highlight-group">
+            <h3 class="highlight-title">🍱 플레이트 구성(예시)</h3>
+            <div class="highlight-grid">
+              <div class="highlight-item" onclick="openDetail('det_meal1')">
+                <img
+                  src="../images/detox-green-bowl.png"
+                  alt="그린 스무디 볼"
+                />
+                <p>그린 스무디 볼</p>
+              </div>
+              <div class="highlight-item" onclick="openDetail('det_meal2')">
+                <img
+                  src="../images/detox-lentil-salad.png"
+                  alt="렌틸콩 샐러드"
+                />
+                <p>렌틸콩 샐러드</p>
+              </div>
+              <div class="highlight-item" onclick="openDetail('det_meal3')">
+                <img
+                  src="../images/detox-oat-soup.png"
+                  alt="통귀리·채소 수프"
+                />
+                <p>통귀리·채소 수프</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 💊 영양제 구성 -->
+          <div class="highlight-group">
+            <h3 class="highlight-title">💊 영양제 구성(예시)</h3>
+            <div class="highlight-grid">
+              <div class="highlight-item" onclick="openDetail('det_sup1')">
+                <img src="./images/detox-milkthistle.png" alt="밀크씨슬" />
+                <p>밀크씨슬(실리마린)</p>
+              </div>
+              <div class="highlight-item" onclick="openDetail('det_sup2')">
+                <img src="./images/detox-probiotics.png" alt="프로바이오틱스" />
+                <p>프로바이오틱스</p>
+              </div>
+              <div class="highlight-item" onclick="openDetail('det_sup3')">
+                <img src="./images/detox-magnesium.png" alt="마그네슘" />
+                <p>마그네슘(구연산)</p>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-diet" id="openDetoxDiet">식단표 보기</button>
+          <p class="small center" style="margin-top: 10px; color: #777">
+            ※ 3일·5일 플랜은 선택 요일 기준으로 자동 조정됩니다.
+          </p>
+        </section>
+
+        <!-- 📅 식단표 팝업 -->
+        <div class="popup" id="detoxPopup">
+          <div class="popup-box">
+            <h3 style="color: var(--kurly); font-weight: 800">
+              Detox 식단표 (7일)
+            </h3>
+            <ul
+              style="
+                text-align: left;
+                font-size: 14px;
+                line-height: 1.6;
+                margin-top: 10px;
+              "
+            >
+              <li><strong>DAY 1:</strong> 케일·바나나 그린볼 + 치아씨드</li>
+              <li><strong>DAY 2:</strong> 렌틸콩 샐러드 + 레몬 워터</li>
+              <li><strong>DAY 3:</strong> 통귀리·채소 수프 + 그린샐러드</li>
+              <li><strong>DAY 4:</strong> 비트·토마토 볼 + 발사믹</li>
+              <li><strong>DAY 5:</strong> 단백 콩샐러드 + 허브티</li>
+              <li><strong>DAY 6:</strong> 구운 채소 플레이트 + 오렌지</li>
+              <li><strong>DAY 7:</strong> 해조류 샐러드 + 라임 워터</li>
+            </ul>
+            <p class="small" style="margin-top: 16px; color: #555">
+              💡 첫 7일은 프리뷰로 제공되며, 이후 전체 루틴은 be:me 앱에서
+              확인하실 수 있습니다.
+            </p>
+            <button
+              class="btn btn--primary"
+              id="closeDetoxDiet"
+              style="margin-top: 14px"
+            >
+              닫기
+            </button>
+          </div>
+        </div>
+
+        <!-- 📊 설계 철학 -->
+        <section class="card pad">
+          <div class="info-card pretty">
+            <h3>📊 설계 철학</h3>
+            <p>
+              Detox는 <strong>항산화·항염</strong> 식품과
+              <strong>수분·식이섬유</strong> 중심으로
+              <strong>간·장 해독 경로</strong>를 보조합니다. 나트륨·첨가물을
+              낮추고 가벼운 에너지원을 배합해 컨디션 리셋에 초점을 맞췄어요.
+            </p>
+          </div>
+        </section>
+
+        <script>
+          // Detox 팝업 핸들러
+          document
+            .getElementById("openDetoxDiet")
+            ?.addEventListener("click", () => {
+              document.getElementById("detoxPopup")?.classList.add("active");
+            });
+          document
+            .getElementById("closeDetoxDiet")
+            ?.addEventListener("click", () => {
+              document.getElementById("detoxPopup")?.classList.remove("active");
+            });
+        </script>
 
         <section class="card pad">
           <h2 class="h2">리뷰</h2>
@@ -280,19 +396,19 @@
         </section>
 
         <section class="card pad app-section">
-          <h2 class="h2">루션앱 챌린지</h2>
+          <h2 class="h2">be:me 앱 챌린지</h2>
           <div class="grid-3">
             <div class="challenge-card">
               <h3>30일</h3>
-              <p>5천원 쿠폰</p>
+              <p>마켓컬리<br />5천원 쿠폰</p>
             </div>
             <div class="challenge-card">
               <h3>60일</h3>
-              <p>팩 세트</p>
+              <p>뷰티컬리<br />팩 세트</p>
             </div>
             <div class="challenge-card">
               <h3>90일</h3>
-              <p>시크릿</p>
+              <p>시크릿 리워드</p>
             </div>
           </div>
           <button
@@ -332,26 +448,29 @@
         </div>
       </div>
       <div class="toast" aria-live="polite"></div>
-
+      <!-- FOOTER   -->
       <footer class="app-footer">
         <div class="pay-row">
-          <img src="./assets/payment-icons.png" alt="결제수단" />
+          <img src="./assets/footer_img.png" alt="하단로고" />
         </div>
         <p>© Inner Kurly · Daily Premium Gift</p>
       </footer>
 
+      <!-- BOTTOM NAV -->
       <nav class="bottom-nav">
         <a href="./index.html" data-key="home"><span>🏠</span><em>홈</em></a>
         <a href="./plates.html" data-key="plates"
           ><span>🍽️</span><em>플레이트</em></a
         >
         <a href="./tests.html" data-key="test"
-          ><span>🧪</span><em>테스트</em></a
+          ><span>📝</span><em>테스트</em></a
         >
         <a href="./cart.html" data-key="cart"
           ><span>🛒</span><em>장바구니</em></a
         >
-        <a href="./mypage.html" data-key="my"><span>👤</span><em>마이</em></a>
+        <a href="./mypage.html" data-key="mypage"
+          ><span>👤</span><em>마이페이지</em></a
+        >
       </nav>
       <script>
         (function () {

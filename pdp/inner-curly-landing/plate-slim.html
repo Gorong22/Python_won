@@ -104,7 +104,7 @@
             />
             <div class="col" style="flex: 1">
               <h1 class="h2">Slim</h1>
-              <p class="text">가벼운 컨디션과 라이트 밸런스</p>
+              <p class="text">부담 없이 즐기는 라이트 플레이트</p>
               <div class="row">
                 <a class="btn btn--primary" href="#plans">구독하기</a>
                 <button
@@ -218,7 +218,7 @@
             <div class="icon-card">
               <div class="icon">📱</div>
               <div>
-                <strong>루션앱 연동</strong>
+                <strong>be:me 앱 연동</strong>
                 <div class="small">체크인·리마인더·포인트</div>
               </div>
             </div>
@@ -228,17 +228,128 @@
         <section class="card pad">
           <h2 class="h2">루틴 가이드</h2>
           <div class="balloons">
+            <div class="balloon">① 아침/점심 한 끼를 간편 루틴으로</div>
             <div class="balloon">
-              1) 아침/점심 한 끼 치환 또는 간편 루틴으로.
+              ② W3로 시작 → W5 루틴화 → Monthly 장기 변화
             </div>
             <div class="balloon">
-              2) W3로 시작 → W5 루틴화 → Monthly 장기 변화.
-            </div>
-            <div class="balloon">
-              3) 루션앱 체크인으로 리마인더·포인트 적립.
+              ③ be:me 앱 체크인으로 리마인더·포인트 적립
             </div>
           </div>
         </section>
+
+        <!-- ✨ Slim 하이라이트 -->
+        <section class="card pad">
+          <!-- 🍱 플레이트 구성 -->
+          <div class="highlight-group">
+            <h3 class="highlight-title">🍱 플레이트 구성(예시)</h3>
+            <div class="highlight-grid">
+              <div class="highlight-item" onclick="openDetail('slim_meal1')">
+                <img src="../images/slim-chicken.png" alt="닭가슴살 스테이크" />
+                <p>닭가슴살 스테이크</p>
+              </div>
+              <div class="highlight-item" onclick="openDetail('slim_meal2')">
+                <img
+                  src="../images/slim-konjac-pasta.png"
+                  alt="곤약/저당 파스타"
+                />
+                <p>곤약·저당 파스타</p>
+              </div>
+              <div class="highlight-item" onclick="openDetail('slim_meal3')">
+                <img src="../images/slim-greek.png" alt="그릭요거트 & 견과" />
+                <p>그릭요거트 & 견과</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 💊 영양제 구성 -->
+          <div class="highlight-group">
+            <h3 class="highlight-title">💊 영양제 구성(예시)</h3>
+            <div class="highlight-grid">
+              <div class="highlight-item" onclick="openDetail('slim_sup1')">
+                <img src="./images/slim-cla.png" alt="CLA" />
+                <p>CLA(공액리놀레산)</p>
+              </div>
+              <div class="highlight-item" onclick="openDetail('slim_sup2')">
+                <img src="./images/slim-carnitine.png" alt="L-카르니틴" />
+                <p>L-카르니틴</p>
+              </div>
+              <div class="highlight-item" onclick="openDetail('slim_sup3')">
+                <img src="./images/slim-garcinia.png" alt="가르시니아" />
+                <p>가르시니아(HCA)</p>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-diet" id="openSlimDiet">식단표 보기</button>
+          <p class="small center" style="margin-top: 10px; color: #777">
+            ※ 3일·5일 플랜은 선택 요일 기준으로 자동 조정됩니다.
+          </p>
+        </section>
+
+        <!-- 📅 식단표 팝업 -->
+        <div class="popup" id="slimPopup">
+          <div class="popup-box">
+            <h3 style="color: var(--kurly); font-weight: 800">
+              Slim 식단표 (7일)
+            </h3>
+            <ul
+              style="
+                text-align: left;
+                font-size: 14px;
+                line-height: 1.6;
+                margin-top: 10px;
+              "
+            >
+              <li><strong>DAY 1:</strong> 닭가슴살 스테이크 + 구운 채소</li>
+              <li><strong>DAY 2:</strong> 곤약 파스타 + 토마토 소스</li>
+              <li><strong>DAY 3:</strong> 소이두부 샐러드 + 저당 드레싱</li>
+              <li><strong>DAY 4:</strong> 그릭요거트&견과 + 블루베리</li>
+              <li><strong>DAY 5:</strong> 연어샐러드 + 아보카도</li>
+              <li><strong>DAY 6:</strong> 닭가슴살 볼 + 컬리플라워 라이스</li>
+              <li><strong>DAY 7:</strong> 달걀&채소 볼 + 미소수프</li>
+            </ul>
+            <p class="small" style="margin-top: 16px; color: #555">
+              💡 첫 7일은 프리뷰로 제공되며, 이후 전체 루틴은 be:me 앱에서
+              확인하실 수 있습니다.
+            </p>
+            <button
+              class="btn btn--primary"
+              id="closeSlimDiet"
+              style="margin-top: 14px"
+            >
+              닫기
+            </button>
+          </div>
+        </div>
+
+        <!-- 📊 설계 철학 -->
+        <section class="card pad">
+          <div class="info-card pretty">
+            <h3>📊 설계 철학</h3>
+            <p>
+              Slim은 <strong>저당·고단백</strong>에 집중해 총열량을 안정적으로
+              낮추면서 <strong>근손실 최소화</strong>와
+              <strong>지속 가능한 포만감</strong>을 우선합니다. 복합 채소·양질의
+              지방을 배합해 <strong>혈당 변동</strong>을 줄이고
+              <strong>식단 지속성</strong>을 높이도록 설계했어요.
+            </p>
+          </div>
+        </section>
+
+        <script>
+          // Slim 팝업 핸들러
+          document
+            .getElementById("openSlimDiet")
+            ?.addEventListener("click", () => {
+              document.getElementById("slimPopup")?.classList.add("active");
+            });
+          document
+            .getElementById("closeSlimDiet")
+            ?.addEventListener("click", () => {
+              document.getElementById("slimPopup")?.classList.remove("active");
+            });
+        </script>
 
         <section class="card pad">
           <h2 class="h2">리뷰</h2>
@@ -280,19 +391,19 @@
         </section>
 
         <section class="card pad app-section">
-          <h2 class="h2">루션앱 챌린지</h2>
+          <h2 class="h2">be:me 앱 챌린지</h2>
           <div class="grid-3">
             <div class="challenge-card">
               <h3>30일</h3>
-              <p>5천원 쿠폰</p>
+              <p>마켓컬리<br />5천원 쿠폰</p>
             </div>
             <div class="challenge-card">
               <h3>60일</h3>
-              <p>팩 세트</p>
+              <p>뷰티컬리<br />팩 세트</p>
             </div>
             <div class="challenge-card">
               <h3>90일</h3>
-              <p>시크릿</p>
+              <p>시크릿 리워드</p>
             </div>
           </div>
           <button
@@ -333,26 +444,31 @@
       </div>
       <div class="toast" aria-live="polite"></div>
 
+      <!-- FOOTER   -->
       <footer class="app-footer">
         <div class="pay-row">
-          <img src="./assets/payment-icons.png" alt="결제수단" />
+          <img src="./assets/footer_img.png" alt="하단로고" />
         </div>
         <p>© Inner Kurly · Daily Premium Gift</p>
       </footer>
 
+      <!-- BOTTOM NAV -->
       <nav class="bottom-nav">
         <a href="./index.html" data-key="home"><span>🏠</span><em>홈</em></a>
         <a href="./plates.html" data-key="plates"
           ><span>🍽️</span><em>플레이트</em></a
         >
         <a href="./tests.html" data-key="test"
-          ><span>🧪</span><em>테스트</em></a
+          ><span>📝</span><em>테스트</em></a
         >
         <a href="./cart.html" data-key="cart"
           ><span>🛒</span><em>장바구니</em></a
         >
-        <a href="./mypage.html" data-key="my"><span>👤</span><em>마이</em></a>
+        <a href="./mypage.html" data-key="mypage"
+          ><span>👤</span><em>마이페이지</em></a
+        >
       </nav>
+
       <script>
         (function () {
           const k = document.body.getAttribute("data-active");

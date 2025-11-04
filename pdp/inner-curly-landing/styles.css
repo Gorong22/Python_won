@@ -87,9 +87,17 @@ img {
   border-left: 1px solid #f0eef3;
   border-right: 1px solid #f0eef3;
   padding-bottom: 84px;
+  box-sizing: border-box; /* ✅ 패딩, 보더 포함 폭 계산 */
 }
+.slide img {
+  width: 100%;
+  display: block;
+  border-radius: 12px; /* 필요 시 */
+  box-sizing: border-box;
+}
+
 .container {
-  padding: var(--space);
+  padding: 12px;
 }
 
 /* ----------------------------------------------------
@@ -106,13 +114,19 @@ img {
   border-bottom: 1px solid #f1eef6;
   padding: 8px var(--space);
 }
+/* Header logo override */
 .logo-img {
-  height: 20px;
+  height: 36px;
+} /* 데스크톱/기본 */
+@media (max-width: 480px) {
+  .logo-img {
+    height: 34px;
+  } /* 모바일에서 살짝 크게 */
 }
 .nav a {
   margin-left: 12px;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 400;
 }
 .icon-btn {
   border: 1px solid #ededed;
@@ -132,19 +146,30 @@ img {
   border-radius: 14px;
   border: 1px solid #ece2f3;
   background: #fff;
-  font-weight: 800;
+  font-weight: 200;
   cursor: pointer;
   transition: transform 0.08s ease, box-shadow 0.2s ease;
 }
 .btn:active {
   transform: scale(0.98);
 }
-.btn--primary {
+/* .btn--primary {
   background: var(--kurly);
   border-color: var(--kurly);
   color: #fff;
-  box-shadow: 0 8px 18px rgba(95, 0, 128, 0.22);
+  box-shadow: 0 8px 18px rgba(95, 0, 128, 0.22); */
+
+.btn--primary {
+  display: inline-block;
+  border-radius: 14px;
+  border: 1px solid #ece2f3;
+  background: var(--kurly);
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.2s ease;
 }
+
 .btn--ghost {
   color: var(--kurly);
   border-color: var(--kurly);
@@ -189,7 +214,8 @@ img {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   overflow: hidden;
-  margin: 12px;
+  margin: 0;
+  transition: transform 0.2s ease, box-shadow 0.25s ease;
 }
 .pad {
   padding: var(--space);
@@ -199,37 +225,29 @@ img {
   border-top: 1px solid #efeaf4;
   margin: 12px 0;
 }
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px rgba(17, 17, 17, 0.08);
+}
 
 /* ----------------------------------------------------
      8. SLIDER
      ---------------------------------------------------- */
+/* 배너 (섹션들과 여백 맞추기용) */
 .slider {
+  margin: 0;
+  padding: 0 var(--space); /* 섹션 여백과 동일하게 */
+  border-radius: var(--radius);
   overflow: hidden;
-  border-radius: 16px;
-  box-shadow: var(--shadow);
 }
-.slides {
-  display: flex;
-  transition: transform 0.5s ease;
-}
-.slide {
-  min-width: 100%;
-  position: relative;
-}
-.slide img {
+
+.slider img {
+  display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: auto;
+  border-radius: var(--radius);
   object-fit: cover;
-}
-.caption {
-  position: absolute;
-  left: 12px;
-  bottom: 12px;
-  background: rgba(0, 0, 0, 0.38);
-  color: #fff;
-  padding: 10px 12px;
-  border-radius: 12px;
-  font-weight: 700;
+  box-shadow: var(--shadow);
 }
 
 /* ----------------------------------------------------
@@ -320,7 +338,7 @@ img {
   background: #fff;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 20px;
+  padding: 12px;
   margin: 18px var(--space);
   box-shadow: var(--shadow);
   text-align: center;
@@ -379,17 +397,26 @@ img {
   box-shadow: 0 -10px 24px rgba(17, 17, 17, 0.08);
   z-index: 50;
 }
+
 .bottom-nav a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 10px 6px;
+  gap: 3px;
   text-align: center;
   color: #666;
-  display: grid;
-  place-items: center;
-  gap: 4px;
+  font-size: 13px;
+  line-height: 1.3;
+  font-weight: 500;
+  font-style: normal;
+  font-family: "Pretendard", "Noto Sans KR", "Spoqa Han Sans Neo", sans-serif;
 }
+
 .bottom-nav a.active {
   color: var(--kurly);
-  font-weight: 800;
+  font-weight: 700;
 }
 
 /* ----------------------------------------------------
@@ -487,14 +514,7 @@ img {
   margin-bottom: 18px;
 }
 
-/* ----------------------------------------------------
-   16. LUSION APP PROMO CARD (체험하러 가기)
-   ---------------------------------------------------- */
-
-//* ----------------------------------------------------
-16. LUSION APP PROMO CARD (중앙 정렬 수정)
-   ---------------------------------------------------- */
-
+/* 16. LUSION APP PROMO CARD (체험하러 가기 / 중앙 정렬 수정) */
 /* 이미지: hover 효과 포함 */
 .app-mockup {
   width: 48%;
@@ -502,15 +522,15 @@ img {
   box-shadow: 0 6px 16px rgba(17, 17, 17, 0.08);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.app-mockup:hover {
+/* .app-mockup:hover {
   transform: translateY(-3px);
   box-shadow: 0 10px 24px rgba(17, 17, 17, 0.12);
-}
+} */
 
 /* 버튼 */
 .btn-experience {
   display: inline-block;
-  padding: 12px 26px;
+  padding: 8px 26px;
   border-radius: 14px;
   border: none;
   background: var(--kurly);
@@ -519,13 +539,14 @@ img {
   font-size: 15px;
   cursor: pointer;
   margin-top: 10px;
-  box-shadow: 0 8px 18px rgba(95, 0, 128, 0.18);
+  box-shadow: 0 4px 10px rgba(95, 0, 128, 0.15);
+
   transition: all 0.25s ease;
 }
 .btn-experience:hover {
   background: #6a12a2;
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(95, 0, 128, 0.28);
+  box-shadow: 0 4px 10px rgba(95, 0, 128, 0.15);
 }
 .btn-experience:active {
   transform: scale(0.97);
@@ -540,12 +561,36 @@ img {
 @media (max-width: 480px) {
   .app-mockup {
     width: 100%;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
   .card.pad .row {
     flex-direction: column;
     align-items: center;
   }
+}
+@media (max-width: 480px) {
+  .pdp .card.pad .row {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+/* .card.pad .row {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+} */
+
+.card.pad .row .col {
+  width: 100%;
+  text-align: center;
+}
+
+.app-mockup {
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
 }
 
 /* ----------------------------------------------------
@@ -634,7 +679,7 @@ img {
 .btn-outline,
 .btn-disabled {
   flex: 1;
-  padding: 10px 0;
+  padding: 6px 0;
   border-radius: 12px;
   font-weight: 700;
   font-size: 13px;
@@ -718,11 +763,6 @@ img {
   color: var(--ink);
 }
 
-.btn.btn--primary {
-  margin-top: 8px;
-  font-size: 15px;
-  padding: 12px;
-}
 /* ----------------------------------------------------
    19. SURVEY PAGE
    ---------------------------------------------------- */
@@ -1072,7 +1112,7 @@ img {
 /* 하단 여백 */
 .app-footer {
   text-align: center;
-  padding: 20px 0 80px;
+  padding: 20px 0 20px;
   color: var(--muted);
   font-size: 12px;
 }
@@ -1173,7 +1213,7 @@ img {
 }
 
 /* 식단표 팝업 */
-.diet-popup {
+.popup {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.45);
@@ -1182,10 +1222,10 @@ img {
   justify-content: center;
   z-index: 200;
 }
-.diet-popup.active {
+.popup.active {
   display: flex;
 }
-.diet-box {
+.popup-box {
   background: #fff;
   border-radius: 18px;
   padding: 22px 24px;
@@ -1196,24 +1236,24 @@ img {
   text-align: center;
   box-shadow: 0 10px 28px rgba(17, 17, 17, 0.18);
 }
-.diet-box h3 {
+.popup-box h3 {
   font-size: 18px;
   font-weight: 800;
   color: var(--kurly, #5f0080);
   margin-bottom: 10px;
 }
-.diet-box ul {
+.popup-box ul {
   list-style: none;
   padding: 0;
   margin: 0;
   text-align: left;
 }
-.diet-box li {
+.popup-box li {
   font-size: 14px;
   line-height: 1.6;
   margin-bottom: 4px;
 }
-.diet-box p {
+.popup-box p {
   font-size: 13px;
   color: #555;
   margin-top: 12px;
@@ -1241,8 +1281,8 @@ img {
   flex: 1;
   text-align: center;
   background: #faf8fc;
-  border-radius: 14px;
-  padding: 12px;
+  border-radius: 8px;
+  padding: 6px;
   transition: all 0.25s ease;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(95, 0, 128, 0.08);
@@ -1252,14 +1292,14 @@ img {
   box-shadow: 0 6px 16px rgba(95, 0, 128, 0.18);
 }
 .highlight-item img {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   object-fit: cover;
   border-radius: 12px;
   margin-bottom: 6px;
 }
 .highlight-item p {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: #333;
   margin: 0;
@@ -1608,17 +1648,18 @@ img {
 }
 .modal header {
   background: #5f0080;
+  border-radius: 16px;
   color: white;
   font-weight: 600;
-  padding: 16px 0;
+  padding: 12px 0;
 }
 .modal .body {
   padding: 24px 20px;
   color: #333;
 }
 .modal .footer {
-  padding: 16px;
-  background: #f8f8f8;
+  /* padding: 16px; */
+  background: #ffffff00;
 }
 @keyframes fadeInUp {
   from {
@@ -1639,3 +1680,177 @@ img {
   font-size: 15px;
   line-height: 1.8;
 }
+.app-header .logo-img {
+  height: 36px;
+  width: auto;
+  display: block;
+}
+@media (max-width: 480px) {
+  .app-header .logo-img {
+    height: 36px;
+  }
+}
+/* 헤더 기준점 */
+.app-header {
+  position: relative;
+  height: 64px; /* 이미 있다면 생략 */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 좌우 버튼은 그대로 */
+  padding: 0 16px;
+}
+
+/* 로고를 헤더의 가로 중앙에 고정 */
+.app-header .logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  bottom: 0; /* 수직 가운데 정렬용 */
+  display: flex;
+  align-items: center; /* 로고 IMG 수직 센터 */
+  z-index: 1; /* 다른 요소 위로 */
+}
+.highlight-item img {
+  width: 100%;
+  aspect-ratio: 2 / 1; /* 같지만 부모 요소 높이를 조절 가능 */
+  max-height: 200px; /* 혹은 height 값으로 직접 조정 */
+  object-fit: cover;
+}
+.card.pad .compact-img {
+  display: block; /* 가운데 정렬 가능하게 블록화 */
+  margin: 0 auto 16px auto; /* 좌우 auto로 정중앙 정렬 + 아래 여백 */
+  border-radius: 12px; /* 둥근 모서리 */
+  width: 60%; /* 적당한 크기 (모바일/데스크탑 대응) */
+  max-width: 400px; /* 너무 커지지 않게 제한 */
+  height: auto; /* 비율 유지 */
+  object-fit: cover; /* 꽉 차게 보여주기 */
+}
+.bottom-nav em {
+  font-style: normal;
+  font-family: "Pretendard", "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.2;
+  color: #555555;
+}
+.bottom-nav span {
+  font-size: 24px;
+}
+/* 1) 배너를 카드(.card)와 같은 라인(28px)으로 */
+.slider {
+  margin-left: 0px !important; /* 16(container) + 12 = 28 */
+  margin-right: 0px !important;
+  margin-bottom: 24px;
+  padding: 0 !important; /* 이전에 넣었을 수 있는 padding 무효화 */
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* 2) 섹션 가터 통일: 28px 라인으로 맞추기 */
+.subscription-section,
+.challenge-section,
+.app-section {
+  margin-left: 12px !important; /* 16 + 12 = 28 */
+  margin-right: 12px !important;
+}
+/* 공통 버튼 */
+.btn {
+  display: inline-block;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #ece2f3;
+  background: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.2s ease;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+/* primary — 색만 보라로 변경 */
+.btn--primary {
+  background: var(--kurly);
+  border-color: var(--kurly);
+  color: #ffffff;
+}
+.card.pad .btn,
+.card.pad .btn--primary {
+  font-family: "Noto Sans KR", Pretendard, system-ui, -apple-system, sans-serif;
+}
+/* 카드 전체 중앙 정렬 */
+.card.pad .icon-cards {
+  display: grid;
+  grid-template-columns: 1fr; /* 기본 1열 */
+  gap: 14px 24px;
+  justify-items: center; /* 아이템 자체를 가운데 */
+  text-align: center; /* 텍스트도 가운데 */
+}
+
+/* 아이콘 카드: 세로 스택 + 센터 */
+.card.pad .icon-cards .icon-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  max-width: 320px; /* 줄 길이 안정화 (원하면 조정/삭제) */
+}
+
+/* 아이콘 크기 통일 */
+.card.pad .icon-cards .icon {
+  font-size: 24px; /* 이모지/아이콘 크기 */
+  line-height: 1;
+}
+
+/* 타이틀/설명 간격 정리 */
+.card.pad .icon-cards strong {
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.card.pad .icon-cards .small {
+  font-size: 14px;
+  color: #5f5a66; /* 은은한 보조색 */
+}
+/* 배너 아래 안내 카드(= <section class="card pad center">)만 */
+section.card.pad.center {
+  border: none;
+  box-shadow: none;
+  transform: none;
+  transition: none; /* 미세한 애니메이션도 제거 */
+}
+
+section.card.pad.center:hover {
+  box-shadow: none;
+  transform: none;
+}
+/* --- Diet CTA: side-by-side, text centered --- */
+.cta-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12px;
+}
+.cta-row .btn-solid-wide,
+.cta-row .btn-outline-anim {
+  display: inline-flex; /* 텍스트 수직 중앙 */
+  align-items: center;
+  justify-content: center;
+  height: 54px; /* 고정 높이 */
+  line-height: normal; /* 라인하이트 의존 제거 */
+  flex: 1 1 0; /* 2버튼 균등 너비 */
+  min-width: 44%;
+}
+
+/* 모바일 아주 좁은 화면에선 세로 스택 */
+@media (max-width: 420px) {
+  .cta-row {
+    flex-direction: column;
+  }
+}
+
+/* 재사용: 모달은 기존 .ik-*를 그대로 활용하므로 별도 스타일 불필요 */

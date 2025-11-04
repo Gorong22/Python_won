@@ -62,6 +62,36 @@ button {
 }
 
 /* --- LAYOUT & REUSABLE CLASSES --- */
+/* === Header logo (IMG) size & alignment === */
+.app-header,
+.header,
+nav.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 로고 IMG를 확실히 타겟 */
+.app-header .logo img,
+.header .logo img,
+nav.site-header .logo img,
+.app-header .logo-img,
+.header .logo-img {
+  height: 48px; /* 데스크톱 기준 크기 */
+  width: auto;
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .app-header .logo img,
+  .header .logo img,
+  nav.site-header .logo img,
+  .app-header .logo-img,
+  .header .logo-img {
+    height: 40px; /* 모바일에서 원하는 값으로 조정 (예: 32~40px) */
+  }
+}
+
 .container {
   max-width: 1140px;
   margin: 0 auto;
@@ -152,25 +182,6 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-/* .nav__logo {
-  font-weight: 700;
-  font-size: 1.5rem;
-  color: var(--color-primary) */
-.nav__logo {
-  display: flex;
-  align-items: center;
-  line-height: 1;
-}
-.nav__logo img {
-  height: 56px;
-  width: auto;
-  display: block;
-}
-@media (max-width: 640px) {
-  .nav__logo img {
-    height: 24px;
-  }
 }
 
 .nav__menu {
@@ -695,9 +706,9 @@ button {
   font-weight: 500;
 }
 .form-group input[type="text"],
- .form-group input[type="number"],
- .form-group input[type="email"],
- .form-group input[type="password"] {
+.form-group input[type="number"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
   width: 100%;
   padding: 12px;
   border: 1px solid #ddd;
@@ -1631,7 +1642,6 @@ body.plate-condition .btn-cta:hover {
   }
 }
 
-
 /* ✅ 경로 및 로고/배경 복원 수정 */
 .hero-section__bg {
   position: absolute;
@@ -1650,15 +1660,6 @@ body.plate-condition .btn-cta:hover {
   inset: 0;
   background: rgba(0, 0, 0, 0.25);
 }
-.nav__logo {
-  display: block;
-  width: 132px;
-  height: 56px;
-  background: url("../assets/logo-innerkurly-purple.png") no-repeat center/contain;
-  text-indent: -9999px;
-  overflow: hidden;
-}
-
 /* 이미지 경로 정정 */
 .plate-card img,
 .insight-news__media img,
@@ -1706,7 +1707,7 @@ body.plate-condition .btn-cta:hover {
   background: #fff;
   border: 1px solid var(--color-border);
   border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
   padding: 32px 24px;
   text-decoration: none;
   color: var(--color-text);
@@ -1714,7 +1715,7 @@ body.plate-condition .btn-cta:hover {
 }
 .ik-test-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 .ik-test-card h3 {
   font-size: 1.2rem;
@@ -1746,7 +1747,7 @@ body.plate-condition .btn-cta:hover {
   background: #fff;
   border: 1px solid #eee;
   border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
   padding: 32px 24px;
   text-decoration: none;
   color: #333;
@@ -1755,13 +1756,13 @@ body.plate-condition .btn-cta:hover {
 
 .ik-test-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .ik-test-card h3 {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #6A1B9A;
+  color: #6a1b9a;
   margin-bottom: 16px;
 }
 
@@ -1782,7 +1783,7 @@ body.plate-condition .btn-cta:hover {
 .supplement {
   background: #fff;
   border-radius: 20px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   padding: 60px 20px;
   margin: 60px auto;
   max-width: 1100px;
@@ -1807,7 +1808,7 @@ body.plate-condition .btn-cta:hover {
   border-radius: 16px;
   padding: 28px 20px;
   border: 1px solid #eee;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
   transition: transform 0.2s ease;
 }
 
@@ -1827,10 +1828,18 @@ body.plate-condition .btn-cta:hover {
 }
 
 /* ✅ 플레이트별 컬러 테마 */
-.glow-supplement h3 { color: #9C27B0; }      /* 보라빛 – 피부광채 */
-.slim-supplement h3 { color: #E91E63; }      /* 핑크 – 슬림바디 */
-.balance-supplement h3 { color: #2196F3; }   /* 블루 – 밸런스 */
-.detox-supplement h3 { color: #4CAF50; }     /* 그린 – 디톡스 */
+.glow-supplement h3 {
+  color: #9c27b0;
+} /* 보라빛 – 피부광채 */
+.slim-supplement h3 {
+  color: #e91e63;
+} /* 핑크 – 슬림바디 */
+.balance-supplement h3 {
+  color: #2196f3;
+} /* 블루 – 밸런스 */
+.detox-supplement h3 {
+  color: #4caf50;
+} /* 그린 – 디톡스 */
 
 /* ✅ 기본 index.html은 기존 헤더 유지 */
 header {
@@ -1907,8 +1916,7 @@ body[class*="plate-"] .nav__toggle {
   font-size: 0.95rem;
 }
 
-<style>
-.review-section {
+<style > .review-section {
   background-color: #faf8fb;
   border-radius: 16px;
   padding: 36px 24px;
@@ -1916,7 +1924,7 @@ body[class*="plate-"] .nav__toggle {
   box-shadow: 0 4px 18px rgba(180, 150, 200, 0.15);
   max-width: 480px;
   width: 92%;
-  font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+  font-family: "Pretendard", "Apple SD Gothic Neo", sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -2049,12 +2057,20 @@ body[class*="plate-"] .nav__toggle {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 /* ✅ 후기 보기 영역 공통 스타일 (review-section 과 겹치지 않음) */
 .review-display {
@@ -2065,7 +2081,7 @@ body[class*="plate-"] .nav__toggle {
   box-shadow: 0 3px 14px rgba(180, 150, 200, 0.12);
   max-width: 600px;
   width: 92%;
-  font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+  font-family: "Pretendard", "Apple SD Gothic Neo", sans-serif;
   box-sizing: border-box;
 }
 
@@ -2167,7 +2183,3 @@ body[class*="plate-"] .nav__toggle {
     padding: 12px;
   }
 }
-
-
-
-

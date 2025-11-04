@@ -14,6 +14,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
+
     <!-- Google Tag Manager -->
     <script>
       (function (w, d, s, l, i) {
@@ -118,40 +119,30 @@
       <!-- MAIN -->
       <main class="container">
         <section class="slider" id="hero">
-          <div class="slides">
-            <div class="slide">
-              <img src="./assets/hero-banner.png" alt="배너1" />
-              <div class="caption">이젠, 나를 바라볼 때</div>
-            </div>
-            <div class="slide">
-              <img src="./assets/hero-banner01.png" alt="배너2" />
-              <div class="caption">가볍게 시작하는 데일리 프리미엄</div>
-            </div>
-            <div class="slide">
-              <img src="./assets/app-mockup01.png" alt="배너3" />
-              <div class="caption">루션앱과 이어지는 루틴</div>
-            </div>
+          <div class="slide">
+            <img src="./assets/hero-banner.png" alt="배너1" />
+            <!-- <div class="caption">이젠, 나를 바라볼 때</div> -->
           </div>
+          <!-- <div class="slide">
+            <img src="./assets/hero-banner01.png" alt="배너2" />
+            <div class="caption">가볍게 시작하는 데일리 프리미엄</div>
+          </div>
+          <div class="slide">
+            <img src="./assets/app-mockup01.png" alt="배너3" />
+            <div class="caption">루션앱과 이어지는 루틴</div>
+          </div> -->
         </section>
 
         <section class="card pad center">
-          <span class="badge">5분 심리·루틴 테스트</span>
-          <h2 class="h2">오늘의 감정 리듬을 체크하고 플레이트 추천 받기</h2>
+          <span class="badge">3분 심리·루틴 테스트</span>
+          <h2 class="h2">오늘의 감정 리듬 체크하고<br />플레이트 추천 받기</h2>
           <p class="text small">
-            번아웃/회복/공허 + 식사패턴 + 목표를 반영한 추천
+            생활 패턴과 식사 패턴을 반영한 나만의 추천 식단
           </p>
           <a class="btn btn--primary" href="./tests.html">테스트로 이동</a>
         </section>
 
         <h2 class="h2 center" style="margin-top: 18px">추천 플레이트</h2>
-        <div class="share-row">
-          <button
-            class="btn"
-            onclick="sharePage('Inner Kurly — 추천 플레이트')"
-          >
-            공유
-          </button>
-        </div>
 
         <section class="grid-2">
           <a class="card" href="./plate-glow.html">
@@ -162,7 +153,7 @@
             />
             <div class="pad">
               <h3 class="h3">Glow</h3>
-              <p class="small">피부 컨디션 케어</p>
+              <p class="small">빛나는 하루를 위한<br />피부 회복 플레이트</p>
             </div>
           </a>
 
@@ -174,7 +165,7 @@
             />
             <div class="pad">
               <h3 class="h3">Slim</h3>
-              <p class="small">가벼운 컨디션</p>
+              <p class="small">부담 없이 즐기는<br />라이트 플레이트</p>
             </div>
           </a>
 
@@ -186,7 +177,7 @@
             />
             <div class="pad">
               <h3 class="h3">Detox</h3>
-              <p class="small">정화/리셋</p>
+              <p class="small">피로는 비우고<br />에너지는 채우는 플레이트</p>
             </div>
           </a>
 
@@ -198,10 +189,19 @@
             />
             <div class="pad">
               <h3 class="h3">Balance</h3>
-              <p class="small">일상 균형</p>
+              <p class="small">일상 에너지를 균형 있게<br />단백질 플레이트</p>
             </div>
           </a>
         </section>
+
+        <!-- <div class="share-row">
+          <button
+            class="btn"
+            onclick="sharePage('Inner Kurly — 추천 플레이트')"
+          >
+            공유
+          </button>
+        </div> -->
 
         <section class="subscription-section">
           <h2 class="h2">구독 플랜</h2>
@@ -282,13 +282,13 @@
               <source srcset="./assets/app-mockup.png" />
               <img
                 src="./assets/app-mockup01.png"
-                alt="루션앱 미리보기"
+                alt="be:me앱 미리보기"
                 class="app-mockup"
               />
             </picture>
             <div class="col" style="flex: 1">
-              <h2 class="h2">루션앱으로 루틴을 관리하세요</h2>
-              <p class="small">체크인 · 리마인더 · 포인트 적립</p>
+              <h2 class="h2">be:me 앱으로 루틴을 관리하세요</h2>
+              <p class="small">식단 관리 · 루틴 완성 · 리마인더</p>
               <button class="btn-experience">체험하러 가기</button>
             </div>
           </div>
@@ -297,7 +297,7 @@
 
       <footer class="app-footer">
         <div class="pay-row">
-          <img src="./assets/payment-icons.png" alt="결제수단" />
+          <img src="./assets/footer_img.png" alt="하단로고" />
         </div>
         <p>© Inner Kurly · Daily Premium Gift</p>
       </footer>
@@ -308,12 +308,14 @@
           ><span>🍽️</span><em>플레이트</em></a
         >
         <a href="./tests.html" data-key="test"
-          ><span>🧪</span><em>테스트</em></a
+          ><span>📝</span><em>테스트</em></a
         >
         <a href="./cart.html" data-key="cart"
           ><span>🛒</span><em>장바구니</em></a
         >
-        <a href="./mypage.html" data-key="my"><span>👤</span><em>마이</em></a>
+        <a href="./mypage.html" data-key="mypage"
+          ><span>👤</span><em>마이페이지</em></a
+        >
       </nav>
     </div>
 

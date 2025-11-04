@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-    
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -30,30 +29,48 @@
       gtag("config", "G-XXXXXXX");
     </script>
     <!-- Hotjar Tracking Code for https://innerkurly.netlify.app/ -->
-<script>
-  (function(h,o,t,j,a,r){
-      h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-      h._hjSettings={hjid:6535845,hjsv:6};
-      a=o.getElementsByTagName('head')[0];
-      r=o.createElement('script');r.async=1;
-      r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-      a.appendChild(r);
-  })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-</script>
+    <script>
+      (function (h, o, t, j, a, r) {
+        h.hj =
+          h.hj ||
+          function () {
+            (h.hj.q = h.hj.q || []).push(arguments);
+          };
+        h._hjSettings = { hjid: 6535845, hjsv: 6 };
+        a = o.getElementsByTagName("head")[0];
+        r = o.createElement("script");
+        r.async = 1;
+        r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+        a.appendChild(r);
+      })(window, document, "https://static.hotjar.com/c/hotjar-", ".js?sv=");
+    </script>
     <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-KWL72ML2');</script>
-  <!-- End Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-KWL72ML2");
+    </script>
+    <!-- End Google Tag Manager -->
   </head>
 
   <body data-active="plates">
     <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWL72ML2"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-KWL72ML2"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <div class="mobile-wrap">
       <!-- HEADER -->
       <header class="app-header">
@@ -88,20 +105,20 @@
             />
             <div class="col" style="flex: 1">
               <h1 class="h2">Glow</h1>
-              <p class="text">피부 컨디션을 위한 데일리 루틴</p>
+              <p class="text">빛나는 하루를 위한 피부 회복 플레이트</p>
               <div class="row">
                 <a class="btn btn--primary" href="#plans">구독하기</a>
-                <button
-                  class="btn"
-                  onclick="sharePage(document.title, location.href)"
-                >
-                  공유
-                </button>
                 <button
                   class="btn"
                   onclick="Cart.add({sku:'PLATE-glow-W3',name:'Glow W3',price:84000,plan:'W3'})"
                 >
                   장바구니
+                </button>
+                <button
+                  class="btn"
+                  onclick="sharePage(document.title, location.href)"
+                >
+                  공유
                 </button>
               </div>
             </div>
@@ -154,91 +171,112 @@
           </div>
         </section>
 
-      <!-- ✨ Glow 하이라이트 섹션 -->
-<section class="card pad">
-  <h2 class="h2">이런 점이 좋아요!</h2>
+        <!-- ✨ Glow 하이라이트 섹션 -->
+        <section class="card pad">
+          <h2 class="h2">이너컬리, 이 점이 좋아요</h2>
+          <div class="icon-cards">
+            <div class="icon-card">
+              <div class="icon">🍽️</div>
+              <div>
+                <strong>푸디케이션</strong>
+                <div class="small">
+                  음식처럼 즐기며 관리하는 데일리 프리미엄
+                </div>
+              </div>
+            </div>
+            <div class="icon-card">
+              <div class="icon">🧘</div>
+              <div>
+                <strong>루틴 최소화</strong>
+                <div class="small">부담은 줄이고 지속성은 높였어요</div>
+              </div>
+            </div>
+            <div class="icon-card">
+              <div class="icon">📱</div>
+              <div>
+                <strong>be:me 앱 연동</strong>
+                <div class="small">체크인·리마인더·포인트</div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-  <!-- 🥗 플레이트 구성 -->
-  <div class="highlight-group">
-    <h3 class="highlight-title">🍱 플레이트 구성</h3>
-    <div class="highlight-grid">
-      <div class="highlight-item" onclick="openDetail('meal1')">
-        <img src="./assets/glow-meal-salmon.png" alt="연어 스테이크" />
-        <p>연어 스테이크</p>
-      </div>
-      <div class="highlight-item" onclick="openDetail('meal2')">
-        <img src="./assets/glow-meal-pumpkin.png" alt="단호박 리조또" />
-        <p>단호박 리조또</p>
-      </div>
-      <div class="highlight-item" onclick="openDetail('meal3')">
-        <img src="./assets/glow-meal-yogurt.png" alt="블루베리 요거트볼" />
-        <p>블루베리 요거트볼</p>
-      </div>
-    </div>
-  </div>
+        <section class="card pad">
+          <h2 class="h2">루틴 가이드</h2>
+          <div class="balloons">
+            <div class="balloon">① 아침/점심 한 끼를 간편 루틴으로</div>
+            <div class="balloon">
+              ② W3로 시작 → W5 루틴화 → Monthly 장기 변화
+            </div>
+            <div class="balloon">
+              ③ be:me 앱 체크인으로 리마인더·포인트 적립
+            </div>
+          </div>
+        </section>
 
-  <!-- 💊 영양제 구성 -->
-  <div class="highlight-group">
-    <h3 class="highlight-title">💊 영양제 구성</h3>
-    <div class="highlight-grid">
-      <div class="highlight-item" onclick="openDetail('supp1')">
-        <img src="./assets/glow-supp-collagen.png" alt="콜라겐 펩타이드" />
-        <p>콜라겐 펩타이드</p>
-      </div>
-      <div class="highlight-item" onclick="openDetail('supp2')">
-        <img src="./assets/glow-supp-vitaminC.png" alt="비타민 C" />
-        <p>비타민 C</p>
-      </div>
-      <div class="highlight-item" onclick="openDetail('supp3')">
-        <img src="./assets/glow-supp-hyaluronic.png" alt="히알루론산" />
-        <p>히알루론산</p>
-      </div>
-    </div>
-  </div>
+        <!-- 🥗 플레이트 구성 -->
+        <section class="card pad">
+          <div class="highlight-group">
+            <h3 class="highlight-title">🍱 플레이트 구성</h3>
+            <div class="highlight-grid">
+              <div class="highlight-item" onclick="openDetail('meal1')">
+                <img src="../images/glow-salmon.png" alt="연어 스테이크" />
+                <p>연어 스테이크</p>
+              </div>
+              <div class="highlight-item" onclick="openDetail('meal2')">
+                <img
+                  src="../images/glow-meal-pumpkin.png"
+                  alt="단호박 리조또"
+                />
+                <p>단호박 리조또</p>
+              </div>
+              <div class="highlight-item" onclick="openDetail('meal3')">
+                <img
+                  src="../images/glow-meal-yogurt.png"
+                  alt="블루베리 요거트볼"
+                />
+                <p>블루베리 요거트볼</p>
+              </div>
+            </div>
+          </div>
 
-  <!-- 📊 설계 철학 -->
-  <div class="info-card pretty">
-    <h3>📊 설계 철학</h3>
-    <p>
-      피부는 단순한 미용이 아니라 <strong>영양 대사</strong>의 결과입니다.<br />
-      Glow 플레이트는 <strong>단백질 기반 식단</strong>에 수분·항산화 밸런스를 더해  
-      <strong>피부장벽·탄력·모공</strong>을 안정화시키는 루틴으로 설계되었습니다.  
-      이너컬리와 협력 병원이 함께 연구한 데이터 기반의 조합이에요.
-    </p>
-  </div>
+          <!-- 💊 영양제 구성 -->
 
-  <button class="btn-diet" id="openDiet">식단표 보기</button>
-  <p class="small center" style="margin-top:10px; color:#777">
-    ※ 3일·5일 플랜은 선택 요일 기준으로 자동 조정됩니다.
-  </p>
-</section>
-
-<!-- 팝업 (음식/영양제 상세 설명 공용) -->
-<div class="diet-popup" id="detailPopup">
-  <div class="diet-box">
-    <h3 id="popupTitle">Glow 세부 구성</h3>
-    <p id="popupText" style="text-align:left; line-height:1.6; margin-top:6px;">
-      로딩 중...
-    </p>
-    <p style="margin-top:18px; font-size:13px; color:#666;">
-      💡 이 조합은 이너컬리와 국내 영양학 연구진이 공동으로 설계한 조합이에요.<br />
-      식품임상학적 데이터를 바탕으로 피부 컨디션에 최적화되었어요.
-    </p>
-    <button class="btn btn--primary" id="closeDetail" style="margin-top:14px;">닫기</button>
-  </div>
-</div>
-
-
-          <button class="btn-diet" id="openDiet">식단표 보기</button>
+          <div class="highlight-group">
+            <h3 class="highlight-title">💊 영양제 구성</h3>
+            <div class="highlight-grid">
+              <div class="highlight-item" onclick="openDetail('supp1')">
+                <img
+                  src="./images/glow-supp-collagen.png"
+                  alt="콜라겐 펩타이드"
+                />
+                <p>콜라겐 펩타이드</p>
+              </div>
+              <div class="highlight-item" onclick="openDetail('supp2')">
+                <img src="./images/glow-supp-vitaminC.png" alt="비타민 C" />
+                <p>비타민 C</p>
+              </div>
+              <div class="highlight-item" onclick="openDetail('supp3')">
+                <img src="./images/glow-supp-hyaluronic.png" alt="히알루론산" />
+                <p>히알루론산</p>
+              </div>
+            </div>
+          </div>
+          <!-- 기존 CTA 블록(단일 버튼 또는 display:grid 블록) 삭제/교체 -->
+          <div class="cta-row" id="diet-cta">
+            <button class="btn-solid-wide" id="openDiet">식단표 보기</button>
+            <button class="btn-outline-anim" id="openQuiz7">
+              추천받기(7일)
+            </button>
+          </div>
           <p class="small center" style="margin-top: 10px; color: #777">
-            ※ 3일·5일 플랜의 경우 선택한 요일에 따라 해당 날짜 식단으로
-            구성됩니다.
+            ※ 3일·5일 플랜은 선택 요일 기준으로 자동 조정됩니다.
           </p>
         </section>
 
         <!-- 📅 식단표 팝업 -->
-        <div class="diet-popup" id="dietPopup">
-          <div class="diet-box">
+        <div class="popup" id="dietPopup">
+          <div class="popup-box">
             <h3 style="color: var(--kurly); font-weight: 800">
               Glow 식단표 (7일)
             </h3>
@@ -260,7 +298,8 @@
             </ul>
             <p style="margin-top: 16px; color: #555; font-size: 13px">
               💡 첫 7일은 프리뷰로 제공되며,<br />
-              이후 전체 루틴은 <strong>루션앱</strong>에서 확인하실 수 있습니다.
+              이후 전체 루틴은 <strong>be:me 앱</strong>에서 확인하실 수
+              있습니다.
             </p>
             <button
               class="btn btn--primary"
@@ -272,6 +311,21 @@
           </div>
         </div>
 
+        <!-- 📊 설계 철학 -->
+        <section class="card pad">
+          <div class="info-card pretty">
+            <h3>📊 설계 철학</h3>
+            <p>
+              피부는 단순한 미용이 아니라 <strong>영양 대사</strong>의
+              결과입니다.<br />
+              Glow 플레이트는 <strong>단백질 기반 식단</strong>에 수분·항산화
+              밸런스를 더해 <strong>피부장벽·탄력·모공</strong>을 안정화시키는
+              루틴으로 설계되었습니다. 이너컬리가 연구한 데이터 기반의
+              조합이에요.
+            </p>
+          </div>
+        </section>
+
         <!-- 리뷰 섹션 -->
         <section class="card pad">
           <h2 class="h2">리뷰</h2>
@@ -281,30 +335,51 @@
                 <div class="h1" style="margin: 0">4.9</div>
                 <div class="small">리뷰 <span id="rev-count">0</span>개</div>
               </div>
+              <div class="col">
+                <div class="row" style="justify-content: space-between">
+                  <span class="small">아주 좋아요</span
+                  ><span class="small" id="rev-5">0</span>
+                </div>
+                <div class="meter"><i id="m5"></i></div>
+                <div class="row" style="justify-content: space-between">
+                  <span class="small">맘에 들어요</span
+                  ><span class="small" id="rev-4">0</span>
+                </div>
+                <div class="meter"><i id="m4"></i></div>
+                <div class="row" style="justify-content: space-between">
+                  <span class="small">보통이에요</span
+                  ><span class="small" id="rev-3">0</span>
+                </div>
+                <div class="meter"><i id="m3"></i></div>
+              </div>
             </div>
-            <div class="center" style="margin: 12px 0">
+            <div
+              class="row"
+              style="justify-content: space-between; margin: 8px 0"
+            >
               <button class="btn btn--primary" id="btn-write">
                 내 리뷰 작성하기
               </button>
+              <div class="row small">포토 우선 보기</div>
             </div>
+            <div id="rev-list" class="grid-1"></div>
           </div>
         </section>
 
-        <!-- 루션앱 챌린지 -->
         <section class="card pad app-section">
-          <h2 class="h2">루션앱 챌린지</h2>
+          <h2 class="h2">be:me 앱 챌린지</h2>
           <div class="grid-3">
             <div class="challenge-card">
               <h3>30일</h3>
-              <p>5천원 쿠폰</p>
+              <p>마켓컬리<br />5천원 쿠폰</p>
             </div>
             <div class="challenge-card">
               <h3>60일</h3>
-              <p>팩 세트</p>
+              <p>뷰티컬리<br />팩 세트</p>
             </div>
             <div class="challenge-card">
               <h3>90일</h3>
-              <p>시크릿</p>
+              <p>시크릿 리워드</p>
             </div>
           </div>
           <button
@@ -314,31 +389,496 @@
             체험하러 가기
           </button>
         </section>
+        <!-- [추천받기(7일) 설문 모달] -->
+        <div id="quiz7Modal" class="ik-backdrop" style="display: none">
+          <div
+            class="ik-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="quiz7Title"
+          >
+            <header class="ik-header">
+              <strong id="quiz7Title">나에게 맞는 7일 식단</strong>
+            </header>
+            <div class="ik-body">
+              <div id="quiz7Prog" class="ik-prog"><i></i></div>
+              <div id="quiz7Box"><!-- 질문/옵션 렌더링 자리 --></div>
+            </div>
+            <div class="ik-footer">
+              <button class="btn" id="quiz7Prev" type="button">이전</button>
+              <button class="btn btn--primary" id="quiz7Next" type="button">
+                다음
+              </button>
+              <button class="btn" id="quiz7Close" type="button">닫기</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- [추천 결과 모달] -->
+        <div id="diet7Result" class="ik-backdrop" style="display: none">
+          <div
+            class="ik-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="diet7Title"
+            style="max-width: 860px"
+          >
+            <header class="ik-header">
+              <strong id="diet7Title">맞춤 7일 식단 추천</strong>
+            </header>
+            <div class="ik-body">
+              <div id="diet7Bars" class="ik-bars"></div>
+              <div id="diet7Plan" style="margin-top: 12px">
+                <!-- DAY 카드 렌더링 -->
+              </div>
+            </div>
+            <div class="ik-footer">
+              <button class="btn btn--primary" id="diet7Start" type="button">
+                바로 시작하기
+              </button>
+              <button class="btn" id="diet7Retry" type="button">
+                다시 추천
+              </button>
+              <button class="btn btn--primary" id="diet7Close" type="button">
+                닫기
+              </button>
+            </div>
+          </div>
+        </div>
       </main>
 
+      <!-- FOOTER   -->
       <footer class="app-footer">
         <div class="pay-row">
-          <img src="./assets/payment-icons.png" alt="결제수단" />
+          <img src="./assets/footer_img.png" alt="하단로고" />
         </div>
         <p>© Inner Kurly · Daily Premium Gift</p>
       </footer>
 
+      <!-- BOTTOM NAV -->
       <nav class="bottom-nav">
         <a href="./index.html" data-key="home"><span>🏠</span><em>홈</em></a>
-        <a href="./plates.html" data-key="plates" class="active"
+        <a href="./plates.html" data-key="plates"
           ><span>🍽️</span><em>플레이트</em></a
         >
         <a href="./tests.html" data-key="test"
-          ><span>🧪</span><em>테스트</em></a
+          ><span>📝</span><em>테스트</em></a
         >
         <a href="./cart.html" data-key="cart"
           ><span>🛒</span><em>장바구니</em></a
         >
-        <a href="./mypage.html" data-key="my"><span>👤</span><em>마이</em></a>
+        <a href="./mypage.html" data-key="mypage"
+          ><span>👤</span><em>마이페이지</em></a
+        >
       </nav>
     </div>
 
     <script src="./scripts/common.js"></script>
     <script src="./scripts/pdp.js"></script>
+    <script>
+      (() => {
+        // ========== 0) 유틸 ==========
+        const $ = (s) => document.querySelector(s);
+        const E = (html) => {
+          const d = document.createElement("div");
+          d.innerHTML = html.trim();
+          return d.firstChild;
+        };
+
+        // ========== 1) 버튼/팝업 기본 ==========
+        // 이미 페이지에 있는 '식단표 보기' 팝업(상세표)은 기존 로직 유지
+        const openQ = $("#openQuiz7");
+        const W = { detox: 0, slow: 0, slim: 0, protein: 0 }; // plate weights
+        let step = 0,
+          ANSW = []; // 사용자의 응답 스냅샷
+
+        // ========== 2) 외부 JSON 로드 ==========
+        const PATHS = {
+          items: "./innerkurly_quiz_5q_items.json",
+          logic: "./innerkurly_quiz_5q_logic.json",
+          results: "./innerkurly_quiz_5q_results.json",
+          plates: "./innerkurly_plate_recommendations_detailed.json", // 메뉴 풀
+        };
+        let QUIZ_ITEMS = [],
+          QUIZ_LOGIC = {},
+          QUIZ_RESULTS = {},
+          PLATES = [];
+
+        async function loadAll() {
+          const [it, lg, rs, pl] = await Promise.all([
+            fetch(PATHS.items)
+              .then((r) => r.json())
+              .catch(() => []),
+            fetch(PATHS.logic)
+              .then((r) => r.json())
+              .catch(() => ({})),
+            fetch(PATHS.results)
+              .then((r) => r.json())
+              .catch(() => ({})),
+            fetch(PATHS.plates)
+              .then((r) => r.json())
+              .catch(() => []),
+          ]);
+          QUIZ_ITEMS = it;
+          QUIZ_LOGIC = lg;
+          QUIZ_RESULTS = rs;
+          PLATES = Array.isArray(pl) ? pl : [];
+
+          // 안전 가드: 배열 최상위만 허용 (일부 파일은 배열 안에 배열 구조일 수 있음)
+          if (Array.isArray(QUIZ_ITEMS[0])) QUIZ_ITEMS = QUIZ_ITEMS.flat();
+        }
+
+        // ========== 3) 설문 모달 ==========
+        const MOD = $("#quiz7Modal"),
+          BOX = $("#quiz7Box"),
+          PROG = $("#quiz7Prog");
+        const btnPrev = $("#quiz7Prev"),
+          btnNext = $("#quiz7Next"),
+          btnClose = $("#quiz7Close");
+
+        function showQuiz() {
+          MOD.style.display = "flex";
+          renderStep();
+        }
+        function hideQuiz() {
+          MOD.style.display = "none";
+        }
+
+        function renderStep() {
+          const total = QUIZ_ITEMS.length;
+          const q = QUIZ_ITEMS[step];
+          PROG.firstElementChild &&
+            (PROG.firstElementChild.style.width = (step / total) * 100 + "%");
+
+          const chosen = ANSW[step]?.id || "";
+          BOX.innerHTML = `
+      <div class="ik-q">
+        <h4>${step + 1}. ${q.title || q.question}</h4>
+        ${(q.options || q.opts || [])
+          .map(
+            (o) => `
+          <label class="ik-opt ${chosen === o.id ? "selected" : ""}" data-id="${
+              o.id
+            }">
+            <input type="radio" name="Q${step}" value="${o.id}" ${
+              chosen === o.id ? "checked" : ""
+            }>
+            <span>${o.text || o.label}</span>
+          </label>
+        `
+          )
+          .join("")}
+      </div>
+    `;
+          BOX.querySelectorAll(".ik-opt").forEach((el) => {
+            el.onclick = () => {
+              BOX.querySelectorAll(".ik-opt").forEach((x) =>
+                x.classList.remove("selected")
+              );
+              el.classList.add("selected");
+              const id = el.getAttribute("data-id");
+              const opt = (q.options || q.opts || []).find((o) => o.id === id);
+              ANSW[step] = { id, qid: q.id || "Q" + (step + 1), raw: opt };
+            };
+          });
+
+          btnPrev.disabled = step === 0;
+          btnNext.textContent = step === total - 1 ? "결과 보기" : "다음";
+        }
+
+        function applyWeights() {
+          // reset
+          W.detox = 0;
+          W.slow = 0;
+          W.slim = 0;
+          W.protein = 0;
+          // QUIZ_LOGIC 형태: { QID: { optionId: { w:{detox:..}, k:['low_sodium',..] } } }
+          ANSW.forEach((a) => {
+            const L = (QUIZ_LOGIC[a.qid] || {})[a.id] || {};
+            const ww = L.w || {};
+            Object.keys(ww).forEach((k) => (W[k] = (W[k] || 0) + (ww[k] || 0)));
+          });
+        }
+
+        // 기존 키워드 매핑: _01과 최종본의 공통 정규식
+        const KEYMAP = {
+          low_sodium:
+            /(저염|해조|미역|다시마|김|케일|샐러리|레몬|디톡스|그린)/i,
+          fiber:
+            /(현미|귀리|퀴노아|렌틸|병아리콩|브로콜리|양배추|샐러드|케일|콩|두부|통곡)/i,
+          antioxidant:
+            /(베리|블루베리|라즈베리|석류|그린티|카카오|토마토|올리브|비타민C)/i,
+          omega3: /(연어|고등어|참치|아마씨|치아씨|호두|오메가\s*3)/i,
+          low_gi: /(곤약|메밀|두부면|버섯|계란|닭가슴살|저당|라이트)/i,
+          probiotic: /(요거트|케피어|김치|발효|유산균)/i,
+          sleep: /(카모마일|마그네슘|글리신|트립토판|수면)/i,
+          stress: /(테아닌|녹차|호두|아보카도|스트레스)/i,
+          high_protein: /(단백|프로틴|치킨|스테이크|연어|두부|계란)/i,
+        };
+
+        function pctFromWeights(W) {
+          const keys = ["detox", "slow", "slim", "protein"];
+          let total = keys.reduce((s, k) => s + (W[k] || 0), 0) || 1;
+          let p = keys.map((k) => ({
+            k,
+            v: Math.round(((W[k] || 0) / total) * 100),
+          }));
+          // 0% 방지
+          const zeros = p.filter((x) => x.v === 0);
+          zeros.forEach((x) => (x.v = 1));
+          let over = p.reduce((s, x) => s + x.v, 0) - 100;
+          for (let i = 0; i < over; i++) {
+            p.sort((a, b) => b.v - a.v);
+            if (p[0].v > 1) p[0].v--;
+          }
+          return p;
+        }
+        function labelGauge(k) {
+          return (
+            {
+              detox: "정화 밸런스",
+              slow: "피부 컨디션",
+              slim: "라이트 컨디션",
+              protein: "단백 밸런스",
+            }[k] || k
+          );
+        }
+
+        // ========== 4) 추천 생성 ==========
+        function pickPlan() {
+          // 각 레코드에서 plate/키/설명 통일
+          const rows = PLATES.map((r) => {
+            const plateKey = String(
+              r.plate || r.plate_key || r.plate_type || r.PlateType || ""
+            ).toLowerCase();
+            const normPlate = /detox|디톡스/.test(plateKey)
+              ? "detox"
+              : /glow|저속|항산|derma|skin|slow/.test(plateKey)
+              ? "slow"
+              : /slim|린|저당|cut/.test(plateKey)
+              ? "slim"
+              : /balance|protein|단백|리커버리/.test(plateKey)
+              ? "protein"
+              : "";
+
+            const text = [
+              r.appetizer_keys ||
+                r.epi_keys ||
+                r.appetizer ||
+                r["에피타이트"] ||
+                "",
+              r.main_keys || r.main || r["본식"] || r.entree || "",
+              r.dinner_keys || r.dessert || r["디너"] || r["디저트"] || "",
+              r.juice || r["주스"] || r.juice_desc || "",
+              r.supplement || r.supplements || r["보충제"] || "",
+              r.tags || r.keywords || r["키워드"] || "",
+            ].join(" ");
+
+            // 키워드 가점
+            let kScore = 0;
+            Object.keys(KEYMAP).forEach((k) => {
+              if (KEYMAP[k].test(text)) kScore += 1;
+            });
+            const base =
+              +r.base_score ||
+              +r.personalized_score ||
+              +r.market_score ||
+              +r.score ||
+              0;
+            const pScore = (W[normPlate] || 0) * 2;
+            const score = base + pScore + kScore;
+
+            return {
+              plate: normPlate,
+              menu_name:
+                r.menu_name || r.menu || r.MenuName || r.menu_display || "",
+              epi_k:
+                r.appetizer_keys ||
+                r.epi_keys ||
+                r.appetizer ||
+                r["에피타이트"] ||
+                "",
+              epi_d: r.appetizer_desc || r["appetizer_desc"] || "",
+              main_k: r.main_keys || r.main || r["본식"] || r.entree || "",
+              main_d: r.main_desc || r["main_desc"] || "",
+              din_k:
+                r.dinner_keys || r.dessert || r["디너"] || r["디저트"] || "",
+              din_d: r.dinner_desc || r["dinner_desc"] || r.dessert_desc || "",
+              juice: r.juice || r["주스"] || r.juice_desc || "",
+              supp: r.supplement || r.supplements || r["보충제"] || "",
+              kcal: +r.kcal || +r.calories || +r["칼로리"] || "",
+              p: +r.protein_g || +r.protein || +r["단백질_g"] || "",
+              c: +r.carbs_g || +r.carbs || +r["탄수화물_g"] || "",
+              f: +r.fat_g || +r.fat || +r["지방_g"] || "",
+              fiber: +r.fiber_g || +r["식이섬유_g"] || "",
+              sodium: +r.sodium_mg || +r.na_mg || +r["나트륨_mg"] || "",
+              score,
+            };
+          });
+
+          // 점수 정렬 + 중복/편중 방지
+          const usedMain = new Set(),
+            usedDessert = new Set();
+          const plateCnt = { detox: 0, slow: 0, slim: 0, protein: 0 };
+          const sorted = rows
+            .filter((it) => it.main_k || it.epi_k || it.din_k)
+            .sort(
+              (a, b) =>
+                b.score - a.score || String(a.main_k).localeCompare(b.main_k)
+            );
+
+          const plan = [];
+          for (const it of sorted) {
+            if (plan.length === 7) break;
+            const m = (it.main_k || "").toLowerCase().trim();
+            const d = (it.din_k || "").toLowerCase().trim();
+            if (!it.main_k) continue;
+            if (usedMain.has(m)) continue;
+            if (d && usedDessert.has(d)) continue;
+            if (plateCnt[it.plate] >= 4) continue;
+            plan.push(it);
+            usedMain.add(m);
+            if (d) usedDessert.add(d);
+            plateCnt[it.plate] = (plateCnt[it.plate] || 0) + 1;
+          }
+          // 7개 못채우면 보충
+          for (const it of sorted) {
+            if (plan.length === 7) break;
+            const m = (it.main_k || "").toLowerCase().trim();
+            const d = (it.din_k || "").toLowerCase().trim();
+            if (!it.main_k) continue;
+            if (usedMain.has(m)) continue;
+            if (d && usedDessert.has(d)) continue;
+            plan.push(it);
+            usedMain.add(m);
+            if (d) usedDessert.add(d);
+          }
+          return plan;
+        }
+
+        // ========== 5) 결과 렌더 ==========
+        const RES = $("#diet7Result"),
+          RB = $("#diet7Bars"),
+          RP = $("#diet7Plan");
+        const btnStart = $("#diet7Start"),
+          btnRetry = $("#diet7Retry"),
+          btnRClose = $("#diet7Close");
+
+        function renderBars() {
+          const pcts = (function () {
+            // 가중치 반영 후 백분율
+            return (function (W) {
+              return pctFromWeights(W);
+            })(W);
+          })();
+          RB.innerHTML = pcts
+            .map(
+              ({ k, v }) => `
+      <div class="ik-bar-row">
+        <div class="ik-bar-title">${labelGauge(k)}</div>
+        <div class="ik-bar-wrap"><i style="width:${v}%"></i></div>
+        <div class="ik-bar-pct">${v}%</div>
+      </div>
+    `
+            )
+            .join("");
+        }
+
+        function renderPlan(plan) {
+          RP.innerHTML = plan
+            .map((r, idx) => {
+              const nut = [
+                r.kcal ? `${r.kcal}kcal` : null,
+                r.p ? `단백 ${r.p}g` : null,
+                r.c ? `탄수 ${r.c}g` : null,
+                r.f ? `지방 ${r.f}g` : null,
+                r.fiber ? `식이섬유 ${r.fiber}g` : null,
+                r.sodium ? `나트륨 ${r.sodium}mg` : null,
+              ]
+                .filter(Boolean)
+                .join(" · ");
+              const jline = [
+                r.juice ? `🥤 ${r.juice}` : "",
+                r.supp ? `💊 ${r.supp}` : "",
+              ]
+                .filter(Boolean)
+                .join(" · ");
+
+              return `
+      <div class="day-card">
+        <div class="day-head">DAY${idx + 1}</div>
+        <div class="day-title">${
+          idx === 0 && r.menu_name ? r.menu_name : r.main_k || "-"
+        }</div>
+        <div class="line"><strong>에피타이트:</strong> ${r.epi_k || "-"}</div>
+        ${r.epi_d ? `<div class="sm">· ${r.epi_d}</div>` : ""}
+        <div class="line"><strong>메인:</strong> ${r.main_k || "-"}</div>
+        ${r.main_d ? `<div class="sm">· ${r.main_d}</div>` : ""}
+        <div class="line"><strong>디너:</strong> ${r.din_k || "-"}</div>
+        ${r.din_d ? `<div class="sm">· ${r.din_d}</div>` : ""}
+        ${
+          jline
+            ? `<div class="line"><strong>주스·영양제:</strong> ${jline}</div>`
+            : ""
+        }
+        ${nut ? `<div class="sm"><strong>영양성분:</strong> ${nut}</div>` : ""}
+      </div>`;
+            })
+            .join("");
+        }
+
+        function showResult() {
+          RES.style.display = "flex";
+        }
+        function hideResult() {
+          RES.style.display = "none";
+        }
+
+        // ========== 6) 이벤트 바인딩 ==========
+        openQ &&
+          (openQ.onclick = async () => {
+            if (!PLATES.length) await loadAll();
+            step = 0;
+            ANSW = [];
+            showQuiz();
+          });
+
+        btnPrev.onclick = () => {
+          if (step > 0) {
+            step--;
+            renderStep();
+          }
+        };
+        btnNext.onclick = () => {
+          const picked = BOX.querySelector("input[type=radio]:checked");
+          if (!picked) {
+            alert("하나를 선택해 주세요.");
+            return;
+          }
+          if (step < QUIZ_ITEMS.length - 1) {
+            step++;
+            renderStep();
+          } else {
+            hideQuiz();
+            applyWeights();
+            renderBars();
+            const plan = pickPlan();
+            renderPlan(plan);
+            showResult();
+          }
+        };
+        btnClose.onclick = () => hideQuiz();
+
+        btnRClose.onclick = () => hideResult();
+        btnRetry.onclick = () => {
+          hideResult();
+          openQ.click();
+        };
+        btnStart.onclick = () => {
+          hideResult();
+          location.hash = "#plans";
+        };
+      })();
+    </script>
   </body>
 </html>
