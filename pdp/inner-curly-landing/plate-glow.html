@@ -107,15 +107,8 @@
               <h1 class="h2">Glow</h1>
               <p class="text">빛나는 하루를 위한 피부 회복 플레이트</p>
               <div class="row">
-                <a class="btn btn--primary" href="#plans">구독하기</a>
                 <button
-                  class="btn"
-                  onclick="Cart.add({sku:'PLATE-glow-W3',name:'Glow W3',price:84000,plan:'W3'})"
-                >
-                  장바구니
-                </button>
-                <button
-                  class="btn"
+                  class="btn btn--primary"
                   onclick="sharePage(document.title, location.href)"
                 >
                   공유
@@ -135,7 +128,7 @@
               <div class="sub">멤버스 가입 시 자동 제공</div>
               <div class="desc">웰컴키트·보냉팩 포함</div>
               <div class="actions">
-                <button class="btn" disabled>이벤트 제공</button>
+                <button class="btn-outline-wide">시작하기</button>
               </div>
             </div>
             <div class="plan">
@@ -262,13 +255,23 @@
               </div>
             </div>
           </div>
-          <!-- 기존 CTA 블록(단일 버튼 또는 display:grid 블록) 삭제/교체 -->
-          <div class="cta-row" id="diet-cta">
+          <!-- CTA pair: 식단표 & 추천받기(7일) -->
+          <!-- 동일 크기 버튼: 식단표=진보라, 추천받기=외곽선 -->
+          <div
+            class="cta-stack"
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+              margin-top: 10px;
+            "
+          >
             <button class="btn-solid-wide" id="openDiet">식단표 보기</button>
-            <button class="btn-outline-anim" id="openQuiz7">
+            <button class="btn-outline-wide" id="btnIKPersonalize7">
               추천받기(7일)
             </button>
           </div>
+
           <p class="small center" style="margin-top: 10px; color: #777">
             ※ 3일·5일 플랜은 선택 요일 기준으로 자동 조정됩니다.
           </p>
@@ -446,6 +449,57 @@
           </div>
         </div>
       </main>
+      <!-- 5문항 설문 모달 -->
+      <div id="ikWizard" class="ik-backdrop" aria-hidden="true">
+        <div
+          class="ik-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="ikWTitle"
+        >
+          <header class="ik-header">
+            <strong id="ikWTitle">나에게 맞는 7일 식단</strong>
+          </header>
+          <div class="ik-body">
+            <div id="ikStepProg" class="ik-prog"><i></i></div>
+            <div id="ikQArea"></div>
+          </div>
+          <div class="ik-footer">
+            <button class="btn" id="ikPrev" type="button">이전</button>
+            <button class="btn btn--primary" id="ikNext" type="button">
+              다음
+            </button>
+            <button class="btn" id="ikWClose" type="button">닫기</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 결과 모달 -->
+      <div id="ikResult" class="ik-backdrop" aria-hidden="true">
+        <div
+          class="ik-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="ikRTitle"
+          style="max-width: 860px"
+        >
+          <header class="ik-header">
+            <strong id="ikRTitle">맞춤 7일 식단 추천</strong>
+          </header>
+          <div class="ik-body">
+            <div id="ikScore" class="small" style="color: #7a7482"></div>
+            <div id="ikBars" class="ik-bars"></div>
+            <div id="ikPlanWrap" style="margin-top: 12px"></div>
+          </div>
+          <div class="ik-footer">
+            <button class="btn btn--primary" id="ikStart" type="button">
+              바로 시작하기
+            </button>
+            <button class="btn" id="ikRetry" type="button">다시 추천</button>
+            <button class="btn" id="ikClose" type="button">닫기</button>
+          </div>
+        </div>
+      </div>
 
       <!-- FOOTER   -->
       <footer class="app-footer">
@@ -475,140 +529,242 @@
 
     <script src="./scripts/common.js"></script>
     <script src="./scripts/pdp.js"></script>
+
     <script>
-      (() => {
-        // ========== 0) 유틸 ==========
+      // ===== 안전한 이벤트 위임: 버튼만 연결 (중복 스크립트/ID 충돌 방지) =====
+      (function () {
         const $ = (s) => document.querySelector(s);
-        const E = (html) => {
-          const d = document.createElement("div");
-          d.innerHTML = html.trim();
-          return d.firstChild;
+        const on = (type, sel, handler) => {
+          document.addEventListener(type, (e) => {
+            const t = e.target.closest(sel);
+            if (t) handler(e, t);
+          });
         };
 
-        // ========== 1) 버튼/팝업 기본 ==========
-        // 이미 페이지에 있는 '식단표 보기' 팝업(상세표)은 기존 로직 유지
-        const openQ = $("#openQuiz7");
-        const W = { detox: 0, slow: 0, slim: 0, protein: 0 }; // plate weights
-        let step = 0,
-          ANSW = []; // 사용자의 응답 스냅샷
+        // 1) 추천받기(7일) 버튼 → 설문 모달 열기
+        on("click", "#btnIKPersonalize7", () => {
+          const wz = $("#ikWizard");
+          if (!wz) return console.warn("ikWizard not found");
+          wz.removeAttribute("hidden");
+          wz.style.display = "flex";
+          // 설문 첫 스텝이 안 그려져 있으면 트리거
+          const next = $("#ikNext");
+          if (!$("#ikQArea")?.children?.length && next) next.click();
+        });
 
-        // ========== 2) 외부 JSON 로드 ==========
-        const PATHS = {
-          items: "./innerkurly_quiz_5q_items.json",
-          logic: "./innerkurly_quiz_5q_logic.json",
-          results: "./innerkurly_quiz_5q_results.json",
-          plates: "./innerkurly_plate_recommendations_detailed.json", // 메뉴 풀
-        };
-        let QUIZ_ITEMS = [],
-          QUIZ_LOGIC = {},
-          QUIZ_RESULTS = {},
-          PLATES = [];
+        // 2) 설문 닫기
+        on("click", "#ikWClose", () => {
+          const wz = $("#ikWizard");
+          if (wz) {
+            wz.style.display = "none";
+            wz.setAttribute("hidden", "");
+          }
+        });
 
-        async function loadAll() {
-          const [it, lg, rs, pl] = await Promise.all([
-            fetch(PATHS.items)
-              .then((r) => r.json())
-              .catch(() => []),
-            fetch(PATHS.logic)
-              .then((r) => r.json())
-              .catch(() => ({})),
-            fetch(PATHS.results)
-              .then((r) => r.json())
-              .catch(() => ({})),
-            fetch(PATHS.plates)
-              .then((r) => r.json())
-              .catch(() => []),
-          ]);
-          QUIZ_ITEMS = it;
-          QUIZ_LOGIC = lg;
-          QUIZ_RESULTS = rs;
-          PLATES = Array.isArray(pl) ? pl : [];
+        // 3) 결과 닫기 / 재추천 / 시작
+        on("click", "#ikClose", () => {
+          const res = $("#ikResult");
+          if (res) {
+            res.style.display = "none";
+            res.setAttribute("hidden", "");
+          }
+        });
+        on("click", "#ikRetry", () => {
+          const res = $("#ikResult");
+          if (res) {
+            res.style.display = "none";
+            res.setAttribute("hidden", "");
+          }
+          const btn = $("#btnIKPersonalize7");
+          if (btn) btn.click();
+        });
+        on("click", "#ikStart", () => {
+          const res = $("#ikResult");
+          if (res) {
+            res.style.display = "none";
+            res.setAttribute("hidden", "");
+          }
+          location.hash = "#plans";
+        });
 
-          // 안전 가드: 배열 최상위만 허용 (일부 파일은 배열 안에 배열 구조일 수 있음)
-          if (Array.isArray(QUIZ_ITEMS[0])) QUIZ_ITEMS = QUIZ_ITEMS.flat();
-        }
+        // 4) JSON 로딩 경로는 최종 HTML과 같은 위치 기준
+        //    (이미 _01 로직에서 fetch를 하고 있다면 아래는 무시되어도 안전)
+        window.IK_JSON_PATHS =
+          window.IK_JSON_PATHS && window.IK_JSON_PATHS.length
+            ? window.IK_JSON_PATHS
+            : [
+                "./innerkurly_recos_personalized.json",
+                "./innerkurly_recos_personalized_A.json",
+                "./innerkurly_plate_recommendations_detailed.json",
+                "./innerkurly_plate_recommendations.json",
+                "./innerkurly_recos_merged.json",
+              ];
+      })();
+    </script>
+    <script>
+      (function () {
+        // ===== 0) 1회만 바인딩(중복 방지) =====
+        if (window.__IK_WIRED) return;
+        window.__IK_WIRED = true;
 
-        // ========== 3) 설문 모달 ==========
-        const MOD = $("#quiz7Modal"),
-          BOX = $("#quiz7Box"),
-          PROG = $("#quiz7Prog");
-        const btnPrev = $("#quiz7Prev"),
-          btnNext = $("#quiz7Next"),
-          btnClose = $("#quiz7Close");
+        // ===== 1) DOM helpers =====
+        const $ = (s) => document.querySelector(s);
 
-        function showQuiz() {
-          MOD.style.display = "flex";
-          renderStep();
-        }
-        function hideQuiz() {
-          MOD.style.display = "none";
-        }
+        // ===== 2) 요소 캐시 =====
+        const WZ = $("#ikWizard");
+        const RES = $("#ikResult");
+        const QBOX = $("#ikQArea");
+        const PROG_I = $("#ikStepProg")?.firstElementChild;
 
-        function renderStep() {
-          const total = QUIZ_ITEMS.length;
-          const q = QUIZ_ITEMS[step];
-          PROG.firstElementChild &&
-            (PROG.firstElementChild.style.width = (step / total) * 100 + "%");
+        const BTN_OPEN = $("#btnIKPersonalize7");
+        const BTN_WCLOSE = $("#ikWClose");
+        const BTN_PREV = $("#ikPrev");
+        const BTN_NEXT = $("#ikNext");
+        const BTN_CLOSE = $("#ikClose");
+        const BTN_RETRY = $("#ikRetry");
+        const BTN_START = $("#ikStart");
 
-          const chosen = ANSW[step]?.id || "";
-          BOX.innerHTML = `
-      <div class="ik-q">
-        <h4>${step + 1}. ${q.title || q.question}</h4>
-        ${(q.options || q.opts || [])
-          .map(
-            (o) => `
-          <label class="ik-opt ${chosen === o.id ? "selected" : ""}" data-id="${
-              o.id
-            }">
-            <input type="radio" name="Q${step}" value="${o.id}" ${
-              chosen === o.id ? "checked" : ""
-            }>
-            <span>${o.text || o.label}</span>
-          </label>
-        `
-          )
-          .join("")}
-      </div>
-    `;
-          BOX.querySelectorAll(".ik-opt").forEach((el) => {
-            el.onclick = () => {
-              BOX.querySelectorAll(".ik-opt").forEach((x) =>
-                x.classList.remove("selected")
-              );
-              el.classList.add("selected");
-              const id = el.getAttribute("data-id");
-              const opt = (q.options || q.opts || []).find((o) => o.id === id);
-              ANSW[step] = { id, qid: q.id || "Q" + (step + 1), raw: opt };
-            };
-          });
+        // ===== 3) 설문 질문/키워드 맵 =====
+        const QUIZ = [
+          {
+            id: "Q1",
+            title: "가장 원하는 변화는 무엇인가요?",
+            opts: [
+              {
+                id: "A",
+                text: "붓기·부종 완화 / 정화",
+                w: { detox: 2 },
+                k: { low_sodium: 2, fiber: 1 },
+              },
+              {
+                id: "B",
+                text: "피부 안색·활력 / 항산화",
+                w: { slow: 2 },
+                k: { antioxidant: 2, omega3: 1 },
+              },
+              {
+                id: "C",
+                text: "가벼운 컨디션 / 라이트",
+                w: { slim: 2 },
+                k: { low_gi: 2 },
+              },
+              {
+                id: "D",
+                text: "근육 회복·고단백",
+                w: { protein: 2 },
+                k: { high_protein: 2, omega3: 1 },
+              },
+            ],
+          },
+          {
+            id: "Q2",
+            title: "요즘 식습관/불편은 어떤가요?",
+            opts: [
+              {
+                id: "A",
+                text: "짠 음식/외식이 잦고 붓는다",
+                w: { detox: 2 },
+                k: { low_sodium: 2, fiber: 1 },
+              },
+              {
+                id: "B",
+                text: "피부가 푸석/건조/트러블",
+                w: { slow: 2 },
+                k: { antioxidant: 2, omega3: 1 },
+              },
+              {
+                id: "C",
+                text: "야식·밀가루/단 음식이 잦다",
+                w: { slim: 2 },
+                k: { low_gi: 2, probiotic: 1 },
+              },
+              {
+                id: "D",
+                text: "단백질 섭취가 부족하다",
+                w: { protein: 2 },
+                k: { high_protein: 2 },
+              },
+            ],
+          },
+          {
+            id: "Q3",
+            title: "활동량/운동 빈도는?",
+            opts: [
+              {
+                id: "A",
+                text: "거의 안 함(주 0–1회)",
+                w: { detox: 1, slow: 1 },
+              },
+              { id: "B", text: "가끔(주 2–3회)", w: { slim: 1, protein: 1 } },
+              {
+                id: "C",
+                text: "꾸준함(주 4회 이상)",
+                w: { protein: 2, slim: 1 },
+              },
+            ],
+          },
+          {
+            id: "Q4",
+            title: "지금 가장 필요한 루틴은?",
+            opts: [
+              {
+                id: "A",
+                text: "속 가벼움(해조·케일·비트)",
+                w: { detox: 2 },
+                k: { fiber: 2, low_sodium: 1 },
+              },
+              {
+                id: "B",
+                text: "피부탄력(연어·베리·올리브)",
+                w: { slow: 2 },
+                k: { antioxidant: 2, omega3: 1 },
+              },
+              {
+                id: "C",
+                text: "저당·포만감(곤약·메밀·닭)",
+                w: { slim: 2 },
+                k: { low_gi: 2 },
+              },
+              {
+                id: "D",
+                text: "근육/회복(연어·치킨·두부)",
+                w: { protein: 2 },
+                k: { high_protein: 2, omega3: 1 },
+              },
+            ],
+          },
+          {
+            id: "Q5",
+            title: "컨디션 케어 보조 신호가 있나요?",
+            opts: [
+              {
+                id: "A",
+                text: "수면/휴식(카모마일·마그네슘)",
+                k: { sleep: 2 },
+              },
+              {
+                id: "B",
+                text: "스트레스 완화(테아닌·견과·녹차)",
+                k: { stress: 2 },
+              },
+              {
+                id: "C",
+                text: "장케어(요거트/발효/식이섬유)",
+                k: { probiotic: 2, fiber: 1 },
+              },
+              { id: "D", text: "특별히 없음", k: {} },
+            ],
+          },
+        ];
 
-          btnPrev.disabled = step === 0;
-          btnNext.textContent = step === total - 1 ? "결과 보기" : "다음";
-        }
-
-        function applyWeights() {
-          // reset
-          W.detox = 0;
-          W.slow = 0;
-          W.slim = 0;
-          W.protein = 0;
-          // QUIZ_LOGIC 형태: { QID: { optionId: { w:{detox:..}, k:['low_sodium',..] } } }
-          ANSW.forEach((a) => {
-            const L = (QUIZ_LOGIC[a.qid] || {})[a.id] || {};
-            const ww = L.w || {};
-            Object.keys(ww).forEach((k) => (W[k] = (W[k] || 0) + (ww[k] || 0)));
-          });
-        }
-
-        // 기존 키워드 매핑: _01과 최종본의 공통 정규식
         const KEYMAP = {
           low_sodium:
             /(저염|해조|미역|다시마|김|케일|샐러리|레몬|디톡스|그린)/i,
           fiber:
-            /(현미|귀리|퀴노아|렌틸|병아리콩|브로콜리|양배추|샐러드|케일|콩|두부|통곡)/i,
+            /(현미|귀리|퀴노아|렌틸|병아리콩|브로콜리|양배추|샐러드|콩|두부|통곡)/i,
           antioxidant:
             /(베리|블루베리|라즈베리|석류|그린티|카카오|토마토|올리브|비타민C)/i,
-          omega3: /(연어|고등어|참치|아마씨|치아씨|호두|오메가\s*3)/i,
+          omega3: /(연어|고등어|참치|अ마씨|치아씨|호두|오메가\s*3)/i,
           low_gi: /(곤약|메밀|두부면|버섯|계란|닭가슴살|저당|라이트)/i,
           probiotic: /(요거트|케피어|김치|발효|유산균)/i,
           sleep: /(카모마일|마그네슘|글리신|트립토판|수면)/i,
@@ -616,23 +772,93 @@
           high_protein: /(단백|프로틴|치킨|스테이크|연어|두부|계란)/i,
         };
 
-        function pctFromWeights(W) {
-          const keys = ["detox", "slow", "slim", "protein"];
-          let total = keys.reduce((s, k) => s + (W[k] || 0), 0) || 1;
-          let p = keys.map((k) => ({
-            k,
-            v: Math.round(((W[k] || 0) / total) * 100),
-          }));
-          // 0% 방지
-          const zeros = p.filter((x) => x.v === 0);
-          zeros.forEach((x) => (x.v = 1));
-          let over = p.reduce((s, x) => s + x.v, 0) - 100;
-          for (let i = 0; i < over; i++) {
-            p.sort((a, b) => b.v - a.v);
-            if (p[0].v > 1) p[0].v--;
-          }
-          return p;
+        // ===== 4) 상태 =====
+        let step = 0;
+        let answers = []; // [{w:{}, k:{}}...]
+
+        // ===== 5) 유틸 =====
+        function drawStep() {
+          const q = QUIZ[step];
+          const total = QUIZ.length;
+
+          if (PROG_I) PROG_I.style.width = (step / total) * 100 + "%";
+          if (BTN_PREV) BTN_PREV.disabled = step === 0;
+          if (BTN_NEXT)
+            BTN_NEXT.textContent = step === total - 1 ? "결과 보기" : "다음";
+
+          const chosen = answers[step]?.id || "";
+          QBOX.innerHTML = `
+      <div class="ik-q">
+        <h4>${step + 1}. ${q.title}</h4>
+        ${q.opts
+          .map(
+            (o) => `
+          <label class="ik-opt ${chosen === o.id ? "selected" : ""}">
+            <input type="radio" name="${q.id}" value="${o.id}" ${
+              chosen === o.id ? "checked" : ""
+            }>
+            <span>${o.text}</span>
+          </label>
+        `
+          )
+          .join("")}
+      </div>
+    `;
+          QBOX.querySelectorAll(".ik-opt").forEach((el) => {
+            el.onclick = () => {
+              QBOX.querySelectorAll(".ik-opt").forEach((x) =>
+                x.classList.remove("selected")
+              );
+              el.classList.add("selected");
+              const inp = el.querySelector("input");
+              if (inp) inp.checked = true;
+            };
+          });
         }
+
+        const plateKey = (s = "") => {
+          s = String(s).toLowerCase();
+          if (/detox|디톡스/.test(s)) return "detox";
+          if (/glow|저속|항산|derma|skin|slow/.test(s)) return "slow";
+          if (/slim|린|저당|cut/.test(s)) return "slim";
+          if (/balance|protein|단백|리커버리/.test(s)) return "protein";
+          return "";
+        };
+
+        function sumWeights(ans) {
+          const plate = { detox: 0, slow: 0, slim: 0, protein: 0 },
+            key = {};
+          ans.forEach((a) => {
+            Object.entries(a.w || {}).forEach(
+              ([k, v]) => (plate[k] = (plate[k] || 0) + v)
+            );
+            Object.entries(a.k || {}).forEach(
+              ([k, v]) => (key[k] = (key[k] || 0) + v)
+            );
+          });
+          return { plate, key };
+        }
+
+        function pctFromWeights(W) {
+          const ks = ["detox", "slow", "slim", "protein"];
+          let tot = ks.reduce((s, k) => s + (W[k] || 0), 0) || 1;
+          let arr = ks.map((k) => ({
+            k,
+            v: Math.round(((W[k] || 0) / tot) * 100),
+          }));
+          // 0% 방지 → 최소 1% 보정
+          const zeros = arr.filter((x) => x.v === 0);
+          if (zeros.length) {
+            zeros.forEach((x) => (x.v = 1));
+            let over = arr.reduce((s, x) => s + x.v, 0) - 100;
+            for (let i = 0; i < over; i++) {
+              arr.sort((a, b) => b.v - a.v);
+              if (arr[0].v > 1) arr[0].v -= 1;
+            }
+          }
+          return arr;
+        }
+
         function labelGauge(k) {
           return (
             {
@@ -644,84 +870,123 @@
           );
         }
 
-        // ========== 4) 추천 생성 ==========
-        function pickPlan() {
-          // 각 레코드에서 plate/키/설명 통일
-          const rows = PLATES.map((r) => {
-            const plateKey = String(
-              r.plate || r.plate_key || r.plate_type || r.PlateType || ""
-            ).toLowerCase();
-            const normPlate = /detox|디톡스/.test(plateKey)
-              ? "detox"
-              : /glow|저속|항산|derma|skin|slow/.test(plateKey)
-              ? "slow"
-              : /slim|린|저당|cut/.test(plateKey)
-              ? "slim"
-              : /balance|protein|단백|리커버리/.test(plateKey)
-              ? "protein"
-              : "";
+        function makeTitleFromKeys(r) {
+          const mainName = (r.main_k || r.main || "").split(/[(+]/)[0].trim();
+          const dinName = (r.din_k || r.dinner || "").split(/[(+]/)[0].trim();
+          if (mainName && dinName) return `${mainName} + ${dinName}`;
+          return mainName || dinName || "커스텀 플레이트";
+        }
 
-            const text = [
+        // ===== 6) 데이터 로딩 =====
+        const IK_JSONS = [
+          "innerkurly_recos_personalized.json",
+          "innerkurly_recos_personalized_A.json",
+          "innerkurly_plate_recommendations_detailed.json",
+          "innerkurly_plate_recommendations.json",
+          "innerkurly_recos_merged.json",
+          "innerkurly_quiz_5q_items.json",
+          "innerkurly_quiz_5q_logic.json",
+          "innerkurly_quiz_5q_results.json",
+        ];
+        const IK_PATHS = IK_JSONS.flatMap((f) => ["./" + f, "./data/" + f]);
+
+        async function fetchJSONs(paths) {
+          const out = [];
+          for (const url of paths) {
+            try {
+              const r = await fetch(url, { cache: "no-store" });
+              if (r.ok) {
+                const j = await r.json();
+                if (Array.isArray(j)) out.push(...j);
+              }
+            } catch (e) {
+              /* ignore */
+            }
+          }
+          return out;
+        }
+
+        // ===== 7) 추천 만들기 + 렌더 =====
+        async function personalizeAndShow() {
+          const { plate: W, key: K } = sumWeights(answers);
+          const rows = await fetchJSONs(IK_PATHS);
+
+          const items = rows.map((r) => {
+            const plate = plateKey(
+              r.plate || r.plate_type || r.plate_key || r.PlateType || ""
+            );
+            const menu_name =
+              r.menu_name || r.menu || r.MenuName || r.menu_display || "";
+            const epi_k =
               r.appetizer_keys ||
-                r.epi_keys ||
-                r.appetizer ||
-                r["에피타이트"] ||
-                "",
-              r.main_keys || r.main || r["본식"] || r.entree || "",
-              r.dinner_keys || r.dessert || r["디너"] || r["디저트"] || "",
-              r.juice || r["주스"] || r.juice_desc || "",
-              r.supplement || r.supplements || r["보충제"] || "",
-              r.tags || r.keywords || r["키워드"] || "",
-            ].join(" ");
-
-            // 키워드 가점
-            let kScore = 0;
-            Object.keys(KEYMAP).forEach((k) => {
-              if (KEYMAP[k].test(text)) kScore += 1;
-            });
-            const base =
+              r.epi_keys ||
+              r.appetizer ||
+              r["에피타이트"] ||
+              "";
+            const epi_d = r.appetizer_desc || r.epi_desc || "";
+            const main_k = r.main_keys || r.main || r["본식"] || r.entree || "";
+            const main_d = r.main_desc || "";
+            const din_k =
+              r.dinner_keys || r.dessert || r["디너"] || r["디저트"] || "";
+            const din_d = r.dinner_desc || r.dessert_desc || "";
+            const juice = r.juice || r["주스"] || r.juice_desc || "";
+            const supp = r.supplements || r.supplement || r["보충제"] || "";
+            const kcal = +r.kcal || +r.calories || +r["칼로리"] || "";
+            const p = +r.protein_g || +r.protein || +r["단백질_g"] || "";
+            const c = +r.carbs_g || +r.carbs || +r["탄수화물_g"] || "";
+            const f = +r.fat_g || +r.fat || +r["지방_g"] || "";
+            const fiber = +r.fiber_g || +r["식이섬유_g"] || "";
+            const sodium = +r.sodium_mg || +r.na_mg || +r["나트륨_mg"] || "";
+            const baseS =
               +r.base_score ||
               +r.personalized_score ||
               +r.market_score ||
               +r.score ||
               0;
-            const pScore = (W[normPlate] || 0) * 2;
-            const score = base + pScore + kScore;
+
+            // 키워드 보너스
+            const txt = [
+              epi_k,
+              main_k,
+              din_k,
+              juice,
+              supp,
+              r.tags || r.keywords || r["키워드"] || "",
+            ].join(" ");
+            let kScore = 0;
+            Object.keys(K).forEach((k) => {
+              if (KEYMAP[k] && KEYMAP[k].test(txt)) kScore += K[k];
+            });
+            const pScore = (W[plate] || 0) * 2;
+            const score = baseS + pScore + kScore;
 
             return {
-              plate: normPlate,
-              menu_name:
-                r.menu_name || r.menu || r.MenuName || r.menu_display || "",
-              epi_k:
-                r.appetizer_keys ||
-                r.epi_keys ||
-                r.appetizer ||
-                r["에피타이트"] ||
-                "",
-              epi_d: r.appetizer_desc || r["appetizer_desc"] || "",
-              main_k: r.main_keys || r.main || r["본식"] || r.entree || "",
-              main_d: r.main_desc || r["main_desc"] || "",
-              din_k:
-                r.dinner_keys || r.dessert || r["디너"] || r["디저트"] || "",
-              din_d: r.dinner_desc || r["dinner_desc"] || r.dessert_desc || "",
-              juice: r.juice || r["주스"] || r.juice_desc || "",
-              supp: r.supplement || r.supplements || r["보충제"] || "",
-              kcal: +r.kcal || +r.calories || +r["칼로리"] || "",
-              p: +r.protein_g || +r.protein || +r["단백질_g"] || "",
-              c: +r.carbs_g || +r.carbs || +r["탄수화물_g"] || "",
-              f: +r.fat_g || +r.fat || +r["지방_g"] || "",
-              fiber: +r.fiber_g || +r["식이섬유_g"] || "",
-              sodium: +r.sodium_mg || +r.na_mg || +r["나트륨_mg"] || "",
+              plate,
+              menu_name,
+              epi_k,
+              epi_d,
+              main_k,
+              main_d,
+              din_k,
+              din_d,
+              juice,
+              supp,
+              kcal,
+              p,
+              c,
+              f,
+              fiber,
+              sodium,
               score,
             };
           });
 
-          // 점수 정렬 + 중복/편중 방지
+          // 상위 7일 (중복/편중 방지)
           const usedMain = new Set(),
             usedDessert = new Set();
-          const plateCnt = { detox: 0, slow: 0, slim: 0, protein: 0 };
-          const sorted = rows
-            .filter((it) => it.main_k || it.epi_k || it.din_k)
+          const cap = { detox: 0, slow: 0, slim: 0, protein: 0 };
+          const sorted = items
+            .filter((i) => i.main_k || i.epi_k || i.din_k)
             .sort(
               (a, b) =>
                 b.score - a.score || String(a.main_k).localeCompare(b.main_k)
@@ -729,19 +994,18 @@
 
           const plan = [];
           for (const it of sorted) {
-            if (plan.length === 7) break;
             const m = (it.main_k || "").toLowerCase().trim();
             const d = (it.din_k || "").toLowerCase().trim();
             if (!it.main_k) continue;
             if (usedMain.has(m)) continue;
             if (d && usedDessert.has(d)) continue;
-            if (plateCnt[it.plate] >= 4) continue;
+            if (cap[it.plate] >= 4) continue;
             plan.push(it);
             usedMain.add(m);
             if (d) usedDessert.add(d);
-            plateCnt[it.plate] = (plateCnt[it.plate] || 0) + 1;
+            cap[it.plate] = (cap[it.plate] || 0) + 1;
+            if (plan.length === 7) break;
           }
-          // 7개 못채우면 보충
           for (const it of sorted) {
             if (plan.length === 7) break;
             const m = (it.main_k || "").toLowerCase().trim();
@@ -753,25 +1017,9 @@
             usedMain.add(m);
             if (d) usedDessert.add(d);
           }
-          return plan;
-        }
 
-        // ========== 5) 결과 렌더 ==========
-        const RES = $("#diet7Result"),
-          RB = $("#diet7Bars"),
-          RP = $("#diet7Plan");
-        const btnStart = $("#diet7Start"),
-          btnRetry = $("#diet7Retry"),
-          btnRClose = $("#diet7Close");
-
-        function renderBars() {
-          const pcts = (function () {
-            // 가중치 반영 후 백분율
-            return (function (W) {
-              return pctFromWeights(W);
-            })(W);
-          })();
-          RB.innerHTML = pcts
+          // 퍼센트 바
+          const barsHTML = pctFromWeights(W)
             .map(
               ({ k, v }) => `
       <div class="ik-bar-row">
@@ -782,102 +1030,149 @@
     `
             )
             .join("");
+          const barsEl = document.getElementById("ikBars");
+          if (barsEl) barsEl.innerHTML = barsHTML;
+
+          // DAY 카드
+          const wrap = document.getElementById("ikPlanWrap");
+          if (wrap) {
+            wrap.innerHTML = plan
+              .map((r, idx) => {
+                const title =
+                  r.menu_name && String(r.menu_name).trim()
+                    ? r.menu_name
+                    : makeTitleFromKeys(r);
+                const nut = [
+                  r.kcal ? `${r.kcal}kcal` : null,
+                  r.p ? `단백 ${r.p}g` : null,
+                  r.c ? `탄수 ${r.c}g` : null,
+                  r.f ? `지방 ${r.f}g` : null,
+                  r.fiber ? `식이섬유 ${r.fiber}g` : null,
+                  r.sodium ? `나트륨 ${r.sodium}mg` : null,
+                ]
+                  .filter(Boolean)
+                  .join(" · ");
+                const jline = [
+                  r.juice ? `🥤 ${r.juice}` : "",
+                  r.supp ? `💊 ${r.supp}` : "",
+                ]
+                  .filter(Boolean)
+                  .join(" · ");
+
+                return `
+          <div class="day-card">
+            <div class="day-head">DAY${idx + 1}</div>
+            <div class="day-title">${title}</div>
+
+            <div class="line"><strong>에피타이트:</strong> ${
+              r.epi_k || "-"
+            }</div>
+            ${r.epi_d ? `<div class="sm">· ${r.epi_d}</div>` : ""}
+
+            <div class="line"><strong>메인:</strong> ${r.main_k || "-"}</div>
+            ${r.main_d ? `<div class="sm">· ${r.main_d}</div>` : ""}
+
+            <div class="line"><strong>디너:</strong> ${r.din_k || "-"}</div>
+            ${r.din_d ? `<div class="sm">· ${r.din_d}</div>` : ""}
+
+            ${
+              jline
+                ? `<div class="line"><strong>주스·영양제:</strong> ${jline}</div>`
+                : ""
+            }
+            ${
+              nut
+                ? `<div class="sm"><strong>영양성분:</strong> ${nut}</div>`
+                : ""
+            }
+          </div>
+        `;
+              })
+              .join("");
+          }
+
+          if (RES) {
+            RES.style.display = "flex";
+            RES.removeAttribute("hidden");
+            RES.setAttribute("aria-hidden", "false");
+          }
         }
 
-        function renderPlan(plan) {
-          RP.innerHTML = plan
-            .map((r, idx) => {
-              const nut = [
-                r.kcal ? `${r.kcal}kcal` : null,
-                r.p ? `단백 ${r.p}g` : null,
-                r.c ? `탄수 ${r.c}g` : null,
-                r.f ? `지방 ${r.f}g` : null,
-                r.fiber ? `식이섬유 ${r.fiber}g` : null,
-                r.sodium ? `나트륨 ${r.sodium}mg` : null,
-              ]
-                .filter(Boolean)
-                .join(" · ");
-              const jline = [
-                r.juice ? `🥤 ${r.juice}` : "",
-                r.supp ? `💊 ${r.supp}` : "",
-              ]
-                .filter(Boolean)
-                .join(" · ");
+        // ===== 8) 이벤트 =====
+        BTN_OPEN?.addEventListener("click", () => {
+          step = 0;
+          answers = [];
+          drawStep();
+          if (WZ) {
+            WZ.removeAttribute("hidden");
+            WZ.style.display = "flex";
+            WZ.setAttribute("aria-hidden", "false");
+          }
+        });
 
-              return `
-      <div class="day-card">
-        <div class="day-head">DAY${idx + 1}</div>
-        <div class="day-title">${
-          idx === 0 && r.menu_name ? r.menu_name : r.main_k || "-"
-        }</div>
-        <div class="line"><strong>에피타이트:</strong> ${r.epi_k || "-"}</div>
-        ${r.epi_d ? `<div class="sm">· ${r.epi_d}</div>` : ""}
-        <div class="line"><strong>메인:</strong> ${r.main_k || "-"}</div>
-        ${r.main_d ? `<div class="sm">· ${r.main_d}</div>` : ""}
-        <div class="line"><strong>디너:</strong> ${r.din_k || "-"}</div>
-        ${r.din_d ? `<div class="sm">· ${r.din_d}</div>` : ""}
-        ${
-          jline
-            ? `<div class="line"><strong>주스·영양제:</strong> ${jline}</div>`
-            : ""
-        }
-        ${nut ? `<div class="sm"><strong>영양성분:</strong> ${nut}</div>` : ""}
-      </div>`;
-            })
-            .join("");
-        }
+        BTN_WCLOSE?.addEventListener("click", () => {
+          if (WZ) {
+            WZ.style.display = "none";
+            WZ.setAttribute("hidden", "");
+            WZ.setAttribute("aria-hidden", "true");
+          }
+        });
 
-        function showResult() {
-          RES.style.display = "flex";
-        }
-        function hideResult() {
-          RES.style.display = "none";
-        }
-
-        // ========== 6) 이벤트 바인딩 ==========
-        openQ &&
-          (openQ.onclick = async () => {
-            if (!PLATES.length) await loadAll();
-            step = 0;
-            ANSW = [];
-            showQuiz();
-          });
-
-        btnPrev.onclick = () => {
+        BTN_PREV?.addEventListener("click", () => {
           if (step > 0) {
             step--;
-            renderStep();
+            drawStep();
           }
-        };
-        btnNext.onclick = () => {
-          const picked = BOX.querySelector("input[type=radio]:checked");
+        });
+
+        BTN_NEXT?.addEventListener("click", () => {
+          const q = QUIZ[step];
+          const picked = QBOX.querySelector("input[type=radio]:checked");
           if (!picked) {
             alert("하나를 선택해 주세요.");
             return;
           }
-          if (step < QUIZ_ITEMS.length - 1) {
+          const opt = q.opts.find((o) => o.id === picked.value);
+          answers[step] = { id: picked.value, w: opt.w || {}, k: opt.k || {} };
+          if (step < QUIZ.length - 1) {
             step++;
-            renderStep();
+            drawStep();
           } else {
-            hideQuiz();
-            applyWeights();
-            renderBars();
-            const plan = pickPlan();
-            renderPlan(plan);
-            showResult();
+            // 완료
+            if (WZ) {
+              WZ.style.display = "none";
+              WZ.setAttribute("hidden", "");
+              WZ.setAttribute("aria-hidden", "true");
+            }
+            personalizeAndShow();
           }
-        };
-        btnClose.onclick = () => hideQuiz();
+        });
 
-        btnRClose.onclick = () => hideResult();
-        btnRetry.onclick = () => {
-          hideResult();
-          openQ.click();
-        };
-        btnStart.onclick = () => {
-          hideResult();
+        BTN_CLOSE?.addEventListener("click", () => {
+          if (RES) {
+            RES.style.display = "none";
+            RES.setAttribute("hidden", "");
+            RES.setAttribute("aria-hidden", "true");
+          }
+        });
+
+        BTN_RETRY?.addEventListener("click", () => {
+          if (RES) {
+            RES.style.display = "none";
+            RES.setAttribute("hidden", "");
+            RES.setAttribute("aria-hidden", "true");
+          }
+          BTN_OPEN?.click();
+        });
+
+        BTN_START?.addEventListener("click", () => {
+          if (RES) {
+            RES.style.display = "none";
+            RES.setAttribute("hidden", "");
+            RES.setAttribute("aria-hidden", "true");
+          }
           location.hash = "#plans";
-        };
+        });
       })();
     </script>
   </body>

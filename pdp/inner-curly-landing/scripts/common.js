@@ -240,6 +240,8 @@ document.addEventListener("DOMContentLoaded", () => {
       "구독",
       "주문",
       "정기배송",
+      "시작하기",
+      "마이페이지",
     ];
     if (triggerWords.some((w) => text.includes(w))) {
       e.preventDefault();

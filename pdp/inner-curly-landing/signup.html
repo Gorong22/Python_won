@@ -275,7 +275,7 @@
               version: "2025-10-31",
               terms: document.getElementById("agreeTerms").checked,
               collect: document.getElementById("agreePICollect").checked,
-              sensitive: document.getElementById("agreeSensitive").checked,
+              sensitive: (document.getElementById("agreeSensitive") ? document.getElementById("agreeSensitive").checked : false),
               policy: document.getElementById("agreePolicy").checked,
               marketing: document.getElementById("agreeMarketing").checked,
               timestamp: new Date().toISOString(),
