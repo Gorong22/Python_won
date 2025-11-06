@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btn-write").addEventListener("click", () => {
     if (!Auth.current()) {
       toast("로그인이 필요합니다");
-      setTimeout(() => (location.href = "./login.html"), 400);
+      // setTimeout(() => (location.href = "./login.html"), 400);
       return;
     }
     modal.classList.add("show");
@@ -114,15 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-document.getElementById("btn-write").addEventListener("click", () => {
-  const user = localStorage.getItem("user_email");
-  if (user) {
-    document.getElementById("review-modal").classList.add("active");
-    document.body.style.overflow = "hidden";
-  } else {
-    showPopup();
-  }
-});
 // ============================
 //  리뷰 작성 버튼 클릭 시 처리
 // ============================
@@ -143,7 +134,7 @@ function showPopup() {
     <div class="alert-box">
       <h3>회원 전용 기능이에요 💜</h3>
       <p>리뷰를 작성하려면 먼저 회원가입이 필요해요.</p>
-      <button class="btn btn--primary" onclick="location.href='./signup.html'">회원가입 하러가기</button>
+      <button class="btn btn--primary" onclick="location.href='./signup.html'">회원가입 하러 가기</button>
       <button class="btn" onclick="this.closest('.alert-popup').remove()">닫기</button>
     </div>`;
   document.body.appendChild(popup);
