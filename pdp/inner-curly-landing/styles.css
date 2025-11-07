@@ -369,7 +369,7 @@ img {
   margin: 0 0 6px;
   font-size: 18px;
   font-weight: 800;
-  color: var(--kurly);
+  color: #00422f;
 }
 .challenge-card p {
   margin: 0;
@@ -528,7 +528,7 @@ img {
 } */
 
 /* 버튼 */
-.btn-experience {
+a.btn-experience {
   display: inline-block;
   padding: 8px 26px;
   border-radius: 14px;
@@ -543,12 +543,12 @@ img {
 
   transition: all 0.25s ease;
 }
-.btn-experience:hover {
-  background: #6a12a2;
+a.btn-experience:hover {
+  background: #56a356;
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(95, 0, 128, 0.15);
 }
-.btn-experience:active {
+a.btn-experience:active {
   transform: scale(0.97);
 }
 
@@ -1778,8 +1778,12 @@ img {
   color: #ffffff;
 }
 .card.pad .btn,
-.card.pad .btn--primary {
+.card.pad .btn--primary,
+a.btn-experience {
   font-family: "Noto Sans KR", Pretendard, system-ui, -apple-system, sans-serif;
+}
+a.btn-experience {
+  background: #00422f;
 }
 /* 카드 전체 중앙 정렬 */
 .card.pad .icon-cards {
