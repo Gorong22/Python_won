@@ -15,7 +15,7 @@
     />
     <link rel="stylesheet" href="./styles.css" />
 
-    <!-- Hotjar Tracking Code for https://innerkurly.netlify.app/ -->
+    <!-- ✅ Hotjar Tracking Code -->
     <script>
       (function (h, o, t, j, a, r) {
         h.hj =
@@ -32,7 +32,7 @@
       })(window, document, "https://static.hotjar.com/c/hotjar-", ".js?sv=");
     </script>
 
-    <!-- Google Tag Manager -->
+    <!-- ✅ Google Tag Manager -->
     <script>
       (function (w, d, s, l, i) {
         w[l] = w[l] || [];
@@ -45,9 +45,8 @@
         f.parentNode.insertBefore(j, f);
       })(window, document, "script", "dataLayer", "GTM-KWL72ML2");
     </script>
-    <!-- End Google Tag Manager -->
 
-    <!-- GA4 -->
+    <!-- ✅ GA4 -->
     <script
       async
       src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"
@@ -61,7 +60,7 @@
       gtag("config", "G-XXXXXXX");
     </script>
 
-    <!-- Clarity -->
+    <!-- ✅ Microsoft Clarity -->
     <script type="text/javascript">
       (function (c, l, a, r, i, t, y) {
         c[a] =
@@ -79,7 +78,7 @@
   </head>
 
   <body data-active="home">
-    <!-- Google Tag Manager (noscript) -->
+    <!-- ✅ Google Tag Manager (noscript) -->
     <noscript
       ><iframe
         src="https://www.googletagmanager.com/ns.html?id=GTM-KWL72ML2"
@@ -88,7 +87,6 @@
         style="display: none; visibility: hidden"
       ></iframe
     ></noscript>
-    <!-- End Google Tag Manager (noscript) -->
 
     <div class="mobile-wrap">
       <!-- HEADER -->
@@ -139,7 +137,6 @@
 
         <section id="section-plate">
           <h2 class="h2 center" style="margin-top: 18px">추천 플레이트</h2>
-
           <section class="grid-2">
             <a class="card" href="./plate-glow.html">
               <img
@@ -309,6 +306,23 @@
           if (a.dataset.key === k) a.classList.add("active");
         });
       })();
+    </script>
+
+    <!-- ✅ Hotjar 재트리거 (index.html용) -->
+    <script>
+      window.addEventListener("load", () => {
+        const checkHotjar = () => {
+          if (window.hj && typeof window.hj === "function") {
+            console.log("🔥 Forcing Hotjar reload on index.html");
+            window.hj("stateChange", "/");
+            window.hj("trigger", "force_load");
+          } else {
+            console.warn("⚠️ Hotjar not yet ready, retrying...");
+            setTimeout(checkHotjar, 1000);
+          }
+        };
+        checkHotjar();
+      });
     </script>
   </body>
 </html>
