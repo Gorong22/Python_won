@@ -1,0 +1,222 @@
+/* ------------------------------
+   파스텔 인스타툰 배경
+------------------------------ */
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(180deg, #ffeef2 0%, #fff8e7 100%);
+  font-family: "Noto Sans KR", sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 92%;
+  max-width: 600px;
+  text-align: center;
+}
+
+/* 로딩 화면 */
+.loading-screen,
+.submit-loading {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #ffeef2, #fff8e7);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.loading-card {
+  padding: 16px 22px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  font-size: 15px;
+  color: #444;
+  margin-bottom: 16px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #ffe3e9;
+  border-top-color: #ff8fa3;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 인트로 */
+.intro-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 28px 24px;
+  margin-bottom: 30px;
+  text-align: left;
+  font-size: 16px;
+  line-height: 1.65;
+  border: 2px solid #ffe3e9;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+/* 선택 버블 */
+.bubble-option {
+  background: #ffffff;
+  padding: 18px 20px;
+  border-radius: 20px;
+  font-size: 17px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.07);
+  margin-bottom: 18px;
+  cursor: pointer;
+  border: 2px solid #ffe0e5;
+  transition: 0.25s;
+}
+
+.bubble-option:hover {
+  background: #fff2f6;
+  transform: translateY(-3px);
+}
+
+/* 질문 박스 */
+.bubble {
+  background: #ffffff;
+  padding: 22px 24px;
+  border-radius: 22px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.07);
+  border: 2px solid #ffe0e5;
+  font-size: 18px;
+  text-align: left;
+  margin-bottom: 12px;
+}
+
+.fade {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* 답변 입력 */
+.answer-input {
+  width: 100%;
+  height: 150px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 2px solid #ffdce3;
+  background: #fffefc;
+  font-size: 16px;
+  resize: none;
+  margin-bottom: 8px;
+}
+
+/* 버튼 */
+.next-btn,
+.prev-btn,
+.finish-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 18px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 8px;
+  transition: 0.2s;
+}
+
+.next-btn {
+  background: #ff8fa3;
+  color: white;
+}
+.next-btn:hover {
+  background: #ff758f;
+}
+
+.prev-btn {
+  background: #eaeaea;
+  color: #444;
+}
+.prev-btn:hover {
+  background: #dcdcdc;
+}
+
+.finish-btn {
+  background: #ff8fa3;
+  color: white;
+  margin-top: 25px;
+}
+
+/* 메타폼 */
+.meta-card {
+  background: #ffffff;
+  padding: 22px;
+  border-radius: 20px;
+  border: 2px solid #ffe0e5;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+  font-size: 16px;
+  margin-bottom: 18px;
+}
+
+.meta-field {
+  text-align: left;
+  margin-bottom: 14px;
+}
+
+.meta-field label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+.meta-field input,
+.meta-field select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+  border: 2px solid #ffdfe7;
+  font-size: 15px;
+  background: #ffffff;
+}
+
+/* 진행률 바 */
+.progress-wrap {
+  margin-bottom: 20px;
+}
+.progress-text {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #555;
+}
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background: #ffe5ea;
+  border-radius: 10px;
+}
+.progress-fill {
+  height: 10px;
+  background: #ff8fa3;
+  border-radius: 10px;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* 완료 메시지 */
+.thank-card {
+  background: #ffffff;
+  padding: 28px 24px;
+  border-radius: 22px;
+  border: 2px solid #ffe0e5;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+  font-size: 18px;
+  line-height: 1.6;
+}
