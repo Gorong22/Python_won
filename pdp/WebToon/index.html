@@ -22,13 +22,7 @@
             안녕하세요!<br /><br />
             이 인터뷰는 더 편하고 자유로운 웹툰 문화를 만들기 위한<br />
             작은 프로젝트예요 :)<br /><br />
-
-            우리가 꿈꾸는 건,<br />
-            <b>누구나 쉽게 만들고</b>,<br />
-            <b>누구나 편하게 즐길 수 있는</b><br />
-            그런 따뜻한 공간이에요 ✨<br /><br />
-
-            총 <b>16문항</b>, <b>3~5분</b>이면 끝나요!<br /><br />
+            총 <b>3~5분</b>이면 끝나요!<br /><br />
             편하게 솔직하게 이야기해주세요 :)
           </p>
         </div>
@@ -36,13 +30,12 @@
         <div class="bubble-option" data-mode="reader">
           저는 웹툰 보는 걸 좋아해요! (독자)
         </div>
-
         <div class="bubble-option" data-mode="creator">
-          저는 웹툰/숏툰을 만들거나 만들어보고 싶어요!
+          저는 웹툰/숏툰을 만들어 본 적이 있어요 (창작자)
         </div>
       </div>
 
-      <!-- 진행률 표시 -->
+      <!-- 진행률 -->
       <div id="progress-wrap" class="progress-wrap" style="display: none">
         <div id="progress-text" class="progress-text">1 / 12</div>
         <div class="progress-bar">
@@ -50,14 +43,13 @@
         </div>
       </div>
 
-      <!-- 질문 박스 -->
-      <div
-        id="question-box"
-        class="bubble question"
-        style="display: none"
-      ></div>
+      <!-- 질문 -->
+      <div id="question-box" class="bubble" style="display: none"></div>
 
-      <!-- 답변 입력 -->
+      <!-- 선택지 -->
+      <div id="choice-box" class="choice-box" style="display: none"></div>
+
+      <!-- 텍스트 입력 -->
       <textarea
         id="answer-input"
         class="answer-input"
@@ -72,20 +64,15 @@
       <!-- 메타폼 -->
       <div id="meta-form" class="meta-form" style="display: none">
         <div class="meta-card">
-          거의 다 끝났어요!<br />마지막으로 간단한 정보만 부탁드릴게요 :)
+          거의 다 끝났어요! 마지막으로 간단히 적어주세요 :)
         </div>
 
         <div class="meta-field">
-          <label for="name-input">성함</label>
-          <input
-            id="name-input"
-            type="text"
-            placeholder="이름을 입력해주세요"
-          />
+          <label>성함</label><input id="name-input" type="text" />
         </div>
 
         <div class="meta-field">
-          <label for="age-select">연령대</label>
+          <label>연령대</label>
           <select id="age-select">
             <option value="">선택해주세요</option>
             <option value="10대">10대</option>
@@ -97,7 +84,7 @@
         </div>
 
         <div class="meta-field">
-          <label for="gender-select">성별</label>
+          <label>성별</label>
           <select id="gender-select">
             <option value="">선택해주세요</option>
             <option value="여성">여성</option>
@@ -106,35 +93,23 @@
         </div>
 
         <div class="meta-field">
-          <label for="email-input">이메일 주소</label>
-          <input
-            id="email-input"
-            type="email"
-            placeholder="example@email.com"
-          />
+          <label>이메일</label><input id="email-input" type="email" />
         </div>
 
         <button id="submit-btn" class="next-btn submit-btn">제출하기</button>
       </div>
 
-      <!-- 제출 중 로딩 -->
+      <!-- 제출 중 -->
       <div id="submit-loading" class="submit-loading" style="display: none">
         <div class="loading-card">응답을 저장하는 중이에요…</div>
         <div class="spinner"></div>
       </div>
 
-      <!-- 완료 메시지 -->
+      <!-- 완료 -->
       <div id="thank-you" class="thank-card" style="display: none">
-        <div class="end-bubble">
-          응답해주셔서 감사합니다 🤍<br /><br />
-          여러분의 솔직한 생각 하나하나가<br />
-          더 편하고 자유로운 웹툰 공간을 만드는 데<br />
-          정말 큰 힘이 되었어요.<br /><br />
-          여러분 덕분에 한 걸음 더 나아갑니다 :)<br /><br />
-
-          <button id="share-btn" class="finish-btn">공유하기</button>
-          <button id="finish-btn" class="finish-btn">종료하기</button>
-        </div>
+        응답해주셔서 감사합니다 🤍<br /><br />
+        <button id="share-btn" class="finish-btn">공유하기</button>
+        <button id="finish-btn" class="finish-btn">종료하기</button>
       </div>
     </div>
 

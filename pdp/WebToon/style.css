@@ -1,6 +1,3 @@
-/* ------------------------------
-   파스텔 인스타툰 배경
------------------------------- */
 body {
   margin: 0;
   padding: 0;
@@ -21,23 +18,22 @@ body {
 /* 로딩 화면 */
 .loading-screen,
 .submit-loading {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: linear-gradient(180deg, #ffeef2, #fff8e7);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 10;
+  z-index: 100;
 }
 
 .loading-card {
   padding: 16px 22px;
-  background: #ffffff;
+  background: white;
   border-radius: 16px;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
   font-size: 15px;
-  color: #444;
   margin-bottom: 16px;
 }
 
@@ -49,7 +45,6 @@ body {
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
-
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -58,63 +53,75 @@ body {
 
 /* 인트로 */
 .intro-card {
-  background: #ffffff;
+  background: white;
   border-radius: 24px;
   padding: 28px 24px;
   margin-bottom: 30px;
-  text-align: left;
-  font-size: 16px;
-  line-height: 1.65;
   border: 2px solid #ffe3e9;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  font-size: 16px;
+  line-height: 1.65;
+  text-align: left;
 }
 
-/* 선택 버블 */
 .bubble-option {
-  background: #ffffff;
+  background: white;
   padding: 18px 20px;
   border-radius: 20px;
-  font-size: 17px;
+  border: 2px solid #ffe0e5;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.07);
+  font-size: 17px;
   margin-bottom: 18px;
   cursor: pointer;
-  border: 2px solid #ffe0e5;
-  transition: 0.25s;
 }
-
 .bubble-option:hover {
   background: #fff2f6;
   transform: translateY(-3px);
 }
 
-/* 질문 박스 */
+/* 질문 */
 .bubble {
-  background: #ffffff;
+  background: white;
   padding: 22px 24px;
   border-radius: 22px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.07);
   border: 2px solid #ffe0e5;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.07);
   font-size: 18px;
   text-align: left;
   margin-bottom: 12px;
 }
 
-.fade {
-  opacity: 0;
-  transition: opacity 0.2s ease;
+/* 선택지 */
+.choice-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.choice-item {
+  background: white;
+  border-radius: 18px;
+  padding: 16px 18px;
+  font-size: 16px;
+  border: 2px solid #ffe0e5;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.07);
+  cursor: pointer;
+}
+.choice-item:hover {
+  background: #fff2f6;
+  transform: translateY(-3px);
 }
 
-/* 답변 입력 */
+/* 입력 */
 .answer-input {
   width: 100%;
   height: 150px;
   padding: 14px;
   border-radius: 16px;
   border: 2px solid #ffdce3;
-  background: #fffefc;
   font-size: 16px;
   resize: none;
-  margin-bottom: 8px;
+  background: #fffefc;
+  margin-bottom: 10px;
 }
 
 /* 버튼 */
@@ -127,74 +134,26 @@ body {
   border: none;
   cursor: pointer;
   font-size: 16px;
-  font-weight: 600;
   margin-top: 8px;
-  transition: 0.2s;
+  font-weight: 600;
 }
-
-.next-btn {
+.next-btn,
+.finish-btn {
   background: #ff8fa3;
   color: white;
 }
-.next-btn:hover {
-  background: #ff758f;
-}
-
 .prev-btn {
   background: #eaeaea;
   color: #444;
 }
-.prev-btn:hover {
-  background: #dcdcdc;
-}
 
-.finish-btn {
-  background: #ff8fa3;
-  color: white;
-  margin-top: 25px;
-}
-
-/* 메타폼 */
-.meta-card {
-  background: #ffffff;
-  padding: 22px;
-  border-radius: 20px;
-  border: 2px solid #ffe0e5;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
-  font-size: 16px;
-  margin-bottom: 18px;
-}
-
-.meta-field {
-  text-align: left;
-  margin-bottom: 14px;
-}
-
-.meta-field label {
-  display: block;
-  font-size: 14px;
-  margin-bottom: 6px;
-  color: #444;
-}
-
-.meta-field input,
-.meta-field select {
-  width: 100%;
-  padding: 12px;
-  border-radius: 14px;
-  border: 2px solid #ffdfe7;
-  font-size: 15px;
-  background: #ffffff;
-}
-
-/* 진행률 바 */
+/* 진행률 */
 .progress-wrap {
   margin-bottom: 20px;
 }
 .progress-text {
   font-size: 14px;
   margin-bottom: 8px;
-  color: #555;
 }
 .progress-bar {
   width: 100%;
@@ -203,20 +162,43 @@ body {
   border-radius: 10px;
 }
 .progress-fill {
+  width: 0%;
   height: 10px;
   background: #ff8fa3;
   border-radius: 10px;
-  width: 0%;
-  transition: width 0.3s ease;
+  transition: 0.3s;
 }
 
-/* 완료 메시지 */
+/* 완료 */
 .thank-card {
-  background: #ffffff;
+  background: white;
   padding: 28px 24px;
   border-radius: 22px;
   border: 2px solid #ffe0e5;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
   font-size: 18px;
   line-height: 1.6;
+}
+
+/* 메타폼 */
+.meta-card {
+  background: white;
+  padding: 22px;
+  border-radius: 20px;
+  border: 2px solid #ffe0e5;
+  font-size: 17px;
+  margin-bottom: 20px;
+}
+.meta-field {
+  margin-bottom: 18px;
+  text-align: left;
+}
+.meta-field input,
+.meta-field select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+  border: 2px solid #ffdfe7;
+  font-size: 15px;
+  box-sizing: border-box;
 }
