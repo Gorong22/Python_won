@@ -35,12 +35,15 @@ const creatorQuestions = [
   "웹툰 제작 시 가장 힘든 점은?",
   "기존 플랫폼 UI 때문에 연출이 어려웠던 경험은?",
 
-  "어려웠던 부분을 도와주는 툴이 있다면 창작할 의향이 있으신가요?",
-  "그렇게 생각하신 이유는 무엇인가요?",
+  // 분기 1
+  "어려웠던 부분을 도와주는 툴이 있다면 창작할 의향이 있으신가요?", // 선택형
+  "왜 그렇게 생각하시나요?", // 이유
 
-  "조회수 기반 정산 플랫폼이 있다면 옮길 의향이 있나요?",
-  "그렇게 생각하신 이유는 무엇인가요?",
+  // 분기 2
+  "조회수 기반 정산 플랫폼이 있다면 옮길 의향이 있나요?", // 선택형
+  "왜 그렇게 생각하시나요?", // 이유
 
+  // 마지막
   "수익 정산 방식과 앞으로의 웹툰 시장에 바라는 점은 무엇인가요?",
 ];
 
@@ -51,7 +54,9 @@ let mode = "";
 let questions = [];
 let index = 0;
 let answers = [];
-let readerChoice = ""; // 독자 짧/긴 선택 저장
+let readerChoice = "";
+let creatorToolChoice = "";
+let creatorMoveChoice = "";
 
 /* ------------------------------
    DOM
@@ -91,6 +96,8 @@ document.querySelectorAll(".bubble-option").forEach((btn) => {
     index = 0;
     answers = [];
     readerChoice = "";
+    creatorToolChoice = "";
+    creatorMoveChoice = "";
 
     startScreen.style.display = "none";
     questionBox.style.display = "block";
@@ -132,7 +139,7 @@ function showChoices(list, callback) {
 }
 
 /* ------------------------------
-   질문 출력 + 분기
+   질문 + 분기
 ------------------------------ */
 function setQuestion() {
   const q = questions[index];
@@ -142,24 +149,42 @@ function setQuestion() {
   answerInput.style.display = "block";
   nextBtn.style.display = "block";
 
-  /* -------- 독자 분기 (선호 질문) -------- */
+  /* ----- reader 분기 (건들지 않음) ----- */
   if (mode === "reader" && index === 7) {
     showChoices(["짧은 웹툰", "긴 웹툰"], (v) => {
       readerChoice = v;
       answers[7] = v;
-
-      index =
-        v === "짧은 웹툰"
-          ? 8 // 짧은 웹툰 이유
-          : 9; // 긴 웹툰 이유
-
+      index = v === "짧은 웹툰" ? 8 : 9;
       updateProgress();
       setQuestion();
     });
     return;
   }
 
-  /* 기본 텍스트 입력 */
+  /* ----- creator 분기 1 ----- */
+  if (mode === "creator" && index === 8) {
+    showChoices(["있다", "없다"], (v) => {
+      creatorToolChoice = v;
+      answers[8] = v;
+      index = 9; // 이유 질문으로 이동
+      updateProgress();
+      setQuestion();
+    });
+    return;
+  }
+
+  /* ----- creator 분기 2 ----- */
+  if (mode === "creator" && index === 10) {
+    showChoices(["있다", "없다"], (v) => {
+      creatorMoveChoice = v;
+      answers[10] = v;
+      index = 11; // 이유 질문
+      updateProgress();
+      setQuestion();
+    });
+    return;
+  }
+
   answerInput.value = answers[index] || "";
 }
 
@@ -172,16 +197,14 @@ nextBtn.addEventListener("click", () => {
 
   answers[index] = val;
 
-  /* ★ 독자 분기 다음 로직 */
+  /* reader 분기 이동 */
   if (mode === "reader") {
-    // 짧은 웹툰 선택 시 : 8 → 바로 10
     if (readerChoice === "짧은 웹툰" && index === 8) {
       index = 10;
       updateProgress();
       setQuestion();
       return;
     }
-    // 긴 웹툰 선택 시 : 9 → 바로 10
     if (readerChoice === "긴 웹툰" && index === 9) {
       index = 10;
       updateProgress();
@@ -190,7 +213,7 @@ nextBtn.addEventListener("click", () => {
     }
   }
 
-  // 기본 next
+  /* creator 기본 흐름 */
   if (index < questions.length - 1) {
     index++;
     prevBtn.disabled = index === 0;
@@ -202,15 +225,15 @@ nextBtn.addEventListener("click", () => {
 });
 
 /* ------------------------------
-   이전 버튼 (독자 분기 완벽 처리)
+   이전 버튼
 ------------------------------ */
 prevBtn.addEventListener("click", () => {
   if (index === 0) return;
 
   answers[index] = answerInput.value.trim();
 
+  /* reader 분기 복원 */
   if (mode === "reader") {
-    // 짧웹 선택한 경우
     if (readerChoice === "짧은 웹툰") {
       if (index === 10) {
         index = 8;
@@ -226,7 +249,6 @@ prevBtn.addEventListener("click", () => {
       }
     }
 
-    // 긴웹 선택한 경우
     if (readerChoice === "긴 웹툰") {
       if (index === 10) {
         index = 9;
@@ -243,7 +265,22 @@ prevBtn.addEventListener("click", () => {
     }
   }
 
-  // 기본 prev
+  /* creator 분기 복원 */
+  if (mode === "creator") {
+    if (index === 9) {
+      index = 8;
+      updateProgress();
+      setQuestion();
+      return;
+    }
+    if (index === 11) {
+      index = 10;
+      updateProgress();
+      setQuestion();
+      return;
+    }
+  }
+
   index--;
   updateProgress();
   setQuestion();
