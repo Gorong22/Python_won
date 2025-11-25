@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0,
+      maximum-scale=1.0, user-scalable=no"
+    />
+    <title>웹툰 취향 테스트</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- 진행률 표시 -->
+    <div id="progress-container" class="hidden">
+      <div id="progress-text">1 / 20</div>
+      <div id="progress-bar-bg">
+        <div id="progress-bar"></div>
+      </div>
+    </div>
+
+    <!-- 화면 렌더 영역들 -->
+    <div id="intro-screen" class="screen"></div>
+    <div id="question-screen" class="screen hidden"></div>
+    <div id="user-info-screen" class="screen hidden"></div>
+    <div id="result-screen" class="screen hidden"></div>
+
+    <!-- 실제 앱 컨트롤 -->
+    <script src="script.js"></script>
+
+    <!-- WebView 리셋 지원 -->
+    <script>
+      document.addEventListener("message", (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data.action === "reset") location.reload();
+        } catch (_) {}
+      });
+
+      window.addEventListener("message", (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data.action === "reset") location.reload();
+        } catch (_) {}
+      });
+    </script>
+  </body>
+</html>
