@@ -7,6 +7,7 @@
   --max-width: 480px;
 }
 
+/* 기본 스타일 */
 * {
   margin: 0;
   padding: 0;
@@ -31,9 +32,9 @@ body {
   padding: 60px 22px;
 }
 
-/* =========================
-     HERO
-  ========================= */
+/* ============================================
+       HERO SECTION
+  ============================================ */
 .hero {
   height: 92vh;
   position: relative;
@@ -56,10 +57,10 @@ body {
 @keyframes pulse {
   from {
     transform: scale(1);
-    opacity: 0.8;
+    opacity: 0.7;
   }
   to {
-    transform: scale(1.06);
+    transform: scale(1.07);
     opacity: 1;
   }
 }
@@ -67,6 +68,7 @@ body {
 .hero-inner {
   position: relative;
   z-index: 3;
+  animation: fadeUp 0.9s ease both;
 }
 
 .brand-title {
@@ -97,23 +99,18 @@ body {
   font-size: 16px;
   border-radius: 12px;
   font-weight: 600;
-  animation: fadeUp 0.6s ease;
+  box-shadow: 0 4px 12px rgba(227, 108, 39, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.cta-main:active {
+  transform: translateY(2px);
+  box-shadow: none;
 }
 
 .big {
   width: 100%;
   text-align: center;
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .scroll-down {
@@ -123,6 +120,7 @@ body {
   font-size: 14px;
   opacity: 0.6;
   animation: float 2s ease-in-out infinite;
+  cursor: pointer;
 }
 
 @keyframes float {
@@ -135,9 +133,33 @@ body {
   }
 }
 
-/* =========================
-     PROBLEM SECTION
-  ========================= */
+/* ============================================
+       SNS TEXT FEED (image 없이도 감성 유지)
+  ============================================ */
+.feed {
+  padding-top: 20px;
+}
+
+.feed-card {
+  background: #ffffff;
+  border-radius: var(--radius);
+  padding: 26px 20px;
+  margin-bottom: 22px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  animation: fadeUp 0.8s ease both;
+}
+
+.feed-quote {
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 500;
+  color: #333;
+}
+
+/* ============================================
+       PROBLEM SECTION
+  ============================================ */
 .problem h2,
 .solution h2,
 .mission h2,
@@ -158,7 +180,7 @@ body {
   padding: 20px 18px;
   margin-bottom: 16px;
   border: 1px solid #eee;
-  animation: fadeUp 0.8s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
 }
 
 .pb-item h3 {
@@ -172,16 +194,16 @@ body {
   color: #333;
 }
 
-/* =========================
-     SOLUTION
-  ========================= */
+/* ============================================
+       SOLUTION SECTION
+  ============================================ */
 .sol-item {
   background: #fffdfb;
   border-radius: var(--radius);
   padding: 20px 18px;
   margin-bottom: 14px;
   border-left: 4px solid var(--point);
-  animation: fadeUp 0.85s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
 }
 
 .sol-item h3 {
@@ -189,9 +211,9 @@ body {
   margin-bottom: 6px;
 }
 
-/* =========================
-     MISSION
-  ========================= */
+/* ============================================
+       MISSION SECTION
+  ============================================ */
 .mission-box {
   background: #fff;
   border-radius: var(--radius);
@@ -203,6 +225,7 @@ body {
   margin-top: 20px;
   font-size: 15px;
   color: var(--point);
+  font-weight: 600;
 }
 
 .ms-text {
@@ -211,9 +234,9 @@ body {
   line-height: 1.6;
 }
 
-/* =========================
-     CTA
-  ========================= */
+/* ============================================
+       CTA SECTION
+  ============================================ */
 .cta-sub {
   margin-top: 12px;
   font-size: 14px;
@@ -221,12 +244,38 @@ body {
   color: #555;
 }
 
-/* =========================
-     FOOTER
-  ========================= */
+/* ============================================
+       FOOTER
+  ============================================ */
 footer {
   text-align: center;
   padding: 30px 0;
   font-size: 13px;
   color: #666;
+}
+
+/* ============================================
+       FADE-UP ANIMATION
+  ============================================ */
+.fade-up {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-up-show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* HERO 등장 애니메이션 */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
