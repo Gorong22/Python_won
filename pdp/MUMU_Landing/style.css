@@ -1,5 +1,5 @@
 :root {
-  --point: #e36c27;
+  --point: #ff5e00;
   --bg: #faf9f7;
   --text: #1a1a1a;
   --glass: rgba(255, 255, 255, 0.65);
@@ -96,22 +96,23 @@ body {
 }
 
 .cta-main {
-  display: inline-block;
-  padding: 14px 18px;
-  background: var(--point);
-  color: #fff;
-  border-radius: 12px;
-  text-decoration: none;
+  background: #ef6c28 !important;
+  color: #fff !important;
+  padding: 14px 26px;
+  border-radius: 14px;
+  font-size: 18px;
   font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
 }
 
 .scroll-down {
-  margin-top: 18px;
-  background: none;
-  border: none;
-  font-size: 14px;
-  opacity: 0.6;
-  animation: float 2s infinite ease-in-out;
+  all: unset;
+  display: inline-flex;
+  cursor: pointer;
 }
 
 @keyframes float {
@@ -256,4 +257,92 @@ footer {
 .scene.show {
   opacity: 1;
   transform: translateX(0) translateY(0) scale(1);
+}
+/* =========================================
+   MIDDLE TAGLINE — Optimized Layout
+========================================= */
+
+.mid-tagline-section {
+  width: 100%;
+  padding: 24px 20px 0; /* 위쪽 간격 최소화 */
+  margin-top: -40px; /* 히어로 그라데이션과 자연스럽게 연결 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.mid-tagline-divider {
+  width: 56px;
+  height: 2px;
+  background: linear-gradient(to right, #f6b68b, #ea712a, #f6b68b);
+  border-radius: 999px;
+  opacity: 0.6;
+  margin-bottom: 12px;
+}
+
+.mid-tagline {
+  font-family: "Pretendard", sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #4a4a4a;
+  line-height: 1.55;
+  text-align: center;
+  max-width: 650px;
+  margin: 0 auto;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards;
+}
+
+/* 자연스러운 페이드 & 업 */
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 모바일 최적화 */
+@media (max-width: 480px) {
+  .mid-tagline-section {
+    margin-top: -30px;
+    padding-top: 20px;
+  }
+  .mid-tagline {
+    font-size: 16px;
+    max-width: 85%;
+  }
+}
+
+.cta-learn {
+  background: #ef6c28;
+  color: #fff;
+  padding: 14px 26px;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin-top: 20px;
+}
+
+.cta-learn .arrow {
+  font-size: 20px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  margin-top: -2px; /* 아이콘 baseline 조절 */
+}
+
+.cta-learn:hover {
+  background: #e25d1d;
+  transform: translateY(-1px);
 }
