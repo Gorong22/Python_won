@@ -8,7 +8,7 @@
   --card-bg: #fff;
 }
 
-/* 기본 스타일 */
+/* 기본 */
 * {
   margin: 0;
   padding: 0;
@@ -17,10 +17,9 @@
     "SF Pro Text", sans-serif;
 }
 
-/* ============================
-        ⭐ 핵심 수정 포인트 ⭐
-        화면 안잘리는 버전
-  ============================ */
+/* ======================================================
+        ⭐ 모바일 전체에서 절대 안 잘리게 하는 핵심 설정
+  ====================================================== */
 html,
 body {
   width: 100%;
@@ -31,42 +30,44 @@ body {
   background: var(--bg);
   color: var(--text);
 
-  /* ★ 아이폰/안드에서 절대 안 잘리는 진짜 높이 */
+  /* 🔥 진짜 모바일 높이 */
   min-height: 100dvh;
   height: 100dvh;
 
-  /* ★ 노치 안전 영역 */
+  /* 🔥 노치/펀치홀 safe-area */
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
 
-  /* 중앙정렬 제거 → 위 짤림 해결 */
-  display: block;
+  /* 🔥 무조건 정가운데 정렬 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* ============================
-        컨테이너
-  ============================ */
+/* ======================================================
+        컨테이너 — 화면 중앙 유지 + 내부 스크롤 가능
+  ====================================================== */
 .container {
   width: 100%;
   max-width: 480px;
 
-  padding: 22px 20px;
+  /* 🔥 카드가 너무 커지면 스크롤되게 처리 */
+  max-height: calc(
+    100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+  );
+  overflow-y: auto;
 
+  padding: 22px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  /* ★ 화면 전체를 안전하게 채움 */
-  min-height: calc(
-    100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom)
-  );
-
-  animation: fadeIn 0.5s ease;
+  animation: fadeIn 0.45s ease;
 }
 
-/* 페이드 인 */
+/* fade animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -78,9 +79,9 @@ body {
   }
 }
 
-/* ============================
-        LOADING — 페이지 첫 로딩
-  ============================ */
+/* ======================================================
+        첫 로딩 화면
+  ====================================================== */
 #loading-screen {
   position: fixed;
   inset: 0;
@@ -90,7 +91,6 @@ body {
   align-items: center;
   gap: 8px;
   z-index: 9999;
-  transition: opacity 0.35s ease;
 }
 
 .dot {
@@ -100,7 +100,6 @@ body {
   border-radius: 50%;
   animation: bounce 0.6s infinite alternate;
 }
-
 .dot:nth-child(2) {
   animation-delay: 0.2s;
 }
@@ -119,9 +118,9 @@ body {
   }
 }
 
-/* ============================
+/* ======================================================
         제출 로딩 오버레이
-  ============================ */
+  ====================================================== */
 #submitLoading {
   display: none;
   position: fixed;
@@ -134,8 +133,9 @@ body {
   align-items: center;
 }
 
+/* 박스 */
 #submitLoading .loading-box {
-  background: #ffffff;
+  background: #fff;
   padding: 22px 30px;
   border-radius: 18px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
@@ -143,7 +143,6 @@ body {
   flex-direction: column;
   align-items: center;
 }
-
 #submitLoading .spinner {
   width: 32px;
   height: 32px;
@@ -153,7 +152,6 @@ body {
   animation: spin 0.7s linear infinite;
   margin-bottom: 10px;
 }
-
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -161,21 +159,20 @@ body {
 }
 
 #submitLoading p {
-  margin: 0;
   margin-top: 4px;
   font-size: 15px;
   font-weight: 500;
 }
 
-/* ============================
-        카드 (iOS 디자인)
-  ============================ */
+/* ======================================================
+        카드 (iOS 스타일)
+  ====================================================== */
 .card {
   width: 100%;
   background: var(--card-bg);
   border-radius: var(--radius);
   padding: 28px 24px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 
   border: 1px solid var(--border);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
@@ -189,18 +186,17 @@ body {
   margin-bottom: 18px;
   letter-spacing: -0.3px;
 }
-
 .card p {
   font-size: 15px;
   line-height: 1.62;
-  letter-spacing: -0.2px;
   margin-bottom: 14px;
+  letter-spacing: -0.2px;
   color: #333;
 }
 
-/* ============================
-        라디오 (iOS)
-  ============================ */
+/* ======================================================
+        라디오 버튼
+  ====================================================== */
 .opt {
   font-size: 16px;
   display: flex;
@@ -216,23 +212,23 @@ input[type="radio"] {
   border-radius: 50%;
   border: 2px solid var(--gray);
   cursor: pointer;
+  position: relative;
 }
 
 input[type="radio"]:checked {
   border-color: var(--point);
 }
-
 input[type="radio"]:checked::after {
   content: "";
   position: absolute;
   inset: 3.5px;
-  background: var(--point);
   border-radius: 50%;
+  background: var(--point);
 }
 
-/* ============================
+/* ======================================================
         입력창
-  ============================ */
+  ====================================================== */
 textarea,
 input[type="text"],
 input[type="email"],
@@ -246,7 +242,6 @@ select {
   margin-top: 8px;
   transition: 0.2s;
 }
-
 textarea {
   height: 120px;
   resize: none;
@@ -255,14 +250,14 @@ textarea {
 textarea:focus,
 input:focus,
 select:focus {
-  outline: none;
   border-color: var(--point);
   background: #fff;
+  outline: none;
 }
 
-/* ============================
+/* ======================================================
         버튼
-  ============================ */
+  ====================================================== */
 .start-btn,
 .next-btn,
 .prev-btn,
@@ -271,10 +266,10 @@ select:focus {
   padding: 15px 0;
   margin-top: 14px;
   border-radius: 12px;
+  border: none;
   font-size: 16px;
   cursor: pointer;
-  border: none;
-  transition: background 0.25s;
+  transition: 0.25s;
 }
 
 .start-btn,
@@ -283,38 +278,33 @@ select:focus {
   background: var(--point);
   color: #fff;
 }
+.prev-btn {
+  background: #e9e9ea;
+  color: #555;
+}
 
 .start-btn:active,
 .next-btn:active,
 .submit-btn:active {
   background: #c85c1f;
 }
-
-.prev-btn {
-  background: #e9e9ea;
-  color: #555;
-}
-
 .prev-btn:active {
   background: #d3d3d4;
 }
 
-/* ============================
+/* ======================================================
         게이지
-  ============================ */
+  ====================================================== */
 .gauge-wrap {
   width: 100%;
-  margin: 16px 0;
+  margin: 14px 0;
 }
-
 .gauge-bar {
   width: 100%;
   height: 8px;
   background: #e6e6e6;
   border-radius: 8px;
-  overflow: hidden;
 }
-
 .gauge-fill {
   width: 0%;
   height: 100%;
@@ -326,6 +316,6 @@ select:focus {
 .char-count {
   text-align: right;
   font-size: 13px;
-  color: #777;
   margin-top: 6px;
+  color: #777;
 }
