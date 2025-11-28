@@ -1,13 +1,13 @@
 :root {
   --point: #e36c27;
-  --bg: #fffdfb;
+  --bg: #faf9f7;
   --text: #1a1a1a;
-  --gray: #aaa;
-  --radius: 18px;
+  --glass: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.45);
+  --radius: 20px;
   --max-width: 480px;
 }
 
-/* 기본 스타일 */
 * {
   margin: 0;
   padding: 0;
@@ -19,28 +19,36 @@ body {
   background: var(--bg);
   display: flex;
   justify-content: center;
-  height: 100%;
 }
 
+/* APP WRAPPER */
 .app {
   width: 100%;
   max-width: var(--max-width);
-  overflow-x: hidden;
 }
 
-.section {
-  padding: 60px 22px;
+/* COMMON TITLES */
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 14px;
 }
 
-/* ============================================
-       HERO SECTION
-  ============================================ */
+.section-desc {
+  font-size: 15px;
+  margin-bottom: 26px;
+  color: #444;
+}
+
+/* =========================
+     HERO
+  ========================= */
 .hero {
   height: 92vh;
-  position: relative;
   padding: 60px 22px;
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 .hero-bg {
@@ -57,10 +65,10 @@ body {
 @keyframes pulse {
   from {
     transform: scale(1);
-    opacity: 0.7;
+    opacity: 0.8;
   }
   to {
-    transform: scale(1.07);
+    transform: scale(1.06);
     opacity: 1;
   }
 }
@@ -68,14 +76,12 @@ body {
 .hero-inner {
   position: relative;
   z-index: 3;
-  animation: fadeUp 0.9s ease both;
 }
 
 .brand-title {
   font-size: 34px;
-  font-weight: 700;
-  line-height: 1.32;
-  letter-spacing: -0.5px;
+  font-weight: 800;
+  line-height: 1.25;
   margin-bottom: 18px;
 }
 
@@ -85,7 +91,6 @@ body {
 
 .brand-sub {
   font-size: 16px;
-  line-height: 1.6;
   color: #333;
   margin-bottom: 26px;
 }
@@ -95,32 +100,18 @@ body {
   padding: 14px 18px;
   background: var(--point);
   color: #fff;
-  text-decoration: none;
-  font-size: 16px;
   border-radius: 12px;
+  text-decoration: none;
   font-weight: 600;
-  box-shadow: 0 4px 12px rgba(227, 108, 39, 0.25);
-  transition: transform 0.15s ease, box-shadow 0.2s ease;
-}
-
-.cta-main:active {
-  transform: translateY(2px);
-  box-shadow: none;
-}
-
-.big {
-  width: 100%;
-  text-align: center;
 }
 
 .scroll-down {
-  margin-top: 16px;
+  margin-top: 18px;
   background: none;
   border: none;
   font-size: 14px;
   opacity: 0.6;
-  animation: float 2s ease-in-out infinite;
-  cursor: pointer;
+  animation: float 2s infinite ease-in-out;
 }
 
 @keyframes float {
@@ -129,153 +120,140 @@ body {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(5px);
+    transform: translateY(6px);
   }
 }
 
-/* ============================================
-       SNS TEXT FEED (image 없이도 감성 유지)
-  ============================================ */
-.feed {
-  padding-top: 20px;
+/* =========================
+     PANEL SECTIONS
+  ========================= */
+.panel-section {
+  padding: 60px 22px;
 }
 
-.feed-card {
-  background: #ffffff;
+.panel {
+  background: var(--glass);
+  backdrop-filter: blur(16px) saturate(160%);
   border-radius: var(--radius);
-  padding: 26px 20px;
+  padding: 22px 18px;
   margin-bottom: 22px;
-  border: 1px solid #f0f0f0;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
-  animation: fadeUp 0.8s ease both;
+  border: 1px solid var(--glass-border);
+
+  opacity: 0;
+  transform: translateY(20px) scale(0.96);
+  transition: all 0.65s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.feed-quote {
-  font-size: 16px;
-  line-height: 1.6;
-  font-weight: 500;
-  color: #333;
+.panel.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
-/* ============================================
-       PROBLEM SECTION
-  ============================================ */
-.problem h2,
-.solution h2,
-.mission h2,
-.cta h2 {
-  font-size: 24px;
-  margin-bottom: 24px;
+/* =========================
+     QUOTE FEED – Glass Panels
+  ========================= */
+.mumu-feed {
+  padding: 60px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.problem-intro {
-  font-size: 16px;
-  margin-bottom: 28px;
-  line-height: 1.6;
-}
-
-.pb-item {
-  background: #fff;
-  border-radius: var(--radius);
-  padding: 20px 18px;
-  margin-bottom: 16px;
-  border: 1px solid #eee;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
-}
-
-.pb-item h3 {
-  font-size: 17px;
-  margin-bottom: 8px;
-}
-
-.pb-item p {
-  font-size: 14px;
-  line-height: 1.55;
-  color: #333;
-}
-
-/* ============================================
-       SOLUTION SECTION
-  ============================================ */
-.sol-item {
-  background: #fffdfb;
-  border-radius: var(--radius);
-  padding: 20px 18px;
-  margin-bottom: 14px;
-  border-left: 4px solid var(--point);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
-}
-
-.sol-item h3 {
-  font-size: 17px;
-  margin-bottom: 6px;
-}
-
-/* ============================================
-       MISSION SECTION
-  ============================================ */
-.mission-box {
-  background: #fff;
-  border-radius: var(--radius);
+.quote-card {
   padding: 26px 20px;
-  border: 1px solid #f0f0f0;
+  background: var(--glass);
+  border-radius: var(--radius);
+  backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid var(--glass-border);
+  font-size: 16px;
+  line-height: 1.55;
+  color: #2a2a2a;
+
+  opacity: 0;
+  transform: translateY(20px) scale(0.96);
+  transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.quote-card.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* MISSION TEXT */
 .ms-title {
-  margin-top: 20px;
   font-size: 15px;
+  font-weight: 700;
   color: var(--point);
-  font-weight: 600;
+  margin-bottom: 4px;
 }
 
 .ms-text {
-  margin: 8px 0 18px;
   font-size: 16px;
   line-height: 1.6;
 }
 
-/* ============================================
-       CTA SECTION
-  ============================================ */
-.cta-sub {
-  margin-top: 12px;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #555;
+/* CTA SECTION */
+.cta-section {
+  padding: 60px 22px;
+  text-align: center;
 }
 
-/* ============================================
-       FOOTER
-  ============================================ */
+.big {
+  width: 100%;
+  display: block;
+  text-align: center;
+}
+
+.cta-sub {
+  margin-top: 16px;
+  color: #777;
+  font-size: 14px;
+}
+
+/* FOOTER */
 footer {
   text-align: center;
-  padding: 30px 0;
-  font-size: 13px;
-  color: #666;
+  padding: 40px 0;
+  color: #777;
+}
+/* Webtoon Scene Feed */
+.scene-feed {
+  padding: 60px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
-/* ============================================
-       FADE-UP ANIMATION
-  ============================================ */
-.fade-up {
+.scene {
+  padding: 28px 22px;
+  border-radius: 22px;
+  font-size: 18px;
+  line-height: 1.65;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(22px) saturate(160%);
+  border: 1.2px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(20px) scale(0.97);
+  transition: all 0.8s cubic-bezier(0.21, 1, 0.36, 1);
 }
 
-.fade-up-show {
+/* 왼쪽 패널 연출 */
+.fade-left {
+  align-self: flex-start;
+  max-width: 85%;
+  transform: translateX(-30px) translateY(20px) scale(0.96);
+}
+
+/* 오른쪽 패널 연출 */
+.fade-right {
+  align-self: flex-end;
+  max-width: 85%;
+  transform: translateX(30px) translateY(20px) scale(0.96);
+}
+
+/* 등장 시 */
+.scene.show {
   opacity: 1;
-  transform: translateY(0);
-}
-
-/* HERO 등장 애니메이션 */
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  transform: translateX(0) translateY(0) scale(1);
 }
