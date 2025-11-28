@@ -1,5 +1,5 @@
 :root {
-  --point: #e36c27;
+  --point: #ff5e00;
   --bg: #f7f7f7;
   --text: #1c1c1e;
   --gray: #c7c7cc;
@@ -286,7 +286,7 @@ select:focus {
 .start-btn:active,
 .next-btn:active,
 .submit-btn:active {
-  background: #c85c1f;
+  background: #ff5e00;
 }
 .prev-btn:active {
   background: #d3d3d4;
