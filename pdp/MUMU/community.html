@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MUMU – Community</title>
+
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/community.css" />
+  </head>
+
+  <body>
+    <div class="app-frame">
+      <!-- 상단 고정 헤더 -->
+      <div id="header"></div>
+
+      <!-- 스크롤 영역 -->
+      <div class="app-scroll">
+        <main class="page-container">
+          <!-- 제목 -->
+          <h2 class="community-title">게시판</h2>
+
+          <!-- 상단 탭 -->
+          <div class="community-top-tabs">
+            <button class="top-tab active" data-tab="posts">게시글</button>
+            <button class="top-tab" data-tab="creator">작가 피드</button>
+          </div>
+
+          <!-- 카테고리 태그 -->
+          <div class="category-tags" id="genreTags">
+            <span class="tag active">전체</span>
+            <span class="tag">판타지</span>
+            <span class="tag">액션</span>
+            <span class="tag">일상</span>
+            <span class="tag">스릴러</span>
+            <span class="tag">개그</span>
+          </div>
+
+          <!-- JS가 채우는 리스트 -->
+          <section id="postList" class="community-list"></section>
+
+          <!-- ===========================
+                [추가됨] 작가 피드 섹션
+          ============================ -->
+          <section id="creatorFeedSection" class="creator-feed hidden">
+            <!-- 팔로우한 작가 영역 -->
+            <div class="follow-section">
+              <div class="follow-header">
+                <span class="follow-title">팔로우한 작가</span>
+                <span class="more-btn">더보기</span>
+              </div>
+
+              <div id="followList" class="follow-list">
+                <!-- JS로 채움 -->
+              </div>
+            </div>
+
+            <!-- 피드 리스트 -->
+            <h3 class="creator-feed-title">피드</h3>
+
+            <div id="creatorFeed" class="creator-feed-list">
+              <!-- JS로 채움 -->
+            </div>
+          </section>
+          <!-- =========================== -->
+          <!-- 여기까지가 오직 '추가'된 부분 -->
+        </main>
+      </div>
+
+      <!-- 탭바 -->
+      <div id="tabbar"></div>
+    </div>
+
+    <script src="js/community.js"></script>
+
+    <script>
+      fetch("components/header.html")
+        .then((r) => r.text())
+        .then((h) => (document.getElementById("header").innerHTML = h));
+
+      fetch("components/tabbar.html")
+        .then((r) => r.text())
+        .then((h) => (document.getElementById("tabbar").innerHTML = h));
+    </script>
+  </body>
+</html>

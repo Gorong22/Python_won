@@ -1,0 +1,115 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+ul, li {
+    list-style: none;
+}
+button {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+/* Color Variables */
+:root {
+    --primary-color: #6A48E3;
+    --primary-light: #E8E2FF;
+    --text-primary: #1F1F1F;
+    --text-secondary: #6B6B6B;
+    --text-placeholder: #A0A0A0;
+    --border-color: #EAEAEA;
+    --bg-color: #FFFFFF;
+    --bg-alt: #F7F7F7;
+    --black: #000000;
+    --white: #FFFFFF;
+    --danger: #FF4D4F;
+}
+
+/* Typography */
+h1 { font-size: 24px; font-weight: bold; }
+h2 { font-size: 20px; font-weight: bold; }
+.text-lg { font-size: 18px; }
+.text-md { font-size: 16px; }
+.text-sm { font-size: 14px; }
+.text-xs { font-size: 12px; }
+.font-bold { font-weight: bold; }
+.font-medium { font-weight: 500; }
+
+/* Layout Utilities */
+.container {
+    padding: 0 20px;
+}
+.d-flex {
+    display: flex;
+}
+.align-center {
+    align-items: center;
+}
+.justify-between {
+    justify-content: space-between;
+}
+.justify-center {
+    justify-content: center;
+}
+.text-center {
+    text-align: center;
+}
+.w-100 {
+    width: 100%;
+}
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }
+.mb-1 { margin-bottom: 8px; }
+.mb-2 { margin-bottom: 16px; }
+.mb-3 { margin-bottom: 24px; }
+
+/* Common Button Styles */
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    height: 50px;
+    padding: 0 20px;
+    transition: background-color 0.2s, opacity 0.2s;
+}
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+.btn-primary:hover {
+    background-color: #583AC7;
+}
+.btn-black {
+    background-color: var(--text-primary);
+    color: var(--white);
+}
+.btn-black:hover {
+    background-color: #333333;
+}
+.btn-block {
+    width: 100%;
+}
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

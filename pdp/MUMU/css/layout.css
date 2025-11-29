@@ -1,0 +1,144 @@
+/* App Frame */
+#app-frame {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    max-width: 480px; /* Mobile First */
+    margin: 0 auto;
+    background-color: var(--bg-color);
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+}
+
+#app-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+}
+
+#app-scroll > .page-content {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+body.scroll-locked {
+    overflow: hidden;
+}
+
+/* Header & Tabbar Layout */
+#header-container {
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+}
+#header-container .header-content {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+#header-container .header-title {
+    font-size: 18px;
+    font-weight: bold;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+#header-container .header-icon {
+    font-size: 22px;
+}
+
+#tabbar-container {
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+    background-color: var(--white);
+    border-top: 1px solid var(--border-color);
+    transition: transform 0.3s ease-out;
+}
+#tabbar-container.hidden {
+    transform: translateY(100%);
+}
+#tabbar-container .tabbar-nav {
+    display: flex;
+    justify-content: space-around;
+    height: 60px;
+}
+#tabbar-container .tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--text-placeholder);
+    transition: color 0.2s;
+}
+#tabbar-container .tab-item.active {
+    color: var(--primary-color);
+}
+#tabbar-container .tab-item i {
+    font-size: 24px;
+    margin-bottom: 2px;
+}
+
+/* Modal Layout */
+#modal-container .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    animation: modalFadeIn 0.3s forwards;
+}
+#modal-container .modal-content {
+    background-color: var(--white);
+    border-radius: 16px;
+    padding: 24px;
+    width: 90%;
+    max-width: 400px;
+    transform: scale(0.95);
+    opacity: 0;
+    animation: modalScaleUp 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+@keyframes modalFadeIn {
+    to { opacity: 1; }
+}
+@keyframes modalScaleUp {
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Splash Screen */
+#splash-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: var(--primary-color);
+    color: var(--white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s;
+}
+#splash-screen h1 {
+    font-size: 48px;
+    font-weight: 900;
+}

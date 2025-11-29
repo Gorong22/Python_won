@@ -1,0 +1,17 @@
+<div class="page-content mypage-container">
+    <div class="profile-section">
+        <img src="https://i.pravatar.cc/150?u=creator" alt="Creator profile" class="profile-img">
+        <h2 class="profile-name">신인 창작자</h2>
+        <p class="profile-role">Creator</p>
+        <button class="btn btn-black mt-2" onclick="window.app.switchToReader()">독자 모드로 전환</button>
+    </div>
+    <div class="mypage-section">
+        <h3>내 작품</h3>
+        <div id="my-works-list" class="content-list">
+             <!-- My works will be rendered by mypage_creator.js -->
+        </div>
+        <button class="btn btn-primary btn-block mt-3" onclick="window.router.navigate('upload')">
+            <i class="fa-solid fa-upload mr-1"></i> 새 작품 업로드
+        </button>
+    </div>
+</div>

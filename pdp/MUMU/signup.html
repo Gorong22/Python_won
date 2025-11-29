@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>MUMU – 회원가입</title>
+
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/signup.css" />
+  </head>
+
+  <body>
+    <div class="app-frame">
+      <!-- HEADER -->
+      <div id="header"></div>
+
+      <div class="app-scroll">
+        <main class="signup-page">
+          <!-- STEP 1: 기본정보 -->
+          <div id="step1" class="signup-step">
+            <h2 class="signup-title">당신의 정보를 입력해주세요</h2>
+
+            <div class="input-group">
+              <label>아이디</label>
+              <input type="text" placeholder="아이디를 입력하세요" />
+            </div>
+
+            <div class="input-group">
+              <label>비밀번호</label>
+              <input type="password" placeholder="비밀번호를 입력하세요" />
+            </div>
+
+            <div class="input-group">
+              <label>이름</label>
+              <input type="text" placeholder="이름" />
+            </div>
+
+            <div class="input-group">
+              <label>닉네임</label>
+              <input type="text" placeholder="닉네임" />
+            </div>
+
+            <div class="input-row">
+              <div class="input-group half">
+                <label>나이</label>
+                <input type="number" placeholder="나이" />
+              </div>
+
+              <div class="input-group half">
+                <label>성별</label>
+                <select>
+                  <option>남성</option>
+                  <option>여성</option>
+                  <option>선택안함</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="btn-primary" id="goStep2">다음</button>
+          </div>
+
+          <!-- STEP 2: 개인화 독자 -->
+          <div id="step2" class="signup-step" style="display: none">
+            <h2 class="signup-title">당신은 누구?</h2>
+
+            <div class="toggle-2">
+              <button class="t-btn active" data-role="reader">독자</button>
+              <button class="t-btn" data-role="creator">창작자</button>
+            </div>
+
+            <div class="tag-section">
+              <div class="tag-label">선호하는 분위기</div>
+              <div class="tag-wrap">
+                <button class="tag">잔잔</button>
+                <button class="tag">로맨스</button>
+                <button class="tag">촌철살인</button>
+                <button class="tag">유머</button>
+              </div>
+            </div>
+
+            <div class="tag-section">
+              <div class="tag-label">선호하는 장르</div>
+              <div class="tag-wrap">
+                <button class="tag">드라마</button>
+                <button class="tag">판타지</button>
+                <button class="tag">일상</button>
+                <button class="tag">스포츠</button>
+                <button class="tag">힐링</button>
+              </div>
+            </div>
+
+            <div class="tag-section">
+              <div class="tag-label">취향</div>
+              <div class="tag-wrap">
+                <button class="tag">단편</button>
+                <button class="tag">고퀄</button>
+                <button class="tag">짧은 호흡</button>
+                <button class="tag">개그</button>
+                <button class="tag">SNS 감성</button>
+              </div>
+            </div>
+
+            <button class="btn-primary" id="goStep3">완료</button>
+          </div>
+
+          <!-- STEP 3: 개인화 창작자 -->
+          <div id="step3" class="signup-step" style="display: none">
+            <h2 class="signup-title">당신은 누구?</h2>
+
+            <div class="toggle-2">
+              <button class="t-btn" data-role="reader">독자</button>
+              <button class="t-btn active" data-role="creator">창작자</button>
+            </div>
+
+            <div class="tag-section">
+              <div class="tag-label">표현하는 장르</div>
+              <div class="tag-wrap">
+                <button class="tag">드라마</button>
+                <button class="tag">코미디</button>
+                <button class="tag">일상</button>
+                <button class="tag">감성</button>
+                <button class="tag">스포츠</button>
+              </div>
+            </div>
+
+            <div class="tag-section">
+              <div class="tag-label">업로드 주기</div>
+              <div class="tag-wrap">
+                <button class="tag">매일</button>
+                <button class="tag">2~3일</button>
+                <button class="tag">주 1회</button>
+                <button class="tag">비정기</button>
+              </div>
+            </div>
+
+            <div class="tag-section">
+              <div class="tag-label">계정 연동</div>
+              <input
+                type="text"
+                class="input-field"
+                placeholder="SNS 또는 포트폴리오 URL 입력"
+              />
+            </div>
+
+            <button class="btn-primary">완료</button>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="js/signup.js"></script>
+
+    <script>
+      fetch("components/header.html")
+        .then((r) => r.text())
+        .then((h) => (document.getElementById("header").innerHTML = h));
+    </script>
+  </body>
+</html>
