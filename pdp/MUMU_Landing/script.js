@@ -1,38 +1,26 @@
-/* Scroll-down button */
-document.addEventListener("DOMContentLoaded", () => {
-  const scrollBtn = document.querySelector(".scroll-down");
-  scrollBtn?.addEventListener("click", () => {
-    window.scrollTo({
-      top: window.innerHeight * 0.92,
-      behavior: "smooth",
-    });
-  });
-});
+document.addEventListener("DOMContentLoaded", function() {
+    const fadeInElements = document.querySelectorAll('.fade-in');
 
-/* Panel fade-in + scale-in */
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("show");
-      }
-    });
-  },
-  { threshold: 0.15 }
-);
+    if (!fadeInElements) {
+        return;
+    }
 
-document.querySelectorAll(".panel, .quote-card").forEach((el) => {
-  observer.observe(el);
-});
-const observerScene = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) entry.target.classList.add("show");
-    });
-  },
-  { threshold: 0.15 }
-);
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
 
-document.querySelectorAll(".scene").forEach((el) => {
-  observerScene.observe(el);
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    fadeInElements.forEach(el => {
+        observer.observe(el);
+    });
 });
