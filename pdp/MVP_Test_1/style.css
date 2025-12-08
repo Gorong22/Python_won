@@ -1,0 +1,322 @@
+/* ============================================================
+   GLOBAL
+============================================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #fafafa;
+  font-family: "Pretendard", sans-serif;
+  color: #222;
+}
+
+.app {
+  max-width: 420px;
+  min-height: 100vh;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ============================================================
+   SCREEN BASE
+============================================================ */
+.screen {
+  display: none;
+  width: 100%;
+  min-height: 100vh;
+  padding: calc(env(safe-area-inset-top) + 20px) 20px
+    calc(env(safe-area-inset-bottom) + 20px);
+}
+
+.screen.active {
+  display: block;
+}
+
+/* ============================================================
+   INTRO
+============================================================ */
+.intro-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(90deg, #ececec 1px, transparent 1px),
+    linear-gradient(#ececec 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.6;
+  z-index: 0;
+}
+
+.intro-collage {
+  position: absolute;
+  top: 8%;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  pointer-events: none;
+}
+
+.c-img {
+  position: absolute;
+  width: 140px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 14px;
+  box-shadow: 6px 10px 18px rgba(0, 0, 0, 0.15);
+}
+
+.c1 {
+  top: 5%;
+  left: 8%;
+  transform: rotate(-8deg);
+}
+.c2 {
+  top: 18%;
+  right: 10%;
+  transform: rotate(4deg);
+}
+.c3 {
+  bottom: 15%;
+  left: 18%;
+  transform: rotate(6deg);
+}
+.c4 {
+  bottom: 5%;
+  right: 16%;
+  transform: rotate(-5deg);
+}
+
+.intro-content {
+  position: absolute;
+  bottom: 8%;
+  width: 100%;
+  text-align: center;
+}
+
+.fade-up {
+  opacity: 0;
+  animation: fadeUp 1s ease-out forwards;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.intro-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.intro-desc {
+  opacity: 0.75;
+  font-size: 15px;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.start-btn {
+  background: #111;
+  color: white;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+/* ============================================================
+   SURVEY
+============================================================ */
+.survey-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* space-between 제거 */
+  align-items: center;
+  height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  padding-top: 10px;
+  padding-bottom: 20px;
+  gap: 32px; /* NEW: 요소 간 자연스러운 간격 */
+}
+
+.progress {
+  width: 100%;
+  height: 8px;
+  background: #e6e6e6;
+  border-radius: 20px;
+  margin: 10px 0 20px;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: #111;
+  border-radius: 20px;
+  transition: 0.3s;
+}
+
+.survey-container {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  padding: 0;
+  margin-top: 10px;
+
+  max-height: 60vh; /* NEW: 질문 영역이 너무 아래로 내려가는 것 방지 */
+  overflow-y: auto;
+}
+
+.survey-container > div,
+.survey-container > label {
+  width: 100%;
+  max-width: 340px; /* 가운데로 모아지는 느낌 */
+}
+
+.question-title {
+  font-size: 19px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.option {
+  display: block;
+  padding: 15px;
+  background: white;
+  margin-bottom: 12px;
+  border-radius: 14px;
+  border: 2px solid #ddd;
+  cursor: pointer;
+  transition: 0.25s;
+  font-size: 15px;
+}
+
+.option:hover {
+  border-color: #111;
+}
+
+.text-field,
+.text-area {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: 2px solid #ddd;
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.nav-btns {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  gap: 12px;
+  margin: 0 auto;
+  padding-bottom: 20px;
+
+  position: relative;
+  bottom: 0;
+}
+
+.nav-btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.prev {
+  background: #eee;
+}
+
+.next,
+.submit {
+  background: #111;
+  color: #fff;
+}
+
+/* ============================================================
+   LOADING
+============================================================ */
+.loading {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading.active {
+  display: flex;
+}
+
+.loader {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 4px solid #ccc;
+  border-top-color: #111;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================================
+   ENDING
+============================================================ */
+.ending-card {
+  background: white;
+  padding: 28px 22px;
+  text-align: center;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.ending-card h2 {
+  margin-bottom: 10px;
+}
+
+.ending-sticker {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 16px;
+  margin: 16px 0;
+}
+
+/* ENDING 화면만 중앙 정렬 */
+#endingScreen.screen.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 닫기 버튼 간격 */
+.close-btn {
+  background: #111;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px; /* ✔ NEW */
+}
