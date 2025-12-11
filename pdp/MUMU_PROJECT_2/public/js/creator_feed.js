@@ -12,7 +12,7 @@ fetch("components/header.html")
     }
     const headerLeft = document.querySelector("#header .header-left");
     if (headerLeft) {
-      headerLeft.innerHTML = '<a href="index.html" style="display: flex; width: 100%; height: 100%; align-items: center; justify-content: center;"><img loading="lazy" src="assets/logos/mumu-logo.webp" alt="MUMU Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;"></a>';
+      headerLeft.innerHTML = '<a href="../index.html" style="display: flex; width: 100%; height: 100%; align-items: center; justify-content: center;"><img loading="lazy" src="assets/logos/mumu-logo.webp" alt="MUMU Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;"></a>';
     }
     const headerLink = document.querySelector("#header .header-link");
     if (headerLink) {

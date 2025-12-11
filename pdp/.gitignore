@@ -4,7 +4,11 @@
 # Git이 추적해야 하는 것만 허용
 !.gitignore
 !README.md
+
+# MUMU_PROJECT_2 폴더 및 모든 내용 허용
+!MUMU_PROJECT_2
 !MUMU_PROJECT_2/
+!MUMU_PROJECT_2/**
 
 # OS & 에디터 무시
 .DS_Store
