@@ -12,6 +12,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- CSS 경로 -->
+  <link rel="stylesheet" href="/public/css/global.css" />
+  <link rel="stylesheet" href="/public/css/layout.css" />
   <link rel="stylesheet" href="/public/css/tabbar.css" />
   <link rel="stylesheet" href="/public/css/feed.css" />
 
@@ -53,10 +55,16 @@
       background: transparent;
       border-radius: 14px;
       animation: floatUp 0.8s ease forwards;
-      background-image: url('/public/assets/logos/mumu-logo.webp');
-      background-size: contain;
-      background-position: center;
-      background-repeat: no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .splash-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
     }
 
     /* 애니메이션 */
@@ -91,6 +99,12 @@
         opacity: 1;
       }
     }
+    
+    /* app-frame 초기 숨김 (스플래시 후 표시) */
+    .app-frame {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
   </style>
 </head>
 
@@ -100,7 +114,9 @@
     ============================ -->
   <div id="splashLayer">
     <div class="splash-app-frame">
-      <div class="splash-logo"></div>
+      <div class="splash-logo">
+        <img src="/public/assets/logos/mumu-logo.webp" alt="MUMU Logo" onerror="this.style.display='none'; this.parentElement.style.background='#e4e4e4';">
+      </div>
     </div>
   </div>
 
