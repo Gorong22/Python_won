@@ -96,7 +96,7 @@ function renderSearchResults(keyword = "") {
     const imgName = randomImages[imgIndex];
     searchResults.innerHTML += `
       <div class="search-item">
-        <div class="search-thumb"><img src="assets/random/${imgName}" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+        <div class="search-thumb"><img src="/public/assets/random/${imgName}" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
         <div class="search-title">작품 제목 ${i + 1}</div>
         <div class="search-author">작가명</div>
         <div class="search-meta">👁 NEW</div>

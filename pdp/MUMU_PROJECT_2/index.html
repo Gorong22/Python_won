@@ -11,11 +11,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS 경로 (public/css/) -->
-  <!-- <link rel="stylesheet" href="public/css/global.css" />
-    <link rel="stylesheet" href="public/css/layout.css" /> -->
-  <link rel="stylesheet" href="public/css/tabbar.css" />
-  <link rel="stylesheet" href="public/css/feed.css" />
+  <!-- CSS 경로 -->
+  <link rel="stylesheet" href="/public/css/tabbar.css" />
+  <link rel="stylesheet" href="/public/css/feed.css" />
 
   <style>
     /* ==============================
@@ -52,9 +50,13 @@
     .splash-logo {
       width: 200px;
       height: 120px;
-      background: #e4e4e4;
+      background: transparent;
       border-radius: 14px;
       animation: floatUp 0.8s ease forwards;
+      background-image: url('/public/assets/logos/mumu-logo.webp');
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
     /* 애니메이션 */
@@ -119,7 +121,7 @@
 
             <div class="mumu-pick-header">MUMU's Pick!</div>
             <div class="carousel-image">
-              <img src="public/assets/community-images/image_28.webp" alt="MUMU's Pick" loading="lazy">
+              <img src="/public/assets/community-images/image_28.webp" alt="MUMU's Pick" loading="lazy">
               <div class="carousel-overlay">
                 <div class="overlay-content">
                   <div class="overlay-title">작품 소개</div>
@@ -880,7 +882,7 @@
         <div class="comment-list">
           <!-- 댓글 항목 1 -->
           <div class="comment-item">
-            <div class="comment-avatar"><img src="public/assets/random/i3.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+            <div class="comment-avatar"><img src="/public/assets/random/i3.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
             <div class="comment-content">
               <div class="comment-header">
                 <span class="comment-author">독자 이름</span>
@@ -916,7 +918,7 @@
           </div>
           <!-- 댓글 항목 2 -->
           <div class="comment-item">
-            <div class="comment-avatar"><img src="public/assets/Thumbnail/스크린샷_2025-12-09_14.59.09.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+            <div class="comment-avatar"><img src="/public/assets/Thumbnail/스크린샷_2025-12-09_14.59.09.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
             <div class="comment-content">
               <div class="comment-header">
                 <span class="comment-author">독자 이름</span>
@@ -952,7 +954,7 @@
           </div>
           <!-- 댓글 항목 3 -->
           <div class="comment-item">
-            <div class="comment-avatar"><img src="public/assets/Thumbnail/스크린샷_2025-12-09_15.00.39.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+            <div class="comment-avatar"><img src="/public/assets/Thumbnail/스크린샷_2025-12-09_15.00.39.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
             <div class="comment-content">
               <div class="comment-header">
                 <span class="comment-author">작가 이름</span>
@@ -988,7 +990,7 @@
           </div>
           <!-- 댓글 항목 4 -->
           <div class="comment-item">
-            <div class="comment-avatar"><img src="public/assets/random/d3.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+            <div class="comment-avatar"><img src="/public/assets/random/d3.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
             <div class="comment-content">
               <div class="comment-header">
                 <span class="comment-author">작가 이름</span>
@@ -1024,7 +1026,7 @@
           </div>
           <!-- 댓글 항목 5 -->
           <div class="comment-item">
-            <div class="comment-avatar"><img src="public/assets/random/b2.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+            <div class="comment-avatar"><img src="/public/assets/random/b2.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
             <div class="comment-content">
               <div class="comment-header">
                 <span class="comment-author">작가 이름</span>
@@ -1091,7 +1093,7 @@
   </div>
 
   <!-- JS 경로 (public/js/) -->
-  <script src="public/js/feed.js" defer></script>
+  <script src="/public/js/feed.js" defer></script>
 
 
 </body>

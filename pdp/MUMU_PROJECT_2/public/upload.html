@@ -5,8 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MUMU – 업로드</title>
-    <link rel="stylesheet" href="css/tabbar.css" />
-    <link rel="stylesheet" href="css/upload.css" />
+    <link rel="stylesheet" href="/public/css/tabbar.css" />
+    <link rel="stylesheet" href="/public/css/upload.css" />
 </head>
 
 <body>
@@ -98,12 +98,12 @@
         /* ========================== 
            Tabbar 로드
         ========================== */
-        fetch("components/tabbar.html")
+        fetch("/public/components/tabbar.html")
             .then((r) => r.text())
             .then((html) => (document.getElementById("tabbar").innerHTML = html))
             .catch((error) => console.error("Error fetching tabbar.html:", error));
     </script>
-    <script src="js/upload.js" defer></script>
+    <script src="/public/js/upload.js" defer></script>
 </body>
 
 </html>

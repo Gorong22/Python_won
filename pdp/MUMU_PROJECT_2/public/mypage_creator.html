@@ -5,8 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MUMU – Creator MY PAGE</title>
-  <link rel="stylesheet" href="css/tabbar.css" />
-  <link rel="stylesheet" href="css/mypage_creator.css" />
+  <link rel="stylesheet" href="/public/css/tabbar.css" />
+  <link rel="stylesheet" href="/public/css/mypage_creator.css" />
 </head>
 
 <body>
@@ -30,7 +30,7 @@
             <div class="profile-avatar-wrapper">
               <div class="profile-avatar"></div>
               <div class="setting-icon">
-                <img src="assets/icons/setting.svg" alt="setting" loading="lazy">
+                <img src="/public/assets/icons/setting.svg" alt="setting" loading="lazy">
               </div>
             </div>
             <div class="profile-follow">
@@ -81,12 +81,12 @@
       /* ========================== 
          Tabbar 로드
       ========================== */
-      fetch("components/tabbar.html")
+      fetch("/public/components/tabbar.html")
         .then((r) => r.text())
         .then((html) => (document.getElementById("tabbar").innerHTML = html))
         .catch((error) => console.error("Error fetching tabbar.html:", error));
     </script>
-    <script src="js/mypage_creator.js" defer></script>
+    <script src="/public/js/mypage_creator.js" defer></script>
 </body>
 
 </html>

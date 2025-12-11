@@ -5,8 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>독자 온보딩</title>
-  <link rel="stylesheet" href="css/tabbar.css" />
-  <link rel="stylesheet" href="css/onboarding_reader.css" />
+  <link rel="stylesheet" href="/public/css/tabbar.css" />
+  <link rel="stylesheet" href="/public/css/onboarding_reader.css" />
 </head>
 
 <body>
@@ -66,12 +66,12 @@
     /* ========================== 
        Tabbar 로드
     ========================== */
-    fetch("components/tabbar.html")
+    fetch("/public/components/tabbar.html")
       .then((r) => r.text())
       .then((html) => (document.getElementById("tabbar").innerHTML = html))
       .catch((error) => console.error("Error fetching tabbar.html:", error));
   </script>
-  <script src="js/onboarding_reader.js" defer></script>
+  <script src="/public/js/onboarding_reader.js" defer></script>
 </body>
 
 </html>

@@ -1,7 +1,7 @@
 /* ========================== 
    Header 커스터마이징
 ========================== */
-fetch("components/header.html")
+fetch("/public/components/header.html")
   .then((r) => r.text())
   .then((html) => {
     document.getElementById("header").innerHTML = html;
@@ -12,12 +12,12 @@ fetch("components/header.html")
     }
     const headerLeft = document.querySelector("#header .header-left");
     if (headerLeft) {
-      headerLeft.innerHTML = '<a href="../index.html" style="display: flex; width: 100%; height: 100%; align-items: center; justify-content: center;"><img loading="lazy" src="assets/logos/mumu-logo.webp" alt="MUMU Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;"></a>';
+      headerLeft.innerHTML = '<a href="/index.html" style="display: flex; width: 100%; height: 100%; align-items: center; justify-content: center;"><img loading="lazy" src="/public/assets/logos/mumu-logo.webp" alt="MUMU Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;"></a>';
     }
     const headerLink = document.querySelector("#header .header-link");
     if (headerLink) {
       headerLink.textContent = "업로드";
-      headerLink.href = "upload.html";
+      headerLink.href = "/public/upload.html";
     }
   })
   .catch((error) => console.error("Error fetching header.html:", error));
@@ -25,7 +25,7 @@ fetch("components/header.html")
 /* ========================== 
    Tabbar 로드
 ========================== */
-fetch("components/tabbar.html")
+fetch("/public/components/tabbar.html")
   .then((r) => r.text())
   .then((html) => (document.getElementById("tabbar").innerHTML = html))
   .catch((error) => console.error("Error fetching tabbar.html:", error));

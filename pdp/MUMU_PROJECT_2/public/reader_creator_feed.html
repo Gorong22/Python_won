@@ -7,10 +7,10 @@
   <title>MUMU – 작가 홈</title>
 
   <!-- 기존 공통 CSS 그대로 사용 -->
-  <!-- <link rel="stylesheet" href="css/global.css" />
-  <link rel="stylesheet" href="css/layout.css" /> -->
-  <link rel="stylesheet" href="css/tabbar.css" />
-  <link rel="stylesheet" href="css/reader_creator_feed.css" />
+  <!-- <link rel="stylesheet" href="/public/css/global.css" />
+  <link rel="stylesheet" href="/public/css/layout.css" /> -->
+  <link rel="stylesheet" href="/public/css/tabbar.css" />
+  <link rel="stylesheet" href="/public/css/reader_creator_feed.css" />
 </head>
 
 <body>
@@ -133,13 +133,13 @@
     /* ========================== 
        Tabbar 로드
     ========================== */
-    fetch("components/tabbar.html")
+    fetch("/public/components/tabbar.html")
       .then((r) => r.text())
       .then((html) => (document.getElementById("tabbar").innerHTML = html))
       .catch((error) => console.error("Error fetching tabbar.html:", error));
   </script>
   <!-- 이 페이지 전용 JS -->
-  <script src="js/reader_creator_feed.js" defer></script>
+  <script src="/public/js/reader_creator_feed.js" defer></script>
 </body>
 
 </html>

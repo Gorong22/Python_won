@@ -8,13 +8,13 @@
 
   <!-- 필요하면 global.css, layout.css 위에 두고 -->
   <!-- 내 파일은 마지막에 로드해서 우선순위 갖도록 -->
-  <!-- <link rel="stylesheet" href="css/global.css" />
-    <link rel="stylesheet" href="css/layout.css" /> -->
+  <!-- <link rel="stylesheet" href="/public/css/global.css" />
+    <link rel="stylesheet" href="/public/css/layout.css" /> -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/tabbar.css" />
-  <link rel="stylesheet" href="css/mypage_reader.css" />
+  <link rel="stylesheet" href="/public/css/tabbar.css" />
+  <link rel="stylesheet" href="/public/css/mypage_reader.css" />
 </head>
 
 <body>
@@ -38,7 +38,7 @@
             <div class="profile-avatar-wrapper">
               <div class="profile-avatar"></div>
               <div class="setting-icon">
-                <img src="assets/icons/setting.svg" alt="setting" loading="lazy">
+                <img src="/public/assets/icons/setting.svg" alt="setting" loading="lazy">
               </div>
             </div>
             <div class="profile-follow">
@@ -97,9 +97,9 @@
         </div>
 
         <div class="myfeed-grid">
-          <div class="myfeed-thumb"><img src="assets/random/스크린샷 2025-12-09 14.56.01.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
-          <div class="myfeed-thumb"><img src="assets/random/스크린샷 2025-12-09 14.56.01.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
-          <div class="myfeed-thumb"><img src="assets/random/스크린샷 2025-12-09 14.56.01.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+          <div class="myfeed-thumb"><img src="/public/assets/random/스크린샷 2025-12-09 14.56.01.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+          <div class="myfeed-thumb"><img src="/public/assets/random/스크린샷 2025-12-09 14.56.01.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+          <div class="myfeed-thumb"><img src="/public/assets/random/스크린샷 2025-12-09 14.56.01.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
         </div>
 
         <!-- 취향 분석 -->
@@ -173,7 +173,7 @@
           </div>
           <div class="comment-list">
             <div class="comment-item">
-              <div class="comment-avatar"><img src="assets/random/d1.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="comment-avatar"><img src="/public/assets/random/d1.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
               <div class="comment-content">
                 <div class="comment-header">
                   <span class="comment-author">독자 이름</span>
@@ -208,7 +208,7 @@
               </button>
             </div>
             <div class="comment-item">
-              <div class="comment-avatar"><img src="assets/random/스크린샷 2025-12-09 15.01.38.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="comment-avatar"><img src="/public/assets/random/스크린샷 2025-12-09 15.01.38.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
               <div class="comment-content">
                 <div class="comment-header">
                   <span class="comment-author">독자 이름</span>
@@ -279,12 +279,12 @@
       /* ========================== 
          Tabbar 로드
       ========================== */
-      fetch("components/tabbar.html")
+      fetch("/public/components/tabbar.html")
         .then((r) => r.text())
         .then((html) => (document.getElementById("tabbar").innerHTML = html))
         .catch((error) => console.error("Error fetching tabbar.html:", error));
     </script>
-    <script src="js/mypage_reader.js" defer></script>
+    <script src="/public/js/mypage_reader.js" defer></script>
 </body>
 
 </html>

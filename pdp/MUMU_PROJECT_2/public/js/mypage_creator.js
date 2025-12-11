@@ -68,7 +68,7 @@ function loadFeedItemImages() {
     const img = document.createElement("img");
     const fileName = imageFiles[imageIndex % imageFiles.length];
     const encodedFileName = encodeURIComponent(fileName);
-    const imagePath = `assets/feed/${encodedFileName}`;
+    const imagePath = `/public/assets/feed/${encodedFileName}`;
     img.src = imagePath;
 
     img.onload = () => {
