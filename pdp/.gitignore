@@ -1,0 +1,28 @@
+# 기본적으로 전부 무시
+*
+
+# Git이 추적해야 하는 것만 허용
+!.gitignore
+!README.md
+!MUMU_PROJECT_2/
+
+# OS & 에디터 무시
+.DS_Store
+Thumbs.db
+
+# Node / Expo / Build 파일 무시
+node_modules/
+dist/
+build/
+.expo/
+.expo-shared/
+npm-debug.log*
+
+# IDE 캐시
+.vscode/
+.idea/
+
+# Python / Jupyter
+*.ipynb_checkpoints*
+*.pyc
+__pycache__/

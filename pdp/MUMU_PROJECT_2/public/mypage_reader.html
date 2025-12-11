@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MUMU – 마이페이지 (독자)</title>
+
+  <!-- 필요하면 global.css, layout.css 위에 두고 -->
+  <!-- 내 파일은 마지막에 로드해서 우선순위 갖도록 -->
+  <!-- <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/layout.css" /> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tabbar.css" />
+  <link rel="stylesheet" href="css/mypage_reader.css" />
+</head>
+
+<body>
+  <div class="app-frame">
+    <!-- 상단 헤더 -->
+    <!-- <header class="header">
+      <div class="header-title">MUMU</div>
+      <button class="header-right">마이페이지</button>
+    </header> -->
+
+    <!-- 스크롤 영역 -->
+    <div class="app-scroll">
+      <!-- 프로필 -->
+      <section class="profile-box">
+        <div class="profile-bg"></div>
+
+        <!-- <button class="reader-mode-btn">독자모드</button> -->
+
+        <div class="profile-content">
+          <div class="profile-header-row">
+            <div class="profile-avatar-wrapper">
+              <div class="profile-avatar"></div>
+              <div class="setting-icon">
+                <img src="assets/icons/setting.svg" alt="setting" loading="lazy">
+              </div>
+            </div>
+            <div class="profile-follow">
+              <div class="follow">
+                <div class="follow-num">12</div>
+                <div class="follow-label">팔로우</div>
+              </div>
+              <div class="follow-line">
+                <div class="line"></div>
+              </div>
+              <div class="follow">
+                <div class="follow-num">12</div>
+                <div class="follow-label">팔로워</div>
+              </div>
+            </div>
+          </div>
+          <div class="profile-name">박햇살</div>
+          <div class="tag-list">
+            <span class="tag">액션</span>
+            <span class="tag">판타지</span>
+            <span class="tag">개그</span>
+          </div>
+          <div class="profile-desc">
+            독자 자기소개<br />
+            링크 연동
+          </div>
+        </div>
+      </section>
+
+      <!-- TABS -->
+      <div class="tab-wrap">
+        <div class="tab active" onclick="goMyFeed()">MY MOOD</div>
+        <div class="tab" onclick="goMy()">MY</div>
+      </div>
+
+      <!-- ========================= -->
+      <!--  TAB 1 : MY MOOD          -->
+      <!-- ========================= -->
+      <section id="tab-feed" class="tab-content active">
+        <section id="postList" class="feed-grid">
+          <div class="feed-item add-btn">+</div>
+          <div class="feed-item"></div>
+          <div class="feed-item"></div>
+          <div class="feed-item"></div>
+        </section>
+      </section>
+
+      <!-- ========================= -->
+      <!--  TAB 2 : MY               -->
+      <!-- ========================= -->
+      <section id="tab-my" class="tab-content">
+        <!-- MY FEED 요약 -->
+        <div class="section-title-row">
+          <p>MY FEED</p>
+          <button class="more">더보기</button>
+        </div>
+
+        <div class="myfeed-grid">
+          <div class="myfeed-thumb"><img src="assets/random/스크린샷 2025-12-09 14.56.01.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+          <div class="myfeed-thumb"><img src="assets/random/스크린샷 2025-12-09 14.56.01.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+          <div class="myfeed-thumb"><img src="assets/random/스크린샷 2025-12-09 14.56.01.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+        </div>
+
+        <!-- 취향 분석 -->
+        <div class="section-title-row">
+          <p>내 취향 분석</p>
+          <button class="more">더보기</button>
+        </div>
+
+        <div class="taste-box">
+          <div class="taste-row">
+            <span>로맨스</span>
+            <div class="bar">
+              <div class="bar-fill" style="width: 57%"></div>
+            </div>
+            <span class="percent">57%</span>
+          </div>
+
+          <div class="taste-row">
+            <span>스릴러</span>
+            <div class="bar">
+              <div class="bar-fill" style="width: 57%"></div>
+            </div>
+            <span class="percent">57%</span>
+          </div>
+
+          <div class="taste-row">
+            <span>일상</span>
+            <div class="bar">
+              <div class="bar-fill" style="width: 57%"></div>
+            </div>
+            <span class="percent">57%</span>
+          </div>
+        </div>
+
+        <!-- 구매 / 찜 / 댓글 내역: 더미 -->
+        <div class="section-title-row">
+          <p>구매 내역</p>
+        </div>
+        <p class="empty-box">최근 구매 내역이 없습니다.</p>
+
+        <div class="section-title-row">
+          <p>찜한 내역</p>
+        </div>
+        <p class="empty-box">찜한 작품이 없습니다.</p>
+
+        <div class="section-title-row">
+          <p>댓글 내역</p>
+        </div>
+        <p class="empty-box">작성한 댓글이 없습니다.</p>
+      </section>
+    </div>
+
+    <!-- 하단 탭바 (고정) -->
+    <div id="tabbar"></div>
+
+
+    <!-- 댓글 모달 -->
+    <div id="commentModal" class="comment-modal">
+      <div class="comment-modal-content">
+
+        <!-- 댓글 섹션 -->
+        <div class="comment-section">
+          <div class="comment-modal-header">
+            <h2 class="comment-count">36개의 댓글</h2>
+            <button class="comment-modal-close" onclick="closeCommentModal()">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6L18 18" stroke="#000000" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+          <div class="comment-list">
+            <div class="comment-item">
+              <div class="comment-avatar"><img src="assets/random/d1.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="comment-content">
+                <div class="comment-header">
+                  <span class="comment-author">독자 이름</span>
+                  <span class="comment-date">2025.11.27</span>
+                </div>
+                <div class="comment-text">얼레리꼴레리 이거 봐라~</div>
+                <div class="comment-stats">
+                  <div class="comment-stat-item">
+                    <svg class="comment-stat-icon-heart" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                      viewBox="0 0 22 20" fill="none">
+                      <path
+                        d="M19.4949 2.31617C18.9986 1.81965 18.4093 1.42577 17.7608 1.15704C17.1122 0.888315 16.4171 0.75 15.715 0.75C15.013 0.75 14.3179 0.888315 13.6693 1.15704C13.0208 1.42577 12.4315 1.81965 11.9352 2.31617L10.9053 3.34615L9.87528 2.31617C8.87281 1.3137 7.51317 0.75052 6.09547 0.75052C4.67776 0.75052 3.31812 1.3137 2.31565 2.31617C1.31318 3.31864 0.75 4.67828 0.75 6.09599C0.75 7.51369 1.31318 8.87333 2.31565 9.8758L3.34563 10.9058L10.9053 18.4654L18.4649 10.9058L19.4949 9.8758C19.9914 9.37951 20.3853 8.79026 20.654 8.14171C20.9227 7.49315 21.061 6.79801 21.061 6.09599C21.061 5.39396 20.9227 4.69882 20.654 4.05027C20.3853 3.40171 19.9914 2.81246 19.4949 2.31617Z"
+                        stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <span>30</span>
+                  </div>
+                  <div class="comment-stat-item">
+                    <svg class="comment-stat-icon-comment" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                      fill="none">
+                      <path
+                        d="M18.4658 9.11582C18.4692 10.4148 18.1657 11.6963 17.58 12.8558C16.8856 14.2453 15.818 15.414 14.4969 16.231C13.1758 17.048 11.6533 17.481 10.1 17.4816C8.80097 17.485 7.51951 17.1815 6.36 16.5958L0.75 18.4658L2.62 12.8558C2.03433 11.6963 1.73082 10.4148 1.73421 9.11582C1.73481 7.5625 2.16787 6.04001 2.98487 4.71891C3.80187 3.3978 4.97055 2.33024 6.36 1.63582C7.51951 1.05014 8.80097 0.746641 10.1 0.750028H10.5921C12.6435 0.863204 14.5812 1.72908 16.0339 3.18187C17.4867 4.63466 18.3526 6.57228 18.4658 8.62371V9.11582Z"
+                        stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <span>1</span>
+                  </div>
+                </div>
+              </div>
+              <button class="comment-more-btn">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </button>
+            </div>
+            <div class="comment-item">
+              <div class="comment-avatar"><img src="assets/random/스크린샷 2025-12-09 15.01.38.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="comment-content">
+                <div class="comment-header">
+                  <span class="comment-author">독자 이름</span>
+                  <span class="comment-date">2025.11.27</span>
+                </div>
+                <div class="comment-text">얼레리꼴레리 이거 봐라~</div>
+                <div class="comment-stats">
+                  <div class="comment-stat-item">
+                    <svg class="comment-stat-icon-heart" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                      viewBox="0 0 22 20" fill="none">
+                      <path
+                        d="M19.4949 2.31617C18.9986 1.81965 18.4093 1.42577 17.7608 1.15704C17.1122 0.888315 16.4171 0.75 15.715 0.75C15.013 0.75 14.3179 0.888315 13.6693 1.15704C13.0208 1.42577 12.4315 1.81965 11.9352 2.31617L10.9053 3.34615L9.87528 2.31617C8.87281 1.3137 7.51317 0.75052 6.09547 0.75052C4.67776 0.75052 3.31812 1.3137 2.31565 2.31617C1.31318 3.31864 0.75 4.67828 0.75 6.09599C0.75 7.51369 1.31318 8.87333 2.31565 9.8758L3.34563 10.9058L10.9053 18.4654L18.4649 10.9058L19.4949 9.8758C19.9914 9.37951 20.3853 8.79026 20.654 8.14171C20.9227 7.49315 21.061 6.79801 21.061 6.09599C21.061 5.39396 20.9227 4.69882 20.654 4.05027C20.3853 3.40171 19.9914 2.81246 19.4949 2.31617Z"
+                        stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <span>30</span>
+                  </div>
+                  <div class="comment-stat-item">
+                    <svg class="comment-stat-icon-comment" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                      fill="none">
+                      <path
+                        d="M18.4658 9.11582C18.4692 10.4148 18.1657 11.6963 17.58 12.8558C16.8856 14.2453 15.818 15.414 14.4969 16.231C13.1758 17.048 11.6533 17.481 10.1 17.4816C8.80097 17.485 7.51951 17.1815 6.36 16.5958L0.75 18.4658L2.62 12.8558C2.03433 11.6963 1.73082 10.4148 1.73421 9.11582C1.73481 7.5625 2.16787 6.04001 2.98487 4.71891C3.80187 3.3978 4.97055 2.33024 6.36 1.63582C7.51951 1.05014 8.80097 0.746641 10.1 0.750028H10.5921C12.6435 0.863204 14.5812 1.72908 16.0339 3.18187C17.4867 4.63466 18.3526 6.57228 18.4658 8.62371V9.11582Z"
+                        stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <span>1</span>
+                  </div>
+                </div>
+              </div>
+              <button class="comment-more-btn">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 댓글 더보기 옵션 모달 -->
+    <div id="commentMoreModal" class="comment-more-modal">
+      <div class="comment-more-modal-content">
+        <button class="comment-more-option">공유</button>
+        <div class="comment-more-divider"></div>
+        <button class="comment-more-option">댓글 신고</button>
+      </div>
+    </div>
+
+    <!-- 작가 더보기 옵션 모달 -->
+    <div id="CreatorMoreModal" class="CreatorMoreModal">
+      <div class="CreatorMoreModal-content">
+        <button class="CreatorMoreModal-option">공유</button>
+        <div class="CreatorMoreModal-divider"></div>
+        <button class="CreatorMoreModal-option">게시글 신고</button>
+        <div class="CreatorMoreModal-divider"></div>
+        <button class="CreatorMoreModal-option">게시글 차단</button>
+      </div>
+    </div>
+
+    <!-- 준비중인 기능 팝업 -->
+    <div id="comingSoonModal" class="coming-soon-modal">
+      <div class="coming-soon-modal-content">
+        <p class="coming-soon-modal-text">준비중인 기능입니다</p>
+        <button class="coming-soon-modal-close">확인</button>
+      </div>
+    </div>
+
+    <script>
+      /* ========================== 
+         Tabbar 로드
+      ========================== */
+      fetch("components/tabbar.html")
+        .then((r) => r.text())
+        .then((html) => (document.getElementById("tabbar").innerHTML = html))
+        .catch((error) => console.error("Error fetching tabbar.html:", error));
+    </script>
+    <script src="js/mypage_reader.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,280 @@
+.app-frame {
+  width: 100%;
+  max-width: 402px;
+  margin: 0 auto;
+  background: #fff;
+  min-height: 100vh;
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+}
+
+/* 페이지 전체 여백 */
+.creator-page {
+  padding: 24px 20px 40px;
+  background: #ffffff;
+}
+
+/* 프로필 상단 배너 */
+.creator-banner {
+  width: 100%;
+  height: 150px;
+  border-radius: 18px;
+  background: #e5e5e5;
+}
+
+/* 아바타가 배너 아래 겹치도록 */
+.creator-avatar-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: -45px;
+  margin-bottom: 12px;
+}
+
+.creator-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #dddddd;
+  border: 4px solid #ffffff;
+}
+
+/* 팔로우/팔로워 */
+.creator-stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin-bottom: 10px;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #666;
+}
+
+/* 이름 */
+.creator-name {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+/* 태그 */
+.creator-tags {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.creator-tags span {
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: #f3f3f3;
+  font-size: 12px;
+}
+
+/* 설명 */
+.creator-desc {
+  text-align: center;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4;
+  margin-bottom: 24px;
+}
+
+/* 탭 영역 */
+.creator-tabs-wrap {
+  margin-bottom: 4px;
+}
+
+.creator-tabs {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+/* 왼쪽 두 탭 */
+.creator-tab {
+  flex: 1;
+  border: none;
+  background: none;
+  font-size: 15px;
+  padding: 10px 0;
+  cursor: pointer;
+  color: #777;
+}
+
+.creator-tab.active {
+  font-weight: 700;
+  color: #111;
+}
+
+/* 오른쪽 전체 ▾ */
+.creator-filter {
+  font-size: 14px;
+  color: #333;
+}
+
+/* 탭 밑줄 (피그마처럼 왼쪽만) */
+.creator-tab-underline {
+  position: relative;
+  height: 2px;
+  background: #eeeeee;
+  margin-top: 2px;
+}
+
+.creator-tab-underline .underline-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  /* 두 탭이라 50% */
+  height: 2px;
+  background: #111;
+  transition: transform 0.25s ease;
+}
+
+/* 탭 패널 공통 */
+.creator-tab-panel {
+  display: none;
+  margin-top: 18px;
+}
+
+.creator-tab-panel.active {
+  display: block;
+}
+
+/* 작품 피드 그리드 */
+.creator-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.creator-grid .grid-item {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 6px;
+  background: #e5e5e5;
+}
+
+/* 작가의 말 리스트 */
+.creator-note {
+  padding: 12px 0 18px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.note-tags {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.note-tags span {
+  padding: 3px 8px;
+  background: #f3f3f3;
+  border-radius: 10px;
+  font-size: 11px;
+}
+
+.note-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.note-text {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.note-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.note-date {
+  font-size: 12px;
+  color: #999;
+}
+
+.note-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.note-icons {
+  font-size: 13px;
+  color: #777;
+}
+
+.note-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 6px;
+  background: #e3e3e3;
+}
+
+/* 앱 공통 레이아웃과 충돌 방지용 (이 페이지에서만) */
+.creator-page .app-scroll,
+.creator-page main {
+  overflow: visible;
+}
+
+/* .tabbar {
+  width: 100%;
+  max-width: 402px;
+  height: 91px;
+  display: flex;
+  padding: 14px 16.5px 28px 16.5px;
+  gap: 0;
+  justify-content: space-around;
+  align-items: center;
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  z-index: 100;
+  box-sizing: border-box;
+  background: #fff;
+  border-top: 1px solid #DDD;
+}
+
+.tabbar .tab,
+.tabbar a.tab {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab img {
+  width: 30px;
+  height: 30px;
+}
+
+.tab-label {
+  font-size: 12px;
+  font-weight: 400;
+  color: #A0A0A0;
+  margin-top: 4px;
+  display: block;
+  text-align: center;
+} */

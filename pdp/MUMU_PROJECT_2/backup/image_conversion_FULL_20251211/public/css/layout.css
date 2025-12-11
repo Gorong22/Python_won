@@ -1,0 +1,150 @@
+/* ====================================
+   GLOBAL WEBAPP FRAME (어디서 봐도 앱처럼)
+==================================== */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  /* 바깥은 검정 */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+  /* 바깥 스크롤 제거 */
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-text-size-adjust: none;
+}
+
+/* ====================================
+   APP FRAME (모바일 고정 화면)
+==================================== */
+
+.app-frame {
+  width: 100%;
+  max-width: 402px;
+  margin: 0 auto;
+  background: #fff;
+  min-height: 100vh;
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 실제 스크롤 영역 */
+.app-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* 의도치 않은 가로 스크롤 방지 */
+  -webkit-overflow-scrolling: touch;
+  /* 탭바 영역만큼 하단 패딩 추가 + iOS 하단 안전영역 */
+  padding-bottom: calc(64px + env(safe-area-inset-bottom));
+  position: relative;
+  min-height: 0;
+}
+
+/* ====================================
+     HEADER (상단 고정)
+==================================== */
+
+.header {
+  width: 100%;
+  /* 헤더 높이 + iOS 상단 안전영역 */
+  height: calc(56px + env(safe-area-inset-top));
+  padding-top: env(safe-area-inset-top);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 18px;
+  padding-right: 18px;
+  background: #fff;
+  border-bottom: 1px solid #ededed;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  /* 패딩/보더가 너비에 포함되도록 */
+}
+
+.header-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #111;
+}
+
+.header-link {
+  font-size: 14px;
+  color: #666;
+}
+
+/* ====================================
+     PAGE CONTAINER
+==================================== */
+
+.page-container,
+.feed-page {
+  padding: 20px;
+  /* 스크롤 영역에서 하단 패딩을 처리하므로 중복 패딩 제거 */
+  padding-bottom: 20px;
+}
+
+/* =================================
+     TABBAR (하단 고정)
+==================================== */
+
+/* .tabbar {
+  width: 100%;
+  max-width: 402px;
+  height: 91px;
+  display: flex;
+  padding: 14px 16.5px 28px 16.5px;
+  gap: 0;
+  justify-content: space-around;
+  align-items: center;
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  z-index: 100;
+  box-sizing: border-box;
+  background: #fff;
+  border-top: 1px solid #DDD;
+}
+
+.tabbar .tab,
+.tabbar a.tab {
+  text-decoration: none;
+}
+
+.tab img {
+  width: 30px;
+  height: 30px;
+}
+
+.tab-label {
+  font-size: x;
+  font-weight: 400;
+  color: #A0A0A0;
+  margin-top: 4px;
+  display: block;
+} */
+
+/* ====================================
+     GLOBAL SPACING
+==================================== */
+
+section {
+  margin-bottom: 28px;
+}
+
+p {
+  line-height: 1.45;
+  color: #333;
+}

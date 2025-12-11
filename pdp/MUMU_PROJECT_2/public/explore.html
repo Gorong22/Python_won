@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MUMU – Explore</title>
+
+  <link rel="stylesheet" href="css/tabbar.css" />
+  <link rel="stylesheet" href="css/explore.css" />
+</head>
+
+<body>
+  <div class="app-frame">
+    <!-- 헤더 -->
+    <div id="header"></div>
+
+    <!-- 스크롤 -->
+    <div class="app-scroll">
+      <main class="explore-page">
+        <!-- 검색창 -->
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="검색" />
+        </div>
+
+        <!-- 🔥 검색 전 화면 -->
+        <div id="beforeSearch">
+          <!-- 취향 탐색 섹션 -->
+          <section class="taste-explore-section">
+            <h2 class="taste-explore-title">_님의 취향 탐색</h2>
+            <p class="taste-explore-subtitle">나의 취향 탐색해보기</p>
+            <div class="taste-explore-divider"></div>
+          </section>
+
+          <!-- 취향에 맞는 장르 추천 -->
+          <section class="section-block">
+            <h3 class="section-title">내 취향에 맞는 작품 <span class="section-title-arrow">
+                <svg width="26" height="15" viewBox="0 0 26 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M24.9327 8.07136C25.3232 7.68084 25.3232 7.04768 24.9327 6.65715L18.5687 0.29319C18.1782 -0.0973349 17.545 -0.097335 17.1545 0.293189C16.764 0.683714 16.764 1.31688 17.1545 1.7074L22.8114 7.36426L17.1545 13.0211C16.764 13.4116 16.764 14.0448 17.1545 14.4353C17.545 14.8258 18.1782 14.8258 18.5687 14.4353L24.9327 8.07136ZM24.2256 7.36426L24.2256 6.36426L8.74228e-08 6.36426L0 7.36426L-8.74228e-08 8.36426L24.2256 8.36426L24.2256 7.36426Z"
+                    fill="#FF5E00" />
+                </svg>
+              </span>
+            </h3>
+            <div class="grid-3">
+              <div class="work-card"><img src="assets/random/a1.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/스크린샷 2025-12-09 14.56.56.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/d1.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/스크린샷 2025-12-09 14.55.11.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/g1.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+            </div>
+          </section>
+
+          <!-- 취향 슬라이더 섹션 -->
+          <section class="taste-slider-section">
+            <div class="taste-slider-item">
+              <div class="taste-slider-title">슬라이드를 옮겨 당신의 취향을 발견하세요!</div>
+              <span class="taste-slider-label">공포</span>
+              <div class="taste-slider-track">
+                <div class="taste-slider-thumb" style="left: calc(100% - 21.786px - 2px);"></div>
+              </div>
+            </div>
+            <div class="taste-slider-item">
+              <span class="taste-slider-label">일상</span>
+              <div class="taste-slider-track">
+                <div class="taste-slider-thumb" style="left: calc(35% - 11px);"></div>
+              </div>
+            </div>
+            <div class="taste-slider-item">
+              <span class="taste-slider-label">스릴러</span>
+              <div class="taste-slider-track">
+                <div class="taste-slider-thumb" style="left: calc(56% - 11px);"></div>
+              </div>
+            </div>
+            <div class="taste-slider-item">
+              <span class="taste-slider-label">감동</span>
+              <div class="taste-slider-track">
+                <div class="taste-slider-thumb" style="left: calc(9% - 11px);"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 내 취향 조금 더 알아보기 -->
+          <section class="taste-more-section">
+            <div class="taste-more-divider"></div>
+            <h2 class="taste-more-title">내 취향 조금 더 알아보기</h2>
+          </section>
+
+          <!-- 취향에 맞는 장르 추천 섹션들 (여러 개) -->
+          <section class="section-block">
+            <h3 class="section-title-black">취향에 맞는 장르 추천</h3>
+            <div class="grid-3">
+              <div class="work-card"><img src="assets/random/j2.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/스크린샷 2025-12-09 14.58.25.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/h2.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/i3.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/j4.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+            </div>
+          </section>
+
+          <section class="section-block">
+            <h3 class="section-title-black">취향에 맞는 장르 추천</h3>
+            <div class="grid-3">
+              <div class="work-card"><img src="assets/random/j3.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/a4.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/b2.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/f3.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/d3.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+            </div>
+          </section>
+
+          <!-- 배너 -->
+          <section class="mid-banner">배너1</section>
+
+          <section class="section-block">
+            <h3 class="section-title-black">취향에 맞는 장르 추천</h3>
+            <div class="grid-3">
+              <div class="work-card"><img src="assets/random/스크린샷 2025-12-09 14.56.37.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/스크린샷 2025-12-09 14.56.01.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/스크린샷 2025-12-09 15.00.39.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/h3.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/스크린샷 2025-12-09 14.57.20.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+            </div>
+          </section>
+
+          <section class="section-block">
+            <h3 class="section-title-black">취향에 맞는 장르 추천</h3>
+            <div class="grid-3">
+              <div class="work-card"><img src="assets/random/i4.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/스크린샷 2025-12-09 15.00.18.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/f1.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/e1.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/i2.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+            </div>
+          </section>
+
+          <section class="section-block">
+            <h3 class="section-title-black">취향에 맞는 장르 추천</h3>
+            <div class="grid-3">
+              <div class="work-card"><img src="assets/random/h4.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/c4.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/스크린샷 2025-12-09 15.01.38.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/스크린샷 2025-12-09 14.59.09.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+              <div class="work-card"><img src="assets/random/c1.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
+            </div>
+          </section>
+        </div>
+
+        <!-- 🔥 검색 후 화면 -->
+        <div id="afterSearch" style="display: none">
+          <h3 class="search-section-title">인기 검색 작품</h3>
+          <div id="searchResults"></div>
+        </div>
+      </main>
+    </div>
+
+    <!-- 하단 탭바 -->
+    <div id="tabbar" class="tabbar">
+    </div>
+
+    <script>
+      /* ========================== 
+         Header 커스터마이징
+      ========================== */
+      fetch("components/header.html")
+        .then((r) => r.text())
+        .then((html) => {
+          document.getElementById("header").innerHTML = html;
+          // 헤더 내용 변경
+          const headerTitle = document.querySelector("#header .header-title");
+          if (headerTitle) {
+            headerTitle.remove();
+          }
+          const headerLeft = document.querySelector("#header .header-left");
+          if (headerLeft) {
+            headerLeft.innerHTML = '<a href="index.html" style="display: flex; width: 100%; height: 100%; align-items: center; justify-content: center;"><img src="assets/logos/mumu-logo.webp" alt="MUMU Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;" loading="lazy"></a>';
+          }
+        })
+        .catch((error) => console.error("Error fetching header.html:", error));
+
+      /* ========================== 
+         Tabbar 로드
+      ========================== */
+      fetch("components/tabbar.html")
+        .then((r) => r.text())
+        .then((html) => (document.getElementById("tabbar").innerHTML = html))
+        .catch((error) => console.error("Error fetching tabbar.html:", error));
+    </script>
+    <script src="js/explore.js"></script>
+</body>
+
+</html>

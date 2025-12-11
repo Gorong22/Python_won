@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>MUMU – Splash</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #ffffff;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* 안전 영역 대응 */
+    .safe-area {
+      width: 100%;
+      height: 100%;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.9s ease forwards;
+    }
+
+    .logo-box {
+      width: 200px;
+      height: 120px;
+      border-radius: 14px;
+      margin-bottom: 24px;
+      animation: floatUp 1s ease forwards;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* 슬로건 */
+    .slogan {
+      font-size: 18px;
+      font-weight: 500;
+      color: #444;
+      opacity: 0;
+      animation: fadeInText 1.2s ease forwards;
+    }
+
+    /* 등장 애니메이션 */
+    @keyframes floatUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInText {
+      0% {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="safe-area" id="splash">
+    <div style="display: flex; flex-direction: column; align-items: center">
+      <div class="logo-box">
+        <img src="assets/logos/mumu-logo.webp" alt="MUMU Logo" loading="lazy">
+      </div>
+      <div class="slogan">무한의 다양성, 무한의 취향</div>
+    </div>
+  </div>
+
+  <script>
+    // 1.7초 후 홈 화면으로 부드럽게 이동
+    setTimeout(() => {
+      document.getElementById("splash").style.animation =
+        "fadeOut 0.6s ease forwards";
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 600);
+    }, 1700);
+  </script>
+</body>
+
+</html>

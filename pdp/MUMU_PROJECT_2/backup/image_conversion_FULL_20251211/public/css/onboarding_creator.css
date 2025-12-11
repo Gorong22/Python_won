@@ -1,0 +1,178 @@
+body {
+  margin: 0;
+  background: #000;
+  font-family: Pretendard, sans-serif;
+}
+
+.app-frame {
+  width: 100%;
+  max-width: 402px;
+  margin: 0 auto;
+  background: #fff;
+  min-height: 100vh;
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+}
+
+.onboarding-container {
+  padding-top: 70px;
+  padding-bottom: 140px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 32px;
+}
+
+.label {
+  display: block;
+  margin-top: 26px;
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.select-row {
+  display: flex;
+  gap: 12px;
+}
+
+.select-btn {
+  flex: 1;
+  padding: 14px 0;
+  background: #fff;
+  border: 1.6px solid #e5e5e5;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.select-btn.active {
+  border-color: #ff7a38;
+  color: #ff7a38;
+  font-weight: 600;
+}
+
+.format-btn {
+  flex: 1;
+  padding: 14px 0;
+  background: #fff;
+  border: 1.6px solid #e5e5e5;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.format-btn.active {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.tag-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tag-btn {
+  padding: 10px 16px;
+  background: #fff;
+  border: 1.6px solid #e5e5e5;
+  border-radius: 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.tag-btn.active {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.upload-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.upload-btn {
+  padding: 10px 16px;
+  background: #fff;
+  border: 1.6px solid #e5e5e5;
+  border-radius: 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.upload-btn.active {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.6px solid #e5e5e5;
+  border-radius: 12px;
+  font-size: 14px;
+  box-sizing: border-box;
+  margin-top: 4px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 18px 0;
+  margin-top: 60px;
+  background: #000;
+  color: #fff;
+  font-size: 16px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+/* .tabbar {
+  width: 100%;
+  max-width: 402px;
+  height: 91px;
+  display: flex;
+  padding: 14px 16.5px 28px 16.5px;
+  gap: 0;
+  justify-content: space-around;
+  align-items: center;
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  z-index: 100;
+  box-sizing: border-box;
+  background: #fff;
+  border-top: 1px solid #DDD;
+}
+
+.tabbar .tab,
+.tabbar a.tab {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab img {
+  width: 30px;
+  height: 30px;
+}
+
+.tab-label {
+  font-size: 12px;
+  font-weight: 400;
+  color: #A0A0A0;
+  margin-top: 4px;
+  display: block;
+  text-align: center;
+} */

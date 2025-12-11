@@ -1,0 +1,258 @@
+/* GLOBAL */
+body {
+  margin: 0;
+  background: #000;
+  font-family: Pretendard, sans-serif;
+}
+
+.app-frame {
+  width: 100%;
+  max-width: 402px;
+  margin: 0 auto;
+  background: #ffffff;
+  min-height: 100vh;
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(91px + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* SCROLL */
+.app-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(64px + env(safe-area-inset-bottom) + 60px);
+  position: relative;
+  min-height: 0;
+}
+
+/* HEADER */
+.header {
+  height: 56px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+}
+
+/* PROFILE */
+.profile-box {}
+
+.profile-box {
+  position: relative;
+}
+
+.profile-bg {
+  width: 100%;
+  height: 120px;
+  background: #e8e8e8;
+  background-image: url('../assets/images/profile-bg.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.creator-mode-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 14px;
+  padding: 6px 10px;
+  background-color: #00000090;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  color: #FF5E00;
+  font-weight: 500;
+  z-index: 10;
+}
+
+.profile-content {
+  margin-top: -45px;
+  padding: 20px;
+  position: relative;
+}
+
+.profile-header-row {
+  display: flex;
+  align-items: center;
+  gap: 55px;
+  margin-bottom: 20px;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  background: #ccc;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.setting-icon {
+  width: 17px;
+  height: 17px;
+  position: absolute;
+  top: 0;
+  right: -20px;
+  cursor: pointer;
+}
+
+.setting-icon img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.profile-follow {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  margin-top: 35px;
+}
+
+.follow {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.follow-num {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000;
+  line-height: 24px;
+}
+
+.follow-label {
+  color: #000;
+  font-size: 12px;
+  margin-top: 3px;
+  line-height: 15px;
+}
+
+.follow-line {
+  width: 1px;
+  height: 20px;
+  background: #000;
+  flex-shrink: 0;
+}
+
+.follow-line .line {
+  width: 1px;
+  height: 20px;
+  background: #000;
+}
+
+.profile-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 12px;
+  text-align: left;
+}
+
+.tag-list {
+  margin-top: 12px;
+  text-align: left;
+}
+
+.tag-list .tag {
+  font-size: 12px;
+  padding: 4px 8px;
+  border: 1px solid #a0a0a0;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.profile-desc {
+  font-size: 12px;
+  color: #000;
+  margin-top: 10px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: left;
+}
+
+/* TABS */
+.tab-wrap {
+  display: flex;
+  position: relative;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 12px 0;
+  font-size: 16px;
+  cursor: pointer;
+  color: #000;
+  font-weight: 600;
+  background: none;
+  border-bottom: 1px solid #000;
+}
+
+.tab.active {
+  color: #FF5E00;
+  font-weight: 700;
+  font-size: 20px;
+  border-bottom: 3px solid #FF5E00;
+}
+
+
+
+
+
+/* FEED GRID */
+.feed-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  padding: 0;
+}
+
+.feed-item {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: #e6e6e6;
+  border-radius: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.feed-item img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.add-btn {
+  font-size: 60px;
+  font-weight: 300;
+  color: #999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  user-select: none;
+}
+
+.add-btn:hover {
+  background-color: #d6d6d6;
+}

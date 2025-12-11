@@ -1,0 +1,626 @@
+/* =============================
+  기본 Explore 페이지 스타일
+============================= */
+body {
+  margin: 0;
+  background: #000;
+  font-family: Pretendard, sans-serif;
+}
+
+.app-frame {
+  width: 100%;
+  max-width: 402px;
+  margin: 0 auto;
+  background: #fff;
+  min-height: 100vh;
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(64px + env(safe-area-inset-bottom));
+  position: relative;
+  min-height: 0;
+}
+
+.app-scroll>* {
+  overflow-x: visible;
+}
+
+.header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+.header-left {
+  width: 60px;
+  height: 60px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.header-left img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.header-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000;
+  flex: 1;
+  text-align: center;
+}
+
+
+.explore-page {
+  padding: 20px;
+  padding-bottom: calc(91px + env(safe-area-inset-bottom));
+}
+
+/* 검색 */
+.search-box {
+  margin-bottom: 24px;
+}
+
+.search-box input {
+  width: 100%;
+  max-width: 362px;
+  height: 45px;
+  border-radius: 4px;
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  padding: 0 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #a0a0a0;
+  box-sizing: border-box;
+  outline: none;
+  transition: background 0.2s ease;
+}
+
+.search-box input::placeholder {
+  color: #a0a0a0;
+}
+
+.search-box input:focus {
+  background: #fff;
+  border-color: #000;
+}
+
+/* 취향 탐색 섹션 */
+.taste-explore-section {
+  margin-bottom: 32px;
+}
+
+.taste-explore-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ff5e00;
+  margin: 0 0 8px 0;
+  line-height: 24.2px;
+  letter-spacing: 0;
+}
+
+.taste-explore-subtitle {
+  font-size: 12px;
+  font-weight: 500;
+  color: #a0a0a0;
+  margin: 0 0 20px 0;
+  line-height: 14.52px;
+  letter-spacing: 0;
+}
+
+.taste-explore-divider {
+  width: 100%;
+  max-width: 362px;
+  height: 1px;
+  background: #d9d9d9;
+  margin-bottom: 27px;
+}
+
+/* 취향에 맞는 장르 추천 섹션 */
+.section-block {
+  margin-bottom: 32px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ff5e00;
+  margin: 0 0 15px 0;
+  line-height: 20.57px;
+  letter-spacing: 0;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 180px;
+}
+
+.section-title-arrow {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+
+.section-title-black {
+  font-size: 17px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0 0 15px 0;
+  line-height: 20.57px;
+  letter-spacing: 0;
+}
+
+.section-divider {
+  width: 100%;
+  max-width: 362px;
+  height: 1px;
+  background: #d9d9d9;
+  margin-top: 32px;
+}
+
+/* 3열 카드 - 가로 스크롤 */
+.grid-3 {
+  display: flex;
+  gap: 8px;
+  max-width: 418px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+}
+
+.grid-3::-webkit-scrollbar {
+  display: none;
+}
+
+.work-card {
+  flex: 0 0 auto;
+  width: 135px;
+  height: 165px;
+  background: #ededed;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* 취향 슬라이더 섹션 */
+.taste-slider-section {
+  margin-bottom: 32px;
+}
+
+.taste-slider-item {
+  margin-bottom: 12px;
+}
+
+.taste-slider-item:last-child {
+  margin-bottom: 0;
+}
+
+.taste-slider-title {
+  font-size: 14px;
+  font-weight: 400;
+  color: #A0A0A0;
+  display: block;
+  margin-bottom: 9px;
+}
+
+.taste-slider-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #000000;
+  display: block;
+  margin-bottom: 9px;
+  line-height: 16.94px;
+  letter-spacing: 0;
+}
+
+.taste-slider-track {
+  width: 100%;
+  max-width: 361px;
+  height: 29px;
+  background: #fff;
+  border: 1px solid #a0a0a0;
+  border-radius: 44px;
+  position: relative;
+}
+
+.taste-slider-thumb {
+  width: 21.786px;
+  height: 21.786px;
+  background: #ff5e00;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  box-shadow: 0 2px 4px rgba(255, 94, 0, 0.3);
+}
+
+.taste-slider-thumb:active {
+  cursor: grabbing;
+}
+
+.taste-slider-track {
+  cursor: pointer;
+  user-select: none;
+  padding: 0 4px 0 4px;
+}
+
+/* 내 취향 조금 더 알아보기 섹션 */
+.taste-more-section {
+  margin-bottom: 32px;
+}
+
+.taste-more-divider {
+  width: 100%;
+  max-width: 362px;
+  height: 1px;
+  background: #d9d9d9;
+  margin-bottom: 29px;
+}
+
+.taste-more-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ff5e00;
+  margin: 0;
+  line-height: 24.2px;
+  letter-spacing: 0;
+}
+
+/* 중간 배너 */
+.mid-banner {
+  width: 100%;
+  max-width: 367.56px;
+  height: 70.625px;
+  background: #ededed;
+  border-radius: 6px;
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #000;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 21px;
+  letter-spacing: -0.32px;
+}
+
+/* =============================
+   검색 모드 — 기존 화면 유지 + 아래 패널만 뜨는 방식
+============================= */
+
+.search-overlay {
+  position: fixed;
+  top: 120px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  z-index: 9999;
+  display: none;
+  pointer-events: auto;
+}
+
+/* 검색 패널 */
+.search-panel {
+  width: 100%;
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
+  background: #fff;
+  border-top: 1px solid #eee;
+  padding: 18px;
+}
+
+/* 검색 후 화면 스타일 */
+#afterSearch {
+  padding: 0 20px;
+  padding-bottom: 100px;
+}
+
+/* 검색 입력 행 (검색 후) */
+.search-input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-top: 10px;
+}
+
+.search-input-field {
+  flex: 1;
+  height: 40px;
+  padding: 0 16px;
+  background: #ededed;
+  border: 1px solid #e5e5e5;
+  border-radius: 20px;
+  font-size: 14px;
+  outline: none;
+  font-family: Pretendard, sans-serif;
+}
+
+.search-input-field::placeholder {
+  color: #999;
+}
+
+.search-cancel-btn {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #000;
+  cursor: pointer;
+  padding: 0;
+  font-family: Pretendard, sans-serif;
+}
+
+/* 검색 섹션 */
+.search-section {
+  margin-bottom: 32px;
+}
+
+.search-section-title {
+  margin: 0 0 14px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #000;
+}
+
+/* 최근 검색어 없음 */
+.no-recent-searches {
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+  padding: 20px 0;
+}
+
+/* 장르 바로가기 */
+.genre-shortcuts {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+
+.genre-shortcuts::-webkit-scrollbar {
+  display: none;
+}
+
+.genre-tag {
+  flex: 0 0 auto;
+  padding: 8px 16px;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #000;
+  cursor: pointer;
+  font-family: Pretendard, sans-serif;
+  white-space: nowrap;
+}
+
+/* 잊고 있던 작품 */
+.forgotten-works-title {
+  margin: 0 0 14px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #000;
+}
+
+.forgotten-works-list {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+
+.forgotten-works-list::-webkit-scrollbar {
+  display: none;
+}
+
+.forgotten-work-card {
+  flex: 0 0 auto;
+  width: 140px;
+}
+
+.forgotten-work-thumb {
+  width: 140px;
+  height: 180px;
+  background: #e3e3e3;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.continue-icon {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 24px;
+  height: 24px;
+  background: #FF5E00;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.forgotten-work-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 4px;
+}
+
+.forgotten-work-episode {
+  font-size: 12px;
+  color: #666;
+}
+
+/* 실시간 인기 검색 웹툰 그리드 */
+.popular-webtoons-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.popular-webtoon-card {
+  background: #fff;
+}
+
+.popular-webtoon-thumb {
+  width: 100%;
+  padding-top: 140%;
+  background: #e3e3e3;
+  border-radius: 8px;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.popular-webtoon-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #ff0000;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.popular-webtoon-up-badge {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background: #FF5E00;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.popular-webtoon-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+  margin-top: 4px;
+}
+
+.popular-webtoon-title.with-up {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.popular-webtoon-title .up-text {
+  background: #FF5E00;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.popular-webtoon-icon {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 24px;
+  height: 24px;
+  background: #00ff00;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+/* 검색 그리드 */
+.search-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.search-grid .item {
+  width: 100%;
+  padding-top: 140%;
+  background: #e3e3e3;
+  border-radius: 12px;
+}
+
+/* 검색 결과 전체를 3열로 */
+#searchResults {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+/* 아이템 = 카드처럼 보이게 */
+.search-item {
+  background: #fff;
+  padding: 6px;
+  border-radius: 12px;
+}
+
+/* 카드 이미지 */
+.search-thumb {
+  width: 100%;
+  padding-top: 140%;
+  background: #e3e3e3;
+  border-radius: 10px;
+  margin-bottom: 6px;
+}
+
+/* 제목/작가/NEW 스타일 */
+.search-title {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.search-author {
+  font-size: 11px;
+  color: #666;
+}
+
+.search-meta {
+  font-size: 11px;
+  color: #999;
+}

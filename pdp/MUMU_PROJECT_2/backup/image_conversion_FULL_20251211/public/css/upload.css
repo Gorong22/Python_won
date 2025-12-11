@@ -1,0 +1,465 @@
+/* ================================
+   Upload Page Styles
+================================ */
+body {
+    margin: 0;
+    background: #000;
+    font-family: Inter, Pretendard, sans-serif;
+}
+
+.app-frame {
+    width: 100%;
+    max-width: 402px;
+    margin: 0 auto;
+    background: #fff;
+    min-height: 100vh;
+    position: relative;
+    overflow: visible;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 헤더 */
+.upload-header {
+    width: 100%;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    background: #fff;
+    border-bottom: 1px solid #ededed;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.back-btn {
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    color: #000;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.temp-save-btn {
+    padding: 6px 16px;
+    background: #ffffff;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #000;
+    cursor: pointer;
+    font-family: Inter, Pretendard, sans-serif;
+    transition: all 0.2s ease;
+    height: 33px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.temp-save-btn:hover {
+    background: #f5f5f5;
+}
+
+.publish-btn {
+    padding: 6px 16px;
+    background: transparent;
+    border: 1px solid #ff5e00;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #ff5e00;
+    cursor: pointer;
+    font-family: Inter, Pretendard, sans-serif;
+    transition: all 0.2s ease;
+    height: 33px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.publish-btn:hover {
+    background: #fff5f0;
+}
+
+.app-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(64px + env(safe-area-inset-bottom));
+    position: relative;
+    min-height: 0;
+}
+
+.upload-container {
+    padding: 20px;
+    padding-bottom: 140px;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #000;
+    font-family: Inter, Pretendard, sans-serif;
+    letter-spacing: -0.32px;
+}
+
+.label {
+    display: block;
+    margin-top: 24px;
+    margin-bottom: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #000;
+    font-family: Inter, Pretendard, sans-serif;
+    letter-spacing: -0.32px;
+}
+
+.label:first-of-type {
+    margin-top: 0;
+}
+
+.image-label {
+    font-size: 12px;
+    font-weight: 400;
+    margin-bottom: 8px;
+    margin-top: 0;
+}
+
+/* 이미지 업로드 영역 */
+.feed-item.add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.upload-image-area {
+    width: 100%;
+    min-height: 200px;
+    background: #ededed;
+    border: 1.6px solid #e5e5e5;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-image-area.has-image {
+    width: 100%;
+    min-height: 200px;
+    height: auto;
+}
+
+.upload-image-area img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.upload-image-placeholder {
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/* 입력 필드 래퍼 */
+.input-wrapper {
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+.tag-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input {
+    width: 100%;
+    padding: 10px 16px;
+    background: #ffffff;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 12px;
+    box-sizing: border-box;
+    font-family: Inter, Pretendard, sans-serif;
+    color: #000;
+    height: 40px;
+}
+
+.input::placeholder {
+    color: #dbdbdb;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.tag-input {
+    padding-right: 50px;
+}
+
+.tag-search-btn {
+    position: absolute;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.tag-search-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* 태그 칩 */
+.tag-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.tag-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 8px;
+    background: #eaeaea;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #000;
+    font-family: Inter, Pretendard, sans-serif;
+    height: 21px;
+}
+
+.tag-chip-remove {
+    background: transparent;
+    border: none;
+    color: #a0a0a0;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    width: 14px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: normal;
+}
+
+.tag-chip-remove:hover {
+    color: #000;
+}
+
+/* 태그 선택 영역 */
+.tag-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tag-btn {
+    padding: 10px 16px;
+    background: #fff;
+    border: 1.6px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: Inter, Pretendard, sans-serif;
+    transition: all 0.2s ease;
+    color: #000;
+}
+
+.tag-btn.active {
+    background: #fff;
+    color: #ff5e00;
+    border-color: #ff5e00;
+}
+
+/* 선택 버튼 행 */
+.select-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.select-btn {
+    flex: 1;
+    padding: 14px 0;
+    background: #fff;
+    border: 1.6px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 15px;
+    cursor: pointer;
+    font-family: Inter, Pretendard, sans-serif;
+    transition: all 0.2s ease;
+    color: #000;
+}
+
+.select-btn.active {
+    background: #ff5e00;
+    color: #fff;
+    border-color: #ff5e00;
+}
+
+/* 텍스트 영역 래퍼 */
+.textarea-wrapper {
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+.textarea {
+    width: 100%;
+    padding: 14px 16px;
+    background: #ffffff;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    font-family: Inter, Pretendard, sans-serif;
+    resize: vertical;
+    min-height: 100px;
+    color: #000;
+}
+
+.textarea::placeholder {
+    color: #dbdbdb;
+}
+
+.textarea:focus {
+    outline: none;
+    border-color: #000;
+}
+
+/* 공개 여부 토글 */
+.privacy-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.privacy-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+    font-family: Inter, Pretendard, sans-serif;
+    letter-spacing: -0.32px;
+}
+
+.privacy-toggle {
+    position: relative;
+    display: inline-block;
+    width: 47px;
+    height: 24px;
+}
+
+.privacy-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ff5e00;
+    border-radius: 40px;
+    transition: 0.3s;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 15px;
+    width: 15px;
+    left: 4px;
+    bottom: 4.5px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.privacy-toggle input:checked+.toggle-slider {
+    background-color: #ff5e00;
+}
+
+.privacy-toggle input:checked+.toggle-slider:before {
+    transform: translateX(23px);
+}
+
+.privacy-toggle input:not(:checked)+.toggle-slider {
+    background-color: #ccc;
+}
+
+.privacy-toggle input:not(:checked)+.toggle-slider:before {
+    transform: translateX(0);
+}
+
+/* 숨김 파일 입력 */
+.file-input {
+    display: none;
+}
+
+/* 업로드 이미지 제거 버튼 */
+.upload-image-remove {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10;
+    border: none;
+}
+
+.upload-image-remove:hover {
+    background: rgba(0, 0, 0, 0.8);
+}

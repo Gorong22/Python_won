@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MUMU – 업로드</title>
+    <link rel="stylesheet" href="css/tabbar.css" />
+    <link rel="stylesheet" href="css/upload.css" />
+</head>
+
+<body>
+    <div class="app-frame">
+        <!-- 헤더 -->
+        <header class="upload-header">
+            <button class="back-btn" id="backBtn">
+                <svg width="21" height="15" viewBox="0 0 21 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M0.292893 6.65715C-0.0976311 7.04768 -0.0976311 7.68084 0.292893 8.07136L6.65685 14.4353C7.04738 14.8259 7.68054 14.8259 8.07107 14.4353C8.46159 14.0448 8.46159 13.4116 8.07107 13.0211L2.41421 7.36426L8.07107 1.7074C8.46159 1.31688 8.46159 0.683714 8.07107 0.29319C7.68054 -0.0973344 7.04738 -0.0973344 6.65685 0.29319L0.292893 6.65715ZM19.7139 8.36426C20.2662 8.36426 20.7139 7.91654 20.7139 7.36426C20.7139 6.81197 20.2662 6.36426 19.7139 6.36426V7.36426V8.36426ZM1 7.36426V8.36426H19.7139V7.36426V6.36426H1V7.36426Z"
+                        fill="#000000" />
+                </svg>
+            </button>
+            <div class="header-actions">
+                <button class="temp-save-btn" id="tempSaveBtn">임시저장</button>
+                <button class="publish-btn" id="publishBtn">발행</button>
+            </div>
+        </header>
+
+        <main class="app-scroll">
+            <div class="upload-container">
+                <h2 class="title">게시물 업로드</h2>
+
+                <!-- 이미지 업로드 -->
+                <label class="label image-label">이미지 업로드</label>
+
+                <div class="upload-image-area" id="uploadImageArea">
+                    <div class="feed-item add-btn">+</div>
+                    <div class="upload-image-placeholder"></div>
+                    <input type="file" class="file-input" id="imageInput" accept="image/*" />
+                </div>
+
+                <!-- 제목 -->
+                <label class="label">제목</label>
+                <div class="input-wrapper">
+                    <input type="text" class="input" id="titleInput" placeholder="텍스트 입력" />
+                </div>
+
+                <!-- 태그 -->
+                <label class="label">태그</label>
+                <div class="input-wrapper tag-input-wrapper">
+                    <input type="text" class="input tag-input" id="tagInput" placeholder="텍스트 입력" />
+                    <button class="tag-search-btn" id="tagSearchBtn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
+                                stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M21 21L16.65 16.65" stroke="#999" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- 태그 칩 영역 -->
+                <div class="tag-chips" id="tagChips">
+                    <div class="tag-chip">
+                        <span>판타지</span>
+                        <button class="tag-chip-remove">×</button>
+                    </div>
+                    <div class="tag-chip">
+                        <span>액션</span>
+                        <button class="tag-chip-remove">×</button>
+                    </div>
+                </div>
+
+                <!-- 본문 입력 -->
+                <label class="label">본문 입력</label>
+                <div class="textarea-wrapper">
+                    <textarea class="textarea" id="descriptionInput" placeholder="텍스트를 입력하세요"></textarea>
+                </div>
+
+                <!-- 공개 여부 -->
+                <label class="label">공개 여부</label>
+                <div class="privacy-toggle-wrapper">
+                    <span class="privacy-label">공개</span>
+                    <label class="privacy-toggle">
+                        <input type="checkbox" id="privacyToggle" checked />
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </main>
+
+        <!-- 하단 탭바 -->
+        <div id="tabbar" class="tabbar"></div>
+    </div>
+
+    <script>
+        /* ========================== 
+           Tabbar 로드
+        ========================== */
+        fetch("components/tabbar.html")
+            .then((r) => r.text())
+            .then((html) => (document.getElementById("tabbar").innerHTML = html))
+            .catch((error) => console.error("Error fetching tabbar.html:", error));
+    </script>
+    <script src="js/upload.js"></script>
+</body>
+
+</html>
