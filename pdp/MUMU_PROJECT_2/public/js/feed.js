@@ -91,7 +91,7 @@ function loadFeedImages() {
       // 공백을 %20으로 인코딩
       const fileName = imageFiles[imageIndex % imageFiles.length];
       const encodedFileName = encodeURIComponent(fileName);
-      const imagePath = `assets/feed/${encodedFileName}`;
+      const imagePath = `public/assets/feed/${encodedFileName}`;
       img.src = imagePath;
       img.alt = "Feed image";
 
@@ -218,7 +218,7 @@ function initSliderDotsSync() {
 ============================ */
 
 function loadMockFeed() {
-  fetch("data/mock_feed.json")
+  fetch("public/data/mock_feed.json")
     .then((res) => res.json())
     .then((data) => {
       const feedList = document.getElementById("feedList");
@@ -314,7 +314,7 @@ function createFeedCard(item) {
 /* ==========================
    Header 커스터마이징
 ========================== */
-fetch("components/header.html")
+fetch("public/components/header.html")
   .then((r) => r.text())
   .then((html) => {
     document.getElementById("header").innerHTML = html;
@@ -328,7 +328,7 @@ fetch("components/header.html")
       header.innerHTML = `
         <div class="header-top-row">
           <div class="header-left">
-            <a href="../index.html" style="display: flex; width: 100%; height: 100%; align-items: center; justify-content: center;"><img loading="lazy" src="assets/logos/mumu-logo.webp" alt="MUMU Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;"></a>
+            <a href="index.html" style="display: flex; width: 100%; height: 100%; align-items: center; justify-content: center;"><img loading="lazy" src="public/assets/logos/mumu-logo.webp" alt="MUMU Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;"></a>
           </div>
           <a class="header-link" href="#">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -344,7 +344,7 @@ fetch("components/header.html")
 /* ==========================
    Tabbar 로드
 ========================== */
-fetch("components/tabbar.html")
+fetch("public/components/tabbar.html")
   .then((r) => r.text())
   .then((html) => (document.getElementById("tabbar").innerHTML = html))
   .catch((error) => console.error("Error fetching tabbar.html:", error));
