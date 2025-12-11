@@ -1,0 +1,936 @@
+/* GLOBAL */
+body {
+  margin: 0;
+  background: #000;
+  font-family: Pretendard, sans-serif;
+}
+
+.app-frame {
+  width: 100%;
+  max-width: 402px;
+  margin: 0 auto;
+  background: #ffffff;
+  min-height: 100vh;
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(91px + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* SCROLL */
+.app-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(64px + env(safe-area-inset-bottom) + 60px);
+  position: relative;
+  min-height: 0;
+}
+
+/* PROFILE */
+.profile-box {
+  position: relative;
+}
+
+.profile-bg {
+  width: 100%;
+  height: 120px;
+  background: #e8e8e8;
+  background-image: url('../assets/images/profile-bg.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.creator-mode-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 14px;
+  padding: 6px 10px;
+  background-color: #00000090;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  color: #FF5E00;
+  font-weight: 500;
+  z-index: 10;
+}
+
+.profile-content {
+  margin-top: -45px;
+  padding: 20px;
+  position: relative;
+}
+
+.profile-header-row {
+  display: flex;
+  align-items: center;
+  gap: 55px;
+  margin-bottom: 20px;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  background: #ccc;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.setting-icon {
+  width: 17px;
+  height: 17px;
+  position: absolute;
+  top: 0;
+  right: -20px;
+  cursor: pointer;
+}
+
+.setting-icon img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.profile-follow {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  margin-top: 35px;
+}
+
+.follow {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.follow-num {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000;
+  line-height: 24px;
+}
+
+.follow-label {
+  color: #000;
+  font-size: 12px;
+  margin-top: 3px;
+  line-height: 15px;
+}
+
+.follow-line {
+  width: 1px;
+  height: 20px;
+  background: #000;
+  flex-shrink: 0;
+}
+
+.follow-line .line {
+  width: 1px;
+  height: 20px;
+  background: #000;
+}
+
+.profile-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 12px;
+  text-align: left;
+}
+
+.tag-list {
+  margin-top: 12px;
+  text-align: left;
+
+}
+
+.tag-list .tag {
+  font-size: 12px;
+  padding: 4px 8px;
+  border: 1px solid #a0a0a0;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.profile-desc {
+  font-size: 12px;
+  color: #000;
+  margin-top: 10px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: left;
+}
+
+/* TABS */
+.tab-wrap {
+  display: flex;
+  position: relative;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 12px 0;
+  font-size: 16px;
+  cursor: pointer;
+  color: #000;
+  font-weight: 600;
+  border-bottom: 1px solid #000;
+}
+
+.tab.active {
+  color: #FF5E00;
+  font-weight: 700;
+  font-size: 20px;
+  border-bottom: 3px solid #FF5E00;
+}
+
+
+/* DASHBOARD */
+.dash-section {
+  padding: 20px;
+}
+
+.dash-card {
+  background: #ffffff;
+  padding: 20px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+}
+
+.dash-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 0px 0px 10px 0px;
+}
+
+
+.more {
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* 수익 (Earnings) */
+.earnings-card {
+  padding: 20px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  margin-bottom: 6px;
+  background: #ffffff;
+}
+
+.muu-convert-btn {
+  font-size: 12px;
+  padding: 6px 10px;
+  background: transparent;
+  border: 1px solid #000;
+  border-radius: 4px;
+  color: #000000;
+  cursor: pointer;
+  align-items: left;
+}
+
+.earnings-estimated {
+  margin-bottom: 16px;
+}
+
+.earnings-label-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.won-icon {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.earnings-label {
+  font-size: 12px;
+  color: #000;
+  font-weight: 500;
+}
+
+.earnings-amount {
+  font-size: 30px;
+  font-weight: 700;
+  color: #000;
+  line-height: 21px;
+}
+
+.earnings-details {
+  margin-bottom: 12px;
+}
+
+.earnings-detail-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #A0A0A0;
+}
+
+.earnings-detail-item span:first-child {
+  color: #A0A0A0;
+  font-weight: 400;
+}
+
+.earnings-detail-item-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #000;
+}
+
+.earnings-detail-item-total span:first-child {
+  color: #000;
+}
+
+.muu-line {
+  width: 100%;
+  height: 1px;
+  background: #000;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.earnings-detail-item .placeholder {
+  color: #000;
+  font-weight: 500;
+}
+
+.placeholder-total {
+  color: #FF5E00;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.settlement-date {
+  font-size: 12px;
+  color: #A0A0A0;
+  font-weight: 500;
+  text-align: right;
+  margin-top: 8px;
+}
+
+/* 오늘의 매출 (Today's Sales) */
+.sales-card {
+  padding: 20px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  margin-top: 6px;
+  background: #ffffff;
+}
+
+.sales-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.sales-icon {
+  font-size: 21px;
+  width: 21px;
+  height: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sales-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.wave-icon {
+  font-size: 14px;
+}
+
+.sales-total {
+  font-size: 16px;
+  font-weight: 600;
+  color: #FF5E00;
+}
+
+
+.sales-graph {
+  align-items: center;
+}
+
+.all-time {
+  /* display: inline-flex; */
+  align-items: center;
+  gap: 18px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.time {
+  font-size: 11px;
+  width: 25px;
+  text-align: center;
+  font-weight: 500;
+  line-height: 21px;
+  color: #A0A0A0;
+}
+
+/* .sales-graph::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: linear-gradient(to top, #FF5E00 0%, #FF5E00 20%, rgba(255, 94, 0, 0.3) 100%);
+  border-radius: 0 0 6px 6px;
+} */
+
+/* 작품별 수익 (Earnings by Work) */
+.earnings-work-list {
+  /* background: #fff; */
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.earnings-work-item {
+  width: 100%;
+  border: 1px solid #000;
+  border-radius: 6px;
+  padding: 18px 20px;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* 왼쪽 텍스트 */
+.left .title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.left .date {
+  font-size: 14px;
+  color: #999;
+  margin-top: 6px;
+}
+
+/* 오른쪽 텍스트 */
+.right {
+  text-align: right;
+}
+
+.right .total {
+  font-size: 12px;
+  color: #888;
+  margin-top: 6px;
+}
+
+
+.work-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
+
+.work-date {
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 6px;
+}
+
+.work-earnings {
+  font-size: 16px;
+  font-weight: 700;
+  color: #FF5E00;
+  margin-bottom: 6px;
+}
+
+.work-total {
+  font-size: 12px;
+  color: #777;
+}
+
+/* 구독자 변화 (Subscriber Change) */
+.subscriber-card {
+  background: #ffffff;
+  border: none;
+  padding: 20px;
+}
+
+.subscriber-filter {
+  font-size: 12px;
+  padding: 4px 8px;
+  border: 1px solid #000;
+  /* border-radius: 4px; */
+  /* background: #fff; */
+
+}
+
+.subscriber-boxes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  padding: 0px 0px 6px 0px;
+}
+
+.subscriber-box {
+  padding: 20px;
+  text-align: left;
+  border: 1px solid #000;
+  border-radius: 6px;
+}
+
+.subscriber-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.subscriber-icon-wrapper {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.subscriber-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.subscriber-label {
+  font-size: 18px;
+  color: #000;
+  font-weight: 600;
+}
+
+.subscriber-number {
+  font-size: 25px;
+  font-weight: 700;
+  color: #000;
+  line-height: 21px;
+}
+
+.subscriber-graph-container {
+  border: 1px solid #000;
+  border-radius: 6px;
+  padding: 20px;
+}
+
+.subscriber-graph-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.subscriber-graph-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+}
+
+.subscriber-graph-title .subscriber-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FF5E00;
+}
+
+.subscriber-filter-wrapper {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.subscriber-filter-select {
+  font-size: 12px;
+  font-weight: 500;
+  color: #000;
+  border: none;
+  background: transparent;
+  padding: 0;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right center;
+  padding-right: 16px;
+  cursor: pointer;
+}
+
+.subscriber-graph {
+  height: 163px;
+  background: #fafafa;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.subscriber-graph-days {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #A0A0A0;
+  font-weight: 500;
+}
+
+/* 조회수 (Views) */
+.views-card {
+  background: #ffffff;
+  border: 1px solid #000;
+  border-radius: 4px;
+  margin: 12px 20px 6px 20px;
+}
+
+.views-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.views-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gender-age-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.gender-age-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.views-work-list {
+  margin-top: 20px;
+}
+
+.views-work-item {
+  display: flex;
+  align-items: center;
+  margin-top: 0;
+  margin-bottom: 20px;
+  gap: 11px;
+}
+
+.views-work-item:last-child {
+  margin-bottom: 0;
+}
+
+.views-rank {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 32px;
+  gap: 4px;
+}
+
+.rank-number {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 19px;
+}
+
+.rank-change-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.rank-arrow {
+  font-size: 13px;
+  width: 13px;
+  height: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rank-change {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 14px;
+}
+
+.rank-change.up {
+  color: #5375E8;
+}
+
+.rank-change.up-blue {
+  color: #5375E8;
+}
+
+.rank-change.down {
+  color: #FF5959;
+}
+
+.rank-change.neutral {
+  color: #A0A0A0;
+}
+
+.views-thumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  background: #EDEDED;
+  flex-shrink: 0;
+}
+
+.views-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.views-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  line-height: 19px;
+}
+
+.views-date {
+  font-size: 11px;
+  color: #A0A0A0;
+  margin-bottom: 6px;
+  line-height: 13px;
+}
+
+.views-bar {
+  width: 100%;
+  height: 4px;
+  background: #EDEDED;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.views-bar-fill {
+  height: 100%;
+  background: #000;
+  border-radius: 5px;
+}
+
+.views-num {
+  font-size: 14px;
+  font-weight: 500;
+  color: #FF5E00;
+  min-width: 30px;
+  text-align: right;
+  line-height: 17px;
+}
+
+/* 성별, 연령대별 조회수 */
+.gender-age-views-card {
+  background: #ffffff;
+  border: 1px solid #000;
+  border-radius: 4px;
+  margin: 6px 20px 20px 20px;
+}
+
+.gender-age-legend {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 20px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-line {
+  width: 16px;
+  height: 1px;
+  display: inline-block;
+}
+
+.legend-line.female {
+  background: #FF5E00;
+}
+
+.legend-line.male {
+  background: #999;
+}
+
+.gender-age-graph {
+  width: 100%;
+  height: 144px;
+  background: #fafafa;
+  border-radius: 6px;
+  position: relative;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.gender-age-graph-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #A0A0A0;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+/* 작품별 좋아요 수 (Likes by Work) */
+.likes-card {
+  border: 1px solid #000;
+  border-radius: 4px;
+  margin: 12px 20px 6px 20px;
+}
+
+.likes-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.likes-icon {
+  font-size: 24px;
+}
+
+.likes-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.likes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.likes-item {
+  text-align: center;
+}
+
+.likes-thumb {
+  width: 72px;
+  height: 72px;
+  background: #EDEDED;
+  border-radius: 6px;
+  margin: 0 auto 12px auto;
+}
+
+.likes-item .likes-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-align: left;
+}
+
+.likes-date {
+  font-size: 11px;
+  color: #A0A0A0;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.likes-count {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #FF5E00;
+}
+
+.likes-item .likes-icon {
+  font-size: 14px;
+}
+
+/* 작품별 댓글 관리 */
+.comments-card {
+  border: 1px solid #000;
+  border-radius: 4px;
+  margin: 6px 20px 0px 20px;
+}
+
+.comments-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.comments-icon {
+  font-size: 24px;
+}
+
+.comments-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* LIST */
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 600;
+  /* margin-bottom: 12px; */
+  padding-left: 20px;
+  padding-right: 20px;
+}

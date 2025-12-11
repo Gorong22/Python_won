@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MUMU – 회원가입</title>
+
+    <style>
+      /* 전체 화면 - 검은 배경 + 가운데 정렬 */
+      body {
+        background: #000; /* 바깥 배경 검은색 */
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        overflow: hidden;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      /* 폰 화면 사이즈 고정 */
+      .app-container {
+        width: 390px; /* 모든 기기에서 동일한 모바일 화면 */
+        min-height: 100vh;
+        background: #fff;
+        padding: 24px;
+        box-sizing: border-box;
+        overflow-y: auto;
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+
+      /* 로고 박스 */
+      .logo-box {
+        width: 100%;
+        height: 150px;
+        background: #e4e4e4;
+        border-radius: 14px;
+        margin: 60px 0 40px;
+      }
+
+      /* 버튼 */
+      .signup-btn {
+        width: 100%;
+        padding: 16px 0;
+        border-radius: 10px;
+        border: 1px solid #dcdcdc;
+        font-size: 15px;
+        background: #fff;
+        color: #333;
+        text-align: center;
+        margin-bottom: 14px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app-container">
+      <div class="logo-box"></div>
+
+      <div class="signup-btn">간편 회원가입</div>
+      <div class="signup-btn">SNS 연동</div>
+      <div class="signup-btn">SNS 연동</div>
+      <div class="signup-btn">SNS 연동</div>
+    </div>
+  </body>
+</html>

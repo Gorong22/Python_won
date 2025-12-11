@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MUMU – Creator Dashboard</title>
+  <link rel="stylesheet" href="css/tabbar.css" />
+  <link rel="stylesheet" href="css/creator_dashboard.css" />
+</head>
+
+<body>
+  <div class="app-frame">
+    <!-- SCROLL -->
+    <div class="app-scroll">
+      <!-- PROFILE TOP -->
+      <div class="profile-box">
+        <div class="profile-bg"></div>
+
+        <!-- <button class="creator-mode-btn">창작자모드</button> -->
+
+        <div class="profile-content">
+          <div class="profile-header-row">
+            <div class="profile-avatar-wrapper">
+              <div class="profile-avatar"></div>
+              <div class="setting-icon">
+                <img src="/public/assets/icons/setting.svg" alt="setting">
+              </div>
+            </div>
+            <div class="profile-follow">
+              <div class="follow">
+                <div class="follow-num">12</div>
+                <div class="follow-label">팔로우</div>
+              </div>
+              <div class="follow-line">
+                <div class="line"></div>
+              </div>
+              <div class="follow">
+                <div class="follow-num">12</div>
+                <div class="follow-label">팔로워</div>
+              </div>
+            </div>
+          </div>
+          <div class="profile-name">박햇살</div>
+          <div class="tag-list">
+            <span class="tag">액션</span>
+            <span class="tag">판타지</span>
+            <span class="tag">개그</span>
+          </div>
+          <div class="profile-desc">작가 설명을 적는 구간<br />링크 연동</div>
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div class="tab-wrap">
+        <div class="tab" onclick="goMyFeed()">MY FEED</div>
+        <div class="tab active">스튜디오</div>
+      </div>
+
+      <!-- DASHBOARD CONTENT -->
+      <div class="dash-section">
+        <!-- 수익 (Earnings) -->
+        <div class="dash-title-row">
+          <span>수익</span>
+          <button class="muu-convert-btn">MUU 포인트 변환</button>
+        </div>
+        <div class="dash-card earnings-card">
+          <div class="earnings-estimated">
+            <div class="earnings-label-wrapper">
+              <span class="won-icon">
+                <svg width="18" height="13" viewBox="0 0 18 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M16.6514 1.09093C16.8055 0.543306 16.3939 0 15.825 0C15.4405 0 15.1028 0.255764 14.9987 0.625963L14.4504 2.5749H10.2507L9.69272 0.712944C9.56592 0.289813 9.17653 0 8.73481 0H8.43121C7.98949 0 7.60009 0.289814 7.4733 0.712945L6.91533 2.5749H2.71566L2.16736 0.625965C2.06321 0.255765 1.72557 0 1.34099 0C0.772106 0 0.360559 0.543306 0.514625 1.09093L0.932115 2.5749H0.858301C0.384274 2.5749 0 2.95918 0 3.4332C0 3.90723 0.384274 4.2915 0.858301 4.2915H1.41448L1.8977 6.00811H0.858302C0.384275 6.00811 0 6.39238 0 6.86641C0 7.34043 0.384275 7.72471 0.858301 7.72471H2.38007L3.62374 12.1453C3.74506 12.5766 4.13838 12.8745 4.58637 12.8745H4.87269C5.3143 12.8745 5.70362 12.5848 5.83052 12.1619L7.16166 7.72471H10.0052L11.3364 12.1619C11.4633 12.5848 11.8526 12.8745 12.2942 12.8745H12.5805C13.0285 12.8745 13.4218 12.5766 13.5431 12.1453L14.7868 7.72471H16.3077C16.7817 7.72471 17.166 7.34043 17.166 6.86641C17.166 6.39238 16.7817 6.00811 16.3077 6.00811H15.2683L15.7515 4.2915H16.3077C16.7817 4.2915 17.166 3.90723 17.166 3.4332C17.166 2.95918 16.7817 2.5749 16.3077 2.5749H16.2339L16.6514 1.09093ZM3.19889 4.2915H6.39949L5.88451 6.00811H3.68125L3.19889 4.2915ZM4.74726 9.79922L4.16448 7.72471H5.36953L4.74726 9.79922ZM7.67664 6.00811L8.19162 4.2915H8.97439L9.48937 6.00811H7.67664ZM12.4188 9.79922L11.7965 7.72471H13.0015L12.4188 9.79922ZM13.4848 6.00811H11.2815L10.7665 4.2915H13.9671L13.4848 6.00811Z"
+                    fill="black" />
+                </svg>
+
+              </span>
+              <span class="earnings-label">이번달 예정액</span>
+            </div>
+            <div class="earnings-amount">2,310MUU</div>
+          </div>
+          <div class="muu-line"></div>
+          <div class="earnings-details">
+            <div class="earnings-detail-item">
+              <span>총 MUU</span>
+              <span class="placeholder">예시 총 MUU</span>
+            </div>
+            <div class="earnings-detail-item">
+              <span>플랫폼 수수료 (00%)</span>
+              <span class="placeholder">- ₩예시 수수료</span>
+            </div>
+            <div class="muu-line"></div>
+            <div class="earnings-detail-item-total">
+              <span>실 수령액</span>
+              <span class="placeholder-total">₩예시 수령액</span>
+            </div>
+          </div>
+          <div class="settlement-date">다음 정산일 2025년 1월 5일</div>
+        </div>
+
+        <!-- 오늘의 매출 (Today's Sales) -->
+        <div class="dash-card sales-card">
+          <div class="dash-title-row">
+            <div class="sales-title-wrapper">
+              <span class="sales-icon">
+                <svg width="19" height="9" viewBox="0 0 19 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M1 7.52571L4.74086 3.78485C5.0468 3.479 5.46169 3.30719 5.89428 3.30719C6.32688 3.30719 6.74176 3.479 7.0477 3.78485L9.63515 6.37229C9.94108 6.67814 10.356 6.84995 10.7886 6.84995C11.2212 6.84995 11.636 6.67814 11.942 6.37229L17.3143 1M17.3143 1V5.07857M17.3143 1H13.2357"
+                    stroke="#FF5E00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+
+              </span>
+              <span class="sales-title">오늘의 매출</span>
+            </div>
+            <span class="sales-total">300MUU</span>
+          </div>
+
+          <div class="sales-graph">
+            <div style="width:100%; max-width:400px;">
+              <canvas id="salesChart"></canvas>
+            </div>
+          </div>
+          <div class="all-time">
+            <div class="time">00시</div>
+            <div class="time">03시</div>
+            <div class="time">06시</div>
+            <div class="time">09시</div>
+            <div class="time">12시</div>
+            <div class="time">15시</div>
+            <div class="time">18시</div>
+            <div class="time">21시</div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- 작품별 수익 (Earnings by Work) -->
+      <div class="list-header">
+        <span>작품별 수익</span>
+        <span class="more">더보기</span>
+      </div>
+      <div class="earnings-work-list">
+        <div class="earnings-work-item">
+          <div class="left">
+            <div class="work-title">작품명</div>
+            <div class="work-date">2025.01.05</div>
+          </div>
+          <div class="right">
+            <div class="work-earnings">+ MUU 1,330</div>
+            <div class="work-total">총 300MUU</div>
+          </div>
+        </div>
+        <div class="earnings-work-item">
+          <div class="left">
+            <div class="work-title">작품명</div>
+            <div class="work-date">2025.01.05</div>
+          </div>
+          <div class="right">
+            <div class="work-earnings">+ MUU 1,330</div>
+            <div class="work-total">총 300MUU</div>
+          </div>
+        </div>
+
+        <div class="earnings-work-item">
+          <div class="left">
+            <div class="work-title">작품명</div>
+            <div class="work-date">2025.01.05</div>
+          </div>
+          <div class="right">
+            <div class="work-earnings">+ MUU 1,330</div>
+            <div class="work-total">총 300MUU</div>
+          </div>
+        </div>
+
+        <div class="earnings-work-item">
+          <div class="left">
+            <div class="work-title">작품명</div>
+            <div class="work-date">2025.01.05</div>
+          </div>
+          <div class="right">
+            <div class="work-earnings">+ MUU 1,330</div>
+            <div class="work-total">총 300MUU</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 구독자 변화 (Subscriber Change) -->
+      <div class="dash-card subscriber-card">
+        <div class="dash-title-row">
+          <span>구독자 변화</span>
+        </div>
+        <div class="subscriber-boxes">
+          <div class="subscriber-box">
+            <div class="subscriber-header">
+              <div class="subscriber-icon-wrapper">
+                <span class="subscriber-icon">
+                  <svg width="19" height="24" viewBox="0 0 19 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.22752 0C10.4963 0 11.5344 1.0381 11.5344 2.30688C11.5344 3.57566 10.4963 4.61376 9.22752 4.61376C7.95873 4.61376 6.92064 3.57566 6.92064 2.30688C6.92064 1.0381 7.95873 0 9.22752 0ZM13.7259 7.03598C13.2646 6.57461 12.4571 5.7672 10.9577 5.7672H8.07408C4.84445 5.7672 2.30688 3.22963 2.30688 0H0C0 3.69101 2.42222 6.68995 5.7672 7.72804V23.0688H8.07408V16.1482H10.381V23.0688H12.6878V9.34286L17.3016 13.8413L18.9164 12.2265L13.7259 7.03598Z"
+                      fill="black" />
+                  </svg>
+
+                </span>
+              </div>
+              <div class="subscriber-label">총 구독자</div>
+            </div>
+            <div class="subscriber-number">132명</div>
+          </div>
+          <div class="subscriber-box">
+            <div class="subscriber-header">
+              <div class="subscriber-icon-wrapper">
+                <span class="subscriber-icon">
+                  <svg width="19" height="24" viewBox="0 0 19 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M9.22752 0C10.4963 0 11.5344 1.0381 11.5344 2.30688C11.5344 3.57566 10.4963 4.61376 9.22752 4.61376C7.95873 4.61376 6.92064 3.57566 6.92064 2.30688C6.92064 1.0381 7.95873 0 9.22752 0ZM13.7259 7.03598C13.2646 6.57461 12.4571 5.7672 10.9577 5.7672H8.07408C4.84445 5.7672 2.30688 3.22963 2.30688 0H0C0 3.69101 2.42222 6.68995 5.7672 7.72804V23.0688H8.07408V16.1482H10.381V23.0688H12.6878V9.34286L17.3016 13.8413L18.9164 12.2265L13.7259 7.03598Z"
+                      fill="black" />
+                  </svg>
+
+                </span>
+              </div>
+              <div class="subscriber-label">오늘의 구독자</div>
+            </div>
+            <div class="subscriber-number">0명</div>
+          </div>
+        </div>
+        <div class="subscriber-graph-container">
+          <div class="subscriber-graph-header">
+            <div class="subscriber-graph-title">
+              <span class="subscriber-icon">
+                <svg width="19" height="24" viewBox="0 0 19 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M9.22752 0C10.4963 0 11.5344 1.0381 11.5344 2.30688C11.5344 3.57566 10.4963 4.61376 9.22752 4.61376C7.95873 4.61376 6.92064 3.57566 6.92064 2.30688C6.92064 1.0381 7.95873 0 9.22752 0ZM13.7259 7.03598C13.2646 6.57461 12.4571 5.7672 10.9577 5.7672H8.07408C4.84445 5.7672 2.30688 3.22963 2.30688 0H0C0 3.69101 2.42222 6.68995 5.7672 7.72804V23.0688H8.07408V16.1482H10.381V23.0688H12.6878V9.34286L17.3016 13.8413L18.9164 12.2265L13.7259 7.03598Z"
+                    fill="#FF5E00" />
+                </svg>
+
+              </span>
+              <span>구독자 변화</span>
+            </div>
+            <div class="subscriber-filter-wrapper">
+              <select class="subscriber-filter-select">
+                <option>전체</option>
+              </select>
+            </div>
+          </div>
+          <div class="subscriber-graph"></div>
+          <div class="subscriber-graph-days">
+            <span>MON</span>
+            <span>TUE</span>
+            <span>WED</span>
+            <span>THU</span>
+            <span>FRI</span>
+            <span>SAT</span>
+            <span>SUN</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 조회수 (Views) -->
+      <div class="list-header">
+        <span>조회수</span>
+      </div>
+
+      <!-- 작품별 조회수 -->
+      <div class="dash-card views-card">
+        <div class="dash-title-row">
+          <div class="views-title-wrapper">
+            <span class="views-icon">
+              <svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M1.00087 18.25C1.00087 18.664 1.33687 19 1.75087 19H12.4029C13.5659 19 14.0009 18.635 14.0009 17.4V15.955M1.00087 18.25C1.00087 17.6533 1.23793 17.081 1.65988 16.659C2.08184 16.2371 2.65414 16 3.25087 16H13.4029C13.6289 16 13.8282 15.985 14.0009 15.955M1.00087 18.25V4.2C1.00087 3.064 0.928873 1.811 2.09287 1.218C2.52087 1 3.08087 1 4.20087 1H13.4009C14.6369 1 15.0009 1.437 15.0009 2.6V14.4C15.0009 15.395 14.7189 15.825 14.0009 15.955"
+                  stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+
+            </span>
+            <span>작품별 조회수</span>
+          </div>
+          <span class="more">더보기</span>
+        </div>
+        <div class="views-work-list">
+          <div class="views-work-item">
+            <div class="views-rank">
+              <span class="rank-number">12</span>
+              <div class="rank-change-wrapper">
+                <span class="rank-arrow">
+                  <svg width="8" height="9" viewBox="0 0 8 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0.75 3.64704L3.98387 0.75M3.98387 0.75L7.21775 3.64704M3.98387 0.75V7.97559"
+                      stroke="#5375E8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+
+                </span>
+                <span class="rank-change up">10</span>
+              </div>
+            </div>
+            <div class="views-thumb"></div>
+            <div class="views-content">
+              <div class="views-title">작품명</div>
+              <div class="views-date">2025.01.05</div>
+              <div class="views-bar">
+                <div class="views-bar-fill" style="width: 80%"></div>
+              </div>
+            </div>
+            <div class="views-num">20</div>
+          </div>
+          <div class="views-work-item">
+            <div class="views-rank">
+              <span class="rank-number">34</span>
+              <div class="rank-change-wrapper">
+                <span class="rank-arrow">
+                  <svg width="8" height="2" viewBox="0 0 8 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.45898 0.75L0.749024 0.75" stroke="#A0A0A0" stroke-width="1.5" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg>
+
+                </span>
+                <span class="rank-change neutral">0</span>
+              </div>
+            </div>
+            <div class="views-thumb"></div>
+            <div class="views-content">
+              <div class="views-title">작품명</div>
+              <div class="views-date">2025.01.05</div>
+              <div class="views-bar">
+                <div class="views-bar-fill" style="width: 60%"></div>
+              </div>
+            </div>
+            <div class="views-num">12</div>
+          </div>
+          <div class="views-work-item">
+            <div class="views-rank">
+              <span class="rank-number">45</span>
+              <div class="rank-change-wrapper">
+                <span class="rank-arrow">
+                  <svg width="8" height="9" viewBox="0 0 8 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0.75 5.07854L3.98387 7.97559M3.98387 7.97559L7.21775 5.07854M3.98387 7.97559V0.75"
+                      stroke="#FF5959" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+
+                </span>
+                <span class="rank-change down">4</span>
+              </div>
+            </div>
+            <div class="views-thumb"></div>
+            <div class="views-content">
+              <div class="views-title">작품명</div>
+              <div class="views-date">2025.01.05</div>
+              <div class="views-bar">
+                <div class="views-bar-fill" style="width: 50%"></div>
+              </div>
+            </div>
+            <div class="views-num">8</div>
+          </div>
+          <div class="views-work-item">
+            <div class="views-rank">
+              <span class="rank-number">62</span>
+              <div class="rank-change-wrapper">
+                <span class="rank-arrow">
+                  <svg width="8" height="9" viewBox="0 0 8 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0.75 3.64704L3.98387 0.75M3.98387 0.75L7.21775 3.64704M3.98387 0.75V7.97559"
+                      stroke="#5375E8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+
+                </span>
+                <span class="rank-change up-blue">2</span>
+              </div>
+            </div>
+            <div class="views-thumb"></div>
+            <div class="views-content">
+              <div class="views-title">작품명</div>
+              <div class="views-date">2025.01.05</div>
+              <div class="views-bar">
+                <div class="views-bar-fill" style="width: 30%"></div>
+              </div>
+            </div>
+            <div class="views-num">4</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 성별, 연령대별 조회수 -->
+      <div class="dash-card gender-age-views-card">
+        <div class="dash-title-row">
+          <div class="gender-age-title-wrapper">
+            <span class="gender-age-icon">
+              <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M14 2C14 0.9 14.9 0 16 0C17.1 0 18 0.9 18 2C18 3.1 17.1 4 16 4C14.9 4 14 3.1 14 2ZM18 20V14H20.5L18 6.4C17.7 5.6 17 5 16.1 5H16C15.1 5 14.4 5.6 14.1 6.4L13.2 9C14.3 9.6 15 10.7 15 12.1V20H18ZM10.5 9.5C11.3 9.5 12 8.8 12 8C12 7.2 11.3 6.5 10.5 6.5C9.7 6.5 9 7.2 9 8C9 8.8 9.7 9.5 10.5 9.5ZM3.5 4C4.6 4 5.5 3.1 5.5 2C5.5 0.9 4.6 0 3.5 0C2.4 0 1.5 0.9 1.5 2C1.5 3.1 2.4 4 3.5 4ZM5.5 20V13H7V7C7 5.9 6.1 5 5 5H2C0.9 5 0 5.9 0 7V13H1.5V20H5.5ZM12 20V16H13V12C13 11.2 12.3 10.5 11.5 10.5H9.5C8.7 10.5 8 11.2 8 12V16H9V20H12Z"
+                  fill="black" />
+              </svg>
+
+            </span>
+            <span>성별, 연령대별 조회수</span>
+          </div>
+        </div>
+        <div class="gender-age-legend">
+          <span class="legend-item">
+            <span class="legend-line female"></span>
+            <span>여</span>
+          </span>
+          <span class="legend-item">
+            <span class="legend-line male"></span>
+            <span>남</span>
+          </span>
+        </div>
+        <div class="gender-age-graph"></div>
+        <div class="gender-age-graph-labels">
+          <span>10대</span>
+          <span>20대</span>
+          <span>30대</span>
+          <span>40대</span>
+          <span>50대</span>
+          <span>60대</span>
+        </div>
+      </div>
+
+      <!-- 작품 관리 (Work Management) -->
+      <div class="list-header">
+        <span>작품 관리</span>
+      </div>
+
+      <!-- 작품별 좋아요 수 (Likes by Work) -->
+      <div class="dash-card likes-card">
+        <div class="dash-title-row">
+          <div class="likes-title-wrapper">
+            <span class="likes-icon">
+              <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M19.1179 2.51379C18.6382 2.03387 18.0687 1.65317 17.4418 1.39343C16.815 1.13369 16.1431 1 15.4645 1C14.786 1 14.1141 1.13369 13.4872 1.39343C12.8604 1.65317 12.2908 2.03387 11.8111 2.51379L10.8156 3.50932L9.82008 2.51379C8.85114 1.54485 7.53697 1.0005 6.16668 1.0005C4.79639 1.0005 3.48223 1.54485 2.51329 2.51379C1.54435 3.48273 1 4.79689 1 6.16718C1 7.53747 1.54435 8.85164 2.51329 9.82058L3.50881 10.8161L10.8156 18.1229L18.1224 10.8161L19.1179 9.82058C19.5978 9.34089 19.9785 8.77135 20.2383 8.14448C20.498 7.51762 20.6317 6.84573 20.6317 6.16718C20.6317 5.48864 20.498 4.81675 20.2383 4.18988C19.9785 3.56302 19.5978 2.99348 19.1179 2.51379Z"
+                  stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+
+            </span>
+            <span class="likes-title">작품별 좋아요 수</span>
+          </div>
+          <span class="more">더보기</span>
+        </div>
+        <div class="likes-grid">
+          <div class="likes-item">
+            <div class="likes-thumb"></div>
+            <div class="likes-title">작품명</div>
+            <div class="likes-date">2025.01.05</div>
+            <div class="likes-count">
+              <span class="likes-icon">
+                <svg width="13" height="11" viewBox="0 0 13 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M11.5623 0.966049C11.2561 0.659783 10.8927 0.416832 10.4926 0.251074C10.0926 0.0853159 9.6638 0 9.23078 0C8.79775 0 8.36897 0.0853159 7.96893 0.251074C7.56889 0.416832 7.20542 0.659783 6.8993 0.966049L6.26399 1.60136L5.62868 0.966049C5.01033 0.347704 4.17168 0.00032051 3.2972 0.000320517C2.42273 0.000320523 1.58407 0.347704 0.965728 0.966049C0.347383 1.58439 6.51533e-09 2.42305 0 3.29752C-6.51533e-09 4.172 0.347383 5.01065 0.965728 5.629L1.60104 6.26431L6.26399 10.9273L10.9269 6.26431L11.5623 5.629C11.8685 5.32288 12.1115 4.95941 12.2772 4.55937C12.443 4.15933 12.5283 3.73055 12.5283 3.29752C12.5283 2.8645 12.443 2.43572 12.2772 2.03568C12.1115 1.63564 11.8685 1.27217 11.5623 0.966049Z"
+                    fill="#FF5E00" />
+                </svg>
+
+              </span>
+              <span>12</span>
+            </div>
+          </div>
+          <div class="likes-item">
+            <div class="likes-thumb"></div>
+            <div class="likes-title">작품명</div>
+            <div class="likes-date">2025.01.05</div>
+            <div class="likes-count">
+              <span class="likes-icon">
+                <svg width="13" height="11" viewBox="0 0 13 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M11.5623 0.966049C11.2561 0.659783 10.8927 0.416832 10.4926 0.251074C10.0926 0.0853159 9.6638 0 9.23078 0C8.79775 0 8.36897 0.0853159 7.96893 0.251074C7.56889 0.416832 7.20542 0.659783 6.8993 0.966049L6.26399 1.60136L5.62868 0.966049C5.01033 0.347704 4.17168 0.00032051 3.2972 0.000320517C2.42273 0.000320523 1.58407 0.347704 0.965728 0.966049C0.347383 1.58439 6.51533e-09 2.42305 0 3.29752C-6.51533e-09 4.172 0.347383 5.01065 0.965728 5.629L1.60104 6.26431L6.26399 10.9273L10.9269 6.26431L11.5623 5.629C11.8685 5.32288 12.1115 4.95941 12.2772 4.55937C12.443 4.15933 12.5283 3.73055 12.5283 3.29752C12.5283 2.8645 12.443 2.43572 12.2772 2.03568C12.1115 1.63564 11.8685 1.27217 11.5623 0.966049Z"
+                    fill="#FF5E00" />
+                </svg>
+
+              </span>
+              <span>12</span>
+            </div>
+          </div>
+          <div class="likes-item">
+            <div class="likes-thumb"></div>
+            <div class="likes-title">작품명</div>
+            <div class="likes-date">2025.01.05</div>
+            <div class="likes-count">
+              <span class="likes-icon">
+                <svg width="13" height="11" viewBox="0 0 13 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M11.5623 0.966049C11.2561 0.659783 10.8927 0.416832 10.4926 0.251074C10.0926 0.0853159 9.6638 0 9.23078 0C8.79775 0 8.36897 0.0853159 7.96893 0.251074C7.56889 0.416832 7.20542 0.659783 6.8993 0.966049L6.26399 1.60136L5.62868 0.966049C5.01033 0.347704 4.17168 0.00032051 3.2972 0.000320517C2.42273 0.000320523 1.58407 0.347704 0.965728 0.966049C0.347383 1.58439 6.51533e-09 2.42305 0 3.29752C-6.51533e-09 4.172 0.347383 5.01065 0.965728 5.629L1.60104 6.26431L6.26399 10.9273L10.9269 6.26431L11.5623 5.629C11.8685 5.32288 12.1115 4.95941 12.2772 4.55937C12.443 4.15933 12.5283 3.73055 12.5283 3.29752C12.5283 2.8645 12.443 2.43572 12.2772 2.03568C12.1115 1.63564 11.8685 1.27217 11.5623 0.966049Z"
+                    fill="#FF5E00" />
+                </svg>
+
+              </span>
+              <span>12</span>
+            </div>
+          </div>
+          <div class="likes-item">
+            <div class="likes-thumb"></div>
+            <div class="likes-title">작품명</div>
+            <div class="likes-date">2025.01.05</div>
+            <div class="likes-count">
+              <span class="likes-icon">
+                <svg width="13" height="11" viewBox="0 0 13 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M11.5623 0.966049C11.2561 0.659783 10.8927 0.416832 10.4926 0.251074C10.0926 0.0853159 9.6638 0 9.23078 0C8.79775 0 8.36897 0.0853159 7.96893 0.251074C7.56889 0.416832 7.20542 0.659783 6.8993 0.966049L6.26399 1.60136L5.62868 0.966049C5.01033 0.347704 4.17168 0.00032051 3.2972 0.000320517C2.42273 0.000320523 1.58407 0.347704 0.965728 0.966049C0.347383 1.58439 6.51533e-09 2.42305 0 3.29752C-6.51533e-09 4.172 0.347383 5.01065 0.965728 5.629L1.60104 6.26431L6.26399 10.9273L10.9269 6.26431L11.5623 5.629C11.8685 5.32288 12.1115 4.95941 12.2772 4.55937C12.443 4.15933 12.5283 3.73055 12.5283 3.29752C12.5283 2.8645 12.443 2.43572 12.2772 2.03568C12.1115 1.63564 11.8685 1.27217 11.5623 0.966049Z"
+                    fill="#FF5E00" />
+                </svg>
+
+              </span>
+              <span>12</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 작품별 댓글 관리 (Comments by Work Management) -->
+      <div class="dash-card comments-card">
+        <div class="dash-title-row">
+          <div class="comments-title-wrapper">
+            <span class="comments-icon">
+              <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M19.664 9.8136C19.6676 11.1822 19.3479 12.5322 18.7308 13.7538C17.9992 15.2176 16.8745 16.4488 15.4827 17.3096C14.0909 18.1703 12.4869 18.6265 10.8505 18.6272C9.4819 18.6307 8.13185 18.311 6.91028 17.694L1 19.6641L2.97009 13.7538C2.35307 12.5322 2.03332 11.1822 2.03689 9.8136C2.03752 8.17714 2.49376 6.57316 3.35449 5.18134C4.21522 3.78952 5.44645 2.66483 6.91028 1.93323C8.13185 1.31621 9.4819 0.996461 10.8505 1.00003H11.3689C13.5301 1.11926 15.5715 2.03149 17.102 3.56204C18.6326 5.09259 19.5448 7.13391 19.664 9.29516V9.8136Z"
+                  stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+            <span class="comments-title">작품별 댓글 관리</span>
+          </div>
+          <span class="more">더보기</span>
+        </div>
+      </div>
+      <!-- end dash section -->
+    </div>
+
+    <!-- 하단 탭바 -->
+    <div id="tabbar" class="tabbar"></div>
+
+    <script>
+      /* ========================== 
+         Tabbar 로드
+      ========================== */
+      fetch("components/tabbar.html")
+        .then((r) => r.text())
+        .then((html) => (document.getElementById("tabbar").innerHTML = html))
+        .catch((error) => console.error("Error fetching tabbar.html:", error));
+    </script>
+    <script src="js/creator_dashboard.js"></script>
+</body>
+
+</html>

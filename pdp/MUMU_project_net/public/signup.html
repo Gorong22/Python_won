@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>회원가입</title>
+
+  <!-- CSS 경로 (public/css/) -->
+  <!-- <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/layout.css" /> -->
+  <link rel="stylesheet" href="css/signup.css" />
+</head>
+
+<body>
+  <div class="app-frame">
+    <main class="signup-container">
+      <h2 class="title">당신의 정보를 입력해주세요</h2>
+
+      <!-- 아이디 -->
+      <label class="label">아이디</label>
+      <input type="text" class="input" placeholder="아이디 입력" id="userId" />
+
+      <!-- 비밀번호 -->
+      <label class="label">비밀번호</label>
+      <input type="password" class="input" placeholder="비밀번호 입력" id="password" />
+
+      <!-- 이름 -->
+      <label class="label">이름</label>
+      <input type="text" class="input" placeholder="이름을 입력해주세요" id="name" />
+
+      <!-- 닉네임 -->
+      <label class="label">닉네임</label>
+      <input type="text" class="input" placeholder="닉네임을 입력해주세요" id="nickname" />
+
+      <!-- 나이 -->
+      <label class="label">나이</label>
+      <div class="birth-row">
+        <input type="number" class="birth-input" placeholder="년도" />
+        <input type="number" class="birth-input" placeholder="월" />
+        <input type="number" class="birth-input" placeholder="일" />
+      </div>
+
+      <!-- 성별 -->
+      <label class="label">성별</label>
+      <div class="gender-row">
+        <button type="button" class="gender-btn">남자</button>
+        <button type="button" class="gender-btn">여자</button>
+        <button type="button" class="gender-btn">알리지 않음</button>
+      </div>
+
+      <button class="submit-btn" id="nextBtn">다음</button>
+    </main>
+  </div>
+
+  <script src="js/signup.js"></script>
+</body>
+
+</html>

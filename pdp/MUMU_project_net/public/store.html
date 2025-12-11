@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>스토어</title>
+  <!-- 
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/layout.css" /> -->
+  <link rel="stylesheet" href="css/tabbar.css" />
+  <link rel="stylesheet" href="css/store.css" />
+  <style>
+    /* 준비 중 팝업 스타일 */
+    .coming-soon-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 10003;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .coming-soon-modal-content {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 24px 20px 20px 20px;
+      min-width: 280px;
+      max-width: 90%;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      animation: slideUp 0.3s ease;
+    }
+
+    .coming-soon-modal-text {
+      font-size: 16px;
+      font-weight: 500;
+      color: #000000;
+      margin: 0 0 20px 0;
+      line-height: 1.5;
+    }
+
+    .coming-soon-modal-close {
+      width: 100%;
+      padding: 12px 0;
+      background: #ffffff;
+      color: #FF5E00;
+      border: 1px solid #FF5E00;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .coming-soon-modal-close:hover {
+      background: #fff5f0;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-frame">
+    <!-- header -->
+    <div id="header"></div>
+
+    <div class="app-scroll">
+      <main class="store-container">
+        <!-- =====================
+               상단 탭
+          ====================== -->
+        <div class="store-top-tabs">
+          <button class="store-tab active">스토어</button>
+          <button class="store-tab">포인트</button>
+        </div>
+
+        <!-- =====================
+                관련 작가
+          ====================== -->
+        <section class="store-section">
+          <div class="section-header">
+            <h3>관련 작가</h3>
+            <span class="more">더보기</span>
+          </div>
+
+          <div class="creator-card">
+            <div class="creator-info">
+              <img class="creator-profile" src="https://via.placeholder.com/50" />
+              <div>
+                <div class="creator-name">작가 이름</div>
+                <div class="creator-tags">
+                  <span>액션</span><span>일상</span><span>개그</span>
+                </div>
+              </div>
+              <button class="support-btn">후원하기</button>
+            </div>
+
+            <div class="creator-thumbnails">
+              <div class="thumb"></div>
+              <div class="thumb"></div>
+              <div class="thumb"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =====================
+              인기 TOP 10
+          ====================== -->
+        <section class="store-section">
+          <div class="section-header">
+            <h3>인기 TOP 10</h3>
+            <span class="more">더보기</span>
+          </div>
+
+          <div class="top-list">
+            <!-- 1번 -->
+            <div class="top-item">
+              <div class="rank">1</div>
+              <div class="top-thumb"></div>
+              <div class="top-info">
+                <div class="name">상품명</div>
+                <div class="desc">상품 상세 설명</div>
+                <div class="price">1,000원</div>
+              </div>
+              <div class="rank-sub">4</div>
+            </div>
+
+            <div class="top-item">
+              <div class="rank">2</div>
+              <div class="top-thumb"></div>
+              <div class="top-info">
+                <div class="name">상품명</div>
+                <div class="desc">상품 상세 설명</div>
+                <div class="price">1,000원</div>
+              </div>
+              <div class="rank-sub">5</div>
+            </div>
+
+            <div class="top-item">
+              <div class="rank">3</div>
+              <div class="top-thumb"></div>
+              <div class="top-info">
+                <div class="name">상품명</div>
+                <div class="desc">상품 상세 설명</div>
+                <div class="price">1,000원</div>
+              </div>
+              <div class="rank-sub">6</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =====================
+              당신이 좋아할만한 굿즈
+          ====================== -->
+        <section class="store-section">
+          <h3 class="section-title">당신이 좋아할만한 굿즈</h3>
+
+          <div class="recommend-list">
+            <div class="goods-item">
+              <div class="goods-thumb"></div>
+              <div class="goods-info">
+                <div class="name">상품명</div>
+                <div class="desc">상품 상세 설명</div>
+                <div class="price">1,000원</div>
+              </div>
+              <div class="heart">❤️</div>
+            </div>
+
+            <div class="goods-item">
+              <div class="goods-thumb"></div>
+              <div class="goods-info">
+                <div class="name">상품명</div>
+                <div class="desc">상품 상세 설명</div>
+                <div class="price">1,000원</div>
+              </div>
+              <div class="heart">❤️</div>
+            </div>
+
+            <div class="goods-item">
+              <div class="goods-thumb"></div>
+              <div class="goods-info">
+                <div class="name">상품명</div>
+                <div class="desc">상품 상세 설명</div>
+                <div class="price">1,000원</div>
+              </div>
+              <div class="heart">❤️</div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- 탭바 -->
+    <div id="tabbar"></div>
+  </div>
+
+  <!-- 준비 중 팝업 -->
+  <div id="comingSoonModal" class="coming-soon-modal">
+    <div class="coming-soon-modal-content">
+      <p class="coming-soon-modal-text">준비중인 기능입니다</p>
+      <button class="coming-soon-modal-close" onclick="closeComingSoonModal()">확인</button>
+    </div>
+  </div>
+
+  <script>
+    /* ========================== 
+       준비 중 팝업 표시
+    ========================== */
+    function showComingSoonModal() {
+      const modal = document.getElementById('comingSoonModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        modal.style.animation = 'fadeIn 0.2s ease';
+      }
+    }
+
+    function closeComingSoonModal() {
+      const modal = document.getElementById('comingSoonModal');
+      if (modal) {
+        modal.style.display = 'none';
+        // 홈으로 이동
+        window.location.href = 'index.html';
+      }
+    }
+
+    // 페이지 로드 시 팝업 표시
+    window.addEventListener('DOMContentLoaded', () => {
+      showComingSoonModal();
+    });
+    /* ========================== 
+       Tabbar 로드
+    ========================== */
+    fetch("components/tabbar.html")
+      .then((r) => r.text())
+      .then((html) => (document.getElementById("tabbar").innerHTML = html))
+      .catch((error) => console.error("Error fetching tabbar.html:", error));
+  </script>
+  <script src="js/store.js"></script>
+</body>
+
+</html>

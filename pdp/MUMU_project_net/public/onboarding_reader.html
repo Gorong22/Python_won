@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>독자 온보딩</title>
+  <link rel="stylesheet" href="css/tabbar.css" />
+  <link rel="stylesheet" href="css/onboarding_reader.css" />
+</head>
+
+<body>
+  <div class="app-frame">
+    <main class="onboarding-container">
+      <h2 class="title">당신은 누구?</h2>
+
+      <!-- 당신은 누구? -->
+      <label class="label">당신은 누구?</label>
+      <div class="select-row">
+        <button class="select-btn active" data-value="독자">독자</button>
+        <button class="select-btn" data-value="창작자">창작자</button>
+      </div>
+
+      <!-- 선호 포맷 -->
+      <label class="label">선호하는 포맷</label>
+      <div class="select-row">
+        <button class="format-btn" data-value="숏툰">숏툰</button>
+        <button class="format-btn" data-value="롱툰">롱툰</button>
+      </div>
+
+      <!-- 선호 장르 -->
+      <label class="label">선호하는 장르</label>
+      <div class="tag-area" id="genreArea">
+        <button class="tag-btn">로맨스</button>
+        <button class="tag-btn">판타지</button>
+        <button class="tag-btn">액션</button>
+        <button class="tag-btn">스포츠</button>
+        <button class="tag-btn">스릴러</button>
+        <button class="tag-btn">무협/사극</button>
+        <button class="tag-btn">드라마</button>
+        <button class="tag-btn">감성</button>
+        <button class="tag-btn">개그</button>
+        <button class="tag-btn">일상</button>
+      </div>
+
+      <!-- 취향 -->
+      <label class="label">취향</label>
+      <div class="tag-area" id="tasteArea">
+        <button class="tag-btn">빠른 전개</button>
+        <button class="tag-btn">잔잔한 전개</button>
+        <button class="tag-btn">개그 / 코믹</button>
+        <button class="tag-btn">감성 / 힐링</button>
+        <button class="tag-btn">자극적 · 몰입감</button>
+        <button class="tag-btn">진지한 분위기</button>
+        <button class="tag-btn">밝은 톤</button>
+        <button class="tag-btn">어두운 톤</button>
+        <button class="tag-btn">작화 중심</button>
+        <button class="tag-btn">스토리 중심</button>
+      </div>
+
+      <button class="submit-btn" id="finishBtn">완료</button>
+    </main>
+  </div>
+
+  <script>
+    /* ========================== 
+       Tabbar 로드
+    ========================== */
+    fetch("components/tabbar.html")
+      .then((r) => r.text())
+      .then((html) => (document.getElementById("tabbar").innerHTML = html))
+      .catch((error) => console.error("Error fetching tabbar.html:", error));
+  </script>
+  <script src="js/onboarding_reader.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+/* 전체 기본 */
+body {
+  margin: 0;
+  background: #000000;
+  font-family: Pretendard, sans-serif;
+}
+
+.app-frame {
+  width: 100%;
+  max-width: 402px;
+  margin: 0 auto;
+  background: #fff;
+  min-height: 100vh;
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+}
+
+.signup-container {
+  padding-top: 90px;
+  /* 화면이 너무 위로 몰리지 않게 */
+  padding-bottom: 120px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+/* 라벨 */
+.label {
+  display: block;
+  margin-top: 22px;
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* 기본 input */
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  font-size: 14px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.input:focus {
+  border-color: #000;
+}
+
+/* 나이 입력 */
+.birth-row {
+  display: flex;
+  gap: 12px;
+}
+
+.birth-input {
+  flex: 1;
+  padding: 14px 12px;
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.birth-input:focus {
+  border-color: #000;
+}
+
+/* 성별 버튼 */
+.gender-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.gender-btn {
+  flex: 1;
+  padding: 12px 0;
+  background: #fff;
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.gender-btn.active {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+/* 다음 버튼 */
+.submit-btn {
+  width: 100%;
+  padding: 16px 0;
+  margin-top: 40px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  cursor: pointer;
+}

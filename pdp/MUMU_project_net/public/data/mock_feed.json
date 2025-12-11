@@ -1,0 +1,5 @@
+[
+  { "creator": "작가A", "title": "작품 1", "desc": "업데이트 내용 1" },
+  { "creator": "작가B", "title": "작품 2", "desc": "업데이트 내용 2" },
+  { "creator": "작가C", "title": "작품 3", "desc": "업데이트 내용 3" }
+]
