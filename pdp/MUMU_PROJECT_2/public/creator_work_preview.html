@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>작품 미리보기 - MUMU</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+      min-height: 100vh;
+    }
+
+    .header {
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: #666;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 12px;
+      padding: 8px 0;
+    }
+
+    .back-btn:hover {
+      color: #ff5e00;
+    }
+
+    .work-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .work-meta {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .work-images {
+      margin-top: 24px;
+    }
+
+    .work-image {
+      width: 100%;
+      margin-bottom: 16px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .work-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+
+    .error {
+      text-align: center;
+      padding: 40px;
+      color: #c62828;
+    }
+
+    .work-description {
+      margin-top: 24px;
+      padding: 16px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      color: #666;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <button class="back-btn" onclick="window.history.back()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+          <path
+            d="M0.292893 9.29289C-0.0976311 9.68342 -0.0976311 10.3166 0.292893 10.7071L6.65685 17.0711C7.04738 17.4616 7.68054 17.4616 8.07107 17.0711C8.46159 16.6805 8.46159 16.0474 8.07107 15.6569L2.41421 10L8.07107 4.34315C8.46159 3.95262 8.46159 3.31946 8.07107 2.92893C7.68054 2.53841 7.04738 2.53841 6.65685 2.92893L0.292893 9.29289ZM19.7139 11C20.2662 11 20.7139 10.5523 20.7139 10C20.7139 9.44772 20.2662 9 19.7139 9V10V11ZM1 10V11H19.7139V10V9H1V10Z"
+            fill="black" />
+        </svg>
+      </button>
+      <h1 class="work-title" id="work-title">작품 제목</h1>
+      <p class="work-meta" id="work-meta"></p>
+    </div>
+
+    <div id="loading" class="loading">작품을 불러오는 중...</div>
+    <div id="error" class="error" style="display: none"></div>
+    <div id="work-content" style="display: none">
+      <div class="work-description" id="work-description"></div>
+      <div class="work-images" id="work-images"></div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://ksipcrcimsnjkgmwzovo.supabase.co";
+    const SUPABASE_ANON_KEY =
+      "sb_publishable_lowQ9k2fr_1QaQo3BNMTUg_s-4Wf5az";
+
+    let supabase;
+
+    async function init() {
+      supabase = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
+
+      // Get workId from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const workId = urlParams.get("workId");
+
+      if (!workId) {
+        showError("작품 ID가 없습니다.");
+        return;
+      }
+
+      await loadWork(workId);
+    }
+
+    async function loadWork(workId) {
+      try {
+        // Load work with cuts
+        const { data: work, error: workError } = await supabase
+          .from("works")
+          .select(
+            `
+              *,
+              cuts!inner(image_url, order_index, is_visible, width, height)
+            `
+          )
+          .eq("id", workId)
+          .single();
+
+        if (workError) {
+          console.error("Failed to load work:", workError);
+          showError("작품을 불러올 수 없습니다.");
+          return;
+        }
+
+        // Sort cuts by order_index
+        const cuts = Array.isArray(work.cuts)
+          ? work.cuts
+            .filter((c) => c.is_visible !== false)
+            .sort((a, b) => (a.order_index || 0) - (b.order_index || 0))
+          : [];
+
+        // Render work
+        document.getElementById("work-title").textContent =
+          work.title || "제목 없음";
+
+        const metaParts = [];
+        if (work.genre) metaParts.push(work.genre);
+        if (work.created_at) {
+          const date = new Date(work.created_at).toLocaleDateString("ko-KR");
+          metaParts.push(date);
+        }
+        document.getElementById("work-meta").textContent =
+          metaParts.join(" · ");
+
+        if (work.description) {
+          document.getElementById("work-description").textContent =
+            work.description;
+        } else {
+          document.getElementById("work-description").style.display = "none";
+        }
+
+        // Render images
+        const imagesContainer = document.getElementById("work-images");
+        imagesContainer.innerHTML = "";
+
+        if (cuts.length === 0) {
+          imagesContainer.innerHTML =
+            '<p style="text-align: center; color: #666; padding: 40px;">이미지가 없습니다.</p>';
+        } else {
+          cuts.forEach((cut, index) => {
+            const imageDiv = document.createElement("div");
+            imageDiv.className = "work-image";
+            const img = document.createElement("img");
+            img.src = cut.image_url;
+            img.alt = `${work.title} - 컷 ${index + 1}`;
+            img.loading = "lazy";
+            img.onerror = () => {
+              img.alt = "이미지를 불러올 수 없습니다.";
+              img.style.background = "#f0f0f0";
+            };
+            imageDiv.appendChild(img);
+            imagesContainer.appendChild(imageDiv);
+          });
+        }
+
+        // Show content
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("work-content").style.display = "block";
+      } catch (error) {
+        console.error("Error loading work:", error);
+        showError("작품을 불러오는 중 오류가 발생했습니다.");
+      }
+    }
+
+    function showError(message) {
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("error").style.display = "block";
+      document.getElementById("error").textContent = message;
+    }
+
+    // Initialize on load
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+  </script>
+</body>
+
+</html>

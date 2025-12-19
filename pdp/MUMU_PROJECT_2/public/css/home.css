@@ -1,0 +1,223 @@
+/* ================================
+   Home Page Styles
+   Scoped to main.feed-page only
+   
+   핵심 원인: index.html에 tabbar.css가 누락되어 
+   tabbar 스타일이 적용되지 않아 다른 페이지와 
+   다르게 렌더링되었음. 모든 선택자는 main.feed-page로
+   스코프되어 tabbar에 영향 없음.
+================================ */
+
+/* Hero / MUMU's Pick Section */
+main.feed-page .hero-section {
+  width: 100%;
+  max-width: 402px;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+
+main.feed-page .hero-slider {
+  width: 100%;
+  max-width: 402px;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  touch-action: pan-x pan-y;
+}
+
+main.feed-page .hero-slider::-webkit-scrollbar {
+  display: none;
+}
+
+main.feed-page .hero-slide {
+  width: 100%;
+  min-width: 100%;
+  aspect-ratio: 1.88 / 1;
+  background: #f4f4f4;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  flex-shrink: 0;
+}
+
+main.feed-page .hero-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  height: 6px;
+  margin: 20px 0;
+}
+
+main.feed-page .hero-dots .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d9d9d9;
+  flex-shrink: 0;
+}
+
+main.feed-page .hero-dots .dot.active {
+  background: #ff5e00;
+}
+
+/* Feed Item Styles */
+main.feed-page .feed-item {
+  width: 100%;
+  max-width: 402px;
+  margin: 0 auto;
+  padding: 0;
+  margin-bottom: 32px;
+}
+
+main.feed-page .feed-item-header {
+  padding: 20px 20px 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+main.feed-page .feed-item-title-group {
+  flex: 1;
+  min-width: 0;
+}
+
+main.feed-page .feed-item-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ff5e00;
+  margin-bottom: 4px;
+  letter-spacing: 0;
+  line-height: 24.2px;
+}
+
+main.feed-page .feed-item-desc {
+  font-size: 14px;
+  font-weight: 500;
+  color: #8c8c8c;
+  letter-spacing: -0.32px;
+  line-height: 21px;
+}
+
+main.feed-page .feed-item-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e5e5e5;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+/* Cut-style Slider */
+main.feed-page .feed-slider {
+  width: 100%;
+  max-width: 402px;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  touch-action: pan-x pan-y;
+  padding: 0;
+  margin: 0;
+}
+
+main.feed-page .feed-slider::-webkit-scrollbar {
+  display: none;
+}
+
+main.feed-page .feed-slide {
+  width: 100%;
+  max-width: 402px;
+  min-width: 100%;
+  aspect-ratio: 0.72 / 1;
+  background: #ededed;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  flex-shrink: 0;
+  border: 1px solid #e5e5e5;
+  border-left: none;
+  border-right: none;
+}
+
+main.feed-page .feed-slide:first-child {
+  border-left: 1px solid #e5e5e5;
+}
+
+main.feed-page .feed-slide:last-child {
+  border-right: 1px solid #e5e5e5;
+}
+
+/* Feed Item Footer */
+main.feed-page .feed-item-footer {
+  padding: 18px 20px 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+main.feed-page .feed-engagement {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+main.feed-page .feed-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+main.feed-page .feed-stat-icon {
+  width: 16px;
+  height: 16px;
+  background: #d9d9d9;
+  border-radius: 2px;
+}
+
+main.feed-page .feed-stat-count {
+  font-size: 14px;
+  font-weight: 500;
+  color: #8c8c8c;
+  letter-spacing: -0.32px;
+  line-height: 21px;
+}
+
+main.feed-page .feed-date {
+  font-size: 14px;
+  font-weight: 500;
+  color: #8c8c8c;
+  letter-spacing: -0.32px;
+  line-height: 21px;
+}
+
+main.feed-page .feed-tags {
+  display: flex;
+  gap: 5px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+main.feed-page .feed-tag {
+  padding: 0 10px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #a0a0a0;
+  background: #fff;
+  letter-spacing: -0.32px;
+  line-height: 21px;
+  height: 21px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}

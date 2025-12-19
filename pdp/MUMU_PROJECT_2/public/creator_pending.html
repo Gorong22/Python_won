@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>MUMU – 승인 대기</title>
+    <link rel="stylesheet" href="css/tabbar.css" />
+    <style>
+      body {
+        margin: 0;
+        background: #000;
+        font-family: -apple-system, BlinkMacSystemFont, "Pretendard", sans-serif;
+      }
+
+      .app-frame {
+        width: 100%;
+        max-width: 402px;
+        margin: 0 auto;
+        background: #ffffff;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+
+      .message-container {
+        text-align: center;
+        max-width: 320px;
+      }
+
+      .message-icon {
+        font-size: 64px;
+        margin-bottom: 24px;
+      }
+
+      .message-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #000;
+        margin: 0 0 16px 0;
+      }
+
+      .message-text {
+        font-size: 16px;
+        color: #666;
+        line-height: 1.6;
+        margin: 0 0 32px 0;
+      }
+
+      .home-btn {
+        width: 100%;
+        padding: 16px;
+        background: #ff5e00;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      .home-btn:hover {
+        background: #e55500;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app-frame">
+      <div class="message-container">
+        <div class="message-icon">⏳</div>
+        <h1 class="message-title">창작자 신청이 완료되었습니다.</h1>
+        <p class="message-text">
+          현재 심사 중입니다.<br />
+          승인 완료 시 안내드리겠습니다.
+        </p>
+        <button class="home-btn" onclick="window.location.href='index.html'">
+          홈으로 돌아가기
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

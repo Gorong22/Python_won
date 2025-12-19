@@ -1,0 +1,128 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // =========================
+    // Helper Functions
+    // =========================
+    
+    /**
+     * 현재 인증된 사용자인지 확인
+     */
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    /**
+     * 현재 사용자의 UID와 문서의 UID가 일치하는지 확인
+     */
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+    
+    // =========================
+    // readers 컬렉션
+    // =========================
+    match /readers/{uid} {
+      // 읽기: 본인 문서만 읽기 가능
+      allow read: if isOwner(uid);
+      
+      // 쓰기: 본인 문서만 쓰기 가능
+      allow create: if isOwner(uid);
+      allow update: if isOwner(uid);
+      allow delete: if false; // 삭제는 비활성화
+    }
+    
+    // =========================
+    // reader_consents 컬렉션
+    // =========================
+    match /reader_consents/{uid} {
+      // 읽기: 본인 문서만 읽기 가능
+      allow read: if isOwner(uid);
+      
+      // 쓰기: 본인 문서만 쓰기 가능 (생성 후 수정 불가)
+      allow create: if isOwner(uid);
+      allow update: if false; // 약관 동의는 수정 불가
+      allow delete: if false; // 삭제 불가
+    }
+    
+    // =========================
+    // reader_onboarding 컬렉션
+    // =========================
+    match /reader_onboarding/{uid} {
+      // 읽기: 본인 문서만 읽기 가능
+      allow read: if isOwner(uid);
+      
+      // 쓰기: 본인 문서만 쓰기 가능 (생성 후 수정 불가)
+      allow create: if isOwner(uid);
+      allow update: if false; // 온보딩 정보는 수정 불가
+      allow delete: if false; // 삭제 불가
+    }
+    
+    // =========================
+    // 이벤트 컬렉션들
+    // =========================
+    
+    // feed_events
+    match /feed_events/{eventId} {
+      allow read: if false; // 다른 사용자의 이벤트 읽기 불가
+      allow write: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+    }
+    
+    // work_view_events
+    match /work_view_events/{eventId} {
+      allow read: if false; // 다른 사용자의 이벤트 읽기 불가
+      allow write: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+    }
+    
+    // work_like_events
+    match /work_like_events/{eventId} {
+      allow read: if false; // 다른 사용자의 이벤트 읽기 불가
+      allow write: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+    }
+    
+    // comment_events
+    match /comment_events/{eventId} {
+      allow read: if false; // 다른 사용자의 이벤트 읽기 불가
+      allow write: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+    }
+    
+    // cut_save_events
+    match /cut_save_events/{eventId} {
+      allow read: if false; // 다른 사용자의 이벤트 읽기 불가
+      allow write: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+    }
+    
+    // moodboard_edit_events
+    match /moodboard_edit_events/{eventId} {
+      allow read: if false; // 다른 사용자의 이벤트 읽기 불가
+      allow write: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+    }
+    
+    // follow_events
+    match /follow_events/{eventId} {
+      allow read: if false; // 다른 사용자의 이벤트 읽기 불가
+      allow write: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+    }
+    
+    // search_events
+    match /search_events/{eventId} {
+      allow read: if false; // 다른 사용자의 이벤트 읽기 불가
+      allow write: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+    }
+    
+    // reports
+    match /reports/{reportId} {
+      allow read: if false; // 다른 사용자의 리포트 읽기 불가
+      allow write: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+    }
+    
+    // =========================
+    // 기본 규칙: 다른 모든 문서는 접근 불가
+    // =========================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>MUMU – 창작자 로그인</title>
+    <link rel="stylesheet" href="css/tabbar.css" />
+    <style>
+      /* Mobile-first layout */
+      body {
+        margin: 0;
+        background: #000;
+        font-family: -apple-system, BlinkMacSystemFont, "Pretendard", sans-serif;
+      }
+
+      .app-frame {
+        width: 100%;
+        max-width: 402px;
+        margin: 0 auto;
+        background: #ffffff;
+        min-height: 100vh;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: calc(64px + env(safe-area-inset-bottom));
+        box-sizing: border-box;
+      }
+
+      .login-container {
+        flex: 1;
+        padding: 40px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .login-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .login-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #000;
+        margin: 0 0 8px 0;
+      }
+
+      .login-subtitle {
+        font-size: 14px;
+        color: #666;
+        margin: 0;
+      }
+
+      .login-form {
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        color: #000;
+        margin-bottom: 8px;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        box-sizing: border-box;
+        font-family: inherit;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: #ff5e00;
+      }
+
+      .login-btn {
+        width: 100%;
+        padding: 14px;
+        background: #ff5e00;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 8px;
+        transition: background 0.2s ease;
+      }
+
+      .login-btn:hover {
+        background: #e55500;
+      }
+
+      .login-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      .error-message {
+        background: #ffebee;
+        color: #c62828;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        margin-bottom: 20px;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      .signup-link {
+        text-align: center;
+        margin-top: 24px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .signup-link a {
+        color: #ff5e00;
+        text-decoration: none;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app-frame">
+      <main class="login-container">
+        <div class="login-header">
+          <h1 class="login-title">창작자 로그인</h1>
+          <p class="login-subtitle">MUMU에 오신 것을 환영합니다</p>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <form class="login-form" id="loginForm">
+          <div class="form-group">
+            <label class="form-label" for="user_id">아이디</label>
+            <input
+              type="text"
+              id="user_id"
+              class="form-input"
+              placeholder="아이디를 입력하세요"
+              required
+              autocomplete="username"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">비밀번호</label>
+            <input
+              type="password"
+              id="password"
+              class="form-input"
+              placeholder="비밀번호를 입력하세요"
+              required
+              autocomplete="current-password"
+            />
+          </div>
+
+          <button type="submit" class="login-btn" id="loginBtn">로그인</button>
+        </form>
+
+        <div class="signup-link">
+          계정이 없으신가요? <a href="signup_creator.html">회원가입</a>
+        </div>
+      </main>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+      import { handleCreatorLogin } from "./js/creator_login.js";
+
+      // 로그인 폼 제출 처리
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const user_id = document.getElementById("user_id").value.trim();
+          const password = document.getElementById("password").value;
+          const loginBtn = document.getElementById("loginBtn");
+          const errorMessage = document.getElementById("errorMessage");
+
+          // 에러 메시지 숨기기
+          errorMessage.classList.remove("show");
+          loginBtn.disabled = true;
+          loginBtn.textContent = "로그인 중...";
+
+          try {
+            // 로그인 처리
+            const result = await handleCreatorLogin(user_id, password);
+
+            // status에 따라 리다이렉트
+            if (result.redirectPath) {
+              window.location.href = result.redirectPath;
+            } else {
+              throw new Error("로그인 후 이동할 페이지를 찾을 수 없습니다.");
+            }
+          } catch (error) {
+            console.error("Login error:", error);
+
+            // Filter out email confirmation errors - status is the only source of truth
+            const errorMsg = error.message || "";
+            const errorCode = error.code || "";
+            const isEmailConfirmationError =
+              (errorMsg.toLowerCase().includes("email") &&
+                (errorMsg.toLowerCase().includes("confirm") ||
+                  errorMsg.toLowerCase().includes("verification") ||
+                  errorMsg.toLowerCase().includes("not confirmed"))) ||
+              errorCode.includes("email_not_confirmed");
+
+            if (isEmailConfirmationError) {
+              // Email confirmation errors are ignored - try to proceed with status check
+              console.warn(
+                "Email confirmation error ignored - checking creator status"
+              );
+              try {
+                const result = await handleCreatorLogin(user_id, password);
+                if (result.redirectPath) {
+                  window.location.href = result.redirectPath;
+                  return;
+                }
+              } catch (retryError) {
+                // If retry also fails, show generic error
+                console.error(
+                  "Retry after email error also failed:",
+                  retryError
+                );
+              }
+            }
+
+            let errorMessageText = "로그인에 실패했습니다. 다시 시도해주세요.";
+
+            // 사용자 친화적인 에러 메시지 (email confirmation errors excluded)
+            if (!isEmailConfirmationError) {
+              if (error.message) {
+                errorMessageText = error.message;
+              } else if (error.code === "auth/user-not-found") {
+                errorMessageText = "아이디를 찾을 수 없습니다.";
+              } else if (error.code === "auth/wrong-password") {
+                errorMessageText = "비밀번호가 올바르지 않습니다.";
+              } else if (error.code === "auth/invalid-email") {
+                errorMessageText = "올바른 아이디를 입력해주세요.";
+              }
+            }
+
+            errorMessage.textContent = errorMessageText;
+            errorMessage.classList.add("show");
+            loginBtn.disabled = false;
+            loginBtn.textContent = "로그인";
+          }
+        });
+    </script>
+  </body>
+</html>

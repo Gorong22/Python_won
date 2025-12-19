@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>MUMU – 계정 만들기</title>
+    <link rel="stylesheet" href="css/tabbar.css" />
+    <style>
+      /* Mobile-first layout */
+      body {
+        margin: 0;
+        background: #000;
+        font-family: -apple-system, BlinkMacSystemFont, "Pretendard", sans-serif;
+      }
+
+      .app-frame {
+        width: 100%;
+        max-width: 402px;
+        margin: 0 auto;
+        background: #ffffff;
+        min-height: 100vh;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: calc(64px + env(safe-area-inset-bottom));
+        box-sizing: border-box;
+      }
+
+      .account-container {
+        flex: 1;
+        padding: 24px 20px;
+        overflow-y: auto;
+      }
+
+      .account-header {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+
+      .account-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #000;
+        margin: 0 0 8px 0;
+      }
+
+      .account-subtitle {
+        font-size: 14px;
+        color: #666;
+        margin: 0;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 8px;
+      }
+
+      .form-label .required {
+        color: #ff5e00;
+        margin-left: 4px;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        box-sizing: border-box;
+        font-family: inherit;
+        transition: border-color 0.2s ease;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: #ff5e00;
+      }
+
+      .form-input.error {
+        border-color: #c62828;
+      }
+
+      .form-hint {
+        font-size: 12px;
+        color: #999;
+        margin-top: 4px;
+      }
+
+      .gender-row {
+        display: flex;
+        gap: 12px;
+      }
+
+      .gender-btn {
+        flex: 1;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #fff;
+        font-size: 14px;
+        color: #333;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .gender-btn:hover {
+        border-color: #ff5e00;
+        background: #fff5f0;
+      }
+
+      .gender-btn.selected {
+        border-color: #ff5e00;
+        background: #ff5e00;
+        color: #fff;
+      }
+
+      .age-row {
+        display: flex;
+        gap: 8px;
+      }
+
+      .age-input {
+        flex: 1;
+        padding: 12px 16px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        box-sizing: border-box;
+        font-family: inherit;
+      }
+
+      .age-input:focus {
+        outline: none;
+        border-color: #ff5e00;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 16px;
+        background: #ff5e00;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        margin-top: 24px;
+      }
+
+      .submit-btn:hover {
+        background: #e55500;
+      }
+
+      .submit-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      .error-message {
+        background: #ffebee;
+        color: #c62828;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        margin-bottom: 20px;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app-frame">
+      <main class="account-container">
+        <div class="account-header">
+          <h1 class="account-title">계정 만들기</h1>
+          <p class="account-subtitle">MUMU에서 시작하세요</p>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <form id="accountForm">
+          <div class="form-group">
+            <label class="form-label" for="username">
+              아이디 <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="username"
+              class="form-input"
+              placeholder="사용자명을 입력하세요"
+              required
+              pattern="[a-zA-Z0-9_]{3,20}"
+            />
+            <p class="form-hint">
+              3-20자, 영문/숫자/언더스코어만 사용 가능. 로그인에 사용됩니다
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">
+              이메일 <span class="required">*</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              class="form-input"
+              placeholder="이메일을 입력하세요"
+              required
+            />
+            <p class="form-hint">계정 복구용 이메일입니다</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">
+              비밀번호 <span class="required">*</span>
+            </label>
+            <input
+              type="password"
+              id="password"
+              class="form-input"
+              placeholder="비밀번호를 입력하세요 (최소 6자)"
+              required
+              minlength="6"
+            />
+            <p class="form-hint">최소 6자 이상</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="name">
+              이름 <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="name"
+              class="form-input"
+              placeholder="이름을 입력하세요"
+              required
+            />
+            <p class="form-hint">실명을 입력하세요</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="nickname">
+              닉네임 <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="nickname"
+              class="form-input"
+              placeholder="닉네임을 입력하세요"
+              required
+            />
+            <p class="form-hint">서비스에서 표시되는 이름입니다</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="birth">
+              생년월일 <span class="required">*</span>
+            </label>
+            <div class="age-row">
+              <input
+                type="number"
+                id="birthYear"
+                class="age-input"
+                placeholder="연도"
+                required
+                min="1900"
+                max="2010"
+              />
+              <input
+                type="number"
+                id="birthMonth"
+                class="age-input"
+                placeholder="월"
+                required
+                min="1"
+                max="12"
+              />
+              <input
+                type="number"
+                id="birthDay"
+                class="age-input"
+                placeholder="일"
+                required
+                min="1"
+                max="31"
+              />
+            </div>
+            <p class="form-hint">만 13세 이상만 가입 가능</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="gender">
+              성별 <span class="required">*</span>
+            </label>
+            <div class="gender-row">
+              <button
+                type="button"
+                class="gender-btn"
+                data-value="male"
+                onclick="selectGender('male')"
+              >
+                남자
+              </button>
+              <button
+                type="button"
+                class="gender-btn"
+                data-value="female"
+                onclick="selectGender('female')"
+              >
+                여자
+              </button>
+            </div>
+            <input type="hidden" id="gender" required />
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">다음</button>
+        </form>
+      </main>
+    </div>
+
+    <!-- Main Script -->
+    <script type="module" src="/js/reader_signup_account.js"></script>
+  </body>
+</html>

@@ -1,0 +1,1022 @@
+// =========================
+// STATE (SINGLE SOURCE OF TRUTH)
+// =========================
+
+const AppState = {
+  currentUserId: null,
+  moodboards: [],
+  folders: [],
+  savedCuts: [],
+  activeMoodboardId: null,
+  activeCanvasId: null,
+  activeBlockId: null,
+  currentTab: 'mood',
+  editor: {
+    isOpen: false,
+    moodboardId: null,
+    template: null,
+    canvasId: null,
+  },
+};
+
+let supabaseClient = null;
+
+// =========================
+// CANVAS INSTANCE MANAGEMENT
+// =========================
+
+class Canvas {
+  constructor(id, moodboardId, options = {}) {
+    this.id = id || `canvas_${Date.now()}`;
+    this.moodboardId = moodboardId;
+    this.ratio = options.ratio || '1:1';
+    this.template = options.template || 'freeform';
+    this.backgroundColor = options.backgroundColor || '#fafafa';
+    this.blocks = options.blocks || [];
+    this.domElement = null;
+  }
+
+  createDOM() {
+    const canvas = document.createElement('div');
+    canvas.className = 'canvas-instance';
+    canvas.dataset.canvasId = this.id;
+    canvas.dataset.moodboardId = this.moodboardId;
+    canvas.dataset.ratio = this.ratio;
+    canvas.style.cssText = `
+      position: relative;
+      width: 358px;
+      aspect-ratio: ${this.ratio.replace(':', ' / ')};
+      background: ${this.backgroundColor};
+      border: 2px solid rgba(128, 128, 128, 0.5);
+      border-radius: 8px;
+      margin: 0 auto;
+      box-sizing: border-box;
+    `;
+    this.domElement = canvas;
+    return canvas;
+  }
+
+  render() {
+    if (!this.domElement) {
+      this.createDOM();
+    }
+    this.domElement.innerHTML = '';
+    this.blocks.forEach(block => {
+      const blockEl = createBlockDOM(block);
+      this.domElement.appendChild(blockEl);
+    });
+    return this.domElement;
+  }
+
+  addBlock(blockData) {
+    this.blocks.push(blockData);
+    if (this.domElement) {
+      const blockEl = createBlockDOM(blockData);
+      this.domElement.appendChild(blockEl);
+    }
+  }
+
+  removeBlock(blockId) {
+    this.blocks = this.blocks.filter(b => b.id !== blockId);
+    if (this.domElement) {
+      const blockEl = this.domElement.querySelector(`[data-block-id="${blockId}"]`);
+      if (blockEl) blockEl.remove();
+    }
+  }
+}
+
+const canvasInstances = new Map();
+
+function getCanvas(canvasId) {
+  return canvasInstances.get(canvasId);
+}
+
+function createCanvas(moodboardId, options = {}) {
+  const canvas = new Canvas(null, moodboardId, options);
+  canvasInstances.set(canvas.id, canvas);
+  return canvas;
+}
+
+function removeCanvas(canvasId) {
+  const canvas = canvasInstances.get(canvasId);
+  if (canvas && canvas.domElement) {
+    canvas.domElement.remove();
+  }
+  canvasInstances.delete(canvasId);
+}
+
+// =========================
+// BLOCK DOM CREATION (NO EVENT BINDING)
+// =========================
+
+function createBlockDOM(blockData) {
+  const block = document.createElement('div');
+  block.className = 'canvas-block';
+  block.dataset.type = blockData.type;
+  block.dataset.blockId = blockData.id || `block_${Date.now()}`;
+  const isActive = AppState.activeBlockId === blockData.id;
+  block.style.cssText = `
+    position: absolute;
+    width: ${blockData.width || 200}px;
+    height: ${blockData.height || 200}px;
+    left: ${blockData.x || 0}px;
+    top: ${blockData.y || 0}px;
+    transform: rotate(${blockData.rotation || 0}deg);
+    cursor: move;
+    border: ${isActive ? '2px solid #007AFF' : '2px solid transparent'};
+    border-radius: 4px;
+    z-index: ${blockData.zIndex || 1};
+  `;
+
+  if (blockData.type === 'text') {
+    block.style.background = 'rgba(255,255,255,0.9)';
+    block.style.padding = '8px';
+    block.innerHTML = `
+      <div class="block-content">
+        <div class="text-content" contenteditable="true" style="width: 100%; height: 100%; font-size: ${blockData.fontSize || 18}px; font-weight: ${blockData.fontWeight || '600'}; color: ${blockData.color || '#333'}; font-family: ${blockData.fontFamily || 'Pretendard, sans-serif'}; outline: none; word-wrap: break-word;">${blockData.text || '텍스트'}</div>
+        <div class="block-controls" style="position: absolute; top: -8px; right: -8px; display: none; gap: 4px; z-index: 10;">
+          <button class="canvas-block-delete" data-action="delete-block" style="width: 28px; height: 28px; background: #ff4444; color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 16px;">×</button>
+          <button class="canvas-block-rotate" data-action="rotate-block" style="width: 24px; height: 24px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 12px;">↻</button>
+          <button class="canvas-block-color" data-action="change-color" style="width: 24px; height: 24px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 12px;">🎨</button>
+        </div>
+        <div class="canvas-block-resize-handle" style="position: absolute; bottom: 0; right: 0; width: 20px; height: 20px; background: rgba(0,0,0,0.7); cursor: nwse-resize; border-radius: 4px 0 4px 0; display: none;"></div>
+      </div>
+    `;
+  } else if (blockData.type === 'image') {
+    block.innerHTML = `
+      <div class="block-content">
+        <img src="${blockData.imageUrl}" alt="Block" style="width: 100%; height: 100%; object-fit: cover; filter: ${blockData.filter || 'none'};" />
+        <div class="block-controls" style="position: absolute; top: -10px; right: -10px; display: none; gap: 4px; z-index: 10;">
+          <button class="canvas-block-delete" data-action="delete-block" style="width: 24px; height: 24px; background: #ff4444; color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 14px;">×</button>
+          <button class="canvas-block-filter" data-action="change-filter" style="width: 24px; height: 24px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 12px;">🎨</button>
+          <button class="canvas-block-rotate" data-action="rotate-block" style="width: 24px; height: 24px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 12px;">↻</button>
+        </div>
+        <div class="canvas-block-resize-handle" style="position: absolute; bottom: 0; right: 0; width: 20px; height: 20px; background: rgba(0,0,0,0.7); cursor: nwse-resize; border-radius: 4px 0 4px 0; display: none;"></div>
+      </div>
+    `;
+  }
+
+  return block;
+}
+
+// =========================
+// RENDER FUNCTIONS (PURE)
+// =========================
+
+function renderMoodboards() {
+  const grid = document.getElementById('moodboards-grid');
+  const empty = document.getElementById('moodboards-empty');
+  if (!grid) return;
+
+  if (AppState.moodboards.length === 0) {
+    if (empty) empty.style.display = 'flex';
+    grid.innerHTML = '';
+    return;
+  }
+
+  if (empty) empty.style.display = 'none';
+  grid.innerHTML = AppState.moodboards.map(moodboard => `
+    <div class="moodboard-card" data-moodboard-id="${moodboard.id}" data-action="open-moodboard">
+      <div class="moodboard-thumbnail" style="background: ${moodboard.backgroundColor || '#fafafa'};">
+        ${moodboard.thumbnail ? `<img src="${moodboard.thumbnail}" alt="${moodboard.name}" />` : ''}
+      </div>
+      <div class="moodboard-name">${moodboard.name || '무드보드'}</div>
+    </div>
+  `).join('');
+}
+
+/**
+ * 대표 무드보드 렌더링 함수
+ * - is_featured가 true인 무드보드를 우선 선택
+ * - 없으면 첫 번째 무드보드를 선택
+ * - 무드보드가 없거나 로딩 실패 시 empty state 표시
+ * - 에러 발생 시 조용히 폴백 (콘솔 에러/alert 금지)
+ */
+function renderFeaturedMoodboard() {
+  const featuredContent = document.getElementById('featured-content');
+  const featuredEmpty = document.getElementById('featured-empty');
+  
+  if (!featuredContent || !featuredEmpty) return;
+
+  try {
+    // 대표 무드보드 식별: is_featured가 true인 것 우선, 없으면 첫 번째
+    const featuredMoodboard = AppState.moodboards.find(m => m.is_featured === true) 
+      || AppState.moodboards[0];
+
+    if (!featuredMoodboard) {
+      // 대표 무드보드가 없는 경우 empty state 표시
+      featuredContent.style.display = 'none';
+      featuredEmpty.style.display = 'flex';
+      return;
+    }
+
+    // 대표 무드보드가 있는 경우 렌더링
+    featuredEmpty.style.display = 'none';
+    featuredContent.style.display = 'block';
+
+    // 썸네일 이미지 URL 추출
+    let thumbnailUrl = featuredMoodboard.thumbnail;
+    if (!thumbnailUrl && featuredMoodboard.blocks && featuredMoodboard.blocks.length > 0) {
+      const firstImageBlock = featuredMoodboard.blocks.find(b => b.type === 'image' && b.imageUrl);
+      if (firstImageBlock) {
+        thumbnailUrl = firstImageBlock.imageUrl;
+      }
+    }
+
+    // 블록 개수 계산
+    const blockCount = featuredMoodboard.blocks ? featuredMoodboard.blocks.length : 0;
+
+    // 무드보드 이름
+    const moodboardName = featuredMoodboard.name || '무드보드';
+
+    // HTML 렌더링
+    featuredContent.innerHTML = `
+      <div class="featured-moodboard-preview-content">
+        ${thumbnailUrl ? `
+          <div class="featured-thumbnail">
+            <img src="${thumbnailUrl}" alt="${moodboardName}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'featured-placeholder-icon\\'>🎨</div>';" />
+          </div>
+        ` : `
+          <div class="featured-thumbnail featured-thumbnail-placeholder">
+            <div class="featured-placeholder-icon">🎨</div>
+          </div>
+        `}
+        <div class="featured-info">
+          <h4 class="featured-name">${moodboardName}</h4>
+          <p class="featured-count">${blockCount}개의 아이템</p>
+        </div>
+      </div>
+    `;
+  } catch (error) {
+    // 에러 발생 시 조용히 empty state로 폴백 (콘솔 에러/alert 금지)
+    featuredContent.style.display = 'none';
+    featuredEmpty.style.display = 'flex';
+  }
+}
+
+function renderEditor() {
+  const modal = document.getElementById('moodboardEditorModal');
+  const canvasContainer = document.getElementById('canvasEditor');
+  if (!modal || !canvasContainer) return;
+
+  if (!AppState.editor.isOpen) {
+    modal.classList.remove('active');
+    return;
+  }
+
+  modal.classList.add('active');
+  const canvas = getCanvas(AppState.editor.canvasId);
+  if (canvas) {
+    canvasContainer.innerHTML = '';
+    const canvasElement = canvas.render();
+    canvasContainer.appendChild(canvasElement);
+    
+    if (AppState.activeBlockId) {
+      const activeBlock = canvasElement.querySelector(`[data-block-id="${AppState.activeBlockId}"]`);
+      if (activeBlock) {
+        activeBlock.style.border = '2px solid #007AFF';
+      }
+    }
+  }
+}
+
+// =========================
+// EVENT DELEGATION (SINGLE ROOT)
+// =========================
+
+function setupEventDelegation() {
+  document.addEventListener('click', (e) => {
+    const action = e.target.dataset.action || e.target.closest('[data-action]')?.dataset.action;
+    const block = e.target.closest('.canvas-block');
+    const moodboardCard = e.target.closest('[data-moodboard-id]');
+
+    if (block && !action) {
+      const blockId = block.dataset.blockId;
+      if (blockId && AppState.editor.isOpen) {
+        setState({ activeBlockId: blockId });
+        return;
+      }
+    }
+
+    if (!action) return;
+
+    switch (action) {
+      case 'delete-block':
+        if (block) {
+          e.stopPropagation();
+          const blockId = block.dataset.blockId;
+          const canvas = getCanvas(AppState.editor.canvasId);
+          if (canvas) {
+            canvas.removeBlock(blockId);
+            if (AppState.activeBlockId === blockId) {
+              setState({ activeBlockId: null });
+            } else {
+              renderEditor();
+            }
+          }
+        }
+        break;
+
+      case 'rotate-block':
+        if (block) {
+          e.stopPropagation();
+          const blockId = block.dataset.blockId;
+          const canvas = getCanvas(AppState.editor.canvasId);
+          if (canvas) {
+            const blockData = canvas.blocks.find(b => b.id === blockId);
+            if (blockData) {
+              blockData.rotation = (blockData.rotation || 0) + 15;
+              renderEditor();
+            }
+          }
+        }
+        break;
+
+      case 'change-color':
+        if (block) {
+          e.stopPropagation();
+          e.preventDefault();
+          if (window.openTextColorPicker) {
+            openTextColorPicker(block);
+          }
+        }
+        break;
+
+      case 'change-filter':
+        if (block) {
+          e.stopPropagation();
+          e.preventDefault();
+          if (window.openImageFilterPicker) {
+            openImageFilterPicker(block);
+          }
+        }
+        break;
+
+      case 'open-moodboard':
+        if (moodboardCard) {
+          const moodboardId = moodboardCard.dataset.moodboardId;
+          openMoodboardEditor(moodboardId);
+        }
+        break;
+    }
+  });
+
+  const editorRoot = document.getElementById('canvasEditor');
+  if (editorRoot) {
+    editorRoot.addEventListener('mouseover', (e) => {
+      const block = e.target.closest('.canvas-block');
+      if (block && !e.target.closest('.block-controls')) {
+        const controls = block.querySelector('.block-controls');
+        if (controls) controls.style.display = 'flex';
+        const resizeHandle = block.querySelector('.canvas-block-resize-handle');
+        if (resizeHandle) resizeHandle.style.display = 'block';
+      }
+    });
+
+    editorRoot.addEventListener('mouseout', (e) => {
+      const block = e.target.closest('.canvas-block');
+      if (block && !block.matches(':hover') && !e.relatedTarget?.closest('.canvas-block')) {
+        const controls = block.querySelector('.block-controls');
+        if (controls) controls.style.display = 'none';
+        const resizeHandle = block.querySelector('.canvas-block-resize-handle');
+        if (resizeHandle) resizeHandle.style.display = 'none';
+      }
+    });
+  }
+}
+
+// =========================
+// STATE ACTIONS
+// =========================
+
+function setState(updates) {
+  Object.assign(AppState, updates);
+  render();
+}
+
+function render() {
+  renderMoodboards();
+  renderFeaturedMoodboard();
+  renderEditor();
+}
+
+// =========================
+// API FUNCTIONS (KEEP EXISTING)
+// =========================
+
+async function loadSupabaseClient() {
+  if (supabaseClient) return supabaseClient;
+  if (!window.supabase) return null;
+  if (typeof SUPABASE_URL === 'undefined' || typeof SUPABASE_ANON_KEY === 'undefined') return null;
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  return supabaseClient;
+}
+
+async function ensureFirebaseUser() {
+  try {
+    if (typeof window.getCurrentFirebaseUser !== 'function') return null;
+    const firebaseUser = await window.getCurrentFirebaseUser();
+    if (!firebaseUser || !firebaseUser.uid) return null;
+    AppState.currentUserId = firebaseUser.uid;
+    return firebaseUser;
+  } catch (error) {
+    return null;
+  }
+}
+
+async function ensureAuthenticated() {
+  if (AppState.currentUserId) return true;
+  const firebaseUser = await ensureFirebaseUser();
+  return !!firebaseUser;
+}
+
+function getContextIds() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const profileUserId = urlParams.get('userId') || AppState.currentUserId;
+  return {
+    currentUserId: AppState.currentUserId,
+    profileUserId: profileUserId,
+    isOwner: AppState.currentUserId && profileUserId && AppState.currentUserId === profileUserId,
+  };
+}
+
+// =========================
+// PROFILE OPERATIONS
+// =========================
+
+/**
+ * 사용자 프로필 데이터 로드
+ */
+async function loadUserProfile() {
+  const isAuthenticated = await ensureAuthenticated();
+  if (!isAuthenticated) {
+    return;
+  }
+
+  try {
+    const firebaseUser = await ensureFirebaseUser();
+    if (!firebaseUser) {
+      return;
+    }
+
+    const client = await loadSupabaseClient();
+    if (!client) {
+      return;
+    }
+
+    // 사용자 프로필 데이터 로드 (users 테이블 또는 user_profiles 테이블)
+    const { data: profileData, error: profileError } = await client
+      .from('users')
+      .select('nickname, name, bio, description, avatar_url, profile_image')
+      .eq('id', firebaseUser.uid)
+      .single();
+
+    // users 테이블이 없거나 에러가 발생하면 user_profiles 테이블 시도
+    let profile = null;
+    if (profileError || !profileData) {
+      const { data: altProfileData } = await client
+        .from('user_profiles')
+        .select('nickname, name, bio, description, avatar_url, profile_image')
+        .eq('user_id', firebaseUser.uid)
+        .single();
+      profile = altProfileData;
+    } else {
+      profile = profileData;
+    }
+
+    // 팔로우/팔로워 수 집계 (follows 테이블 또는 user_follows 테이블)
+    let followCount = 0;
+    let followerCount = 0;
+
+    try {
+      const { count: followingCount } = await client
+        .from('follows')
+        .select('*', { count: 'exact', head: true })
+        .eq('follower_id', firebaseUser.uid);
+      followCount = followingCount || 0;
+    } catch (e) {
+      // follows 테이블이 없거나 다른 구조일 수 있음
+    }
+
+    try {
+      const { count: followersCount } = await client
+        .from('follows')
+        .select('*', { count: 'exact', head: true })
+        .eq('following_id', firebaseUser.uid);
+      followerCount = followersCount || 0;
+    } catch (e) {
+      // follows 테이블이 없거나 다른 구조일 수 있음
+    }
+
+    // user_follows 테이블 시도 (다른 구조일 수 있음)
+    if (followCount === 0 && followerCount === 0) {
+      try {
+        const { count: followingCount } = await client
+          .from('user_follows')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', firebaseUser.uid);
+        followCount = followingCount || 0;
+      } catch (e) {
+        // 테이블이 없을 수 있음
+      }
+
+      try {
+        const { count: followersCount } = await client
+          .from('user_follows')
+          .select('*', { count: 'exact', head: true })
+          .eq('followed_user_id', firebaseUser.uid);
+        followerCount = followersCount || 0;
+      } catch (e) {
+        // 테이블이 없을 수 있음
+      }
+    }
+
+    // UI 업데이트
+    updateProfileUI({
+      nickname: profile?.nickname || profile?.name || null,
+      bio: profile?.bio || profile?.description || null,
+      avatarUrl: profile?.avatar_url || profile?.profile_image || null,
+      followCount: followCount,
+      followerCount: followerCount,
+    });
+  } catch (error) {
+    // 에러 발생 시 조용히 실패 (기존 하드코딩 텍스트 유지)
+    return;
+  }
+}
+
+/**
+ * 프로필 UI 업데이트
+ * @param {Object} profileData - 프로필 데이터 객체
+ */
+function updateProfileUI(profileData) {
+  const profileNameEl = document.querySelector('.profile-name');
+  const profileDescEl = document.querySelector('.profile-desc');
+  const profileStatsEl = document.getElementById('profile-stats');
+
+  // 닉네임 업데이트
+  if (profileNameEl) {
+    if (profileData.nickname) {
+      profileNameEl.textContent = profileData.nickname;
+    }
+    // 데이터가 없으면 기존 하드코딩 텍스트 유지
+  }
+
+  // 소개 업데이트
+  if (profileDescEl) {
+    if (profileData.bio) {
+      profileDescEl.textContent = profileData.bio;
+      profileDescEl.style.display = '';
+    } else {
+      profileDescEl.style.display = 'none';
+    }
+  }
+
+  // 팔로우/팔로워 수 업데이트
+  if (profileStatsEl) {
+    const followNums = profileStatsEl.querySelectorAll('.follow-num');
+    if (followNums.length >= 2) {
+      followNums[0].textContent = profileData.followCount || 0;
+      followNums[1].textContent = profileData.followerCount || 0;
+    }
+
+    // 데이터가 있으면 표시 (MY MOOD 탭에서만 표시되도록 조건 확인)
+    if (profileData.followCount !== undefined || profileData.followerCount !== undefined) {
+      // MY MOOD 탭일 때만 표시
+      const currentTab = AppState.currentTab || 'mood';
+      if (currentTab === 'mood') {
+        profileStatsEl.style.display = '';
+      }
+    }
+  }
+
+  // 프로필 이미지 업데이트 (선택사항)
+  if (profileData.avatarUrl) {
+    const profileAvatarEl = document.querySelector('.profile-avatar');
+    if (profileAvatarEl) {
+      profileAvatarEl.style.backgroundImage = `url(${profileData.avatarUrl})`;
+      profileAvatarEl.style.backgroundSize = 'cover';
+      profileAvatarEl.style.backgroundPosition = 'center';
+    }
+  }
+}
+
+// =========================
+// MOODBOARD OPERATIONS
+// =========================
+
+async function loadMoodboards() {
+  const isAuthenticated = await ensureAuthenticated();
+  if (!isAuthenticated) {
+    setState({ moodboards: [] });
+    return;
+  }
+
+  try {
+    const firebaseUser = await ensureFirebaseUser();
+    if (!firebaseUser) {
+      setState({ moodboards: [] });
+      return;
+    }
+
+    const client = await loadSupabaseClient();
+    if (!client) {
+      setState({ moodboards: [] });
+      return;
+    }
+
+    const { data: eventsData, error } = await client
+      .from('user_feed_events')
+      .select('id, metadata, created_at')
+      .eq('user_id', firebaseUser.uid)
+      .eq('event_type', 'moodboard_created')
+      .order('created_at', { ascending: false })
+      .limit(1000);
+
+    if (error) {
+      setState({ moodboards: [] });
+      return;
+    }
+
+    const loadedMoodboards = (eventsData || []).map((event) => {
+      const metadata = event.metadata || {};
+      const moodboardData = metadata.moodboard_data || metadata || {};
+      return {
+        id: metadata.moodboard_id || event.id,
+        name: moodboardData.name || metadata.name || '무드보드',
+        creatorId: AppState.currentUserId,
+        template: moodboardData.template || metadata.template || 'freeform',
+        blocks: moodboardData.blocks || metadata.blocks || [],
+        thumbnail: moodboardData.thumbnail || metadata.thumbnail,
+        backgroundColor: moodboardData.backgroundColor || metadata.backgroundColor || '#fafafa',
+        is_featured: moodboardData.is_featured === true || metadata.is_featured === true || false,
+        isPublic: moodboardData.isPublic !== false,
+        createdAt: event.created_at,
+      };
+    });
+
+    setState({ moodboards: loadedMoodboards });
+    // 대표 무드보드 렌더링
+    renderFeaturedMoodboard();
+  } catch (error) {
+    setState({ moodboards: [] });
+    // 에러 발생 시에도 empty state 표시
+    renderFeaturedMoodboard();
+  }
+}
+
+function openMoodboardEditor(moodboardId, template = null) {
+  const moodboard = AppState.moodboards.find(m => m.id === moodboardId);
+  const canvas = createCanvas(moodboardId, {
+    ratio: moodboard?.canvas_ratio || '1:1',
+    template: template || moodboard?.template || 'freeform',
+    backgroundColor: moodboard?.backgroundColor || '#fafafa',
+    blocks: moodboard?.blocks || [],
+  });
+
+  setState({
+    editor: {
+      isOpen: true,
+      moodboardId: moodboardId,
+      template: template || moodboard?.template || 'freeform',
+      canvasId: canvas.id,
+    },
+    activeMoodboardId: moodboardId,
+    activeCanvasId: canvas.id,
+    activeBlockId: null,
+  });
+}
+
+function closeMoodboardEditor() {
+  if (AppState.editor.canvasId) {
+    removeCanvas(AppState.editor.canvasId);
+  }
+  setState({
+    editor: {
+      isOpen: false,
+      moodboardId: null,
+      template: null,
+      canvasId: null,
+    },
+    activeMoodboardId: null,
+    activeCanvasId: null,
+    activeBlockId: null,
+  });
+}
+
+function addTextBlock() {
+  const canvas = getCanvas(AppState.editor.canvasId);
+  if (!canvas) return;
+
+  const canvasEl = canvas.domElement;
+  if (!canvasEl) return;
+
+  const rect = canvasEl.getBoundingClientRect();
+  const centerX = rect.width / 2 - 100;
+  const centerY = rect.height / 2 - 50;
+
+  const blockData = {
+    id: `block_${Date.now()}`,
+    type: 'text',
+    text: '텍스트를 입력하세요',
+    x: centerX,
+    y: centerY,
+    width: 200,
+    height: 100,
+    rotation: 0,
+  };
+
+  canvas.addBlock(blockData);
+  renderEditor();
+}
+
+function addImageBlock(imageUrl) {
+  const canvas = getCanvas(AppState.editor.canvasId);
+  if (!canvas) return;
+
+  const canvasEl = canvas.domElement;
+  if (!canvasEl) return;
+
+  const rect = canvasEl.getBoundingClientRect();
+  const centerX = rect.width / 2 - 100;
+  const centerY = rect.height / 2 - 100;
+
+  const blockData = {
+    id: `block_${Date.now()}`,
+    type: 'image',
+    imageUrl: imageUrl,
+    x: centerX,
+    y: centerY,
+    width: 200,
+    height: 200,
+    rotation: 0,
+  };
+
+  canvas.addBlock(blockData);
+  renderEditor();
+}
+
+async function saveMoodboardEditor() {
+  const isAuthenticated = await ensureAuthenticated();
+  if (!isAuthenticated) return;
+
+  const canvas = getCanvas(AppState.editor.canvasId);
+  if (!canvas) return;
+
+  const blocks = Array.from(canvas.domElement.querySelectorAll('.canvas-block')).map(block => {
+    const rect = block.getBoundingClientRect();
+    const canvasRect = canvas.domElement.getBoundingClientRect();
+    const transform = block.style.transform || '';
+    const rotationMatch = transform.match(/rotate\(([^)]+)\)/);
+    const rotation = rotationMatch ? parseFloat(rotationMatch[1]) : 0;
+
+    const blockData = {
+      type: block.dataset.type || 'image',
+      x: parseFloat(block.style.left) || 0,
+      y: parseFloat(block.style.top) || 0,
+      width: parseFloat(block.style.width) || 200,
+      height: parseFloat(block.style.height) || 200,
+      rotation: rotation,
+      zIndex: parseInt(block.style.zIndex) || 1,
+    };
+
+    if (block.dataset.type === 'image') {
+      const img = block.querySelector('img');
+      blockData.imageUrl = img ? img.src : block.dataset.imageUrl || '';
+    } else if (block.dataset.type === 'text') {
+      const textContent = block.querySelector('.text-content');
+      blockData.text = textContent ? textContent.textContent || textContent.innerText : '';
+      blockData.fontSize = parseInt(textContent?.style.fontSize) || 18;
+      blockData.fontWeight = textContent?.style.fontWeight || '600';
+      blockData.color = textContent?.style.color || '#333';
+      blockData.fontFamily = textContent?.style.fontFamily || 'Pretendard, sans-serif';
+    }
+
+    return blockData;
+  });
+
+  const titleInput = document.getElementById('editor-title-input');
+  const moodboardName = titleInput?.value.trim() || `무드보드 ${AppState.moodboards.length + 1}`;
+
+  const moodboardData = {
+    name: moodboardName,
+    template: canvas.template,
+    blocks: blocks,
+    thumbnail: blocks.find(b => b.type === 'image')?.imageUrl || null,
+    backgroundColor: canvas.backgroundColor,
+    canvas_ratio: canvas.ratio,
+    is_featured: false,
+    isPublic: false,
+  };
+
+  const savedMoodboardId = await createMoodboardFeed(moodboardData);
+  if (savedMoodboardId) {
+    await loadMoodboards();
+    closeMoodboardEditor();
+  }
+}
+
+async function createMoodboardFeed(moodboardData) {
+  const moodboardId = AppState.editor.moodboardId || `moodboard_${Date.now()}`;
+  const firebaseUser = await ensureFirebaseUser();
+  if (!firebaseUser) return null;
+
+  const client = await loadSupabaseClient();
+  if (!client) return null;
+
+  const { data: existingEvents } = await client
+    .from('user_feed_events')
+    .select('*')
+    .eq('user_id', firebaseUser.uid)
+    .eq('event_type', 'moodboard_created')
+    .order('created_at', { ascending: false });
+
+  let existingEvent = null;
+  if (existingEvents && existingEvents.length > 0) {
+    existingEvent = existingEvents.find(e => e.metadata?.moodboard_id === moodboardId);
+  }
+
+  const metadata = {
+    moodboard_id: moodboardId,
+    moodboard_data: moodboardData,
+    name: moodboardData.name,
+    thumbnail: moodboardData.thumbnail,
+    blocks: moodboardData.blocks,
+    backgroundColor: moodboardData.backgroundColor || '#fafafa',
+    isPublic: moodboardData.isPublic,
+  };
+
+  if (existingEvent && AppState.editor.moodboardId) {
+    const { error } = await client
+      .from('user_feed_events')
+      .update({ metadata })
+      .eq('id', existingEvent.id);
+    if (error) return null;
+  } else {
+    const { error } = await client
+      .from('user_feed_events')
+      .insert({
+        user_id: firebaseUser.uid,
+        event_type: 'moodboard_created',
+        metadata: metadata,
+      });
+    if (error) return null;
+  }
+
+  return moodboardId;
+}
+
+// =========================
+// UI HELPERS
+// =========================
+
+function switchTab(tab) {
+  setState({ currentTab: tab });
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  const tabEl = document.querySelector(`[data-tab="${tab}"]`);
+  const contentEl = document.getElementById(`tab-${tab}`);
+  if (tabEl) tabEl.classList.add('active');
+  if (contentEl) contentEl.classList.add('active');
+
+  // 탭 전환 시 프로필 통계 표시/숨김 처리
+  const profileStatsEl = document.getElementById('profile-stats');
+  if (profileStatsEl) {
+    if (tab === 'mood') {
+      // MY MOOD 탭에서는 팔로우/팔로워 정보 표시
+      const followNums = profileStatsEl.querySelectorAll('.follow-num');
+      if (followNums.length >= 2) {
+        const hasData = parseInt(followNums[0].textContent) > 0 || parseInt(followNums[1].textContent) > 0;
+        if (hasData || profileStatsEl.textContent.trim() !== '0 팔로우0 팔로워') {
+          profileStatsEl.style.display = '';
+        }
+      }
+    } else {
+      // MY 탭에서는 숨김
+      profileStatsEl.style.display = 'none';
+    }
+  }
+}
+
+function createNewMoodboard() {
+  document.getElementById('moodboardCreateModal')?.classList.add('active');
+}
+
+function closeMoodboardCreateModal() {
+  document.getElementById('moodboardCreateModal')?.classList.remove('active');
+}
+
+function startFreeformMoodboard() {
+  closeMoodboardCreateModal();
+  openMoodboardEditor(null, 'freeform');
+}
+
+function showTemplates() {
+  document.getElementById('moodboardCreateModal')?.classList.remove('active');
+  document.getElementById('templateSelectModal')?.classList.add('active');
+}
+
+function closeTemplateSelectModal() {
+  document.getElementById('templateSelectModal')?.classList.remove('active');
+}
+
+function selectTemplate(templateName) {
+  closeTemplateSelectModal();
+  openMoodboardEditor(null, templateName);
+}
+
+// =========================
+// INITIALIZATION
+// =========================
+
+document.addEventListener('DOMContentLoaded', () => {
+  // 초기 렌더링 실행
+  render();
+  
+  // app-frame에 loaded 클래스 추가하여 표시
+  const appFrame = document.querySelector('.app-frame');
+  if (appFrame) {
+    appFrame.classList.add('loaded');
+  }
+  
+  setupEventDelegation();
+  ensureAuthenticated().then(() => {
+    loadMoodboards();
+    loadUserProfile();
+  });
+
+  document.getElementById('btnAddText')?.addEventListener('click', addTextBlock);
+  document.getElementById('btnAddCut')?.addEventListener('click', () => {
+    if (window.openCutSelectionModal) {
+      openCutSelectionModal();
+    }
+  });
+  document.getElementById('btnAddEmoji')?.addEventListener('click', () => {
+    const emoji = prompt('이모티콘 입력 😀');
+    if (emoji) {
+      const canvas = getCanvas(AppState.editor.canvasId);
+      if (canvas) {
+        const blockData = {
+          id: `block_${Date.now()}`,
+          type: 'text',
+          text: emoji,
+          x: 50,
+          y: 50,
+          width: 100,
+          height: 100,
+          rotation: 0,
+        };
+        canvas.addBlock(blockData);
+        renderEditor();
+      }
+    }
+  });
+
+  document.querySelectorAll('.ratio-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const ratio = card.dataset.ratio;
+      if (ratio) {
+        const canvas = getCanvas(AppState.editor.canvasId);
+        if (canvas) {
+          canvas.ratio = ratio;
+          canvas.domElement.style.aspectRatio = ratio.replace(':', ' / ');
+          canvas.domElement.dataset.ratio = ratio;
+        }
+        document.getElementById('ratio-selector-panel')?.style.setProperty('display', 'none');
+      }
+    });
+  });
+
+  document.getElementById('ratioToggleBtn')?.addEventListener('click', () => {
+    const panel = document.getElementById('ratio-selector-panel');
+    if (panel) {
+      const isVisible = panel.style.display !== 'none';
+      panel.style.display = isVisible ? 'none' : 'block';
+    }
+  });
+
+  document.getElementById('editor-title-input')?.addEventListener('input', (e) => {
+    // Title update handled in state
+  });
+
+  document.querySelector('.editor-btn-back')?.addEventListener('click', closeMoodboardEditor);
+  document.querySelector('.editor-btn.close-btn')?.addEventListener('click', closeMoodboardEditor);
+  document.querySelector('[onclick="saveMoodboardEditor()"]')?.addEventListener('click', saveMoodboardEditor);
+});
+
+// =========================
+// EXPORT FOR COMPATIBILITY
+// =========================
+
+window.switchTab = switchTab;
+window.createNewMoodboard = createNewMoodboard;
+window.closeMoodboardCreateModal = closeMoodboardCreateModal;
+window.startFreeformMoodboard = startFreeformMoodboard;
+window.showTemplates = showTemplates;
+window.closeTemplateSelectModal = closeTemplateSelectModal;
+window.selectTemplate = selectTemplate;
+window.openMoodboardEditor = openMoodboardEditor;
+window.closeMoodboardEditor = closeMoodboardEditor;
+window.saveMoodboardEditor = saveMoodboardEditor;
+window.addTextBlock = addTextBlock;
+window.addImageBlock = addImageBlock;

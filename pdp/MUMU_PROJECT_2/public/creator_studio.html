@@ -1,0 +1,1846 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MUU CREATOR STUDIO</title>
+    <link rel="stylesheet" href="./css/creator_studio.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-logo">
+        <span class="logo-mu">MU</span>
+        <span class="logo-text">CREATOR STUDIO</span>
+      </div>
+    </header>
+
+    <div class="container">
+      <aside class="sidebar">
+        <nav class="sidebar-nav">
+          <button class="nav-item active" data-view="dashboard">
+            대시보드
+          </button>
+          <button class="nav-item" data-view="work-list">작품 관리</button>
+          <button class="nav-item" data-view="revenue">수익</button>
+          <button class="nav-item" data-view="store">스토어</button>
+          <button class="nav-item" data-view="analytics">통계</button>
+          <button class="nav-item" data-view="profile">프로필 설정</button>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <!-- Dashboard View - TOP SUMMARY -->
+        <section id="dashboard-view" class="view active">
+          <!-- THIS MONTH PAYOUT - DOMINANT -->
+          <div class="payout-summary-card">
+            <div class="payout-header">
+              <h2 class="payout-label">이번 달 정산 예정액</h2>
+              <div class="payout-status-badge" id="payout-status-badge">
+                <span class="status-text">집계 중</span>
+              </div>
+            </div>
+            <div class="payout-amount">
+              <span class="currency">₩</span>
+              <span class="amount" id="payout-amount">2,310,000</span>
+            </div>
+            <div class="payout-date">다음 달 10일 정산</div>
+            <div class="payout-breakdown">
+              <div class="breakdown-item">
+                <span class="breakdown-label">총 수익</span>
+                <span class="breakdown-value" id="total-revenue"
+                  >₩2,500,000</span
+                >
+              </div>
+              <div class="breakdown-item">
+                <span class="breakdown-label">플랫폼 수수료 (10%)</span>
+                <span class="breakdown-value">- ₩190,000</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ACTION REQUIRED - DOMINANT -->
+          <div class="action-required-card" id="action-required-card">
+            <h3 class="action-title">필요한 작업</h3>
+            <div class="action-list" id="action-list">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- PERFORMING WORKS -->
+          <div class="dashboard-card">
+            <h3 class="card-title">수익 기여 작품</h3>
+            <div class="revenue-works-list" id="revenue-works-list"></div>
+          </div>
+
+          <!-- QUICK STATS -->
+          <div class="dashboard-grid">
+            <div class="dashboard-card">
+              <h3 class="card-title">이번 달 조회수</h3>
+              <div class="big-stat-value" id="monthly-views">45,678</div>
+            </div>
+            <div class="dashboard-card">
+              <h3 class="card-title">이번 달 좋아요</h3>
+              <div class="big-stat-value" id="monthly-likes">2,345</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Work List View -->
+        <section id="work-list-view" class="view">
+          <div class="work-list-header">
+            <h1 class="page-title">작품 관리</h1>
+            <button class="btn-primary" id="upload-btn">작품 업로드</button>
+          </div>
+
+          <div class="work-tabs">
+            <button class="work-tab active" data-tab="all">전체</button>
+            <button class="work-tab" data-tab="review">심사 중</button>
+            <button class="work-tab" data-tab="approved">심사 완료</button>
+            <button class="work-tab" data-tab="rejected">반려됨</button>
+            <button class="work-tab" data-tab="draft">임시저장</button>
+          </div>
+
+          <div class="work-list" id="work-list-container"></div>
+        </section>
+
+        <!-- Work Detail View -->
+        <section id="work-detail-view" class="view">
+          <div class="detail-header">
+            <button class="btn-back" id="back-to-list-btn">← 목록으로</button>
+            <h1 class="page-title" id="work-detail-title">작품 상세</h1>
+          </div>
+
+          <div class="detail-content">
+            <div class="detail-main">
+              <div class="detail-info-card">
+                <div class="work-status" id="work-status-badge"></div>
+                <h2 id="detail-work-title"></h2>
+                <p class="work-meta" id="detail-work-meta"></p>
+                <div class="work-images" id="detail-work-images"></div>
+              </div>
+
+              <div class="review-timeline-card">
+                <h3 class="card-title">심사 타임라인</h3>
+                <div class="timeline" id="review-timeline"></div>
+              </div>
+
+              <div
+                class="rejection-card"
+                id="rejection-card"
+                style="display: none"
+              >
+                <h3 class="card-title">반려 사유</h3>
+                <div class="rejection-reason" id="rejection-reason"></div>
+                <button class="btn-primary" id="resubmit-btn">
+                  재제출하기
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Upload Screen View - 3 Step Flow -->
+        <section id="upload-view" class="view">
+          <!-- Step 0: Entry -->
+          <div class="upload-step" data-step="0" id="upload-step-0">
+            <div class="upload-entry">
+              <button class="btn-upload-entry" id="btn-new-work">
+                <span class="btn-icon">+</span>
+                <span class="btn-text">새 작품 업로드</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 1: 컷 업로드 (로컬 상태만) -->
+          <div
+            class="upload-step"
+            data-step="1"
+            id="upload-step-1"
+            style="display: none"
+          >
+            <div class="upload-header">
+              <button class="btn-back" id="upload-back-step1">←</button>
+              <h2 class="step-title">컷 업로드</h2>
+            </div>
+            <div class="upload-content">
+              <div class="upload-area-large" id="upload-area">
+                <input
+                  type="file"
+                  id="file-input"
+                  name="images"
+                  multiple
+                  accept="image/jpeg,image/png,image/jpg"
+                  style="display: none"
+                />
+                <div class="upload-placeholder-large" id="upload-placeholder">
+                  <svg
+                    width="64"
+                    height="64"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 5V19M5 12H19"
+                      stroke="#999"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  <p class="upload-instruction">
+                    컷 이미지를 순서대로 업로드하세요
+                  </p>
+                  <p class="upload-hint">
+                    JPG, PNG 파일을 드래그하거나 클릭하세요
+                  </p>
+                  <p class="upload-hint-square">
+                    컷은 자동으로 1:1 비율로 맞춰집니다
+                  </p>
+                </div>
+                <!-- 가로 스와이프 미리보기 -->
+                <div class="cut-preview-swipe" id="image-preview-list"></div>
+              </div>
+              <div class="cut-actions-row">
+                <button
+                  type="button"
+                  class="btn-text-danger"
+                  id="btn-reset-all"
+                  style="display: none"
+                >
+                  전체 삭제
+                </button>
+              </div>
+              <div class="upload-actions">
+                <button
+                  type="button"
+                  class="btn-primary"
+                  id="btn-next-to-settings"
+                  disabled
+                >
+                  다음
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2: 작품 설정 (필수: 제목, 설명, 장르, 대표 컷 / 선택: 태그) -->
+          <div
+            class="upload-step"
+            data-step="2"
+            id="upload-step-2"
+            style="display: none"
+          >
+            <div class="upload-header">
+              <button class="btn-back" id="upload-back-step2">←</button>
+              <h2 class="step-title">작품 설정</h2>
+            </div>
+            <div class="upload-content">
+              <div class="work-upload-layout">
+                <section class="work-form">
+                  <div class="form-group">
+                    <label for="work-title"
+                      >작품 제목 <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="work-title"
+                      name="work-title"
+                      placeholder="작품 제목을 입력하세요"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="work-description"
+                      >작품 설명 <span class="required">*</span></label
+                    >
+                    <textarea
+                      id="work-description"
+                      name="work-description"
+                      placeholder="한 줄로 작품을 소개해주세요"
+                      rows="3"
+                      required
+                    ></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="work-genre"
+                      >장르 <span class="required">*</span>
+                      <span class="hint">1~2개 선택 가능</span></label
+                    >
+                    <div class="genre-chips" id="genre-chips">
+                      <button
+                        type="button"
+                        class="genre-chip"
+                        data-genre="romance"
+                      >
+                        로맨스
+                      </button>
+                      <button
+                        type="button"
+                        class="genre-chip"
+                        data-genre="fantasy"
+                      >
+                        판타지
+                      </button>
+                      <button
+                        type="button"
+                        class="genre-chip"
+                        data-genre="action"
+                      >
+                        액션
+                      </button>
+                      <button
+                        type="button"
+                        class="genre-chip"
+                        data-genre="comedy"
+                      >
+                        코미디
+                      </button>
+                      <button
+                        type="button"
+                        class="genre-chip"
+                        data-genre="drama"
+                      >
+                        드라마
+                      </button>
+                      <button
+                        type="button"
+                        class="genre-chip"
+                        data-genre="horror"
+                      >
+                        공포
+                      </button>
+                      <button
+                        type="button"
+                        class="genre-chip"
+                        data-genre="slice-of-life"
+                      >
+                        일상
+                      </button>
+                      <button
+                        type="button"
+                        class="genre-chip"
+                        data-genre="sports"
+                      >
+                        스포츠
+                      </button>
+                      <button
+                        type="button"
+                        class="genre-chip"
+                        data-genre="thriller"
+                      >
+                        스릴러
+                      </button>
+                      <button
+                        type="button"
+                        class="genre-chip"
+                        data-genre="mystery"
+                      >
+                        미스터리
+                      </button>
+                      <button
+                        type="button"
+                        class="genre-chip"
+                        data-genre="sci-fi"
+                      >
+                        SF
+                      </button>
+                      <button
+                        type="button"
+                        class="genre-chip"
+                        data-genre="historical"
+                      >
+                        시대물
+                      </button>
+                    </div>
+                    <p class="form-hint">
+                      선택한 장르: <span id="genre-count">0</span>/2
+                    </p>
+                  </div>
+
+                  <!-- 대표 컷 선택 -->
+                  <div class="form-group">
+                    <label
+                      >대표 컷 <span class="required">*</span>
+                      <span class="hint">썸네일로 사용됩니다</span></label
+                    >
+                    <div class="thumbnail-selection" id="thumbnail-selection">
+                      <div class="thumbnail-preview" id="thumbnail-preview">
+                        <div class="thumbnail-placeholder">
+                          <span>대표 컷을 선택하세요</span>
+                        </div>
+                      </div>
+                      <div class="thumbnail-options">
+                        <div class="thumbnail-option-buttons">
+                          <button
+                            type="button"
+                            class="btn-secondary"
+                            id="btn-select-from-cuts"
+                          >
+                            컷에서 선택
+                          </button>
+                          <button
+                            type="button"
+                            class="btn-secondary"
+                            id="btn-upload-thumbnail"
+                          >
+                            별도 업로드
+                          </button>
+                        </div>
+                        <input
+                          type="file"
+                          id="thumbnail-input"
+                          accept="image/jpeg,image/png,image/jpg"
+                          style="display: none"
+                        />
+                        <!-- 컷 선택 모달 -->
+                        <div
+                          class="cut-selection-modal"
+                          id="cut-selection-modal"
+                          style="display: none"
+                        >
+                          <div class="modal-content">
+                            <h3>컷 선택</h3>
+                            <div
+                              class="cut-selection-grid"
+                              id="cut-selection-grid"
+                            ></div>
+                            <button
+                              type="button"
+                              class="btn-secondary"
+                              id="btn-close-cut-selection"
+                            >
+                              닫기
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="work-tags"
+                      >태그
+                      <span class="hint"
+                        >원하시면 추가하세요 (최대 10개)</span
+                      ></label
+                    >
+                    <div class="tags-preset" id="tags-preset">
+                      <span class="preset-label">추천 태그:</span>
+                      <button
+                        type="button"
+                        class="tag-preset-chip"
+                        data-tag="힐링"
+                      >
+                        힐링
+                      </button>
+                      <button
+                        type="button"
+                        class="tag-preset-chip"
+                        data-tag="복수"
+                      >
+                        복수
+                      </button>
+                      <button
+                        type="button"
+                        class="tag-preset-chip"
+                        data-tag="성장"
+                      >
+                        성장
+                      </button>
+                      <button
+                        type="button"
+                        class="tag-preset-chip"
+                        data-tag="재회"
+                      >
+                        재회
+                      </button>
+                      <button
+                        type="button"
+                        class="tag-preset-chip"
+                        data-tag="첫사랑"
+                      >
+                        첫사랑
+                      </button>
+                      <button
+                        type="button"
+                        class="tag-preset-chip"
+                        data-tag="역하렘"
+                      >
+                        역하렘
+                      </button>
+                      <button
+                        type="button"
+                        class="tag-preset-chip"
+                        data-tag="하렘"
+                      >
+                        하렘
+                      </button>
+                      <button
+                        type="button"
+                        class="tag-preset-chip"
+                        data-tag="빙의"
+                      >
+                        빙의
+                      </button>
+                      <button
+                        type="button"
+                        class="tag-preset-chip"
+                        data-tag="회귀"
+                      >
+                        회귀
+                      </button>
+                      <button
+                        type="button"
+                        class="tag-preset-chip"
+                        data-tag="게임"
+                      >
+                        게임
+                      </button>
+                      <button
+                        type="button"
+                        class="tag-preset-chip"
+                        data-tag="학교"
+                      >
+                        학교
+                      </button>
+                      <button
+                        type="button"
+                        class="tag-preset-chip"
+                        data-tag="직장"
+                      >
+                        직장
+                      </button>
+                      <button
+                        type="button"
+                        class="tag-preset-chip"
+                        data-tag="판타지세계"
+                      >
+                        판타지세계
+                      </button>
+                    </div>
+                    <div class="tags-input-wrapper">
+                      <input
+                        type="text"
+                        id="tags-input"
+                        placeholder="태그를 입력하고 Enter를 누르세요"
+                        maxlength="20"
+                      />
+                    </div>
+                    <div class="tags-list" id="tags-list"></div>
+                    <p class="form-hint">
+                      추가한 태그: <span id="tags-count">0</span>/10
+                    </p>
+                  </div>
+
+                  <div class="upload-actions">
+                    <button
+                      type="button"
+                      class="btn-primary"
+                      id="btn-next-to-publish"
+                    >
+                      다음
+                    </button>
+                  </div>
+                </section>
+
+                <!-- 실시간 Preview 패널 -->
+                <aside class="work-preview">
+                  <div class="feed-card preview-card">
+                    <header class="feed-header">
+                      <h2 id="preview-title">제목을 입력해주세요</h2>
+                      <p id="preview-description">
+                        작품 소개가 여기에 표시됩니다.
+                      </p>
+                    </header>
+
+                    <!-- 컷 슬라이더 -->
+                    <div class="feed-slider">
+                      <button class="slide-prev" type="button">‹</button>
+
+                      <div class="slide-track" id="preview-cuts">
+                        <!-- JS로 <img> 삽입 -->
+                      </div>
+
+                      <button class="slide-next" type="button">›</button>
+                    </div>
+
+                    <!-- pagination -->
+                    <div class="feed-pagination" id="preview-pagination"></div>
+
+                    <!-- META -->
+                    <footer class="feed-meta">
+                      <div class="feed-reactions">
+                        <span class="reaction">
+                          <img src="/assets/icons/heart.svg" alt="like" />
+                          <em>0</em>
+                        </span>
+
+                        <span class="reaction">
+                          <img src="/assets/icons/comment.svg" alt="comment" />
+                          <em>0</em>
+                        </span>
+
+                        <span class="reaction">
+                          <img
+                            src="/assets/icons/follow-line.svg"
+                            alt="bookmark"
+                          />
+                          <em>0</em>
+                        </span>
+                      </div>
+
+                      <div class="feed-tags" id="preview-tags"></div>
+
+                      <div class="feed-date" id="preview-date">오늘 날짜</div>
+                    </footer>
+                  </div>
+                </aside>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3: 공개 결정 (임시저장/게시하기) -->
+          <div
+            class="upload-step"
+            data-step="3"
+            id="upload-step-3"
+            style="display: none"
+          >
+            <div class="upload-header">
+              <button class="btn-back" id="upload-back-step3">←</button>
+              <h2 class="step-title">공개 결정</h2>
+            </div>
+            <div class="upload-content">
+              <div class="publish-options">
+                <button
+                  type="button"
+                  class="btn-secondary btn-publish-option"
+                  id="btn-save-draft"
+                >
+                  임시저장
+                </button>
+                <button
+                  type="button"
+                  class="btn-primary btn-publish-option"
+                  id="btn-publish"
+                >
+                  게시하기
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4: Completion -->
+          <div
+            class="upload-step"
+            data-step="4"
+            id="upload-step-4"
+            style="display: none"
+          >
+            <div class="upload-completion">
+              <div class="completion-icon">✓</div>
+              <h2 class="completion-title" id="completion-title">
+                작품이 등록되었습니다
+              </h2>
+              <div class="completion-preview" id="completion-preview">
+                <!-- Work preview card will be rendered here -->
+              </div>
+              <div class="completion-actions">
+                <button
+                  type="button"
+                  class="completion-action-btn"
+                  id="btn-view-feed"
+                >
+                  👀 피드에서 보기
+                </button>
+                <button
+                  type="button"
+                  class="completion-action-btn"
+                  id="btn-edit-work"
+                >
+                  ✏️ 작품 수정하기
+                </button>
+                <button
+                  type="button"
+                  class="completion-action-btn"
+                  id="btn-upload-next"
+                >
+                  ➕ 다음 작품 업로드
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Error Message -->
+          <div
+            class="upload-error"
+            id="upload-error"
+            style="display: none"
+          ></div>
+        </section>
+
+        <!-- Cut Editor View -->
+        <section id="cut-editor-view" class="view">
+          <div class="editor-header">
+            <button class="btn-back" id="editor-back-btn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="21"
+                height="20"
+                viewBox="0 0 21 20"
+                fill="none"
+              >
+                <path
+                  d="M0.292893 9.29289C-0.0976311 9.68342 -0.0976311 10.3166 0.292893 10.7071L6.65685 17.0711C7.04738 17.4616 7.68054 17.4616 8.07107 17.0711C8.46159 16.6805 8.46159 16.0474 8.07107 15.6569L2.41421 10L8.07107 4.34315C8.46159 3.95262 8.46159 3.31946 8.07107 2.92893C7.68054 2.53841 7.04738 2.53841 6.65685 2.92893L0.292893 9.29289ZM19.7139 11C20.2662 11 20.7139 10.5523 20.7139 10C20.7139 9.44772 20.2662 9 19.7139 9V10V11ZM1 10V11H19.7139V10V9H1V10Z"
+                  fill="black"
+                />
+              </svg>
+            </button>
+            <h1 class="page-title">컷 편집</h1>
+          </div>
+
+          <div class="editor-container">
+            <div class="editor-sidebar">
+              <div class="cut-list" id="cut-list"></div>
+            </div>
+            <div class="editor-main">
+              <div class="editor-canvas" id="editor-canvas"></div>
+              <div class="editor-tools">
+                <button class="tool-btn" data-tool="crop">자르기</button>
+                <button class="tool-btn" data-tool="rotate">회전</button>
+                <button class="tool-btn" data-tool="flip-h">좌우 반전</button>
+                <button class="tool-btn" data-tool="flip-v">상하 반전</button>
+                <button class="tool-btn" data-tool="replace">교체</button>
+                <button class="tool-btn" data-tool="delete">삭제</button>
+              </div>
+              <div class="editor-metadata">
+                <div class="form-group">
+                  <label for="cut-memo">컷 메모 (관리자 검토용)</label>
+                  <textarea
+                    id="cut-memo"
+                    rows="3"
+                    placeholder="이 컷에 대한 메모를 입력하세요"
+                  ></textarea>
+                </div>
+                <div class="form-group">
+                  <label>
+                    <input type="checkbox" id="cut-visibility" checked />
+                    공개
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Revenue View -->
+        <section id="revenue-view" class="view">
+          <h1 class="page-title">수익</h1>
+
+          <div class="revenue-summary-card">
+            <h3 class="card-title">이번달 예정액</h3>
+            <div class="revenue-amount">
+              <span class="currency">₩</span>
+              <span class="amount" id="monthly-revenue">2,310,000</span>
+            </div>
+            <div class="revenue-details">
+              <div class="detail-row">
+                <span>총 수익</span>
+                <span id="total-revenue-detail">₩2,500,000</span>
+              </div>
+              <div class="detail-row">
+                <span>플랫폼 수수료 (10%)</span>
+                <span id="platform-fee">- ₩190,000</span>
+              </div>
+              <div class="detail-row highlight">
+                <span>실 수령액</span>
+                <span class="highlight-value" id="actual-revenue"
+                  >₩2,310,000</span
+                >
+              </div>
+              <div class="settlement-date">다음 정산일: 다음 달 10일</div>
+            </div>
+          </div>
+
+          <div class="revenue-card">
+            <div class="card-header">
+              <h3 class="card-title">작품별 수익 기여도</h3>
+            </div>
+            <div class="revenue-by-work" id="revenue-by-work"></div>
+          </div>
+
+          <div class="revenue-card">
+            <h3 class="card-title">정산 내역</h3>
+            <div class="settlement-history" id="settlement-history"></div>
+          </div>
+        </section>
+
+        <!-- Store Analytics View -->
+        <section id="store-view" class="view">
+          <h1 class="page-title">스토어 분석</h1>
+
+          <div class="store-summary-card">
+            <h3 class="card-title">이번 달 굿즈 수익</h3>
+            <div class="store-amount">
+              <span class="currency">₩</span>
+              <span class="amount" id="store-revenue">850,000</span>
+            </div>
+            <div class="store-stats">
+              <div class="store-stat-item">
+                <span class="stat-label">판매된 상품</span>
+                <span class="stat-value" id="items-sold">127개</span>
+              </div>
+              <div class="store-stat-item">
+                <span class="stat-label">인기 상품</span>
+                <span class="stat-value" id="best-seller">스티커 팩</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="store-card">
+            <h3 class="card-title">팬 행동 분석</h3>
+            <div class="fan-behavior-list" id="fan-behavior-list"></div>
+          </div>
+
+          <div class="store-card">
+            <h3 class="card-title">작품별 굿즈 전환</h3>
+            <div class="work-goods-conversion" id="work-goods-conversion"></div>
+          </div>
+        </section>
+
+        <!-- Analytics View -->
+        <section id="analytics-view" class="view">
+          <h1 class="page-title">통계</h1>
+
+          <div class="analytics-card">
+            <h3 class="card-title">성별 분포</h3>
+            <div class="demographic-chart" id="gender-chart"></div>
+            <p class="insight-text" id="gender-insight">
+              <!-- Populated by JS -->
+            </p>
+          </div>
+
+          <div class="analytics-card">
+            <h3 class="card-title">연령대 분포</h3>
+            <div class="demographic-chart" id="age-chart"></div>
+            <p class="insight-text" id="age-insight">
+              <!-- Populated by JS -->
+            </p>
+          </div>
+
+          <div class="analytics-card">
+            <h3 class="card-title">조회수 추이</h3>
+            <div class="chart-container" id="views-chart-full"></div>
+          </div>
+
+          <div class="analytics-card">
+            <h3 class="card-title">구독자 변화</h3>
+            <div class="chart-container" id="subscribers-chart-full"></div>
+          </div>
+        </section>
+
+        <!-- Profile Settings View -->
+        <section id="profile-view" class="view">
+          <h1 class="page-title">프로필 편집</h1>
+
+          <form class="profile-form" id="profile-form">
+            <div class="profile-picture-section">
+              <div class="profile-picture-preview" id="profile-picture-preview">
+                <svg
+                  width="80"
+                  height="80"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="12"
+                    cy="8"
+                    r="4"
+                    stroke="#ff6b35"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M6 21V19C6 16.7909 7.79086 15 10 15H14C16.2091 15 18 16.7909 18 19V21"
+                    stroke="#ff6b35"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <input
+                type="file"
+                id="profile-picture-input"
+                accept="image/*"
+                style="display: none"
+              />
+              <button
+                type="button"
+                class="btn-secondary"
+                id="profile-picture-btn"
+              >
+                사진 설정
+              </button>
+            </div>
+
+            <div class="form-group">
+              <label for="author-name">작가명</label>
+              <input
+                type="text"
+                id="author-name"
+                name="author-name"
+                placeholder="작가명 입력"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="author-intro">작가소개</label>
+              <textarea
+                id="author-intro"
+                name="author-intro"
+                placeholder="텍스트를 입력하세요"
+                rows="6"
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="contact-email">연락 이메일</label>
+              <input
+                type="email"
+                id="contact-email"
+                name="contact-email"
+                placeholder="이메일 주소"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="sns-links">SNS 링크</label>
+              <input
+                type="text"
+                id="sns-links"
+                name="sns-links"
+                placeholder="인스타그램, 트위터 등"
+              />
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-primary">수정 완료</button>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <!-- Approval status check overlay (shown if not approved) -->
+    <div id="approval-overlay" class="approval-overlay" style="display: none">
+      <div class="approval-message">
+        <div class="approval-icon" id="approvalIcon">⏳</div>
+        <h2 class="approval-title" id="approvalTitle">심사 중입니다</h2>
+        <p class="approval-text" id="approvalText">
+          창작자 승인을 기다리고 있습니다.<br />
+          승인 완료 후 스튜디오를 이용하실 수 있습니다.
+        </p>
+        <button
+          class="approval-btn"
+          onclick="window.location.href='index.html'"
+        >
+          홈으로 돌아가기
+        </button>
+      </div>
+    </div>
+
+    <style>
+      .approval-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+      }
+
+      .approval-message {
+        background: #fff;
+        border-radius: 16px;
+        padding: 40px 24px;
+        text-align: center;
+        max-width: 320px;
+        margin: 20px;
+      }
+
+      .approval-icon {
+        font-size: 64px;
+        margin-bottom: 24px;
+      }
+
+      .approval-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #000;
+        margin: 0 0 16px 0;
+      }
+
+      .approval-text {
+        font-size: 16px;
+        color: #666;
+        line-height: 1.6;
+        margin: 0 0 32px 0;
+      }
+
+      .approval-btn {
+        width: 100%;
+        padding: 16px;
+        background: #ff5e00;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      .approval-btn:hover {
+        background: #e55500;
+      }
+
+      .approval-overlay.rejected .approval-icon {
+        font-size: 64px;
+      }
+
+      .approval-overlay.rejected .approval-title {
+        color: #c62828;
+      }
+
+      /* Step-Based Upload Flow */
+      .upload-step {
+        padding: 20px;
+        max-width: 100%;
+      }
+
+      .upload-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .btn-back {
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: #666;
+        cursor: pointer;
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-back:hover {
+        color: #ff5e00;
+      }
+
+      .step-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0;
+      }
+
+      .upload-content {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      /* Feed preview should be full width of content area */
+      .feed-preview-container {
+        max-width: 100%;
+      }
+
+      /* Step 0: Entry */
+      .upload-entry {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 400px;
+      }
+
+      .btn-upload-entry {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        width: 200px;
+        height: 200px;
+        border: 2px dashed #ff5e00;
+        border-radius: 16px;
+        background: #fff;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-upload-entry:hover {
+        background: #fff5f0;
+        border-color: #ff6b35;
+      }
+
+      .btn-icon {
+        font-size: 64px;
+        color: #ff5e00;
+        line-height: 1;
+      }
+
+      .btn-text {
+        font-size: 18px;
+        font-weight: 600;
+        color: #ff5e00;
+      }
+
+      /* Step 2: Cut Upload */
+      .upload-area-large {
+        min-height: 300px;
+        border: 2px dashed #e0e0e0;
+        border-radius: 12px;
+        padding: 40px 20px;
+        text-align: center;
+        background: #fafafa;
+        margin-bottom: 24px;
+      }
+
+      .upload-placeholder-large {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+      }
+
+      .upload-placeholder-large.hidden {
+        display: none;
+      }
+
+      .upload-instruction {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin: 0;
+      }
+
+      .upload-hint {
+        font-size: 14px;
+        color: #999;
+        margin: 0;
+      }
+
+      .upload-hint-square {
+        font-size: 14px;
+        color: #ff5e00;
+        margin: 8px 0 0 0;
+        font-weight: 500;
+      }
+
+      /* 가로 스와이프 미리보기 - 세로 1:1 카드 */
+      .cut-preview-swipe {
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px;
+        margin-top: 20px;
+        padding: 0 4px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      .cut-preview-swipe::-webkit-scrollbar {
+        display: none;
+      }
+
+      .cut-preview-swipe-item {
+        position: relative;
+        flex: 0 0 120px;
+        width: 120px;
+        height: 120px;
+        aspect-ratio: 1;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 2px solid #e0e0e0;
+        cursor: move;
+        scroll-snap-align: start;
+      }
+
+      .cut-preview-swipe-item.dragging {
+        opacity: 0.5;
+      }
+
+      .cut-preview-swipe-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .cut-number-badge {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      .cut-preview-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+        padding: 8px;
+      }
+
+      .cut-preview-name {
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .cut-remove-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        color: #c62828;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+      }
+
+      .cut-remove-btn:hover {
+        background: #fff;
+      }
+
+      .cut-set-thumbnail-btn {
+        position: absolute;
+        bottom: 8px;
+        left: 8px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        background: rgba(255, 107, 53, 0.9);
+        border: none;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        transition: background 0.2s;
+        z-index: 10;
+      }
+
+      .cut-set-thumbnail-btn:hover {
+        background: rgba(255, 107, 53, 1);
+      }
+
+      /* Step 3: Feed Preview */
+      .feed-preview-container {
+        background: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 24px;
+        min-height: 400px;
+      }
+
+      .feed-preview-item {
+        width: 100%;
+        margin-bottom: 16px;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .feed-preview-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .feed-preview-item img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      /* Step 4: Completion */
+      .upload-completion {
+        text-align: center;
+        padding: 60px 20px;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .completion-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: #4caf50;
+        color: #fff;
+        font-size: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+      }
+
+      .completion-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0 0 32px 0;
+        color: #333;
+      }
+
+      .completion-preview {
+        margin: 0 0 40px 0;
+      }
+
+      .completion-preview-card {
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        max-width: 300px;
+        margin: 0 auto;
+      }
+
+      .completion-preview-image {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+      }
+
+      .completion-preview-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .completion-preview-title {
+        padding: 16px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .completion-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .completion-action-btn {
+        width: 100%;
+        padding: 16px;
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        color: #333;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .completion-action-btn:hover {
+        background: #f9f9f9;
+        border-color: #ff5e00;
+        color: #ff5e00;
+      }
+
+      /* Upload Actions */
+      .upload-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 32px;
+      }
+
+      .upload-actions button {
+        flex: 1;
+      }
+
+      .upload-actions button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Error Message */
+      .upload-error {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #c62828;
+        color: #fff;
+        padding: 12px 24px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        max-width: 90%;
+        text-align: center;
+      }
+
+      .required {
+        color: #c62828;
+      }
+
+      /* Genre Chips */
+      .genre-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .genre-chip {
+        padding: 10px 18px;
+        border: 2px solid #e0e0e0;
+        background: #fff;
+        border-radius: 24px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s;
+        color: #333;
+      }
+
+      .genre-chip:hover {
+        border-color: #ff5e00;
+        color: #ff5e00;
+      }
+
+      .genre-chip.active {
+        background: #ff5e00;
+        color: #fff;
+        border-color: #ff5e00;
+      }
+
+      /* Tags */
+      .tags-preset {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+        margin-bottom: 12px;
+        padding: 12px;
+        background: #f9f9f9;
+        border-radius: 8px;
+      }
+
+      .preset-label {
+        font-size: 12px;
+        color: #999;
+        margin-right: 4px;
+        align-self: center;
+      }
+
+      .tag-preset-chip {
+        padding: 6px 12px;
+        border: 1px solid #e0e0e0;
+        background: #fff;
+        border-radius: 16px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.2s;
+        color: #666;
+      }
+
+      .tag-preset-chip:hover {
+        border-color: #ff5e00;
+        color: #ff5e00;
+        background: #fff5f0;
+      }
+
+      .tags-input-wrapper {
+        margin-top: 8px;
+      }
+
+      .tags-input-wrapper input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+      }
+
+      .tags-input-wrapper input:focus {
+        outline: none;
+        border-color: #ff5e00;
+      }
+
+      .tags-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .tag-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        background: #fff5f0;
+        border: 1px solid #ff5e00;
+        border-radius: 16px;
+        font-size: 13px;
+        color: #ff5e00;
+      }
+
+      .tag-remove {
+        background: none;
+        border: none;
+        color: #ff5e00;
+        cursor: pointer;
+        font-size: 18px;
+        line-height: 1;
+        padding: 0;
+        width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.7;
+      }
+
+      .tag-remove:hover {
+        opacity: 1;
+      }
+
+      /* Feed Preview - Figma-Accurate Implementation */
+      .feed-preview-container {
+        width: 100%;
+        margin-bottom: 24px;
+      }
+
+      .feed-preview {
+        width: 100%;
+        max-width: 390px;
+        margin: 0 auto;
+        background: #ffffff;
+      }
+
+      .feed-slider {
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+      }
+
+      .feed-slider::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+      }
+
+      .feed-slide {
+        flex: 0 0 100%;
+        scroll-snap-align: start;
+        aspect-ratio: 1 / 1;
+        background: #fff;
+      }
+
+      .feed-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        user-select: none;
+        pointer-events: none;
+      }
+
+      .feed-dots {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 12px;
+      }
+
+      .feed-dots span {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #d9d9d9;
+        display: block;
+      }
+
+      .feed-dots span.active {
+        background: #000000;
+      }
+
+      /* Cut Actions */
+      .cut-actions-row {
+        margin-top: 16px;
+        margin-bottom: 8px;
+        text-align: right;
+      }
+
+      .btn-text-danger {
+        background: none;
+        border: none;
+        color: #c62828;
+        font-size: 14px;
+        cursor: pointer;
+        padding: 8px 0;
+        text-decoration: underline;
+      }
+
+      .btn-text-danger:hover {
+        color: #a02020;
+      }
+
+      /* 대표 컷 선택 UI */
+      .thumbnail-selection {
+        margin-top: 16px;
+      }
+
+      .thumbnail-preview {
+        width: 200px;
+        height: 200px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        overflow: hidden;
+        position: relative;
+        background: #f9f9f9;
+        margin-bottom: 16px;
+      }
+
+      .thumbnail-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .thumbnail-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #999;
+        font-size: 14px;
+      }
+
+      .thumbnail-remove {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        color: #c62828;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+      }
+
+      .thumbnail-remove:hover {
+        background: #fff;
+      }
+
+      .thumbnail-options {
+        margin-top: 12px;
+      }
+
+      .thumbnail-option-buttons {
+        display: flex;
+        gap: 12px;
+      }
+
+      /* 컷 선택 모달 */
+      .cut-selection-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+
+      .cut-selection-modal .modal-content {
+        background: #fff;
+        border-radius: 12px;
+        padding: 24px;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+
+      .cut-selection-modal h3 {
+        margin: 0 0 16px 0;
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .cut-selection-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .cut-selection-item {
+        position: relative;
+        aspect-ratio: 1;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 2px solid #e0e0e0;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .cut-selection-item:hover {
+        border-color: #ff6b35;
+        transform: scale(1.05);
+      }
+
+      .cut-selection-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .cut-selection-label {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+        color: #fff;
+        padding: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        text-align: center;
+      }
+
+      /* 공개 결정 단계 */
+      .publish-options {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 40px 0;
+      }
+
+      .btn-publish-option {
+        width: 100%;
+        padding: 16px;
+        font-size: 16px;
+      }
+    </style>
+
+    <!-- Supabase Client (전역 주입) -->
+    <script type="module">
+      import { supabase } from "./js/supabase-auth.js";
+      // creator_studio.js가 전역 supabase를 기대하므로 주입
+      window.supabase = supabase;
+    </script>
+
+    <!-- Creator Studio Access Control (Firebase Auth + Cloud Function) -->
+    <script type="module">
+      import { auth, app } from "./js/firebase_init.js";
+      import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+      import {
+        getFunctions,
+        httpsCallable,
+      } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-functions.js";
+
+      async function fetchCreatorStatus() {
+        const functions = getFunctions(app, "us-central1");
+        const checkCreatorStatus = httpsCallable(
+          functions,
+          "checkCreatorStatus"
+        );
+        const result = await checkCreatorStatus();
+        return result.data;
+      }
+
+      function redirect(path) {
+        window.location.href = path;
+      }
+
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          console.warn("[studio access] no user, stay for debug (no redirect)");
+          return;
+        }
+
+        try {
+          const statusResult = await fetchCreatorStatus();
+          const status = statusResult?.status;
+          const exists = statusResult?.exists;
+
+          if (!exists) {
+            console.warn("[studio access] creator record not found");
+            return;
+          }
+
+          console.log("[studio access] status:", status);
+
+          if (status === "approved") {
+            const overlay = document.getElementById("approval-overlay");
+            if (overlay) overlay.style.display = "none";
+            if (typeof loadStudioData === "function") {
+              loadStudioData();
+            }
+          } else if (status === "pending") {
+            console.warn("[studio access] pending");
+          } else if (status === "rejected") {
+            console.warn("[studio access] rejected");
+          } else {
+            console.warn("[studio access] unknown status");
+          }
+        } catch (error) {
+          console.error("[studio access] error fetching status:", error);
+          // 오류 시에도 페이지에 머무르게 하여 로그 확인
+        }
+      });
+    </script>
+    <script src="./js/creator_studio.js" defer></script>
+  </body>
+</html>

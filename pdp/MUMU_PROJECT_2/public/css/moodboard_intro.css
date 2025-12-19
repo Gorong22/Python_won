@@ -1,0 +1,166 @@
+/* moodboard_intro.css */
+/* 무드보드 안내 팝업 스타일 */
+
+/* 오버레이 (배경 dim) */
+.moodboard-intro-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.moodboard-intro-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 모달 컨테이너 */
+.moodboard-intro-modal {
+  width: 100%;
+  max-width: 360px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(20px) scale(0.95);
+  transition: transform 0.3s ease;
+  overflow: hidden;
+}
+
+.moodboard-intro-overlay.show .moodboard-intro-modal {
+  transform: translateY(0) scale(1);
+}
+
+/* 모달 콘텐츠 */
+.moodboard-intro-content {
+  padding: 32px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* 타이틀 */
+.moodboard-intro-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111;
+  margin: 0;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* 본문 텍스트 */
+.moodboard-intro-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.moodboard-intro-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #666;
+  margin: 0;
+  text-align: center;
+}
+
+/* 버튼 영역 */
+.moodboard-intro-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* 버튼 공통 스타일 */
+.moodboard-intro-btn {
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  font-family: inherit;
+}
+
+.moodboard-intro-btn:active {
+  transform: scale(0.98);
+}
+
+/* Primary 버튼 (네! 알려주세요!) */
+.moodboard-intro-btn-primary {
+  background: #ff5e00;
+  color: #ffffff;
+}
+
+.moodboard-intro-btn-primary:hover {
+  background: #e55500;
+}
+
+.moodboard-intro-btn-primary:active {
+  background: #e55500;
+}
+
+/* Secondary 버튼 (아니요, 지금은 웹툰부터 볼래요) */
+.moodboard-intro-btn-secondary {
+  background: #ffffff;
+  color: #666;
+  border: 1px solid #e0e0e0;
+}
+
+.moodboard-intro-btn-secondary:hover {
+  background: #f5f5f5;
+  border-color: #d0d0d0;
+}
+
+.moodboard-intro-btn-secondary:active {
+  background: #f0f0f0;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 360px) {
+  .moodboard-intro-modal {
+    max-width: calc(100% - 40px);
+  }
+
+  .moodboard-intro-content {
+    padding: 28px 20px 20px;
+    gap: 20px;
+  }
+
+  .moodboard-intro-title {
+    font-size: 20px;
+  }
+
+  .moodboard-intro-text {
+    font-size: 14px;
+  }
+}
+
+/* 접근성: 키보드 포커스 */
+.moodboard-intro-btn:focus-visible {
+  outline: 2px solid #ff5e00;
+  outline-offset: 2px;
+}
+
+/* 애니메이션 최적화 */
+@media (prefers-reduced-motion: reduce) {
+  .moodboard-intro-overlay,
+  .moodboard-intro-modal,
+  .moodboard-intro-btn {
+    transition: none;
+  }
+}

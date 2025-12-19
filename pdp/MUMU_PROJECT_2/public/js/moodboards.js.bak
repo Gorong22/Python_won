@@ -1,0 +1,1120 @@
+// ============================
+// MOODBOARD MANAGEMENT
+// ============================
+
+const MOODBOARDS_KEY = "mumumoodboards";
+const REPRESENTATIVE_KEY = "mumumoodboard_representative";
+let moodboards = [];
+let currentMoodboardId = null;
+let editorGrid = null;
+
+// AppState
+const AppState = {
+  canvases: new Map(),
+  activeCanvasId: null,
+  activeMoodboardId: null,
+};
+
+// Canvas 인스턴스 생성자
+function createCanvas(canvasId, containerEl) {
+  const grid = GridStack.init(
+    {
+      column: 12,
+      cellHeight: 50,
+      margin: 8,
+      minRow: 1,
+      float: false,
+      animate: true,
+      disableOneColumnMode: true,
+      resizable: {
+        handles: "e, se, s, sw, w",
+      },
+    },
+    containerEl
+  );
+
+  const canvas = {
+    id: canvasId,
+    grid: grid,
+    container: containerEl,
+    blocks: [],
+    thumbnail: null,
+  };
+
+  AppState.canvases.set(canvasId, canvas);
+  return canvas;
+}
+
+// Canvas 인스턴스 가져오기
+function getCanvas(canvasId) {
+  return AppState.canvases.get(canvasId);
+}
+
+// 이미지 블록 추가 액션
+function addImageBlock(imageUrl) {
+  const activeCanvasId = AppState.activeCanvasId;
+  if (!activeCanvasId) {
+    console.warn("No active canvas");
+    return;
+  }
+
+  const canvas = getCanvas(activeCanvasId);
+  if (!canvas) {
+    console.warn("Canvas not found:", activeCanvasId);
+    return;
+  }
+
+  const blockId = `block-${Date.now()}-${Math.random()
+    .toString(36)
+    .substr(2, 9)}`;
+  const blockData = {
+    id: blockId,
+    type: "image",
+    content: {
+      url: imageUrl,
+    },
+    x: 0,
+    y: 0,
+    w: 4,
+    h: 3,
+    rotation: 0,
+  };
+
+  canvas.blocks.push(blockData);
+  renderCanvas(activeCanvasId);
+}
+
+// Canvas 렌더링
+function renderCanvas(canvasId) {
+  const canvas = getCanvas(canvasId);
+  if (!canvas) return;
+
+  const blocks = canvas.blocks;
+  const grid = canvas.grid;
+
+  grid.removeAll(false);
+
+  blocks.forEach((blockData) => {
+    const blockDOM = createBlockDOM(blockData);
+    grid.addWidget(blockDOM, false);
+  });
+
+  grid.compact();
+
+  generateCanvasThumbnail(canvasId);
+}
+
+// Generate canvas thumbnail
+function generateCanvasThumbnail(canvasId) {
+  const canvas = getCanvas(canvasId);
+  if (!canvas || !canvas.container) return;
+
+  if (typeof html2canvas === "undefined") {
+    return;
+  }
+
+  setTimeout(() => {
+    html2canvas(canvas.container, {
+      backgroundColor: "#ffffff",
+      scale: 0.5,
+      logging: false,
+      useCORS: true,
+    })
+      .then((canvasEl) => {
+        const thumbnailDataUrl = canvasEl.toDataURL("image/png");
+        canvas.thumbnail = thumbnailDataUrl;
+
+        const board = moodboards.find(
+          (b) => b.id === AppState.activeMoodboardId
+        );
+        if (board) {
+          const canvasData = board.canvases.find(
+            (c) => c.canvasId === canvasId
+          );
+          if (canvasData) {
+            canvasData.thumbnail = thumbnailDataUrl;
+            saveMoodboards();
+          }
+        }
+      })
+      .catch((error) => {
+        console.warn("Failed to generate thumbnail:", error);
+      });
+  }, 100);
+}
+
+// 블록 DOM 생성
+function createBlockDOM(blockData) {
+  const blockEl = document.createElement("div");
+  blockEl.className = "grid-stack-item";
+  blockEl.setAttribute("gs-id", blockData.id);
+  blockEl.setAttribute("gs-x", blockData.x || 0);
+  blockEl.setAttribute("gs-y", blockData.y || 0);
+  blockEl.setAttribute("gs-w", blockData.w || 4);
+  blockEl.setAttribute("gs-h", blockData.h || 3);
+  blockEl.dataset.blockId = blockData.id;
+  blockEl.dataset.blockType = blockData.type;
+
+  const contentEl = document.createElement("div");
+  contentEl.className = "grid-stack-item-content";
+
+  const blockInner = document.createElement("div");
+  blockInner.className = "moodboard-block";
+
+  const controls = document.createElement("div");
+  controls.className = "block-controls";
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.className = "block-control-btn";
+  deleteBtn.dataset.action = "delete-block";
+  deleteBtn.textContent = "삭제";
+
+  const rotateBtn = document.createElement("button");
+  rotateBtn.className = "block-control-btn";
+  rotateBtn.dataset.action = "rotate-block";
+  rotateBtn.textContent = "회전";
+
+  controls.appendChild(deleteBtn);
+  controls.appendChild(rotateBtn);
+  blockInner.appendChild(controls);
+
+  if (blockData.type === "image" && blockData.content?.url) {
+    const img = document.createElement("img");
+    img.src = blockData.content.url;
+    img.alt = "Image block";
+    img.style.width = "100%";
+    img.style.height = "100%";
+    img.style.objectFit = "cover";
+    img.style.transform = `rotate(${blockData.rotation || 0}deg)`;
+    blockInner.appendChild(img);
+  }
+
+  contentEl.appendChild(blockInner);
+  blockEl.appendChild(contentEl);
+
+  return blockEl;
+}
+
+// Initialize moodboards
+function initMoodboards() {
+  loadMoodboards();
+  renderFeaturedMoodboard();
+  renderMoodboards();
+}
+
+// Load moodboards from localStorage
+function loadMoodboards() {
+  try {
+    const saved = localStorage.getItem(MOODBOARDS_KEY);
+    if (saved) {
+      moodboards = JSON.parse(saved);
+      moodboards.forEach((board) => {
+        if (!board.canvases || board.canvases.length === 0) {
+          const canvasId = board.id || `canvas-${Date.now()}`;
+          board.canvases = [
+            {
+              canvasId: canvasId,
+              ratio: "1:1",
+            },
+          ];
+        }
+      });
+      saveMoodboards();
+    } else {
+      moodboards = [];
+    }
+  } catch (e) {
+    console.error("Failed to load moodboards:", e);
+    moodboards = [];
+  }
+}
+
+// Save moodboards to localStorage
+function saveMoodboards() {
+  try {
+    localStorage.setItem(MOODBOARDS_KEY, JSON.stringify(moodboards));
+  } catch (e) {
+    console.error("Failed to save moodboards:", e);
+  }
+}
+
+// Render featured moodboard
+function renderFeaturedMoodboard() {
+  const featured = document.getElementById("featured-moodboard");
+  const empty = document.getElementById("featured-empty");
+
+  if (!featured || !empty) return;
+
+  try {
+    const representativeData = localStorage.getItem(REPRESENTATIVE_KEY);
+    if (!representativeData) {
+      featured.style.display = "none";
+      empty.style.display = "block";
+      return;
+    }
+
+    const boardData = JSON.parse(representativeData);
+    featured.style.display = "block";
+    empty.style.display = "none";
+
+    // Create preview (simplified)
+    featured.innerHTML = `
+      <div class="featured-preview">
+        <div class="featured-thumbnail">
+          ${
+            boardData.blocks && boardData.blocks.length > 0
+              ? `<img src="${
+                  boardData.blocks[0].content?.url || ""
+                }" alt="Featured" />`
+              : '<div class="featured-placeholder">무드보드 미리보기</div>'
+          }
+        </div>
+        <div class="featured-info">
+          <p class="featured-name">대표 무드보드</p>
+        </div>
+      </div>
+    `;
+  } catch (e) {
+    featured.style.display = "none";
+    empty.style.display = "block";
+  }
+}
+
+// Render moodboards grid
+function renderMoodboards() {
+  const grid = document.getElementById("moodboards-grid");
+  const empty = document.getElementById("moodboards-empty");
+
+  if (!grid || !empty) return;
+
+  if (moodboards.length === 0) {
+    grid.style.display = "none";
+    empty.style.display = "block";
+    return;
+  }
+
+  grid.style.display = "grid";
+  empty.style.display = "none";
+  grid.innerHTML = "";
+
+  moodboards.forEach((board) => {
+    const boardItem = document.createElement("div");
+    boardItem.className = "moodboard-item";
+    boardItem.dataset.moodboardId = board.id;
+
+    // Thumbnail
+    const thumbnail = document.createElement("div");
+    thumbnail.className = "moodboard-thumbnail";
+    if (board.blocks && board.blocks.length > 0) {
+      const firstBlock = board.blocks[0];
+      if (firstBlock.content?.url) {
+        const img = document.createElement("img");
+        img.src = firstBlock.content.url;
+        img.alt = board.name;
+        thumbnail.appendChild(img);
+      } else {
+        thumbnail.innerHTML = '<div class="moodboard-placeholder">📋</div>';
+      }
+    } else {
+      thumbnail.innerHTML = '<div class="moodboard-placeholder">📋</div>';
+    }
+
+    // Info
+    const info = document.createElement("div");
+    info.className = "moodboard-info";
+
+    const name = document.createElement("div");
+    name.className = "moodboard-name";
+    name.textContent = board.name || "무제";
+
+    const meta = document.createElement("div");
+    meta.className = "moodboard-meta";
+    meta.innerHTML = `
+      <span class="moodboard-privacy">${board.isPublic ? "🌐" : "🔒"}</span>
+      ${board.isHidden ? '<span class="moodboard-hidden">숨김</span>' : ""}
+    `;
+
+    info.appendChild(name);
+    info.appendChild(meta);
+
+    // Menu button
+    const menuBtn = document.createElement("button");
+    menuBtn.className = "moodboard-menu-btn";
+    menuBtn.innerHTML = "⋯";
+    menuBtn.onclick = function (e) {
+      e.stopPropagation();
+      currentMoodboardId = board.id;
+      openMoodboardMenu();
+    };
+
+    boardItem.appendChild(thumbnail);
+    boardItem.appendChild(info);
+    boardItem.appendChild(menuBtn);
+
+    // Click to edit
+    boardItem.addEventListener("click", function (e) {
+      if (!e.target.closest(".moodboard-menu-btn")) {
+        openMoodboardEditor(board.id);
+      }
+    });
+
+    grid.appendChild(boardItem);
+  });
+}
+
+// Create new moodboard
+function createNewMoodboard() {
+  const name = prompt("무드보드 이름을 입력하세요:");
+  if (!name || name.trim() === "") return;
+
+  const canvasId = `canvas-${Date.now()}`;
+  const newBoard = {
+    id: `moodboard-${Date.now()}`,
+    name: name.trim(),
+    isPublic: false,
+    isHidden: false,
+    blocks: [],
+    layout: [],
+    canvases: [
+      {
+        canvasId: canvasId,
+        ratio: "1:1",
+      },
+    ],
+    createdAt: new Date().toISOString(),
+  };
+
+  moodboards.push(newBoard);
+  saveMoodboards();
+  renderMoodboards();
+  openMoodboardEditor(newBoard.id);
+}
+
+// Open moodboard editor
+// Open moodboard editor
+function openMoodboardEditor(boardId) {
+  currentMoodboardId = boardId;
+  AppState.activeMoodboardId = boardId;
+  
+  const saved = localStorage.getItem(MOODBOARDS_KEY);
+  if (saved) {
+    moodboards = JSON.parse(saved);
+  }
+  
+  const board = moodboards.find((b) => b.id === boardId);
+  if (!board) return;
+
+  const modal = document.getElementById("moodboardEditorModal");
+  const title = document.getElementById("editor-title");
+
+  if (modal && title) {
+    title.textContent = board.name || "무드보드 편집";
+    modal.classList.add("active");
+
+    initMoodboardEditor(board);
+  }
+}
+
+// Initialize moodboard editor
+function initMoodboardEditor(board) {
+  AppState.canvases.clear();
+
+  if (!board.canvases || board.canvases.length === 0) {
+    const canvasId = `canvas-${Date.now()}`;
+    board.canvases = [
+      {
+        canvasId: canvasId,
+        ratio: "1:1",
+        blocks: [],
+        thumbnail: null
+      },
+    ];
+    saveMoodboards();
+  }
+
+  const firstCanvasId = board.canvases[0].canvasId;
+  AppState.activeCanvasId = board.activeCanvasId || firstCanvasId;
+
+  const exists = board.canvases.some(c => c.canvasId === AppState.activeCanvasId);
+  if (!exists) AppState.activeCanvasId = firstCanvasId;
+
+  renderEditor(board);
+  renderEditorFolders();
+}
+// Render editor (canvas list + active canvas)
+function renderEditor(board) {
+  renderCanvasList(board);
+  renderActiveCanvas();
+}
+
+// Render canvas list
+function renderCanvasList(board) {
+  const canvasListEl = document.getElementById("editor-canvas-list");
+  if (!canvasListEl) return;
+
+  const canvases = board.canvases || [];
+  canvasListEl.innerHTML = "";
+
+  canvases.forEach((canvasData) => {
+    const canvasCard = document.createElement("div");
+    canvasCard.className = "canvas-card";
+    if (canvasData.canvasId === AppState.activeCanvasId) {
+      canvasCard.classList.add("active");
+    }
+    canvasCard.dataset.action = "select-canvas";
+    canvasCard.dataset.canvasId = canvasData.canvasId;
+
+    const thumbnail = document.createElement("div");
+    thumbnail.className = "canvas-card-thumbnail";
+    const canvas = getCanvas(canvasData.canvasId);
+    const thumbnailUrl = canvas?.thumbnail || canvasData.thumbnail || null;
+    if (thumbnailUrl) {
+      const img = document.createElement("img");
+      img.src = thumbnailUrl;
+      img.alt = "Canvas thumbnail";
+      thumbnail.appendChild(img);
+    } else {
+      const blocks = canvas?.blocks || canvasData.blocks || [];
+      if (blocks.length > 0) {
+        const firstBlock = blocks[0];
+        if (firstBlock.content?.url) {
+          const img = document.createElement("img");
+          img.src = firstBlock.content.url;
+          img.alt = "Canvas thumbnail";
+          thumbnail.appendChild(img);
+        } else {
+          thumbnail.innerHTML = '<div class="canvas-placeholder">📋</div>';
+        }
+      } else {
+        thumbnail.innerHTML = '<div class="canvas-placeholder">📋</div>';
+      }
+    }
+
+    const info = document.createElement("div");
+    info.className = "canvas-card-info";
+    info.textContent = `캔버스 ${canvases.indexOf(canvasData) + 1}`;
+
+    const duplicateBtn = document.createElement("button");
+    duplicateBtn.className = "canvas-duplicate-btn";
+    duplicateBtn.dataset.action = "duplicate-canvas";
+    duplicateBtn.dataset.canvasId = canvasData.canvasId;
+    duplicateBtn.textContent = "복제";
+
+    canvasCard.appendChild(thumbnail);
+    canvasCard.appendChild(info);
+    canvasCard.appendChild(duplicateBtn);
+    canvasListEl.appendChild(canvasCard);
+  });
+
+  const addCanvasBtn = document.createElement("button");
+  addCanvasBtn.className = "canvas-card add-canvas-btn";
+  addCanvasBtn.dataset.action = "add-canvas";
+  addCanvasBtn.innerHTML =
+    '<div class="canvas-placeholder">+</div><div class="canvas-card-info">새 캔버스</div>';
+  canvasListEl.appendChild(addCanvasBtn);
+}
+
+// Render active canvas
+function renderActiveCanvas() {
+  const gridEl = document.getElementById("editor-moodboard-grid");
+  if (!gridEl) return;
+
+  const activeCanvasId = AppState.activeCanvasId;
+  if (!activeCanvasId) return;
+
+  const board = moodboards.find((b) => b.id === AppState.activeMoodboardId);
+  if (!board) return;
+
+  let canvas = getCanvas(activeCanvasId);
+  if (!canvas) {
+    gridEl.innerHTML = "";
+    const containerEl = document.createElement("div");
+    containerEl.className = "grid-stack";
+    gridEl.appendChild(containerEl);
+    canvas = createCanvas(activeCanvasId, containerEl);
+  } else {
+    gridEl.innerHTML = "";
+    gridEl.appendChild(canvas.container);
+  }
+
+  editorGrid = canvas.grid;
+  window.editorGrid = editorGrid;
+
+  const canvasData = board.canvases.find((c) => c.canvasId === activeCanvasId);
+  if (canvasData && canvasData.blocks && canvasData.blocks.length > 0) {
+    canvas.blocks = canvasData.blocks.map((b) => ({ ...b }));
+  } else if (board.blocks && board.blocks.length > 0 && !canvasData.blocks) {
+    canvas.blocks = board.blocks.map((b) => ({ ...b }));
+    if (canvasData) {
+      canvasData.blocks = canvas.blocks.map((b) => ({ ...b }));
+      saveMoodboards();
+    }
+  }
+  if (canvasData && canvasData.thumbnail) {
+    canvas.thumbnail = canvasData.thumbnail;
+  }
+  renderCanvas(activeCanvasId);
+
+  editorGrid.on("change", function (event, items) {
+    const canvas = getCanvas(activeCanvasId);
+    if (!canvas) return;
+
+    items.forEach((item) => {
+      const block = canvas.blocks.find((b) => b.id === item.id);
+      if (block) {
+        block.x = item.x;
+        block.y = item.y;
+        block.w = item.w;
+        block.h = item.h;
+      }
+    });
+
+    saveEditorLayout();
+    setTimeout(() => {
+      generateCanvasThumbnail(activeCanvasId);
+    }, 300);
+  });
+
+  setupCanvasEventDelegation(activeCanvasId);
+}
+
+// Select canvas
+function selectCanvas(canvasId) {
+  AppState.activeCanvasId = canvasId;
+  const board = moodboards.find((b) => b.id === AppState.activeMoodboardId);
+  if (board) {
+    renderEditor(board);
+    setTimeout(() => {
+      generateCanvasThumbnail(canvasId);
+    }, 200);
+  }
+}
+
+// Add new canvas
+function addNewCanvas() {
+  const board = moodboards.find((b) => b.id === AppState.activeMoodboardId);
+  if (!board) return;
+
+  const canvasId = `canvas-${Date.now()}`;
+  if (!board.canvases) {
+    board.canvases = [];
+  }
+
+  board.canvases.push({
+    canvasId: canvasId,
+    ratio: "1:1",
+  });
+
+  AppState.activeCanvasId = canvasId;
+  saveMoodboards();
+  renderEditor(board);
+}
+
+// Duplicate canvas
+function duplicateCanvas() {
+  const activeCanvasId = AppState.activeCanvasId;
+  if (!activeCanvasId) return;
+
+  const board = moodboards.find((b) => b.id === AppState.activeMoodboardId);
+  if (!board) return;
+
+  const sourceCanvas = getCanvas(activeCanvasId);
+  const sourceCanvasData = board.canvases.find(
+    (c) => c.canvasId === activeCanvasId
+  );
+  if (!sourceCanvasData) return;
+
+  const newCanvasId = `canvas-${Date.now()}`;
+  const duplicatedBlocks = JSON.parse(
+    JSON.stringify(sourceCanvas?.blocks || sourceCanvasData.blocks || [])
+  );
+  const duplicatedRatio = sourceCanvasData.ratio || "1:1";
+
+  if (!board.canvases) {
+    board.canvases = [];
+  }
+
+  const duplicatedThumbnail =
+    sourceCanvas?.thumbnail || sourceCanvasData.thumbnail || null;
+
+  board.canvases.push({
+    canvasId: newCanvasId,
+    ratio: duplicatedRatio,
+    blocks: duplicatedBlocks,
+    thumbnail: duplicatedThumbnail,
+  });
+
+  AppState.activeCanvasId = newCanvasId;
+  saveMoodboards();
+  renderEditor(board);
+}
+
+// Canvas 이벤트 위임 설정
+function setupCanvasEventDelegation(canvasId) {
+  const canvas = getCanvas(canvasId);
+  if (!canvas) return;
+
+  const container = canvas.container;
+
+  container.addEventListener("click", function (e) {
+    const blockEl = e.target.closest("[data-block-id]");
+    if (!blockEl) return;
+
+    const blockId = blockEl.dataset.blockId;
+    const action = e.target.dataset.action;
+
+    if (action === "delete-block") {
+      deleteBlock(canvasId, blockId);
+    } else if (action === "rotate-block") {
+      rotateBlock(canvasId, blockId);
+    } else {
+      selectBlock(canvasId, blockId);
+    }
+  });
+}
+
+// Editor event delegation
+function setupEditorEventDelegation() {
+  const editorEl = document.getElementById("moodboardEditorModal");
+  if (!editorEl) return;
+
+  editorEl.addEventListener("click", function (e) {
+    const actionEl = e.target.closest("[data-action]");
+    if (!actionEl) return;
+
+    const action = actionEl.dataset.action;
+
+    if (action === "select-canvas") {
+      const canvasId = actionEl.dataset.canvasId;
+      if (canvasId) {
+        selectCanvas(canvasId);
+      }
+    } else if (action === "add-canvas") {
+      addNewCanvas();
+    } else if (action === "duplicate-canvas") {
+      e.stopPropagation();
+      const canvasId = actionEl.dataset.canvasId;
+      if (canvasId && canvasId === AppState.activeCanvasId) {
+        duplicateCanvas();
+      }
+    }
+  });
+}
+
+// 블록 선택
+function selectBlock(canvasId, blockId) {
+  const canvas = getCanvas(canvasId);
+  if (!canvas) return;
+
+  const blockEl = canvas.container.querySelector(
+    `[data-block-id="${blockId}"]`
+  );
+  if (blockEl) {
+    canvas.container.querySelectorAll("[data-block-id]").forEach((el) => {
+      el.classList.remove("selected");
+    });
+    blockEl.classList.add("selected");
+  }
+}
+
+// 블록 삭제
+function deleteBlock(canvasId, blockId) {
+  const canvas = getCanvas(canvasId);
+  if (!canvas) return;
+
+  canvas.blocks = canvas.blocks.filter((b) => b.id !== blockId);
+  renderCanvas(canvasId);
+  saveEditorLayout();
+}
+
+// 블록 회전
+function rotateBlock(canvasId, blockId) {
+  const canvas = getCanvas(canvasId);
+  if (!canvas) return;
+
+  const block = canvas.blocks.find((b) => b.id === blockId);
+  if (!block) return;
+
+  block.rotation = ((block.rotation || 0) + 90) % 360;
+  renderCanvas(canvasId);
+  saveEditorLayout();
+}
+
+// Load blocks into editor (deprecated, use renderCanvas instead)
+function loadBlocksIntoEditor(blocks) {
+  const canvasId = AppState.activeCanvasId;
+  if (!canvasId) return;
+
+  const canvas = getCanvas(canvasId);
+  if (!canvas) return;
+
+  canvas.blocks = blocks.map((b) => ({ ...b }));
+  renderCanvas(canvasId);
+}
+
+// Create block in editor (deprecated, use createBlockDOM instead)
+function createEditorBlock(blockData) {
+  const canvasId = AppState.activeCanvasId;
+  if (!canvasId) return;
+
+  const canvas = getCanvas(canvasId);
+  if (!canvas) return;
+
+  canvas.blocks.push({ ...blockData });
+  renderCanvas(canvasId);
+}
+
+// Save editor layout
+function saveEditorLayout() {
+  if (!currentMoodboardId || !AppState.activeCanvasId) return;
+
+  const canvas = getCanvas(AppState.activeCanvasId);
+  if (!canvas) return;
+
+  const board = moodboards.find((b) => b.id === currentMoodboardId);
+  if (!board) return;
+
+  if (!board.canvases) {
+    board.canvases = [];
+  }
+
+  const canvasData = board.canvases.find(
+    (c) => c.canvasId === AppState.activeCanvasId
+  );
+  if (canvasData) {
+    canvasData.blocks = canvas.blocks.map((block) => ({ ...block }));
+    const items = canvas.grid.save();
+    canvasData.layout = items;
+    if (canvas.thumbnail) {
+      canvasData.thumbnail = canvas.thumbnail;
+    }
+  }
+
+  board.blocks = canvas.blocks.map((block) => ({ ...block }));
+  const items = canvas.grid.save();
+  board.layout = items;
+  saveMoodboards();
+}
+
+// Save moodboard editor
+function saveMoodboardEditor() {
+  saveEditorLayout();
+  closeMoodboardEditor();
+  renderMoodboards();
+  renderFeaturedMoodboard();
+}
+
+// Close moodboard editor
+function closeMoodboardEditor() {
+  const modal = document.getElementById("moodboardEditorModal");
+  if (modal) {
+    modal.classList.remove("active");
+  }
+
+  AppState.canvases.forEach((canvas) => {
+    if (canvas.grid) {
+      canvas.grid.destroy(false);
+    }
+  });
+  AppState.canvases.clear();
+  AppState.activeCanvasId = null;
+  AppState.activeMoodboardId = null;
+
+  if (window.editorGrid) {
+    window.editorGrid.destroy(false);
+    window.editorGrid = null;
+  }
+  editorGrid = null;
+
+  currentMoodboardId = null;
+}
+
+// Render folders in editor sidebar
+function renderEditorFolders() {
+  const folderList = document.getElementById("editor-folder-list");
+  if (!folderList) return;
+
+  // Load folders if not already loaded
+  if (typeof window.initFolders === "function") {
+    window.initFolders();
+  }
+
+  // Get folders from folders.js
+  if (typeof window.folders === "undefined" || !window.folders) {
+    folderList.innerHTML =
+      '<p style="padding: 12px; color: #999; font-size: 12px;">폴더가 없습니다</p>';
+    return;
+  }
+
+  folderList.innerHTML = "";
+
+  window.folders.forEach((folder) => {
+    const folderItem = document.createElement("div");
+    folderItem.className = "editor-folder-item";
+    folderItem.dataset.folderId = folder.id;
+    folderItem.textContent = folder.name;
+
+    folderItem.addEventListener("click", function () {
+      // Remove active from all
+      folderList.querySelectorAll(".editor-folder-item").forEach((el) => {
+        el.classList.remove("active");
+      });
+      // Add active to clicked
+      folderItem.classList.add("active");
+
+      // Set selected folder and render cuts
+      if (typeof window.editorSelectedFolderId !== "undefined") {
+        window.editorSelectedFolderId = folder.id;
+      }
+      renderEditorCuts(folder.id);
+    });
+
+    folderList.appendChild(folderItem);
+  });
+
+  // Render cuts from first folder if available
+  if (window.folders.length > 0) {
+    const firstFolder = window.folders[0];
+    folderList
+      .querySelector(`[data-folder-id="${firstFolder.id}"]`)
+      ?.classList.add("active");
+    if (typeof window.editorSelectedFolderId !== "undefined") {
+      window.editorSelectedFolderId = firstFolder.id;
+    }
+    renderEditorCuts(firstFolder.id);
+  }
+}
+
+// Render cuts in editor sidebar
+function renderEditorCuts(folderId) {
+  const cutsGrid = document.getElementById("editor-cuts-grid");
+  const cutsEmpty = document.getElementById("editor-cuts-empty");
+
+  if (!cutsGrid || !cutsEmpty) return;
+
+  if (typeof window.getCutsFromFolder !== "function") {
+    cutsGrid.style.display = "none";
+    cutsEmpty.style.display = "block";
+    return;
+  }
+
+  const cuts = window.getCutsFromFolder(folderId);
+
+  if (cuts.length === 0) {
+    cutsGrid.style.display = "none";
+    cutsEmpty.style.display = "block";
+    return;
+  }
+
+  cutsGrid.style.display = "grid";
+  cutsEmpty.style.display = "none";
+  cutsGrid.innerHTML = "";
+
+  cuts.forEach((cut) => {
+    const cutItem = document.createElement("div");
+    cutItem.className = "editor-cut-item";
+    cutItem.draggable = true;
+
+    const img = document.createElement("img");
+    img.src = cut.url;
+    img.alt = "Saved cut";
+    img.loading = "lazy";
+
+    cutItem.appendChild(img);
+    cutsGrid.appendChild(cutItem);
+
+    // Drag to canvas
+    cutItem.addEventListener("dragstart", function (e) {
+      e.dataTransfer.setData(
+        "text/plain",
+        JSON.stringify({ cutId: cut.id, url: cut.url })
+      );
+    });
+
+    // Click to add image block
+    cutItem.addEventListener("click", function () {
+      addImageBlock(cut.url);
+    });
+  });
+
+  // Handle drop on canvas
+  const canvas = document.getElementById("editor-moodboard-grid");
+  if (canvas) {
+    canvas.addEventListener("dragover", function (e) {
+      e.preventDefault();
+    });
+
+    canvas.addEventListener("drop", function (e) {
+      e.preventDefault();
+      try {
+        const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+        if (data.url) {
+          addImageBlock(data.url);
+        }
+      } catch (err) {
+        console.error("Failed to handle drop:", err);
+      }
+    });
+  }
+}
+
+// Set as representative from editor
+function setAsRepresentativeFromEditor() {
+  if (!currentMoodboardId) return;
+
+  const board = moodboards.find((b) => b.id === currentMoodboardId);
+  if (!board) return;
+
+  saveEditorLayout();
+
+  const representativeData = {
+    id: board.id,
+    name: board.name,
+    blocks: board.blocks,
+    layout: board.layout,
+  };
+
+  localStorage.setItem(REPRESENTATIVE_KEY, JSON.stringify(representativeData));
+  alert("대표 무드보드로 설정되었습니다.");
+}
+
+// Edit featured moodboard
+function editFeaturedMoodboard() {
+  try {
+    const representativeData = localStorage.getItem(REPRESENTATIVE_KEY);
+    if (!representativeData) {
+      alert("대표 무드보드가 없습니다.");
+      return;
+    }
+
+    const boardData = JSON.parse(representativeData);
+    const board = moodboards.find((b) => b.id === boardData.id);
+    if (board) {
+      openMoodboardEditor(board.id);
+    } else {
+      alert("무드보드를 찾을 수 없습니다.");
+    }
+  } catch (e) {
+    alert("대표 무드보드를 불러올 수 없습니다.");
+  }
+}
+
+// Moodboard menu functions
+function openMoodboardMenu() {
+  const modal = document.getElementById("moodboardMenuModal");
+  if (modal) {
+    modal.classList.add("active");
+  }
+}
+
+function closeMoodboardMenu() {
+  const modal = document.getElementById("moodboardMenuModal");
+  if (modal) {
+    modal.classList.remove("active");
+  }
+  currentMoodboardId = null;
+}
+
+function editMoodboardFromGrid() {
+  if (!currentMoodboardId) return;
+  closeMoodboardMenu();
+  openMoodboardEditor(currentMoodboardId);
+}
+
+function setMoodboardAsRepresentative() {
+  if (!currentMoodboardId) return;
+
+  const board = moodboards.find((b) => b.id === currentMoodboardId);
+  if (!board) return;
+
+  const representativeData = {
+    id: board.id,
+    name: board.name,
+    blocks: board.blocks,
+    layout: board.layout,
+  };
+
+  localStorage.setItem(REPRESENTATIVE_KEY, JSON.stringify(representativeData));
+  alert("대표 무드보드로 설정되었습니다.");
+  renderFeaturedMoodboard();
+  closeMoodboardMenu();
+}
+
+function toggleMoodboardPrivacy() {
+  if (!currentMoodboardId) return;
+
+  const board = moodboards.find((b) => b.id === currentMoodboardId);
+  if (board) {
+    board.isPublic = !board.isPublic;
+    saveMoodboards();
+    renderMoodboards();
+  }
+
+  closeMoodboardMenu();
+}
+
+function hideMoodboard() {
+  if (!currentMoodboardId) return;
+
+  const board = moodboards.find((b) => b.id === currentMoodboardId);
+  if (board) {
+    board.isHidden = !board.isHidden;
+    saveMoodboards();
+    renderMoodboards();
+  }
+
+  closeMoodboardMenu();
+}
+
+function deleteMoodboard() {
+  if (!currentMoodboardId) return;
+
+  if (!confirm("이 무드보드를 삭제하시겠습니까?")) {
+    closeMoodboardMenu();
+    return;
+  }
+
+  moodboards = moodboards.filter((b) => b.id !== currentMoodboardId);
+  saveMoodboards();
+  renderMoodboards();
+  renderFeaturedMoodboard();
+  closeMoodboardMenu();
+}
+
+// Expose functions globally
+window.createEditorBlock = createEditorBlock;
+window.editorGrid = editorGrid;
+window.renderEditorCuts = renderEditorCuts;
+window.addImageBlock = addImageBlock;
+window.renderCanvas = renderCanvas;
+window.createBlockDOM = createBlockDOM;
+window.AppState = AppState;
+
+// Make functions globally available
+window.initMoodboards = initMoodboards;
+window.createNewMoodboard = createNewMoodboard;
+window.openMoodboardEditor = openMoodboardEditor;
+window.saveMoodboardEditor = saveMoodboardEditor;
+window.closeMoodboardEditor = closeMoodboardEditor;
+window.editFeaturedMoodboard = editFeaturedMoodboard;
+window.setAsRepresentativeFromEditor = setAsRepresentativeFromEditor;
+window.openMoodboardMenu = openMoodboardMenu;
+window.closeMoodboardMenu = closeMoodboardMenu;
+window.editMoodboardFromGrid = editMoodboardFromGrid;
+window.setMoodboardAsRepresentative = setMoodboardAsRepresentative;
+window.toggleMoodboardPrivacy = toggleMoodboardPrivacy;
+window.hideMoodboard = hideMoodboard;
+window.deleteMoodboard = deleteMoodboard;
+window.saveEditorLayout = saveEditorLayout;
+window.selectCanvas = selectCanvas;
+window.addNewCanvas = addNewCanvas;
+window.duplicateCanvas = duplicateCanvas;
+window.renderEditor = renderEditor;
+window.generateCanvasThumbnail = generateCanvasThumbnail;
+
+// Initialize editor event delegation on DOM ready
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", setupEditorEventDelegation);
+} else {
+  setupEditorEventDelegation();
+}

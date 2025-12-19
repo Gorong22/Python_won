@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>MUMU - 홈</title>
+    <!-- 댓글 모달 최소 스타일 (기존 comment-modal 오버레이에도 적용되도록 범용) -->
+    <style>
+      #commentModal.comment-modal,
+      #comment-modal.comment-modal-overlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: flex-end;
+        justify-content: center;
+        z-index: 9999;
+      }
+      #commentModal .comment-modal-backdrop,
+      #comment-modal .comment-modal-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+      }
+      #commentModal .comment-modal-sheet,
+      #comment-modal .comment-modal {
+        position: relative;
+        width: 100%;
+        max-width: 480px;
+        background: #fff;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        padding: 16px;
+        box-sizing: border-box;
+        animation: slideUp 0.25s ease;
+      }
+      #commentModal .comment-modal-header,
+      #comment-modal .comment-modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: 700;
+        font-size: 16px;
+        margin-bottom: 12px;
+      }
+      #commentModal .comment-modal-close,
+      #comment-modal .comment-modal-close {
+        border: none;
+        background: none;
+        font-size: 18px;
+        cursor: pointer;
+      }
+      #commentModal .comment-modal-body,
+      #comment-modal .comment-modal-content {
+        max-height: 60vh;
+        overflow-y: auto;
+        font-size: 14px;
+        color: #333;
+      }
+      #commentModal .comment-empty,
+      #comment-modal .comment-empty {
+        color: #888;
+        text-align: center;
+        padding: 24px 0;
+      }
+      @keyframes slideUp {
+        from {
+          transform: translateY(30px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+    </style>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/tabbar.css" />
+    <link rel="stylesheet" href="css/moodboard_intro.css" />
+    <link rel="stylesheet" href="css/feed-modals.css" />
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="66"
+          height="33"
+          viewBox="0 0 66 33"
+          fill="none"
+          class="header-logo"
+        >
+          <path
+            d="M21.8057 19.4238C23.8834 13.555 25.4048 8.11381 27.5078 0.767578V0H36.5371V28.0244C38.3632 27.4704 40.1105 26.7874 42.2383 25.9531V0H51.2666V27.998C53.0869 27.4409 54.8359 26.754 56.9707 25.917V0H65.999V32.9912H56.9707V29.625C54.8758 30.2024 53.1431 30.7743 51.2666 31.3496V32.9912H42.2383V29.6504C40.1516 30.2283 38.4204 30.801 36.5371 31.377V32.9912H27.5078V14.6396C25.8102 19.8463 24.2073 24.8635 21.8057 31.4521V32.9912H12.7764V14.6719C11.0575 19.9443 9.43511 25.0266 6.97852 31.7471L6.94531 31.7393V32.9902H0V23.3994L6.94531 7.63965V19.8115C9.09084 13.803 10.6326 8.29372 12.7764 0.804688V0H21.8057V19.4238Z"
+            fill="#FF5E00"
+          />
+        </svg>
+      </div>
+      <div class="header-right">
+        <button class="header-bell" aria-label="알림">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.89 22 12 22ZM18 16V11C18 7.93 16.36 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.63 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z"
+              stroke="#1A1A1A"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              fill="none"
+            />
+          </svg>
+        </button>
+        <button
+          class="header-login"
+          id="headerLoginBtn"
+          aria-label="로그인"
+          onclick="handleLoginClick(event)"
+        >
+          로그인
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- MUMU's Pick Title -->
+      <h2 class="mumu-pick-title">MUMU's Pick!</h2>
+
+      <!-- Hero / MUMU's Pick Section -->
+      <section class="hero-section">
+        <div class="hero-content">
+          <div class="hero-image">
+            <!-- Placeholder for hero illustration -->
+            <div class="hero-illustration">
+              <div class="hero-text-overlay"></div>
+            </div>
+            <!-- Gradient Overlay -->
+            <div class="hero-gradient-overlay"></div>
+            <!-- Text and Arrow Overlay -->
+            <div class="hero-info">
+              <div class="hero-text-group">
+                <h3 class="hero-work-title">작품 소개</h3>
+                <p class="hero-work-desc">작품 소개 내용</p>
+              </div>
+              <button class="hero-arrow" aria-label="더보기">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="26"
+                  height="15"
+                  viewBox="0 0 26 15"
+                  fill="none"
+                >
+                  <path
+                    d="M24.9327 8.07039C25.3232 7.67986 25.3232 7.0467 24.9327 6.65617L18.5687 0.292213C18.1782 -0.0983115 17.545 -0.0983115 17.1545 0.292213C16.764 0.682737 16.764 1.3159 17.1545 1.70643L22.8114 7.36328L17.1545 13.0201C16.764 13.4107 16.764 14.0438 17.1545 14.4343C17.545 14.8249 18.1782 14.8249 18.5687 14.4343L24.9327 8.07039ZM24.2256 7.36328L24.2256 6.36328L8.74228e-08 6.36328L0 7.36328L-8.74228e-08 8.36328L24.2256 8.36328L24.2256 7.36328Z"
+                    fill="white"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="hero-dots">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Feed List -->
+      <div class="feed-list" id="feedList">
+        <!-- Feed Item 1 -->
+        <article class="feed-item">
+          <div class="feed-card-header">
+            <!-- <div class="feed-card-title-group">
+              <h3 class="feed-card-title">깜장 고양이 짜루 -시즌 2-</h3>
+              <p class="feed-card-desc">
+                작품 소개 본문 내용이 들어갈 예정입니다. 참고하여 주십시오.
+              </p>
+            </div> -->
+            <div class="feed-card-avatar">
+              <div class="avatar-circle">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="23"
+                  height="23"
+                  viewBox="0 0 23 23"
+                  fill="none"
+                >
+                  <path
+                    d="M11.498 0C13.0228 0 14.4851 0.605699 15.5632 1.68385C16.6414 2.762 17.2471 4.22429 17.2471 5.74902C17.2471 7.27376 16.6414 8.73605 15.5632 9.8142C14.4851 10.8923 13.0228 11.498 11.498 11.498C9.97331 11.498 8.51102 10.8923 7.43287 9.8142C6.35472 8.73605 5.74902 7.27376 5.74902 5.74902C5.74902 4.22429 6.35472 2.762 7.43287 1.68385C8.51102 0.605699 9.97331 0 11.498 0ZM11.498 22.9961C11.498 22.9961 22.9961 22.9961 22.9961 20.1216C22.9961 16.6722 17.3908 12.9353 11.498 12.9353C5.6053 12.9353 0 16.6722 0 20.1216C0 22.9961 11.498 22.9961 11.498 22.9961Z"
+                    fill="#FF5E00"
+                  />
+                </svg>
+              </div>
+              <div class="avatar-plus"></div>
+            </div>
+          </div>
+
+          <div class="feed-image-container">
+            <div class="feed-image-scroll">
+              <div class="feed-image-item"></div>
+              <div class="feed-image-item"></div>
+              <div class="feed-image-item"></div>
+              <div class="feed-image-item"></div>
+              <div class="feed-image-item"></div>
+              <div class="feed-image-item"></div>
+            </div>
+          </div>
+
+          <div class="feed-card-pagination">
+            <div class="pagination-dots">
+              <span class="pagination-dot"></span>
+              <span class="pagination-dot"></span>
+              <span class="pagination-dot"></span>
+              <span class="pagination-dot active"></span>
+              <span class="pagination-dot"></span>
+              <span class="pagination-dot"></span>
+            </div>
+            <div class="feed-card-date">2025.11.27</div>
+          </div>
+
+          <div class="feed-card-footer">
+            <div class="feed-card-meta">
+              <div class="feed-card-stats">
+                <button
+                  class="feed-card-stat"
+                  type="button"
+                  aria-label="좋아요"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="stat-icon"
+                  >
+                    <path
+                      d="M15.8434 4.05117C15.4768 3.68448 15.0417 3.3936 14.5627 3.19514C14.0837 2.99668 13.5704 2.89453 13.0519 2.89453C12.5335 2.89453 12.0201 2.99668 11.5411 3.19514C11.0621 3.3936 10.627 3.68448 10.2605 4.05117L9.49981 4.81182L8.73916 4.05117C7.99882 3.31083 6.9947 2.89491 5.94771 2.89492C4.90071 2.89492 3.89659 3.31083 3.15626 4.05117C2.41592 4.79151 2 5.79562 2 6.84262C2 7.88962 2.41592 8.89373 3.15626 9.63407L3.91691 10.3947L9.49981 15.9776L15.0827 10.3947L15.8434 9.63407C16.21 9.26756 16.5009 8.83238 16.6994 8.35342C16.8979 7.87445 17 7.36108 17 6.84262C17 6.32417 16.8979 5.81079 16.6994 5.33183C16.5009 4.85286 16.21 4.41769 15.8434 4.05117Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="stat-count">30</span>
+                </button>
+                <button
+                  class="feed-card-stat stat-icon-comment"
+                  type="button"
+                  aria-label="댓글"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="stat-icon stat-icon-comment"
+                  >
+                    <path
+                      d="M16 8.61112C16.0027 9.63769 15.7628 10.6504 15.3 11.5667C14.7512 12.6647 13.9076 13.5882 12.8636 14.2339C11.8195 14.8795 10.6164 15.2217 9.38888 15.2222C8.36231 15.2249 7.34964 14.9851 6.43333 14.5222L2 16L3.47778 11.5667C3.01494 10.6504 2.7751 9.63769 2.77778 8.61112C2.77825 7.3836 3.12047 6.18046 3.76611 5.13644C4.41175 4.09243 5.3353 3.24879 6.43333 2.70002C7.34964 2.23719 8.36231 1.99735 9.38888 2.00002H9.77777C11.3989 2.08946 12.9301 2.77372 14.0782 3.9218C15.2263 5.06987 15.9105 6.60108 16 8.22223V8.61112Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="stat-count">30</span>
+                </button>
+                <button class="feed-card-stat" type="button" aria-label="저장">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="stat-icon"
+                  >
+                    <path
+                      d="M14.5 15.2557L9 12.4758L3.50001 15.2557V3.36393C3.49864 3.202 3.59456 3.04577 3.76841 2.92679C3.85083 2.86987 3.95109 2.82441 4.06283 2.7933C4.17456 2.7622 4.29531 2.74612 4.41741 2.74609H13.5837C13.7056 2.74621 13.8261 2.76234 13.9377 2.79344C14.0492 2.82455 14.1493 2.86996 14.2316 2.92679C14.4057 3.04595 14.5016 3.20245 14.5 3.36462V15.2557Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="stat-count">30</span>
+                </button>
+              </div>
+              <div class="feed-card-tags">
+                <span class="feed-card-tag">액션</span>
+                <span class="feed-card-tag">판타지</span>
+                <span class="feed-card-tag">개그</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Feed Item 2 -->
+        <article class="feed-item">
+          <div class="feed-card-header">
+            <div class="feed-card-title-group">
+              <h3 class="feed-card-title">깜장 고양이 짜루 -시즌 2-</h3>
+              <p class="feed-card-desc">
+                작품 소개 본문 내용이 들어갈 예정입니다. 참고하여 주십시오.
+              </p>
+            </div>
+            <div class="feed-card-avatar">
+              <div class="avatar-circle">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="23"
+                  height="23"
+                  viewBox="0 0 23 23"
+                  fill="none"
+                >
+                  <path
+                    d="M11.498 0C13.0228 0 14.4851 0.605699 15.5632 1.68385C16.6414 2.762 17.2471 4.22429 17.2471 5.74902C17.2471 7.27376 16.6414 8.73605 15.5632 9.8142C14.4851 10.8923 13.0228 11.498 11.498 11.498C9.97331 11.498 8.51102 10.8923 7.43287 9.8142C6.35472 8.73605 5.74902 7.27376 5.74902 5.74902C5.74902 4.22429 6.35472 2.762 7.43287 1.68385C8.51102 0.605699 9.97331 0 11.498 0ZM11.498 22.9961C11.498 22.9961 22.9961 22.9961 22.9961 20.1216C22.9961 16.6722 17.3908 12.9353 11.498 12.9353C5.6053 12.9353 0 16.6722 0 20.1216C0 22.9961 11.498 22.9961 11.498 22.9961Z"
+                    fill="#FF5E00"
+                  />
+                </svg>
+              </div>
+              <div class="avatar-plus"></div>
+            </div>
+          </div>
+
+          <div class="feed-image-container">
+            <div class="feed-image-scroll">
+              <div class="feed-image-item"></div>
+              <div class="feed-image-item"></div>
+              <div class="feed-image-item"></div>
+              <div class="feed-image-item"></div>
+              <div class="feed-image-item"></div>
+              <div class="feed-image-item"></div>
+            </div>
+          </div>
+
+          <div class="feed-card-pagination">
+            <div class="pagination-dots">
+              <span class="pagination-dot"></span>
+              <span class="pagination-dot"></span>
+              <span class="pagination-dot"></span>
+              <span class="pagination-dot active"></span>
+              <span class="pagination-dot"></span>
+              <span class="pagination-dot"></span>
+            </div>
+            <div class="feed-card-date">2025.11.27</div>
+          </div>
+
+          <div class="feed-card-footer">
+            <div class="feed-card-meta">
+              <div class="feed-card-stats">
+                <div class="feed-card-stat stat-icon-comment">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="stat-icon stat-icon-comment"
+                  >
+                    <path
+                      d="M15.8434 4.05117C15.4768 3.68448 15.0417 3.3936 14.5627 3.19514C14.0837 2.99668 13.5704 2.89453 13.0519 2.89453C12.5335 2.89453 12.0201 2.99668 11.5411 3.19514C11.0621 3.3936 10.627 3.68448 10.2605 4.05117L9.49981 4.81182L8.73916 4.05117C7.99882 3.31083 6.9947 2.89491 5.94771 2.89492C4.90071 2.89492 3.89659 3.31083 3.15626 4.05117C2.41592 4.79151 2 5.79562 2 6.84262C2 7.88962 2.41592 8.89373 3.15626 9.63407L3.91691 10.3947L9.49981 15.9776L15.0827 10.3947L15.8434 9.63407C16.21 9.26756 16.5009 8.83238 16.6994 8.35342C16.8979 7.87445 17 7.36108 17 6.84262C17 6.32417 16.8979 5.81079 16.6994 5.33183C16.5009 4.85286 16.21 4.41769 15.8434 4.05117Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="stat-count">30</span>
+                </div>
+                <div class="feed-card-stat">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="stat-icon"
+                  >
+                    <path
+                      d="M16 8.61112C16.0027 9.63769 15.7628 10.6504 15.3 11.5667C14.7512 12.6647 13.9076 13.5882 12.8636 14.2339C11.8195 14.8795 10.6164 15.2217 9.38888 15.2222C8.36231 15.2249 7.34964 14.9851 6.43333 14.5222L2 16L3.47778 11.5667C3.01494 10.6504 2.7751 9.63769 2.77778 8.61112C2.77825 7.3836 3.12047 6.18046 3.76611 5.13644C4.41175 4.09243 5.3353 3.24879 6.43333 2.70002C7.34964 2.23719 8.36231 1.99735 9.38888 2.00002H9.77777C11.3989 2.08946 12.9301 2.77372 14.0782 3.9218C15.2263 5.06987 15.9105 6.60108 16 8.22223V8.61112Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="stat-count">30</span>
+                </div>
+                <button class="feed-card-stat" type="button" aria-label="저장">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="stat-icon"
+                  >
+                    <path
+                      d="M14.5 15.2557L9 12.4758L3.50001 15.2557V3.36393C3.49864 3.202 3.59456 3.04577 3.76841 2.92679C3.85083 2.86987 3.95109 2.82441 4.06283 2.7933C4.17456 2.7622 4.29531 2.74612 4.41741 2.74609H13.5837C13.7056 2.74621 13.8261 2.76234 13.9377 2.79344C14.0492 2.82455 14.1493 2.86996 14.2316 2.92679C14.4057 3.04595 14.5016 3.20245 14.5 3.36462V15.2557Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="stat-count">30</span>
+                </button>
+              </div>
+              <div class="feed-card-tags">
+                <span class="feed-card-tag">액션</span>
+                <span class="feed-card-tag">판타지</span>
+                <span class="feed-card-tag">개그</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Feed Item 3 -->
+        <article class="feed-item">
+          <div class="feed-card-header">
+            <div class="feed-card-title-group">
+              <h3 class="feed-card-title">깜장 고양이 짜루 -시즌 2-</h3>
+              <p class="feed-card-desc">
+                작품 소개 본문 내용이 들어갈 예정입니다. 참고하여 주십시오.
+              </p>
+            </div>
+            <div class="feed-card-avatar">
+              <div class="avatar-circle">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="23"
+                  height="23"
+                  viewBox="0 0 23 23"
+                  fill="none"
+                >
+                  <path
+                    d="M11.498 0C13.0228 0 14.4851 0.605699 15.5632 1.68385C16.6414 2.762 17.2471 4.22429 17.2471 5.74902C17.2471 7.27376 16.6414 8.73605 15.5632 9.8142C14.4851 10.8923 13.0228 11.498 11.498 11.498C9.97331 11.498 8.51102 10.8923 7.43287 9.8142C6.35472 8.73605 5.74902 7.27376 5.74902 5.74902C5.74902 4.22429 6.35472 2.762 7.43287 1.68385C8.51102 0.605699 9.97331 0 11.498 0ZM11.498 22.9961C11.498 22.9961 22.9961 22.9961 22.9961 20.1216C22.9961 16.6722 17.3908 12.9353 11.498 12.9353C5.6053 12.9353 0 16.6722 0 20.1216C0 22.9961 11.498 22.9961 11.498 22.9961Z"
+                    fill="#FF5E00"
+                  />
+                </svg>
+              </div>
+              <div class="avatar-plus"></div>
+            </div>
+          </div>
+
+          <div class="feed-image-container">
+            <div class="feed-image-scroll">
+              <div class="feed-image-item"></div>
+              <div class="feed-image-item"></div>
+              <div class="feed-image-item"></div>
+              <div class="feed-image-item"></div>
+              <div class="feed-image-item"></div>
+              <div class="feed-image-item"></div>
+            </div>
+          </div>
+
+          <div class="feed-card-pagination">
+            <div class="pagination-dots">
+              <span class="pagination-dot"></span>
+              <span class="pagination-dot"></span>
+              <span class="pagination-dot"></span>
+              <span class="pagination-dot active"></span>
+              <span class="pagination-dot"></span>
+              <span class="pagination-dot"></span>
+            </div>
+            <div class="feed-card-date">2025.11.27</div>
+          </div>
+
+          <div class="feed-card-footer">
+            <div class="feed-card-meta">
+              <div class="feed-card-stats">
+                <div class="feed-card-stat">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="stat-icon"
+                  >
+                    <path
+                      d="M15.8434 4.05117C15.4768 3.68448 15.0417 3.3936 14.5627 3.19514C14.0837 2.99668 13.5704 2.89453 13.0519 2.89453C12.5335 2.89453 12.0201 2.99668 11.5411 3.19514C11.0621 3.3936 10.627 3.68448 10.2605 4.05117L9.49981 4.81182L8.73916 4.05117C7.99882 3.31083 6.9947 2.89491 5.94771 2.89492C4.90071 2.89492 3.89659 3.31083 3.15626 4.05117C2.41592 4.79151 2 5.79562 2 6.84262C2 7.88962 2.41592 8.89373 3.15626 9.63407L3.91691 10.3947L9.49981 15.9776L15.0827 10.3947L15.8434 9.63407C16.21 9.26756 16.5009 8.83238 16.6994 8.35342C16.8979 7.87445 17 7.36108 17 6.84262C17 6.32417 16.8979 5.81079 16.6994 5.33183C16.5009 4.85286 16.21 4.41769 15.8434 4.05117Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="stat-count">30</span>
+                </div>
+                <div class="feed-card-stat">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="stat-icon"
+                  >
+                    <path
+                      d="M16 8.61112C16.0027 9.63769 15.7628 10.6504 15.3 11.5667C14.7512 12.6647 13.9076 13.5882 12.8636 14.2339C11.8195 14.8795 10.6164 15.2217 9.38888 15.2222C8.36231 15.2249 7.34964 14.9851 6.43333 14.5222L2 16L3.47778 11.5667C3.01494 10.6504 2.7751 9.63769 2.77778 8.61112C2.77825 7.3836 3.12047 6.18046 3.76611 5.13644C4.41175 4.09243 5.3353 3.24879 6.43333 2.70002C7.34964 2.23719 8.36231 1.99735 9.38888 2.00002H9.77777C11.3989 2.08946 12.9301 2.77372 14.0782 3.9218C15.2263 5.06987 15.9105 6.60108 16 8.22223V8.61112Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="stat-count">30</span>
+                </div>
+                <button class="feed-card-stat" type="button" aria-label="저장">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="stat-icon"
+                  >
+                    <path
+                      d="M14.5 15.2557L9 12.4758L3.50001 15.2557V3.36393C3.49864 3.202 3.59456 3.04577 3.76841 2.92679C3.85083 2.86987 3.95109 2.82441 4.06283 2.7933C4.17456 2.7622 4.29531 2.74612 4.41741 2.74609H13.5837C13.7056 2.74621 13.8261 2.76234 13.9377 2.79344C14.0492 2.82455 14.1493 2.86996 14.2316 2.92679C14.4057 3.04595 14.5016 3.20245 14.5 3.36462V15.2557Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span class="stat-count">30</span>
+                </button>
+              </div>
+              <div class="feed-card-tags">
+                <span class="feed-card-tag">액션</span>
+                <span class="feed-card-tag">판타지</span>
+                <span class="feed-card-tag">개그</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <!-- Bottom Tab Bar -->
+    <div id="tabbar"></div>
+    <script src="js/tabbar-init.js" defer></script>
+    <script src="js/feed-image-swipe.js" defer></script>
+    <script src="js/feed-stat-interaction.js" defer></script>
+
+    <!-- Moodboard Intro -->
+    <div id="moodboard-intro-root"></div>
+    <script src="/js/moodboard_intro.js" defer></script>
+
+    <!-- Welcome Modal -->
+    <div
+      id="welcome-modal-overlay"
+      class="welcome-modal-overlay"
+      style="display: none"
+    >
+      <div class="welcome-modal">
+        <h2 class="welcome-modal-title">가입을 환영합니다</h2>
+        <p class="welcome-modal-message">MUMU에 오신 것을 환영합니다!</p>
+        <button id="welcome-modal-close-btn" class="welcome-modal-btn">
+          확인
+        </button>
+      </div>
+    </div>
+
+    <!-- Comment Modal -->
+    <div id="comment-modal" class="comment-modal-overlay" style="display: none">
+      <div class="comment-modal">
+        <div class="comment-modal-header">
+          <h2 class="comment-modal-title">36개의 댓글</h2>
+          <button
+            class="comment-modal-close"
+            onclick="closeCommentModal()"
+            aria-label="닫기"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M18 6L6 18M6 6L18 18"
+                stroke="#1A1A1A"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+        <div class="comment-modal-content">
+          <div class="comment-item">
+            <div class="comment-avatar"></div>
+            <div class="comment-body">
+              <div class="comment-header">
+                <span class="comment-author">작가 이름</span>
+                <span class="comment-date">2025.11.27</span>
+              </div>
+              <p class="comment-text">얼레리꼴레리 이거 봐라~</p>
+              <div class="comment-actions">
+                <button class="comment-action-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="comment-action-icon"
+                  >
+                    <path
+                      d="M15.8434 4.05117C15.4768 3.68448 15.0417 3.3936 14.5627 3.19514C14.0837 2.99668 13.5704 2.89453 13.0519 2.89453C12.5335 2.89453 12.0201 2.99668 11.5411 3.19514C11.0621 3.3936 10.627 3.68448 10.2605 4.05117L9.49981 4.81182L8.73916 4.05117C7.99882 3.31083 6.9947 2.89491 5.94771 2.89492C4.90071 2.89492 3.89659 3.31083 3.15626 4.05117C2.41592 4.79151 2 5.79562 2 6.84262C2 7.88962 2.41592 8.89373 3.15626 9.63407L3.91691 10.3947L9.49981 15.9776L15.0827 10.3947L15.8434 9.63407C16.21 9.26756 16.5009 8.83238 16.6994 8.35342C16.8979 7.87445 17 7.36108 17 6.84262C17 6.32417 16.8979 5.81079 16.6994 5.33183C16.5009 4.85286 16.21 4.41769 15.8434 4.05117Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span>30</span>
+                </button>
+                <button class="comment-action-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="comment-action-icon"
+                  >
+                    <path
+                      d="M16 8.61112C16.0027 9.63769 15.7628 10.6504 15.3 11.5667C14.7512 12.6647 13.9076 13.5882 12.8636 14.2339C11.8195 14.8795 10.6164 15.2217 9.38888 15.2222C8.36231 15.2249 7.34964 14.9851 6.43333 14.5222L2 16L3.47778 11.5667C3.01494 10.6504 2.7751 9.63769 2.77778 8.61112C2.77825 7.3836 3.12047 6.18046 3.76611 5.13644C4.41175 4.09243 5.3353 3.24879 6.43333 2.70002C7.34964 2.23719 8.36231 1.99735 9.38888 2.00002H9.77777C11.3989 2.08946 12.9301 2.77372 14.0782 3.9218C15.2263 5.06987 15.9105 6.60108 16 8.22223V8.61112Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span>1</span>
+                </button>
+                <button
+                  class="comment-menu-btn"
+                  onclick="openReportModal()"
+                  aria-label="메뉴"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <circle cx="10" cy="5" r="1.5" fill="#1A1A1A" />
+                    <circle cx="10" cy="10" r="1.5" fill="#1A1A1A" />
+                    <circle cx="10" cy="15" r="1.5" fill="#1A1A1A" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="comment-item comment-reply">
+            <div class="comment-reply-line"></div>
+            <div class="comment-avatar"></div>
+            <div class="comment-body">
+              <div class="comment-header">
+                <span class="comment-author">작가 이름</span>
+                <span class="comment-date">2025.11.27</span>
+              </div>
+              <p class="comment-text">얼레리꼴레리 이거 봐라~</p>
+              <div class="comment-actions">
+                <button class="comment-action-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="comment-action-icon"
+                  >
+                    <path
+                      d="M15.8434 4.05117C15.4768 3.68448 15.0417 3.3936 14.5627 3.19514C14.0837 2.99668 13.5704 2.89453 13.0519 2.89453C12.5335 2.89453 12.0201 2.99668 11.5411 3.19514C11.0621 3.3936 10.627 3.68448 10.2605 4.05117L9.49981 4.81182L8.73916 4.05117C7.99882 3.31083 6.9947 2.89491 5.94771 2.89492C4.90071 2.89492 3.89659 3.31083 3.15626 4.05117C2.41592 4.79151 2 5.79562 2 6.84262C2 7.88962 2.41592 8.89373 3.15626 9.63407L3.91691 10.3947L9.49981 15.9776L15.0827 10.3947L15.8434 9.63407C16.21 9.26756 16.5009 8.83238 16.6994 8.35342C16.8979 7.87445 17 7.36108 17 6.84262C17 6.32417 16.8979 5.81079 16.6994 5.33183C16.5009 4.85286 16.21 4.41769 15.8434 4.05117Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span>30</span>
+                </button>
+                <button class="comment-action-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="comment-action-icon"
+                  >
+                    <path
+                      d="M16 8.61112C16.0027 9.63769 15.7628 10.6504 15.3 11.5667C14.7512 12.6647 13.9076 13.5882 12.8636 14.2339C11.8195 14.8795 10.6164 15.2217 9.38888 15.2222C8.36231 15.2249 7.34964 14.9851 6.43333 14.5222L2 16L3.47778 11.5667C3.01494 10.6504 2.7751 9.63769 2.77778 8.61112C2.77825 7.3836 3.12047 6.18046 3.76611 5.13644C4.41175 4.09243 5.3353 3.24879 6.43333 2.70002C7.34964 2.23719 8.36231 1.99735 9.38888 2.00002H9.77777C11.3989 2.08946 12.9301 2.77372 14.0782 3.9218C15.2263 5.06987 15.9105 6.60108 16 8.22223V8.61112Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span>1</span>
+                </button>
+                <button
+                  class="comment-menu-btn"
+                  onclick="openReportModal()"
+                  aria-label="메뉴"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <circle cx="10" cy="5" r="1.5" fill="#1A1A1A" />
+                    <circle cx="10" cy="10" r="1.5" fill="#1A1A1A" />
+                    <circle cx="10" cy="15" r="1.5" fill="#1A1A1A" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="comment-item comment-reply">
+            <div class="comment-reply-line"></div>
+            <div class="comment-avatar"></div>
+            <div class="comment-body">
+              <div class="comment-header">
+                <span class="comment-author">작가 이름</span>
+                <span class="comment-date">2025.11.27</span>
+              </div>
+              <p class="comment-text">얼레리꼴레리 이거 봐라~</p>
+              <div class="comment-actions">
+                <button class="comment-action-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="comment-action-icon"
+                  >
+                    <path
+                      d="M15.8434 4.05117C15.4768 3.68448 15.0417 3.3936 14.5627 3.19514C14.0837 2.99668 13.5704 2.89453 13.0519 2.89453C12.5335 2.89453 12.0201 2.99668 11.5411 3.19514C11.0621 3.3936 10.627 3.68448 10.2605 4.05117L9.49981 4.81182L8.73916 4.05117C7.99882 3.31083 6.9947 2.89491 5.94771 2.89492C4.90071 2.89492 3.89659 3.31083 3.15626 4.05117C2.41592 4.79151 2 5.79562 2 6.84262C2 7.88962 2.41592 8.89373 3.15626 9.63407L3.91691 10.3947L9.49981 15.9776L15.0827 10.3947L15.8434 9.63407C16.21 9.26756 16.5009 8.83238 16.6994 8.35342C16.8979 7.87445 17 7.36108 17 6.84262C17 6.32417 16.8979 5.81079 16.6994 5.33183C16.5009 4.85286 16.21 4.41769 15.8434 4.05117Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span>30</span>
+                </button>
+                <button class="comment-action-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="comment-action-icon"
+                  >
+                    <path
+                      d="M16 8.61112C16.0027 9.63769 15.7628 10.6504 15.3 11.5667C14.7512 12.6647 13.9076 13.5882 12.8636 14.2339C11.8195 14.8795 10.6164 15.2217 9.38888 15.2222C8.36231 15.2249 7.34964 14.9851 6.43333 14.5222L2 16L3.47778 11.5667C3.01494 10.6504 2.7751 9.63769 2.77778 8.61112C2.77825 7.3836 3.12047 6.18046 3.76611 5.13644C4.41175 4.09243 5.3353 3.24879 6.43333 2.70002C7.34964 2.23719 8.36231 1.99735 9.38888 2.00002H9.77777C11.3989 2.08946 12.9301 2.77372 14.0782 3.9218C15.2263 5.06987 15.9105 6.60108 16 8.22223V8.61112Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span>1</span>
+                </button>
+                <button
+                  class="comment-menu-btn"
+                  onclick="openReportModal()"
+                  aria-label="메뉴"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <circle cx="10" cy="5" r="1.5" fill="#1A1A1A" />
+                    <circle cx="10" cy="10" r="1.5" fill="#1A1A1A" />
+                    <circle cx="10" cy="15" r="1.5" fill="#1A1A1A" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="comment-item">
+            <div class="comment-avatar"></div>
+            <div class="comment-body">
+              <div class="comment-header">
+                <span class="comment-author">작가 이름</span>
+                <span class="comment-date">2025.11.27</span>
+              </div>
+              <p class="comment-text">얼레리꼴레리 이거 봐라~</p>
+              <div class="comment-actions">
+                <button class="comment-action-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="comment-action-icon"
+                  >
+                    <path
+                      d="M15.8434 4.05117C15.4768 3.68448 15.0417 3.3936 14.5627 3.19514C14.0837 2.99668 13.5704 2.89453 13.0519 2.89453C12.5335 2.89453 12.0201 2.99668 11.5411 3.19514C11.0621 3.3936 10.627 3.68448 10.2605 4.05117L9.49981 4.81182L8.73916 4.05117C7.99882 3.31083 6.9947 2.89491 5.94771 2.89492C4.90071 2.89492 3.89659 3.31083 3.15626 4.05117C2.41592 4.79151 2 5.79562 2 6.84262C2 7.88962 2.41592 8.89373 3.15626 9.63407L3.91691 10.3947L9.49981 15.9776L15.0827 10.3947L15.8434 9.63407C16.21 9.26756 16.5009 8.83238 16.6994 8.35342C16.8979 7.87445 17 7.36108 17 6.84262C17 6.32417 16.8979 5.81079 16.6994 5.33183C16.5009 4.85286 16.21 4.41769 15.8434 4.05117Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span>30</span>
+                </button>
+                <button class="comment-action-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="comment-action-icon"
+                  >
+                    <path
+                      d="M16 8.61112C16.0027 9.63769 15.7628 10.6504 15.3 11.5667C14.7512 12.6647 13.9076 13.5882 12.8636 14.2339C11.8195 14.8795 10.6164 15.2217 9.38888 15.2222C8.36231 15.2249 7.34964 14.9851 6.43333 14.5222L2 16L3.47778 11.5667C3.01494 10.6504 2.7751 9.63769 2.77778 8.61112C2.77825 7.3836 3.12047 6.18046 3.76611 5.13644C4.41175 4.09243 5.3353 3.24879 6.43333 2.70002C7.34964 2.23719 8.36231 1.99735 9.38888 2.00002H9.77777C11.3989 2.08946 12.9301 2.77372 14.0782 3.9218C15.2263 5.06987 15.9105 6.60108 16 8.22223V8.61112Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span>1</span>
+                </button>
+                <button
+                  class="comment-menu-btn"
+                  onclick="openReportModal()"
+                  aria-label="메뉴"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <circle cx="10" cy="5" r="1.5" fill="#1A1A1A" />
+                    <circle cx="10" cy="10" r="1.5" fill="#1A1A1A" />
+                    <circle cx="10" cy="15" r="1.5" fill="#1A1A1A" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="comment-item">
+            <div class="comment-avatar"></div>
+            <div class="comment-body">
+              <div class="comment-header">
+                <span class="comment-author">작가 이름</span>
+                <span class="comment-date">2025.11.27</span>
+              </div>
+              <p class="comment-text">얼레리꼴레리 이거 봐라~</p>
+              <div class="comment-actions">
+                <button class="comment-action-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="comment-action-icon"
+                  >
+                    <path
+                      d="M15.8434 4.05117C15.4768 3.68448 15.0417 3.3936 14.5627 3.19514C14.0837 2.99668 13.5704 2.89453 13.0519 2.89453C12.5335 2.89453 12.0201 2.99668 11.5411 3.19514C11.0621 3.3936 10.627 3.68448 10.2605 4.05117L9.49981 4.81182L8.73916 4.05117C7.99882 3.31083 6.9947 2.89491 5.94771 2.89492C4.90071 2.89492 3.89659 3.31083 3.15626 4.05117C2.41592 4.79151 2 5.79562 2 6.84262C2 7.88962 2.41592 8.89373 3.15626 9.63407L3.91691 10.3947L9.49981 15.9776L15.0827 10.3947L15.8434 9.63407C16.21 9.26756 16.5009 8.83238 16.6994 8.35342C16.8979 7.87445 17 7.36108 17 6.84262C17 6.32417 16.8979 5.81079 16.6994 5.33183C16.5009 4.85286 16.21 4.41769 15.8434 4.05117Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span>30</span>
+                </button>
+                <button class="comment-action-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    class="comment-action-icon"
+                  >
+                    <path
+                      d="M16 8.61112C16.0027 9.63769 15.7628 10.6504 15.3 11.5667C14.7512 12.6647 13.9076 13.5882 12.8636 14.2339C11.8195 14.8795 10.6164 15.2217 9.38888 15.2222C8.36231 15.2249 7.34964 14.9851 6.43333 14.5222L2 16L3.47778 11.5667C3.01494 10.6504 2.7751 9.63769 2.77778 8.61112C2.77825 7.3836 3.12047 6.18046 3.76611 5.13644C4.41175 4.09243 5.3353 3.24879 6.43333 2.70002C7.34964 2.23719 8.36231 1.99735 9.38888 2.00002H9.77777C11.3989 2.08946 12.9301 2.77372 14.0782 3.9218C15.2263 5.06987 15.9105 6.60108 16 8.22223V8.61112Z"
+                      stroke="#A0A0A0"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  <span>1</span>
+                </button>
+                <button
+                  class="comment-menu-btn"
+                  onclick="openReportModal()"
+                  aria-label="메뉴"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <circle cx="10" cy="5" r="1.5" fill="#1A1A1A" />
+                    <circle cx="10" cy="10" r="1.5" fill="#1A1A1A" />
+                    <circle cx="10" cy="15" r="1.5" fill="#1A1A1A" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Save Modal -->
+    <div id="save-modal" class="save-modal-overlay" style="display: none">
+      <div class="save-modal">
+        <h2 class="save-modal-title">나의 무드보드로 이동하시겠습니까?</h2>
+        <div class="save-modal-buttons">
+          <button
+            class="save-modal-btn save-modal-btn-cancel"
+            onclick="closeSaveModal()"
+          >
+            아니오
+          </button>
+          <button
+            class="save-modal-btn save-modal-btn-confirm"
+            onclick="confirmSaveModal()"
+          >
+            무드보드 바로가기
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div id="report-modal" class="report-modal-overlay" style="display: none">
+      <div class="report-modal">
+        <button class="report-modal-btn" onclick="closeReportModal()">
+          댓글 신고
+        </button>
+      </div>
+    </div>
+
+    <!-- Follow Modal -->
+    <div id="follow-modal" class="follow-modal-overlay" style="display: none">
+      <div class="follow-modal">
+        <p class="follow-modal-message">팔로우했습니다</p>
+        <button class="follow-modal-btn" onclick="closeFollowModal()">
+          확인
+        </button>
+      </div>
+    </div>
+    <!-- Feed interactions (댓글 모달, 카드 통계 등) -->
+    <script src="/js/feed.js" defer></script>
+
+    <script src="/js/welcome_modal.js" defer></script>
+
+    <!-- Login Status & UI Toggle -->
+    <script type="module" src="/js/reader_auth.js"></script>
+    <script type="module">
+      // 로그인 버튼 클릭 핸들러 (기본 핸들러)
+      window.handleLoginClick = function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const loginBtn = event.target.closest("#headerLoginBtn");
+        if (!loginBtn) return;
+
+        // 이미 로그인 상태인지 확인
+        const isLoggedIn = loginBtn.textContent === "로그아웃";
+
+        if (isLoggedIn) {
+          // 로그아웃 처리
+          handleLogout();
+        } else {
+          // 로그인 페이지로 이동
+          window.location.href = "login.html";
+        }
+      };
+
+      // 로그인 상태 체크 및 UI 토글
+      async function updateLoginUI() {
+        const loginBtn = document.getElementById("headerLoginBtn");
+        if (!loginBtn) {
+          console.warn("[로그인UI] 헤더 로그인 버튼을 찾을 수 없습니다.");
+          return;
+        }
+
+        try {
+          // Firebase Auth 상태 확인 (전역 함수 사용)
+          // getCurrentFirebaseUser가 없으면 잠시 대기 후 재시도
+          if (typeof window.getCurrentFirebaseUser !== "function") {
+            console.log("[로그인UI] getCurrentFirebaseUser 대기 중...");
+            await new Promise((resolve) => setTimeout(resolve, 500));
+
+            if (typeof window.getCurrentFirebaseUser !== "function") {
+              console.warn(
+                "[로그인UI] getCurrentFirebaseUser를 찾을 수 없습니다."
+              );
+              // 기본값으로 로그인 버튼 설정
+              loginBtn.textContent = "로그인";
+              loginBtn.onclick = window.handleLoginClick;
+              return;
+            }
+          }
+
+          const user = await window.getCurrentFirebaseUser();
+
+          // localStorage도 확인 (이중 체크)
+          const loggedInStorage =
+            localStorage.getItem("mumu_logged_in") === "true";
+
+          const isLoggedIn = user !== null || loggedInStorage;
+
+          console.log("[로그인UI] 로그인 상태 체크:");
+          console.log("  - Firebase User:", user ? "있음" : "없음");
+          console.log("  - localStorage:", loggedInStorage);
+          console.log("  - 최종 상태:", isLoggedIn ? "로그인됨" : "비로그인");
+
+          if (isLoggedIn) {
+            // 로그인 상태 → 로그아웃 버튼으로 변경
+            loginBtn.textContent = "로그아웃";
+            loginBtn.onclick = window.handleLoginClick;
+            console.log("[로그인UI] ✅ 로그아웃 버튼으로 변경");
+          } else {
+            // 비로그인 상태 → 로그인 버튼으로 변경
+            loginBtn.textContent = "로그인";
+            loginBtn.onclick = window.handleLoginClick;
+            console.log("[로그인UI] ✅ 로그인 버튼으로 변경");
+          }
+        } catch (error) {
+          console.error("[로그인UI] ❌ 로그인 상태 체크 실패:", error);
+          // 에러 발생 시 기본값으로 로그인 버튼 표시
+          loginBtn.textContent = "로그인";
+          loginBtn.onclick = window.handleLoginClick;
+        }
+      }
+
+      // 로그아웃 처리
+      window.handleLogout = async function handleLogout() {
+        console.log("[로그아웃] 로그아웃 버튼 클릭");
+
+        if (!confirm("로그아웃 하시겠습니까?")) {
+          return;
+        }
+
+        try {
+          // Firebase 로그아웃
+          if (window.signOutFirebase) {
+            await window.signOutFirebase();
+          } else {
+            // 모듈에서 직접 import
+            const { signOutFirebase } = await import("/js/reader_auth.js");
+            await signOutFirebase();
+          }
+
+          console.log("[로그아웃] ✅ 로그아웃 성공");
+
+          // UI 즉시 업데이트
+          const loginBtn = document.getElementById("headerLoginBtn");
+          if (loginBtn) {
+            loginBtn.textContent = "로그인";
+            loginBtn.onclick = window.handleLoginClick;
+          }
+
+          // 페이지 새로고침 (선택사항)
+          // window.location.reload();
+        } catch (error) {
+          console.error("[로그아웃] ❌ 로그아웃 실패:", error);
+          alert("로그아웃 중 오류가 발생했습니다.");
+        }
+      };
+
+      // 페이지 로드 시 로그인 상태 체크 (약간의 지연을 두어 Firebase 로드 대기)
+      const checkLoginState = async () => {
+        // 방금 로그인한 경우 즉시 업데이트
+        const justLoggedIn =
+          localStorage.getItem("mumu_just_logged_in") === "true";
+
+        if (justLoggedIn) {
+          // 즉시 업데이트 시도
+          await updateLoginUI();
+          localStorage.removeItem("mumu_just_logged_in");
+        } else {
+          // Firebase가 로드될 때까지 약간 대기
+          await new Promise((resolve) => setTimeout(resolve, 300));
+          await updateLoginUI();
+        }
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", checkLoginState);
+      } else {
+        checkLoginState();
+      }
+
+      // Firebase Auth 상태 변경 감지하여 UI 업데이트
+      if (window.setupAuthStateListener) {
+        window.setupAuthStateListener((user) => {
+          console.log(
+            "[로그인UI] Auth 상태 변경 감지:",
+            user ? "로그인됨" : "로그아웃됨"
+          );
+          updateLoginUI();
+        });
+      }
+    </script>
+
+    <!-- 상단 복귀 버튼 -->
+    <button
+      id="scrollToTopBtn"
+      class="scroll-to-top-btn"
+      aria-label="상단으로 이동"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+      >
+        <path
+          d="M12 19V5M5 12L12 5L19 12"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+
+    <!-- 컷 저장 모달 1: 저장 확인 -->
+    <div id="cutSaveConfirmModal" class="cut-save-modal" style="display: none">
+      <div class="cut-save-modal-content">
+        <p class="cut-save-modal-text">컷 저장을 하시겠습니까?</p>
+        <div class="cut-save-modal-buttons">
+          <button
+            class="cut-save-btn cut-save-btn-no"
+            onclick="closeCutSaveConfirmModal()"
+          >
+            아니오
+          </button>
+          <button
+            class="cut-save-btn cut-save-btn-yes"
+            onclick="confirmCutSave()"
+          >
+            네
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 컷 저장 모달 2: 저장 완료 후 무드보드 이동 확인 -->
+    <div id="cutSaveCompleteModal" class="cut-save-modal" style="display: none">
+      <div class="cut-save-modal-content">
+        <p class="cut-save-modal-text">
+          저장 되었습니다 무드보드로 이동할까요?
+        </p>
+        <div class="cut-save-modal-buttons">
+          <button
+            class="cut-save-btn cut-save-btn-no"
+            onclick="closeCutSaveCompleteModal()"
+          >
+            아니오
+          </button>
+          <button
+            class="cut-save-btn cut-save-btn-yes"
+            onclick="goToMoodboard()"
+          >
+            네
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

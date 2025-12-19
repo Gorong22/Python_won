@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>MUMU – 창작자 회원가입</title>
+    <link rel="stylesheet" href="css/tabbar.css" />
+    <style>
+      /* Mobile-first layout */
+      body {
+        margin: 0;
+        background: #000;
+        font-family: -apple-system, BlinkMacSystemFont, "Pretendard", sans-serif;
+      }
+
+      .app-frame {
+        width: 100%;
+        max-width: 402px;
+        margin: 0 auto;
+        background: #ffffff;
+        min-height: 100vh;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: calc(64px + env(safe-area-inset-bottom));
+        box-sizing: border-box;
+      }
+
+      .signup-container {
+        flex: 1;
+        padding: 24px 20px;
+        overflow-y: auto;
+      }
+
+      .signup-header {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+
+      .signup-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #000;
+        margin: 0 0 8px 0;
+      }
+
+      .signup-subtitle {
+        font-size: 14px;
+        color: #666;
+        margin: 0;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 8px;
+      }
+
+      .form-label .required {
+        color: #ff5e00;
+      }
+
+      .form-input,
+      .form-select,
+      .form-textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        box-sizing: border-box;
+        font-family: inherit;
+      }
+
+      .form-input:focus,
+      .form-select:focus,
+      .form-textarea:focus {
+        outline: none;
+        border-color: #ff5e00;
+      }
+
+      .form-textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .file-upload-area {
+        border: 2px dashed #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .file-upload-area:hover {
+        border-color: #ff5e00;
+        background: #fff5f0;
+      }
+
+      .file-upload-area.has-files {
+        border-color: #ff5e00;
+        background: #fff5f0;
+      }
+
+      .file-input {
+        display: none;
+      }
+
+      .file-list {
+        margin-top: 12px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .file-item {
+        padding: 4px 0;
+      }
+
+      .agreement-section {
+        background: #fafafa;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 24px 0;
+      }
+
+      .agreement-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0 0 16px 0;
+        color: #000;
+      }
+
+      .agreement-item {
+        margin-bottom: 16px;
+      }
+
+      .agreement-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .agreement-checkbox {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .agreement-checkbox input[type="checkbox"] {
+        margin-top: 2px;
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+      }
+
+      .agreement-label {
+        font-size: 14px;
+        color: #333;
+        line-height: 1.5;
+        cursor: pointer;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 16px;
+        background: #ff5e00;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 24px;
+        transition: background 0.2s ease;
+      }
+
+      .submit-btn:hover {
+        background: #e55500;
+      }
+
+      .submit-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      .error-message {
+        background: #ffebee;
+        color: #c62828;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        margin-bottom: 20px;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      .success-message {
+        background: #e8f5e9;
+        color: #2e7d32;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        margin-bottom: 20px;
+        display: none;
+      }
+
+      .success-message.show {
+        display: block;
+      }
+
+      .login-link {
+        text-align: center;
+        margin-top: 24px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .login-link a {
+        color: #ff5e00;
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .confirmation-screen {
+        display: none;
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      .confirmation-screen.show {
+        display: block;
+      }
+
+      .confirmation-icon {
+        font-size: 64px;
+        margin-bottom: 24px;
+      }
+
+      .confirmation-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #000;
+        margin: 0 0 16px 0;
+      }
+
+      .confirmation-message {
+        font-size: 16px;
+        color: #666;
+        line-height: 1.8;
+        margin: 0 0 32px 0;
+        text-align: left;
+        background: #fafafa;
+        padding: 20px;
+        border-radius: 8px;
+      }
+
+      .confirmation-btn {
+        width: 100%;
+        padding: 16px;
+        background: #ff5e00;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      .confirmation-btn:hover {
+        background: #e55500;
+      }
+
+      .signup-form.hidden {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app-frame">
+      <main class="signup-container">
+        <div class="signup-header">
+          <h1 class="signup-title">창작자 회원가입</h1>
+          <p class="signup-subtitle">MUMU에서 창작 활동을 시작하세요</p>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+
+        <!-- Confirmation Screen (shown after successful signup) -->
+        <div class="confirmation-screen" id="confirmationScreen">
+          <div class="confirmation-icon">✅</div>
+          <h1 class="confirmation-title">창작자 신청이 완료되었습니다.</h1>
+          <div class="confirmation-message">
+            현재 심사 중이며,<br />
+            심사 결과는 영업일 기준 3~5일 이내에<br />
+            입력하신 이메일 주소로 안내드립니다.<br /><br />
+            승인 완료 후<br />
+            Creator Studio 이용이 가능합니다.
+          </div>
+          <button
+            type="button"
+            class="confirmation-btn"
+            id="confirmationBtn"
+            onclick="window.location.href='index.html'"
+          >
+            확인
+          </button>
+        </div>
+
+        <form id="signupForm" class="signup-form">
+          <!-- 필수 필드 -->
+          <div class="form-group">
+            <label class="form-label" for="user_id">
+              아이디 <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="user_id"
+              name="user_id"
+              class="form-input"
+              placeholder="로그인에 사용할 아이디를 입력하세요"
+              required
+              pattern="[a-zA-Z0-9_]{3,20}"
+              title="영문, 숫자, 언더스코어만 사용 가능 (3-20자)"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">
+              비밀번호 <span class="required">*</span>
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-input"
+              placeholder="비밀번호를 입력하세요 (최소 6자)"
+              required
+              minlength="6"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">
+              이메일 <span class="required">*</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-input"
+              placeholder="이메일을 입력하세요"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="real_name">
+              성명 <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="real_name"
+              name="real_name"
+              class="form-input"
+              placeholder="실명을 입력하세요"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="age">
+              나이 <span class="required">*</span>
+            </label>
+            <input
+              type="number"
+              id="age"
+              name="age"
+              class="form-input"
+              placeholder="나이를 입력하세요"
+              required
+              min="1"
+              max="150"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="gender">
+              성별 <span class="required">*</span>
+            </label>
+            <select id="gender" name="gender" class="form-select" required>
+              <option value="">선택하세요</option>
+              <option value="male">남성</option>
+              <option value="female">여성</option>
+              <option value="other">기타</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="pen_name">
+              작가명 <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="pen_name"
+              name="pen_name"
+              class="form-input"
+              placeholder="작가명을 입력하세요"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="introduction">
+              자기소개 <span class="required">*</span>
+            </label>
+            <textarea
+              id="introduction"
+              name="introduction"
+              class="form-textarea"
+              placeholder="자신을 소개해주세요"
+              required
+            ></textarea>
+          </div>
+
+          <!-- 선택 필드 -->
+          <div class="form-group">
+            <label class="form-label" for="portfolio_files">
+              포트폴리오 파일
+            </label>
+            <div class="file-upload-area" id="fileUploadArea">
+              <input
+                type="file"
+                id="portfolio_files"
+                name="portfolio_files"
+                class="file-input"
+                multiple
+                accept=".pdf,.jpg,.jpeg,.png,.zip"
+              />
+              <div id="fileUploadText">
+                <p>파일을 선택하거나 드래그하세요</p>
+                <p style="font-size: 12px; color: #999; margin-top: 4px">
+                  PDF, 이미지, ZIP 파일 지원
+                </p>
+              </div>
+              <div class="file-list" id="fileList"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="activity_links"> 활동 링크 </label>
+            <input
+              type="text"
+              id="activity_links"
+              name="activity_links"
+              class="form-input"
+              placeholder="URL을 쉼표로 구분하여 입력하세요 (예: https://example.com, https://another.com)"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact_email">
+              연락용 이메일
+            </label>
+            <input
+              type="email"
+              id="contact_email"
+              name="contact_email"
+              class="form-input"
+              placeholder="연락용 이메일을 입력하세요 (선택사항)"
+            />
+          </div>
+
+          <!-- 약관 동의 -->
+          <div class="agreement-section">
+            <h3 class="agreement-title">필수 동의 사항</h3>
+
+            <div class="agreement-item">
+              <label class="agreement-checkbox">
+                <input
+                  type="checkbox"
+                  id="agreementRequired"
+                  name="agreementRequired"
+                  required
+                />
+                <span class="agreement-label">
+                  <strong>필수 약관에 동의합니다</strong><br />
+                  창작자 이용약관 및 개인정보 처리방침에 동의합니다.
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">
+            회원가입
+          </button>
+        </form>
+
+        <div class="login-link">
+          이미 계정이 있으신가요? <a href="login_creator.html">로그인</a>
+        </div>
+      </main>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Supabase Client -->
+    <script type="module" src="js/supabase_client.js"></script>
+    <script type="module" src="js/creator_signup.js"></script>
+    <script type="module">
+      import { handleCreatorSignup } from "./js/creator_signup.js";
+
+      // 파일 업로드 UI 처리
+      const fileInput = document.getElementById("portfolio_files");
+      const fileUploadArea = document.getElementById("fileUploadArea");
+      const fileList = document.getElementById("fileList");
+      const fileUploadText = document.getElementById("fileUploadText");
+
+      fileUploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+          fileUploadArea.classList.add("has-files");
+          fileUploadText.style.display = "none";
+          fileList.innerHTML = files
+            .map((file) => `<div class="file-item">📄 ${file.name}</div>`)
+            .join("");
+        } else {
+          fileUploadArea.classList.remove("has-files");
+          fileUploadText.style.display = "block";
+          fileList.innerHTML = "";
+        }
+      });
+
+      // 폼 제출 처리
+      let isSubmitting = false; // Prevent multiple submissions
+
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          // Safety: Prevent multiple submissions
+          if (isSubmitting) {
+            console.warn(
+              "Signup already in progress, ignoring duplicate submission"
+            );
+            return;
+          }
+
+          const submitBtn = document.getElementById("submitBtn");
+          const errorMessage = document.getElementById("errorMessage");
+          const successMessage = document.getElementById("successMessage");
+
+          // 에러 메시지 숨기기
+          errorMessage.classList.remove("show");
+          successMessage.classList.remove("show");
+
+          // Disable button and set submitting flag
+          isSubmitting = true;
+          submitBtn.disabled = true;
+          submitBtn.textContent = "처리 중...";
+
+          try {
+            // 폼 데이터 수집
+            const formData = {
+              user_id: document.getElementById("user_id").value.trim(),
+              password: document.getElementById("password").value,
+              email: document.getElementById("email").value.trim(),
+              real_name: document.getElementById("real_name").value.trim(),
+              age: document.getElementById("age").value,
+              gender: document.getElementById("gender").value,
+              pen_name: document.getElementById("pen_name").value.trim(),
+              introduction: document
+                .getElementById("introduction")
+                .value.trim(),
+              portfolio_files: fileInput.files,
+              activity_links: document
+                .getElementById("activity_links")
+                .value.trim(),
+              contact_email:
+                document.getElementById("contact_email").value.trim() || null,
+            };
+
+            // 약관 동의 확인
+            const agreementRequired =
+              document.getElementById("agreementRequired").checked;
+            if (!agreementRequired) {
+              throw new Error("필수 약관에 동의해주세요.");
+            }
+
+            // 회원가입 처리
+            await handleCreatorSignup(formData);
+
+            // 회원가입 성공 - 확인 화면 표시
+            // 폼 숨기기
+            document.getElementById("signupForm").classList.add("hidden");
+            // 확인 화면 표시
+            document.getElementById("confirmationScreen").classList.add("show");
+            // Keep isSubmitting = true to prevent any further submissions
+          } catch (error) {
+            console.error("Signup error:", error);
+            errorMessage.textContent =
+              error.message ||
+              "회원가입 중 오류가 발생했습니다. 다시 시도해주세요.";
+            errorMessage.classList.add("show");
+            // Re-enable button on error
+            isSubmitting = false;
+            submitBtn.disabled = false;
+            submitBtn.textContent = "회원가입";
+          }
+        });
+    </script>
+  </body>
+</html>

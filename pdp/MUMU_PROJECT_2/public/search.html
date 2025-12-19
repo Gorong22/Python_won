@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>MUMU – 검색</title>
+    <link rel="stylesheet" href="css/tabbar.css" />
+    <link rel="stylesheet" href="css/search.css" />
+</head>
+
+<body>
+    <div class="app-frame">
+        <!-- 헤더 -->
+        <header class="search-header">
+            <button class="search-back-btn" id="searchBackBtn" aria-label="뒤로가기">
+                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                    <path
+                        d="M0.292893 9.29289C-0.0976311 9.68342 -0.0976311 10.3166 0.292893 10.7071L6.65685 17.0711C7.04738 17.4616 7.68054 17.4616 8.07107 17.0711C8.46159 16.6805 8.46159 16.0474 8.07107 15.6569L2.41421 10L8.07107 4.34315C8.46159 3.95262 8.46159 3.31946 8.07107 2.92893C7.68054 2.53841 7.04738 2.53841 6.65685 2.92893L0.292893 9.29289ZM19.7139 11C20.2662 11 20.7139 10.5523 20.7139 10C20.7139 9.44772 20.2662 9 19.7139 9V10V11ZM1 10V11H19.7139V10V9H1V10Z"
+                        fill="black" />
+                </svg>
+            </button>
+            <div class="search-input-wrapper">
+                <input type="text" class="search-input" id="searchInput" placeholder="텍스트 입력" />
+                <button class="search-icon-btn" aria-label="검색">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path
+                            d="M14.7981 15.8571C13.0268 17.3552 10.7451 18.1107 8.42974 17.9657C6.11442 17.8208 3.94473 16.7865 2.37414 15.0792C0.803543 13.3719 -0.0463972 11.1236 0.0019555 8.80424C0.0503082 6.48489 0.993212 4.27398 2.6336 2.6336C4.27398 0.993212 6.48489 0.0503082 8.80424 0.0019555C11.1236 -0.0463972 13.3719 0.803543 15.0792 2.37414C16.7865 3.94473 17.8208 6.11442 17.9657 8.42974C18.1107 10.7451 17.3552 13.0268 15.8571 14.7981L19.7615 18.7025C19.8351 18.7711 19.8942 18.8538 19.9351 18.9457C19.9761 19.0376 19.9981 19.1369 19.9999 19.2375C20.0017 19.3381 19.9832 19.438 19.9455 19.5313C19.9078 19.6246 19.8517 19.7094 19.7805 19.7805C19.7094 19.8517 19.6246 19.9078 19.5313 19.9455C19.438 19.9832 19.3381 20.0017 19.2375 19.9999C19.1369 19.9981 19.0376 19.9761 18.9457 19.9351C18.8538 19.8942 18.7711 19.8351 18.7025 19.7615L14.7981 15.8571ZM16.4846 8.99151C16.4846 7.00423 15.6951 5.09835 14.2899 3.69313C12.8847 2.28791 10.9788 1.49846 8.99151 1.49846C7.00423 1.49846 5.09835 2.28791 3.69313 3.69313C2.28791 5.09835 1.49846 7.00423 1.49846 8.99151C1.49846 10.9788 2.28791 12.8847 3.69313 14.2899C5.09835 15.6951 7.00423 16.4846 8.99151 16.4846C10.9788 16.4846 12.8847 15.6951 14.2899 14.2899C15.6951 12.8847 16.4846 10.9788 16.4846 8.99151Z"
+                            fill="#111111" />
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- 스크롤 -->
+        <div class="app-scroll">
+            <main class="search-page">
+
+                <!-- 카테고리 필터 -->
+                <div class="category-filters">
+                    <button class="category-filter active">전체</button>
+                    <button class="category-filter">판타지</button>
+                    <button class="category-filter">액션</button>
+                    <button class="category-filter">일상</button>
+                    <button class="category-filter">스릴러</button>
+                    <button class="category-filter">코디</button>
+                </div>
+
+                <!-- 최근 검색과 비슷한 작품 추천 -->
+                <section class="recommendation-section">
+                    <h2 class="recommendation-title">최근 검색과 비슷한 작품 추천</h2>
+                    <div class="recommendation-cards">
+                        <div class="recommendation-card"></div>
+                        <div class="recommendation-card"></div>
+                        <div class="recommendation-card"></div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bottom Tab Bar -->
+    <div id="tabbar"></div>
+
+    <script src="js/tabbar-init.js"></script>
+    <script src="js/search.js" defer></script>
+</body>
+
+</html>

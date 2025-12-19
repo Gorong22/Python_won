@@ -1,0 +1,19 @@
+{
+  "name": "mumu-project-2",
+  "version": "1.0.0",
+  "description": "MUMU Project 2 - Firebase Auth Email Migration",
+  "main": "index.js",
+  "scripts": {
+    "migrate": "node scripts/migrate_auth_email.js"
+  },
+  "keywords": [
+    "firebase",
+    "migration",
+    "auth"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  }
+}
