@@ -1,422 +1,759 @@
-/* Comment Modal */
+/* =========================
+   Comment Modal (FIXED)
+========================= */
+
 .comment-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    z-index: 10000;
-    animation: fadeIn 0.2s ease-out;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s ease-out;
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .comment-modal {
-    background: #ffffff;
-    width: 100%;
-    max-width: 402px;
-    height: 80vh;
-    max-height: 800px;
-    border-radius: 20px 20px 0 0;
-    display: flex;
-    flex-direction: column;
-    animation: slideUp 0.3s ease-out;
+  background: #ffffff;
+  width: 100%;
+  max-width: 402px;
+  height: 80vh;
+  border-radius: 20px 20px 0 0;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease-out;
 }
 
 @keyframes slideUp {
-    from {
-        transform: translateY(100%);
-    }
-
-    to {
-        transform: translateY(0);
-    }
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 .comment-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    border-bottom: 1px solid #e5e5e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-bottom: 1px solid #e5e5e5;
+  position: relative;
 }
 
 .comment-modal-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #000000;
-    margin: 0;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .comment-modal-close {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
+  position: absolute;
+  right: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
+
+/* =========================
+   CONTENT AREA
+========================= */
 
 .comment-modal-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-    scrollbar-width: thin;
-    scrollbar-color: #d9d9d9 #f5f5f5;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  -webkit-overflow-scrolling: touch;
 }
 
-.comment-modal-content::-webkit-scrollbar {
-    width: 6px;
+/* 댓글 리스트 wrapper */
+.comment-list-wrapper {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
 }
 
-.comment-modal-content::-webkit-scrollbar-track {
-    background: #f5f5f5;
-}
+/* =========================
+   COMMENT ITEM (FIXED)
+========================= */
 
-.comment-modal-content::-webkit-scrollbar-thumb {
-    background: #d9d9d9;
-    border-radius: 3px;
-}
-
+/* 댓글 카드 자체는 무조건 세로 */
 .comment-item {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 24px;
-    position: relative;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0;
+  width: 100% !important;
+  margin-bottom: 24px;
+  box-sizing: border-box;
 }
 
-.comment-reply {
-    margin-left: 44px;
+.comment-reply-item {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 0;
+  width: 100% !important;
+  margin-bottom: 16px;
+  position: relative;
+  padding-left: 8px;
+  box-sizing: border-box;
+  align-items: flex-start;
 }
 
-.comment-reply-line {
-    position: absolute;
-    left: -32px;
-    top: 0;
-    bottom: -24px;
-    width: 1px;
-    background: #e5e5e5;
+/* avatar + body 가로 정렬 */
+.comment-main-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  flex: 1;
 }
 
+/* avatar */
 .comment-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #ededed;
-    flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ededed;
+  flex-shrink: 0;
 }
 
+/* body */
 .comment-body {
-    flex: 1;
-    min-width: 0;
+  flex: 1;
+  min-width: 0;
 }
 
+/* header */
 .comment-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  width: 100%;
+  position: relative;
 }
 
 .comment-author {
-    font-size: 14px;
-    font-weight: 600;
-    color: #000000;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .comment-date {
-    font-size: 12px;
-    font-weight: 400;
-    color: #a0a0a0;
+  font-size: 12px;
+  color: #a0a0a0;
 }
 
+/* text */
 .comment-text {
-    font-size: 14px;
-    font-weight: 400;
-    color: #000000;
-    line-height: 1.5;
-    margin: 0 0 8px 0;
+  font-size: 14px;
+  line-height: 1.6;
+  word-break: break-word;
+  white-space: pre-wrap;
+  margin-bottom: 8px;
 }
 
+/* actions */
 .comment-actions {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
 }
 
+/* 대댓글 토글 버튼 */
+.reply-toggle {
+  font-size: 13px;
+  color: #ff5e00;
+  cursor: pointer;
+  margin-left: 52px;
+  margin-top: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  transition: opacity 0.2s ease;
+}
+
+.reply-toggle:hover {
+  opacity: 0.7;
+}
+
+/* 공통 버튼 */
 .comment-action-btn {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 400;
-    color: #a0a0a0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 13px;
+  color: #a0a0a0;
+  cursor: pointer;
 }
 
+/* 아이콘 공통 */
 .comment-action-icon {
-    width: 18px;
-    height: 18px;
+  width: 18px;
+  height: 18px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
 
-.comment-action-btn:hover {
-    opacity: 0.7;
+/* ❤️ 좋아요 아이콘 */
+.comment-action-like .comment-action-icon {
+  background-image: url("/assets/icons/heart.svg");
 }
 
-.comment-action-btn.active .comment-action-icon path {
-    stroke: #ff5e00;
-    fill: #ff5e00;
+/* 💬 댓글 아이콘 */
+.comment-action-comment .comment-action-icon {
+  background-image: url("/assets/icons/comment.svg");
 }
 
-.comment-action-btn.active {
-    color: #ff5e00;
+/* =========================
+   REPLIES
+========================= */
+
+.comment-replies {
+  margin-left: 52px;
+  margin-top: 12px;
+  display: none !important;
+  flex-direction: column !important;
+  width: calc(100% - 52px);
+  position: relative;
+}
+
+.comment-replies.open {
+  display: flex !important;
+}
+
+.comment-reply-line {
+  position: absolute;
+  left: -40px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #e5e5e5;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.comment-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #a0a0a0;
+  font-size: 14px;
+}
+
+/* =========================
+   Creator Preview Modal
+========================= */
+
+.creator-preview-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.creator-preview-modal {
+  background: #ffffff;
+  width: 90%;
+  max-width: 360px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease-out;
+  position: relative;
+  max-height: 80vh;
+  overflow: hidden;
+}
+
+.creator-preview-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 16px;
+  position: relative;
+}
+
+.creator-preview-modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+  transition: opacity 0.2s ease;
+}
+
+.creator-preview-modal-close:hover {
+  opacity: 0.7;
+}
+
+.creator-preview-modal-content {
+  padding: 0 24px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.creator-preview-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #e5e5e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.creator-preview-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.creator-preview-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.creator-preview-intro {
+  font-size: 14px;
+  font-weight: 400;
+  color: #666666;
+  margin: 0;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.creator-preview-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.creator-preview-follow-btn {
+  width: 100%;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #ff5e00;
+  background: #ffffff;
+  color: #ff5e00;
+}
+
+.creator-preview-follow-btn:hover {
+  background: #fff5f0;
+}
+
+.creator-preview-follow-btn.following {
+  background: #ff5e00;
+  color: #ffffff;
+  border-color: #ff5e00;
+}
+
+.creator-preview-follow-btn.following:hover {
+  background: #e55500;
+}
+
+.creator-preview-feed-btn {
+  width: 100%;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #000000;
+  background: #000000;
+  color: #ffffff;
+}
+
+.creator-preview-feed-btn:hover {
+  background: #333333;
+  border-color: #333333;
+}
+
+/* Toast Notification */
+.toast-notification {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(0, 0, 0, 0.85);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 10002;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  max-width: calc(100% - 40px);
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.toast-notification.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* =========================
+   INPUT
+========================= */
+
+.comment-input-area {
+  padding: 16px 20px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.comment-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.comment-input {
+  min-height: 80px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  background: #f5f5f5;
+}
+
+.comment-submit-btn {
+  align-self: flex-end;
+  padding: 10px 20px;
+  background: #ff5e00;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+}
+
+/* =========================
+   REPLY INPUT
+========================= */
+
+.comment-reply-input-area {
+  margin-top: 12px;
+  margin-left: 52px;
+  padding: 12px 0;
+}
+
+.comment-reply-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comment-reply-input {
+  width: 100%;
+  min-height: 60px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  background: #f5f5f5;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.comment-reply-input:focus {
+  outline: none;
+  border-color: #ff5e00;
+  background: #fff;
+}
+
+.comment-reply-submit-btn {
+  align-self: flex-end;
+  padding: 8px 16px;
+  background: #ff5e00;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.comment-reply-submit-btn:hover {
+  background: #e55000;
+}
+
+/* =========================
+   HARD SAFETY (깨짐 방지)
+========================= */
+
+.comment-modal * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* 메뉴 기본 상태: 무조건 숨김 */
+.comment-menu-dropdown {
+  display: none !important;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 6px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 6px 0;
+  min-width: 120px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  z-index: 10001;
+}
+
+/* JS가 붙여주는 상태 클래스 */
+.comment-menu-dropdown.show {
+  display: block !important;
+}
+
+.comment-menu-btn-wrapper {
+  margin-left: auto;
+  position: relative;
 }
 
 .comment-menu-btn {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    margin-left: auto;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
 }
 
 .comment-menu-btn:hover {
-    opacity: 0.7;
+  background: #f5f5f5;
 }
 
-/* Save Modal */
-.save-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    animation: fadeIn 0.2s ease-out;
+.comment-menu-item {
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 400;
+  color: #000000;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  white-space: nowrap;
 }
 
-.save-modal {
-    background: #ffffff;
-    border-radius: 4px;
-    padding: 20px 20px;
-    max-width: 340px;
-    width: calc(100% - 40px);
-    margin: 0 20px;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    animation: scaleIn 0.2s ease-out;
-    position: relative;
+.comment-menu-item:hover {
+  background: #f5f5f5;
 }
 
-@keyframes scaleIn {
-    from {
-        transform: scale(0.95);
-        opacity: 0;
-    }
-
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
+.comment-menu-item.danger {
+  color: #ff0000;
 }
 
-.save-modal-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #000000;
-    margin-bottom: 32px;
-    margin-top: 10px;
-    line-height: 1.4;
+/* =========================
+   M.creator 배지
+========================= */
+
+.m-creator-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #ff6a2a;
+  background: rgba(255, 106, 42, 0.12);
+  border-radius: 999px;
+  vertical-align: middle;
+  user-select: none;
 }
 
-.save-modal-buttons {
-    display: flex;
-    gap: 12px;
-    width: 100%;
+/* =========================
+   Creator Preview Modal
+========================= */
+
+.creator-preview-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s ease-out;
 }
 
-.save-modal-btn {
-    flex: 1;
-    padding: 14px 16px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: 1px solid;
-    white-space: nowrap;
-    min-width: 0;
+.creator-preview-modal {
+  background: #ffffff;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  animation: slideUpModal 0.3s ease-out;
+  max-height: 80vh;
+  overflow: hidden;
 }
 
-.save-modal-btn-cancel {
-    background: #ffffff;
-    border-color: #d9d9d9;
-    color: #a0a0a0;
+@keyframes slideUpModal {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
-.save-modal-btn-cancel:hover {
-    background: #f5f5f5;
-    border-color: #c9c9c9;
+.creator-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid #e5e5e5;
 }
 
-.save-modal-btn-cancel:active {
-    background: #ededed;
+.creator-preview-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
 }
 
-.save-modal-btn-confirm {
-    background: #ffffff;
-    border-color: #ff5e00;
-    color: #ff5e00;
+.creator-preview-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.save-modal-btn-confirm:hover {
-    background: #fff5f0;
-    border-color: #ff5e00;
+.creator-preview-content {
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  overflow-y: auto;
 }
 
-.save-modal-btn-confirm:active {
-    background: #ffe5d6;
+.creator-preview-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #ededed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  overflow: hidden;
 }
 
-/* Report Modal */
-.report-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10001;
-    animation: fadeIn 0.2s ease-out;
+.creator-preview-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.report-modal {
-    background: #ffffff;
-    border-radius: 4px;
-    padding: 20px 20px;
-    max-width: 340px;
-    width: calc(100% - 40px);
-    margin: 0 20px;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    animation: scaleIn 0.2s ease-out;
-    position: relative;
-    box-sizing: border-box;
+.creator-preview-name {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: #1a1a1a;
 }
 
-.report-modal-btn {
-    width: 100%;
-    padding: 14px 16px;
-    background: #ffffff;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #000000;
-    cursor: pointer;
-    transition: all 0.2s ease;
+.creator-preview-intro {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+  max-width: 100%;
+  word-break: break-word;
 }
 
-.report-modal-btn:hover {
-    background: #f5f5f5;
-    border-color: #c9c9c9;
+.creator-preview-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
 }
 
-.report-modal-btn:active {
-    background: #ededed;
+.creator-preview-btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
 }
 
-/* Follow Modal */
-.follow-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    animation: fadeIn 0.2s ease-out;
+.creator-preview-btn-primary {
+  background: #ff5e00;
+  color: #fff;
 }
 
-.follow-modal {
-    background: #ffffff;
-    border-radius: 4px;
-    padding: 20px 20px;
-    max-width: 340px;
-    width: calc(100% - 40px);
-    margin: 0 20px;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    animation: scaleIn 0.2s ease-out;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    box-sizing: border-box;
+.creator-preview-btn-primary:hover {
+  background: #e55000;
 }
 
-.follow-modal-message {
-    color: #000;
-    text-align: center;
-    font-family: Inter;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    margin-bottom: 32px;
-    margin-top: 10px;
+.creator-preview-btn-secondary {
+  background: #f5f5f5;
+  color: #1a1a1a;
 }
 
-.follow-modal-btn {
-    width: 100%;
-    padding: 14px 16px;
-    background: #ff5e00;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
+.creator-preview-btn-secondary:hover {
+  background: #e5e5e5;
 }
 
-.follow-modal-btn:hover {
-    background: #e55500;
-}
-
-.follow-modal-btn:active {
-    background: #cc4d00;
+.creator-preview-btn-secondary.following {
+  background: #ff5e00;
+  color: #fff;
 }

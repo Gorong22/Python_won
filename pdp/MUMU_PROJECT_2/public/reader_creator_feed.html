@@ -1,145 +1,143 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>MUMU – 작가 홈</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>MUMU – 작가 홈</title>
-
-  <!-- 기존 공통 CSS 그대로 사용 -->
-  <!-- <link rel="stylesheet" href="/public/css/global.css" />
+    <!-- 기존 공통 CSS 그대로 사용 -->
+    <!-- <link rel="stylesheet" href="/public/css/global.css" />
   <link rel="stylesheet" href="/public/css/layout.css" /> -->
-  <link rel="stylesheet" href="/public/css/tabbar.css" />
-  <link rel="stylesheet" href="/public/css/reader_creator_feed.css" />
-</head>
+    <link rel="stylesheet" href="css/tabbar.css" />
+    <link rel="stylesheet" href="css/reader_creator_feed.css" />
+  </head>
 
-<body>
-  <div class="app-frame">
-    <!-- 상단 헤더 (공통 컴포넌트) -->
-    <div id="header"></div>
+  <body>
+    <div class="app-frame">
+      <!-- 상단 헤더 (공통 컴포넌트) -->
+      <div id="header"></div>
 
-    <!-- 스크롤 영역 -->
-    <div class="app-scroll">
-      <main class="creator-page">
-        <!-- 프로필 영역 -->
-        <section class="creator-profile">
-          <div class="creator-banner"></div>
+      <!-- 스크롤 영역 -->
+      <div class="app-scroll">
+        <main class="creator-page">
+          <!-- 프로필 영역 -->
+          <section class="creator-profile">
+            <div class="creator-banner"></div>
 
-          <div class="creator-avatar-wrap">
-            <div class="creator-avatar"></div>
-          </div>
-
-          <div class="creator-stats-row">
-            <div class="stat">
-              <span class="stat-number">12</span>
-              <span class="stat-label">팔로우</span>
+            <div class="creator-avatar-wrap">
+              <div class="creator-avatar"></div>
             </div>
-            <div class="stat">
-              <span class="stat-number">12</span>
-              <span class="stat-label">팔로워</span>
-            </div>
-          </div>
 
-          <h2 class="creator-name">박햇살</h2>
-
-          <div class="creator-tags">
-            <span>액션</span>
-            <span>판타지</span>
-            <span>개그</span>
-          </div>
-
-          <p class="creator-desc">
-            작가 설명을 적는 구간<br />
-            링크 연동
-          </p>
-        </section>
-
-        <!-- 탭 + 필터 -->
-        <section class="creator-tabs-wrap">
-          <div class="creator-tabs">
-            <button type="button" class="creator-tab active" data-tab="works">
-              작품 피드
-            </button>
-            <button type="button" class="creator-tab" data-tab="words">
-              작가의 말
-            </button>
-          </div>
-          <div class="creator-tab-underline">
-            <span class="underline-bar"></span>
-          </div>
-        </section>
-
-        <!-- 작품 피드 화면 -->
-        <section id="tab-works" class="creator-tab-panel active" aria-label="작품 피드">
-          <div class="creator-grid">
-            <div class="grid-item"></div>
-            <div class="grid-item"></div>
-            <div class="grid-item"></div>
-            <div class="grid-item"></div>
-            <div class="grid-item"></div>
-            <div class="grid-item"></div>
-            <div class="grid-item"></div>
-            <div class="grid-item"></div>
-            <div class="grid-item"></div>
-          </div>
-        </section>
-
-        <!-- 작가의 말 화면 -->
-        <section id="tab-words" class="creator-tab-panel" aria-label="작가의 말">
-          <!-- 피그마 오른쪽 화면 구조 그대로 더미 데이터 -->
-          <article class="creator-note">
-            <div class="note-tags">
-              <span>판타지</span>
-              <span>액션</span>
-            </div>
-            <h3 class="note-title">얼레리꼴레리</h3>
-            <p class="note-text">홀랄랄란 핑꾸야 노올자~~</p>
-
-            <div class="note-meta-row">
-              <span class="note-date">2025.11.27</span>
-              <div class="note-right">
-                <span class="note-icons">❤️ 30&nbsp;&nbsp;💬 30</span>
-                <div class="note-thumb"></div>
+            <div class="creator-stats-row">
+              <div class="stat">
+                <span class="stat-number">12</span>
+                <span class="stat-label">팔로우</span>
+              </div>
+              <div class="stat">
+                <span class="stat-number">12</span>
+                <span class="stat-label">팔로워</span>
               </div>
             </div>
-          </article>
 
-          <article class="creator-note">
-            <div class="note-tags">
-              <span>판타지</span>
+            <h2 class="creator-name">박햇살</h2>
+
+            <div class="creator-tags">
               <span>액션</span>
+              <span>판타지</span>
+              <span>개그</span>
             </div>
-            <h3 class="note-title">얼레리꼴레리</h3>
-            <p class="note-text">홀랄랄란 핑꾸야 노올자~~</p>
 
-            <div class="note-meta-row">
-              <span class="note-date">2025.11.27</span>
-              <div class="note-right">
-                <span class="note-icons">❤️ 30&nbsp;&nbsp;💬 30</span>
-                <div class="note-thumb"></div>
-              </div>
+            <p class="creator-desc">
+              작가 설명을 적는 구간<br />
+              링크 연동
+            </p>
+          </section>
+
+          <!-- 탭 + 필터 -->
+          <section class="creator-tabs-wrap">
+            <div class="creator-tabs">
+              <button type="button" class="creator-tab active" data-tab="works">
+                작품 피드
+              </button>
+              <button type="button" class="creator-tab" data-tab="words">
+                작가의 말
+              </button>
             </div>
-          </article>
-        </section>
-      </main>
+            <div class="creator-tab-underline">
+              <span class="underline-bar"></span>
+            </div>
+          </section>
+
+          <!-- 작품 피드 화면 -->
+          <section
+            id="tab-works"
+            class="creator-tab-panel active"
+            aria-label="작품 피드"
+          >
+            <div class="creator-grid">
+              <div class="grid-item"></div>
+              <div class="grid-item"></div>
+              <div class="grid-item"></div>
+              <div class="grid-item"></div>
+              <div class="grid-item"></div>
+              <div class="grid-item"></div>
+              <div class="grid-item"></div>
+              <div class="grid-item"></div>
+              <div class="grid-item"></div>
+            </div>
+          </section>
+
+          <!-- 작가의 말 화면 -->
+          <section
+            id="tab-words"
+            class="creator-tab-panel"
+            aria-label="작가의 말"
+          >
+            <!-- 피그마 오른쪽 화면 구조 그대로 더미 데이터 -->
+            <article class="creator-note">
+              <div class="note-tags">
+                <span>판타지</span>
+                <span>액션</span>
+              </div>
+              <h3 class="note-title">얼레리꼴레리</h3>
+              <p class="note-text">홀랄랄란 핑꾸야 노올자~~</p>
+
+              <div class="note-meta-row">
+                <span class="note-date">2025.11.27</span>
+                <div class="note-right">
+                  <span class="note-icons">❤️ 30&nbsp;&nbsp;💬 30</span>
+                  <div class="note-thumb"></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="creator-note">
+              <div class="note-tags">
+                <span>판타지</span>
+                <span>액션</span>
+              </div>
+              <h3 class="note-title">얼레리꼴레리</h3>
+              <p class="note-text">홀랄랄란 핑꾸야 노올자~~</p>
+
+              <div class="note-meta-row">
+                <span class="note-date">2025.11.27</span>
+                <div class="note-right">
+                  <span class="note-icons">❤️ 30&nbsp;&nbsp;💬 30</span>
+                  <div class="note-thumb"></div>
+                </div>
+              </div>
+            </article>
+          </section>
+        </main>
+      </div>
+
+      <!-- Bottom Tab Bar -->
+      <div id="tabbar"></div>
     </div>
-
-    <!-- 하단 탭바 (공통 컴포넌트) -->
-    <div id="tabbar"></div>
-  </div>
-
-
-  <script>
-    /* ========================== 
-       Tabbar 로드
-    ========================== */
-    fetch("/public/components/tabbar.html")
-      .then((r) => r.text())
-      .then((html) => (document.getElementById("tabbar").innerHTML = html))
-      .catch((error) => console.error("Error fetching tabbar.html:", error));
-  </script>
-  <!-- 이 페이지 전용 JS -->
-  <script src="/public/js/reader_creator_feed.js" defer></script>
-</body>
-
+    <script src="js/tabbar-init.js"></script>
+    <script src="js/reader_creator_feed.js" defer></script>
+  </body>
 </html>

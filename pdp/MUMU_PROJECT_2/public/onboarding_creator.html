@@ -1,75 +1,365 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>MUMU – 창작자 신청</title>
+    <link rel="stylesheet" href="css/tabbar.css" />
+    <style>
+      /* Mobile-first layout */
+      body {
+        margin: 0;
+        background: #000;
+        font-family: -apple-system, BlinkMacSystemFont, "Pretendard", sans-serif;
+      }
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>창작자 온보딩</title>
-  <link rel="stylesheet" href="/public/css/tabbar.css" />
-  <link rel="stylesheet" href="/public/css/onboarding_creator.css" />
-</head>
+      .app-frame {
+        width: 100%;
+        max-width: 402px;
+        margin: 0 auto;
+        background: #ffffff;
+        min-height: 100vh;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: calc(64px + env(safe-area-inset-bottom));
+        box-sizing: border-box;
+      }
 
-<body>
-  <div class="app-frame">
-    <main class="onboarding-container">
-      <h2 class="title">당신은 누구?</h2>
+      .onboarding-container {
+        flex: 1;
+        padding: 24px 20px;
+        overflow-y: auto;
+      }
 
-      <!-- 당신은 누구? -->
-      <label class="label">당신은 누구?</label>
-      <div class="select-row">
-        <button class="select-btn" id="goReader">독자</button>
-        <button class="select-btn active" id="goCreator">창작자</button>
-      </div>
+      .onboarding-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #000;
+        margin: 0 0 32px 0;
+        text-align: center;
+      }
 
-      <!-- 선호 포맷 -->
-      <label class="label">선호하는 포맷</label>
-      <div class="select-row">
-        <button class="format-btn" data-value="숏툰">숏툰</button>
-        <button class="format-btn" data-value="롱툰">롱툰</button>
-      </div>
+      .form-group {
+        margin-bottom: 24px;
+      }
 
-      <!-- 표현하는 장르 -->
-      <label class="label">표현하는 장르</label>
-      <div class="tag-area" id="genreArea">
-        <button class="tag-btn">로맨스</button>
-        <button class="tag-btn">판타지</button>
-        <button class="tag-btn">액션</button>
-        <button class="tag-btn">스포츠</button>
-        <button class="tag-btn">스릴러</button>
-        <button class="tag-btn">무협/사극</button>
-        <button class="tag-btn">드라마</button>
-        <button class="tag-btn">감성</button>
-        <button class="tag-btn">개그</button>
-        <button class="tag-btn">일상</button>
-      </div>
+      .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 8px;
+      }
 
-      <!-- 업로드 주기 -->
-      <label class="label">업로드 주기</label>
-      <div class="upload-row">
-        <button class="upload-btn">주 1회</button>
-        <button class="upload-btn">주 2~3회</button>
-        <button class="upload-btn">주 4~5회</button>
-        <button class="upload-btn">매일</button>
-      </div>
+      .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        box-sizing: border-box;
+        font-family: inherit;
+      }
 
-      <!-- 계정 연동 -->
-      <label class="label">계정 연동</label>
-      <input type="text" class="input" placeholder="계정 URL 입력" id="creatorLink" />
+      .form-input:focus {
+        outline: none;
+        border-color: #ff5e00;
+      }
 
-      <button class="submit-btn" id="finishBtn">완료</button>
-    </main>
-  </div>
+      .form-textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        box-sizing: border-box;
+        font-family: inherit;
+        resize: vertical;
+        min-height: 100px;
+      }
 
-  <script>
-    /* ========================== 
-       Tabbar 로드
-    ========================== */
-    fetch("/public/components/tabbar.html")
-      .then((r) => r.text())
-      .then((html) => (document.getElementById("tabbar").innerHTML = html))
-      .catch((error) => console.error("Error fetching tabbar.html:", error));
-  </script>
-  <script src="/public/js/onboarding_creator.js" defer></script>
-</body>
+      .form-textarea:focus {
+        outline: none;
+        border-color: #ff5e00;
+      }
 
+      .agreement-section {
+        background: #fafafa;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 24px 0;
+      }
+
+      .agreement-item {
+        margin-bottom: 16px;
+      }
+
+      .agreement-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .agreement-checkbox {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .agreement-checkbox input[type="checkbox"] {
+        margin-top: 2px;
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+      }
+
+      .agreement-label {
+        font-size: 14px;
+        color: #333;
+        line-height: 1.5;
+        cursor: pointer;
+      }
+
+      .agreement-label strong {
+        color: #000;
+        font-weight: 600;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 16px;
+        background: #ff5e00;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 24px;
+        transition: background 0.2s ease;
+      }
+
+      .submit-btn:hover {
+        background: #e55500;
+      }
+
+      .submit-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      .error-message {
+        background: #ffebee;
+        color: #c62828;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        margin-bottom: 20px;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app-frame">
+      <main class="onboarding-container">
+        <h1 class="onboarding-title">창작자 신청</h1>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <form id="creatorForm">
+          <div class="form-group">
+            <label class="form-label" for="email">이메일 *</label>
+            <input
+              type="email"
+              id="email"
+              class="form-input"
+              placeholder="이메일을 입력하세요"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">비밀번호 *</label>
+            <input
+              type="password"
+              id="password"
+              class="form-input"
+              placeholder="비밀번호를 입력하세요 (최소 6자)"
+              required
+              minlength="6"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="displayName">작가명 *</label>
+            <input
+              type="text"
+              id="displayName"
+              class="form-input"
+              placeholder="작가명을 입력하세요"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="intro">작가 소개 *</label>
+            <textarea
+              id="intro"
+              class="form-textarea"
+              placeholder="자신을 소개해주세요"
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="portfolioUrl">포트폴리오 URL</label>
+            <input
+              type="url"
+              id="portfolioUrl"
+              class="form-input"
+              placeholder="https://..."
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="snsLinks">SNS 링크</label>
+            <input
+              type="text"
+              id="snsLinks"
+              class="form-input"
+              placeholder="인스타그램, 트위터 등 (쉼표로 구분)"
+            />
+          </div>
+
+          <div class="agreement-section">
+            <h3
+              style="
+                font-size: 16px;
+                font-weight: 600;
+                margin: 0 0 16px 0;
+                color: #000;
+              "
+            >
+              필수 동의 사항
+            </h3>
+
+            <div class="agreement-item">
+              <label class="agreement-checkbox">
+                <input type="checkbox" id="agreementContent" required />
+                <span class="agreement-label">
+                  <strong>콘텐츠 검토 및 승인</strong><br />
+                  제출하신 작품은 플랫폼 정책에 따라 검토되며, 승인 후
+                  공개됩니다.
+                </span>
+              </label>
+            </div>
+
+            <div class="agreement-item">
+              <label class="agreement-checkbox">
+                <input type="checkbox" id="agreementRevenue" required />
+                <span class="agreement-label">
+                  <strong>수익 구조</strong><br />
+                  플랫폼 수수료 10%가 적용되며, 매월 10일 정산됩니다.
+                </span>
+              </label>
+            </div>
+
+            <div class="agreement-item">
+              <label class="agreement-checkbox">
+                <input type="checkbox" id="agreementIP" required />
+                <span class="agreement-label">
+                  <strong>지적재산권 및 플랫폼 정책</strong><br />
+                  업로드한 작품의 지적재산권은 창작자에게 있으며, 플랫폼
+                  이용약관에 동의합니다.
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">
+            신청하기
+          </button>
+        </form>
+      </main>
+    </div>
+
+    <!-- Bottom Tab Bar -->
+    <div id="tabbar"></div>
+    <script src="js/tabbar-init.js"></script>
+    <!-- Creator Supabase Auth ONLY -->
+    <script type="module">
+      import { signUpCreator } from "./js/supabase-auth.js";
+
+      // Handle form submission
+      document
+        .getElementById("creatorForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const submitBtn = document.getElementById("submitBtn");
+          const errorMessage = document.getElementById("errorMessage");
+
+          // Clear previous errors
+          errorMessage.classList.remove("show");
+          submitBtn.disabled = true;
+          submitBtn.textContent = "처리 중...";
+
+          try {
+            // Get form values
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const displayName = document.getElementById("displayName").value;
+            const intro = document.getElementById("intro").value;
+            const portfolioUrl =
+              document.getElementById("portfolioUrl").value || null;
+            const snsLinks = document.getElementById("snsLinks").value || null;
+
+            // Check agreements
+            const agreementContent =
+              document.getElementById("agreementContent").checked;
+            const agreementRevenue =
+              document.getElementById("agreementRevenue").checked;
+            const agreementIP = document.getElementById("agreementIP").checked;
+
+            if (!agreementContent || !agreementRevenue || !agreementIP) {
+              throw new Error("모든 필수 동의 사항에 동의해주세요.");
+            }
+
+            // Create Supabase Auth user and creator record
+            // Map form data to DB schema (intro → bio, portfolio_url removed)
+            const creatorData = {
+              display_name: displayName,
+              intro: intro, // Will be mapped to 'bio' in supabase-auth.js
+              sns_links: snsLinks, // Will be converted to JSON array if provided
+            };
+
+            const user = await signUpCreator(email, password, creatorData);
+
+            if (!user) {
+              throw new Error("계정 생성에 실패했습니다.");
+            }
+
+            // Redirect to confirmation screen
+            // Store user ID in sessionStorage for confirmation page
+            sessionStorage.setItem("pendingCreatorId", user.id);
+            window.location.href = "creator_pending.html";
+          } catch (error) {
+            console.error("Creator signup error:", error);
+            errorMessage.textContent =
+              error.message ||
+              "신청 중 오류가 발생했습니다. 다시 시도해주세요.";
+            errorMessage.classList.add("show");
+            submitBtn.disabled = false;
+            submitBtn.textContent = "신청하기";
+          }
+        });
+    </script>
+  </body>
 </html>

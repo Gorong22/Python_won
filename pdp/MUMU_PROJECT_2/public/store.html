@@ -1,275 +1,326 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>스토어</title>
-    <!-- 
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>스토어</title>
+  <!-- 
   <link rel="stylesheet" href="/public/css/global.css" />
   <link rel="stylesheet" href="/public/css/layout.css" /> -->
-    <link rel="stylesheet" href="/public/css/tabbar.css" />
-    <link rel="stylesheet" href="/public/css/store.css" />
-    <style>
-      /* 준비 중 팝업 스타일 */
-      .coming-soon-modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 10003;
-        justify-content: center;
-        align-items: center;
-        animation: fadeIn 0.2s ease;
+  <link rel="stylesheet" href="css/tabbar.css" />
+  <link rel="stylesheet" href="css/store.css" />
+  <style>
+    /* 준비 중 팝업 스타일 */
+    .coming-soon-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 10003;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .coming-soon-modal-content {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 24px 20px 20px 20px;
+      min-width: 280px;
+      max-width: 90%;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      animation: slideUp 0.3s ease;
+    }
+
+    .coming-soon-modal-text {
+      font-size: 16px;
+      font-weight: 500;
+      color: #000000;
+      margin: 0 0 20px 0;
+      line-height: 1.5;
+    }
+
+    .coming-soon-modal-close {
+      width: 100%;
+      padding: 12px 0;
+      background: #ffffff;
+      color: #ff5e00;
+      border: 1px solid #ff5e00;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .coming-soon-modal-close:hover {
+      background: #fff5f0;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
       }
 
-      .coming-soon-modal-content {
-        background: #ffffff;
-        border-radius: 8px;
-        padding: 24px 20px 20px 20px;
-        min-width: 280px;
-        max-width: 90%;
-        text-align: center;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        animation: slideUp 0.3s ease;
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
       }
 
-      .coming-soon-modal-text {
-        font-size: 16px;
-        font-weight: 500;
-        color: #000000;
-        margin: 0 0 20px 0;
-        line-height: 1.5;
+      to {
+        transform: translateY(0);
+        opacity: 1;
       }
+    }
+  </style>
+</head>
 
-      .coming-soon-modal-close {
-        width: 100%;
-        padding: 12px 0;
-        background: #ffffff;
-        color: #ff5e00;
-        border: 1px solid #ff5e00;
-        border-radius: 4px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s ease;
-      }
+<body>
+  <div class="app-frame">
+    <!-- header -->
+    <div id="header"></div>
 
-      .coming-soon-modal-close:hover {
-        background: #fff5f0;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-
-        to {
-          opacity: 1;
-        }
-      }
-
-      @keyframes slideUp {
-        from {
-          transform: translateY(20px);
-          opacity: 0;
-        }
-
-        to {
-          transform: translateY(0);
-          opacity: 1;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="app-frame">
-      <!-- header -->
-      <div id="header"></div>
-
-      <div class="app-scroll">
-        <main class="store-container">
-          <!-- =====================
-               상단 탭
+    <div class="app-scroll">
+      <main class="store-container">
+        <!-- =====================
+               인기 작가 판매 상품
           ====================== -->
-          <div class="store-top-tabs">
-            <button class="store-tab active">스토어</button>
-            <button class="store-tab">포인트</button>
-          </div>
+        <section class="store-section">
+          <h3 class="section-title section-title-orange">인기 작가 판매 상품</h3>
 
-          <!-- =====================
-                관련 작가
-          ====================== -->
-          <section class="store-section">
-            <div class="section-header">
-              <h3>관련 작가</h3>
-              <span class="more">더보기</span>
+          <div class="popular-creator-products">
+            <!-- 왼쪽: 작가 카드 3개 -->
+            <div class="creator-cards-column">
+              <div class="creator-card-item">
+                <div class="creator-card-image"></div>
+                <div class="creator-card-name">작가명</div>
+                <button class="creator-card-home-btn">작가 홈 →</button>
+              </div>
+              <div class="creator-card-item">
+                <div class="creator-card-image"></div>
+                <div class="creator-card-name">작가명</div>
+                <button class="creator-card-home-btn">작가 홈 →</button>
+              </div>
+              <div class="creator-card-item">
+                <div class="creator-card-image"></div>
+                <div class="creator-card-name">작가명</div>
+                <button class="creator-card-home-btn">작가 홈 →</button>
+              </div>
             </div>
 
-            <div class="creator-card">
-              <div class="creator-info">
-                <img
-                  class="creator-profile"
-                  src="/public/assets/feed/a1.webp"
-                  alt="creator profile"
-                  loading="lazy" />
-                <div>
-                  <div class="creator-name">작가 이름</div>
-                  <div class="creator-tags">
-                    <span>액션</span><span>일상</span><span>개그</span>
-                  </div>
+            <!-- 오른쪽: 상품 카드 6개 (2열 그리드) -->
+            <div class="product-cards-grid">
+              <div class="product-card-item">
+                <div class="product-card-image"></div>
+                <div class="product-card-info">
+                  <div class="product-card-name">상품명</div>
+                  <div class="product-card-price">₩10,000원</div>
                 </div>
-                <button class="support-btn">후원하기</button>
+                <button class="product-card-heart" aria-label="좋아요">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path
+                      d="M15.8434 4.05117C15.4768 3.68448 15.0417 3.3936 14.5627 3.19514C14.0837 2.99668 13.5704 2.89453 13.0519 2.89453C12.5335 2.89453 12.0201 2.99668 11.5411 3.19514C11.0621 3.3936 10.627 3.68448 10.2605 4.05117L9.49981 4.81182L8.73916 4.05117C7.99882 3.31083 6.9947 2.89491 5.94771 2.89492C4.90071 2.89492 3.89659 3.31083 3.15626 4.05117C2.41592 4.79151 2 5.79562 2 6.84262C2 7.88962 2.41592 8.89373 3.15626 9.63407L3.91691 10.3947L9.49981 15.9776L15.0827 10.3947L15.8434 9.63407C16.21 9.26756 16.5009 8.83238 16.6994 8.35342C16.8979 7.87445 17 7.36108 17 6.84262C17 6.32417 16.8979 5.81079 16.6994 5.33183C16.5009 4.85286 16.21 4.41769 15.8434 4.05117Z"
+                      stroke="#A0A0A0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </button>
               </div>
-
-              <div class="creator-thumbnails">
-                <div class="thumb"></div>
-                <div class="thumb"></div>
-                <div class="thumb"></div>
+              <div class="product-card-item">
+                <div class="product-card-image"></div>
+                <div class="product-card-info">
+                  <div class="product-card-name">상품명</div>
+                  <div class="product-card-price">₩10,000원</div>
+                </div>
+                <button class="product-card-heart" aria-label="좋아요">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path
+                      d="M15.8434 4.05117C15.4768 3.68448 15.0417 3.3936 14.5627 3.19514C14.0837 2.99668 13.5704 2.89453 13.0519 2.89453C12.5335 2.89453 12.0201 2.99668 11.5411 3.19514C11.0621 3.3936 10.627 3.68448 10.2605 4.05117L9.49981 4.81182L8.73916 4.05117C7.99882 3.31083 6.9947 2.89491 5.94771 2.89492C4.90071 2.89492 3.89659 3.31083 3.15626 4.05117C2.41592 4.79151 2 5.79562 2 6.84262C2 7.88962 2.41592 8.89373 3.15626 9.63407L3.91691 10.3947L9.49981 15.9776L15.0827 10.3947L15.8434 9.63407C16.21 9.26756 16.5009 8.83238 16.6994 8.35342C16.8979 7.87445 17 7.36108 17 6.84262C17 6.32417 16.8979 5.81079 16.6994 5.33183C16.5009 4.85286 16.21 4.41769 15.8434 4.05117Z"
+                      stroke="#A0A0A0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </button>
+              </div>
+              <div class="product-card-item">
+                <div class="product-card-image"></div>
+                <div class="product-card-info">
+                  <div class="product-card-name">상품명</div>
+                  <div class="product-card-price">₩10,000원</div>
+                </div>
+                <button class="product-card-heart" aria-label="좋아요">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path
+                      d="M15.8434 4.05117C15.4768 3.68448 15.0417 3.3936 14.5627 3.19514C14.0837 2.99668 13.5704 2.89453 13.0519 2.89453C12.5335 2.89453 12.0201 2.99668 11.5411 3.19514C11.0621 3.3936 10.627 3.68448 10.2605 4.05117L9.49981 4.81182L8.73916 4.05117C7.99882 3.31083 6.9947 2.89491 5.94771 2.89492C4.90071 2.89492 3.89659 3.31083 3.15626 4.05117C2.41592 4.79151 2 5.79562 2 6.84262C2 7.88962 2.41592 8.89373 3.15626 9.63407L3.91691 10.3947L9.49981 15.9776L15.0827 10.3947L15.8434 9.63407C16.21 9.26756 16.5009 8.83238 16.6994 8.35342C16.8979 7.87445 17 7.36108 17 6.84262C17 6.32417 16.8979 5.81079 16.6994 5.33183C16.5009 4.85286 16.21 4.41769 15.8434 4.05117Z"
+                      stroke="#A0A0A0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </button>
+              </div>
+              <div class="product-card-item">
+                <div class="product-card-image"></div>
+                <div class="product-card-info">
+                  <div class="product-card-name">상품명</div>
+                  <div class="product-card-price">₩10,000원</div>
+                </div>
+                <button class="product-card-heart" aria-label="좋아요">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path
+                      d="M15.8434 4.05117C15.4768 3.68448 15.0417 3.3936 14.5627 3.19514C14.0837 2.99668 13.5704 2.89453 13.0519 2.89453C12.5335 2.89453 12.0201 2.99668 11.5411 3.19514C11.0621 3.3936 10.627 3.68448 10.2605 4.05117L9.49981 4.81182L8.73916 4.05117C7.99882 3.31083 6.9947 2.89491 5.94771 2.89492C4.90071 2.89492 3.89659 3.31083 3.15626 4.05117C2.41592 4.79151 2 5.79562 2 6.84262C2 7.88962 2.41592 8.89373 3.15626 9.63407L3.91691 10.3947L9.49981 15.9776L15.0827 10.3947L15.8434 9.63407C16.21 9.26756 16.5009 8.83238 16.6994 8.35342C16.8979 7.87445 17 7.36108 17 6.84262C17 6.32417 16.8979 5.81079 16.6994 5.33183C16.5009 4.85286 16.21 4.41769 15.8434 4.05117Z"
+                      stroke="#A0A0A0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </button>
+              </div>
+              <div class="product-card-item">
+                <div class="product-card-image"></div>
+                <div class="product-card-info">
+                  <div class="product-card-name">상품명</div>
+                  <div class="product-card-price">₩10,000원</div>
+                </div>
+                <button class="product-card-heart" aria-label="좋아요">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path
+                      d="M15.8434 4.05117C15.4768 3.68448 15.0417 3.3936 14.5627 3.19514C14.0837 2.99668 13.5704 2.89453 13.0519 2.89453C12.5335 2.89453 12.0201 2.99668 11.5411 3.19514C11.0621 3.3936 10.627 3.68448 10.2605 4.05117L9.49981 4.81182L8.73916 4.05117C7.99882 3.31083 6.9947 2.89491 5.94771 2.89492C4.90071 2.89492 3.89659 3.31083 3.15626 4.05117C2.41592 4.79151 2 5.79562 2 6.84262C2 7.88962 2.41592 8.89373 3.15626 9.63407L3.91691 10.3947L9.49981 15.9776L15.0827 10.3947L15.8434 9.63407C16.21 9.26756 16.5009 8.83238 16.6994 8.35342C16.8979 7.87445 17 7.36108 17 6.84262C17 6.32417 16.8979 5.81079 16.6994 5.33183C16.5009 4.85286 16.21 4.41769 15.8434 4.05117Z"
+                      stroke="#A0A0A0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </button>
+              </div>
+              <div class="product-card-item">
+                <div class="product-card-image"></div>
+                <div class="product-card-info">
+                  <div class="product-card-name">상품명</div>
+                  <div class="product-card-price">₩10,000원</div>
+                </div>
+                <button class="product-card-heart" aria-label="좋아요">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path
+                      d="M15.8434 4.05117C15.4768 3.68448 15.0417 3.3936 14.5627 3.19514C14.0837 2.99668 13.5704 2.89453 13.0519 2.89453C12.5335 2.89453 12.0201 2.99668 11.5411 3.19514C11.0621 3.3936 10.627 3.68448 10.2605 4.05117L9.49981 4.81182L8.73916 4.05117C7.99882 3.31083 6.9947 2.89491 5.94771 2.89492C4.90071 2.89492 3.89659 3.31083 3.15626 4.05117C2.41592 4.79151 2 5.79562 2 6.84262C2 7.88962 2.41592 8.89373 3.15626 9.63407L3.91691 10.3947L9.49981 15.9776L15.0827 10.3947L15.8434 9.63407C16.21 9.26756 16.5009 8.83238 16.6994 8.35342C16.8979 7.87445 17 7.36108 17 6.84262C17 6.32417 16.8979 5.81079 16.6994 5.33183C16.5009 4.85286 16.21 4.41769 15.8434 4.05117Z"
+                      stroke="#A0A0A0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </button>
               </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <!-- =====================
+        <!-- =====================
+              광고 배너
+          ====================== -->
+        <section class="store-section">
+          <div class="ad-banner">
+            <div class="ad-banner-text">광고 배너</div>
+          </div>
+        </section>
+
+        <!-- =====================
               인기 TOP 10
           ====================== -->
-          <section class="store-section">
-            <div class="section-header">
-              <h3>인기 TOP 10</h3>
-              <span class="more">더보기</span>
-            </div>
+        <section class="store-section">
+          <h3 class="section-title section-title-orange">인기 TOP 10</h3>
 
-            <div class="top-list">
-              <!-- 1번 -->
-              <div class="top-item">
-                <div class="rank">1</div>
-                <div class="top-thumb"></div>
-                <div class="top-info">
-                  <div class="name">상품명</div>
-                  <div class="desc">상품 상세 설명</div>
-                  <div class="price">1,000원</div>
-                </div>
-                <div class="rank-sub">4</div>
-              </div>
-
-              <div class="top-item">
-                <div class="rank">2</div>
-                <div class="top-thumb"></div>
-                <div class="top-info">
-                  <div class="name">상품명</div>
-                  <div class="desc">상품 상세 설명</div>
-                  <div class="price">1,000원</div>
-                </div>
-                <div class="rank-sub">5</div>
-              </div>
-
-              <div class="top-item">
-                <div class="rank">3</div>
-                <div class="top-thumb"></div>
-                <div class="top-info">
-                  <div class="name">상품명</div>
-                  <div class="desc">상품 상세 설명</div>
-                  <div class="price">1,000원</div>
-                </div>
-                <div class="rank-sub">6</div>
+          <div class="top-10-grid">
+            <div class="top-10-item">
+              <div class="top-10-rank">1</div>
+              <div class="top-10-image"></div>
+              <div class="top-10-info">
+                <div class="top-10-name">상품명</div>
+                <div class="top-10-price">₩10,000원</div>
               </div>
             </div>
-          </section>
-
-          <!-- =====================
-              당신이 좋아할만한 굿즈
-          ====================== -->
-          <section class="store-section">
-            <h3 class="section-title">당신이 좋아할만한 굿즈</h3>
-
-            <div class="recommend-list">
-              <div class="goods-item">
-                <div class="goods-thumb"></div>
-                <div class="goods-info">
-                  <div class="name">상품명</div>
-                  <div class="desc">상품 상세 설명</div>
-                  <div class="price">1,000원</div>
-                </div>
-                <div class="heart">❤️</div>
-              </div>
-
-              <div class="goods-item">
-                <div class="goods-thumb"></div>
-                <div class="goods-info">
-                  <div class="name">상품명</div>
-                  <div class="desc">상품 상세 설명</div>
-                  <div class="price">1,000원</div>
-                </div>
-                <div class="heart">❤️</div>
-              </div>
-
-              <div class="goods-item">
-                <div class="goods-thumb"></div>
-                <div class="goods-info">
-                  <div class="name">상품명</div>
-                  <div class="desc">상품 상세 설명</div>
-                  <div class="price">1,000원</div>
-                </div>
-                <div class="heart">❤️</div>
+            <div class="top-10-item">
+              <div class="top-10-rank">2</div>
+              <div class="top-10-image"></div>
+              <div class="top-10-info">
+                <div class="top-10-name">상품명</div>
+                <div class="top-10-price">₩10,000원</div>
               </div>
             </div>
-          </section>
-        </main>
-      </div>
-
-      <!-- 탭바 -->
-      <div id="tabbar"></div>
+            <div class="top-10-item">
+              <div class="top-10-rank">3</div>
+              <div class="top-10-image"></div>
+              <div class="top-10-info">
+                <div class="top-10-name">상품명</div>
+                <div class="top-10-price">₩10,000원</div>
+              </div>
+            </div>
+            <div class="top-10-item">
+              <div class="top-10-rank">4</div>
+              <div class="top-10-image"></div>
+              <div class="top-10-info">
+                <div class="top-10-name">상품명</div>
+                <div class="top-10-price">₩10,000원</div>
+              </div>
+            </div>
+            <div class="top-10-item">
+              <div class="top-10-rank">5</div>
+              <div class="top-10-image"></div>
+              <div class="top-10-info">
+                <div class="top-10-name">상품명</div>
+                <div class="top-10-price">₩10,000원</div>
+              </div>
+            </div>
+            <div class="top-10-item">
+              <div class="top-10-rank">6</div>
+              <div class="top-10-image"></div>
+              <div class="top-10-info">
+                <div class="top-10-name">상품명</div>
+                <div class="top-10-price">₩10,000원</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
 
-    <!-- 준비 중 팝업 -->
-    <div id="comingSoonModal" class="coming-soon-modal">
-      <div class="coming-soon-modal-content">
-        <p class="coming-soon-modal-text">준비중인 기능입니다</p>
-        <button
-          class="coming-soon-modal-close"
-          onclick="closeComingSoonModal()"
-        >
-          확인
-        </button>
-      </div>
-    </div>
+    <!-- 탭바 -->
+    <div id="tabbar"></div>
+  </div>
 
-    <script>
-      /* ========================== 
+  <!-- 준비 중 팝업 -->
+  <div id="comingSoonModal" class="coming-soon-modal">
+    <div class="coming-soon-modal-content">
+      <p class="coming-soon-modal-text">준비중인 기능입니다</p>
+      <button class="coming-soon-modal-close" onclick="closeComingSoonModal()">
+        확인
+      </button>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================
        준비 중 팝업 표시
     ========================== */
-      function showComingSoonModal() {
-        const modal = document.getElementById("comingSoonModal");
-        if (modal) {
-          modal.style.display = "flex";
-          modal.style.animation = "fadeIn 0.2s ease";
-        }
+    function showComingSoonModal() {
+      const modal = document.getElementById("comingSoonModal");
+      if (modal) {
+        modal.style.display = "flex";
+        modal.style.animation = "fadeIn 0.2s ease";
       }
+    }
 
-      function closeComingSoonModal() {
-        const modal = document.getElementById("comingSoonModal");
-        if (modal) {
-          modal.style.display = "none";
-          // 홈으로 이동
-          window.location.href = "../index.html";
-        }
+    function closeComingSoonModal() {
+      const modal = document.getElementById("comingSoonModal");
+      if (modal) {
+        modal.style.display = "none";
+        // 홈으로 이동
+        window.location.href = "index.html";
       }
+    }
 
-      // 페이지 로드 시 팝업 표시
-      window.addEventListener("DOMContentLoaded", () => {
-        showComingSoonModal();
-      });
-      /* ========================== 
-       Tabbar 로드
-    ========================== */
-      fetch("/public/components/tabbar.html")
-        .then((r) => r.text())
-        .then((html) => (document.getElementById("tabbar").innerHTML = html))
-        .catch((error) => console.error("Error fetching tabbar.html:", error));
-    </script>
-    <script src="/public/js/store.js" defer></script>
-  </body>
+    // 페이지 로드 시 팝업 표시
+    window.addEventListener("DOMContentLoaded", () => {
+      showComingSoonModal();
+    });
+  </script>
+  <script src="js/tabbar-init.js"></script>
+  <!-- DISABLED: store.js script loading -->
+  <!-- <script src="js/store.js" defer></script> -->
+</body>
+
 </html>

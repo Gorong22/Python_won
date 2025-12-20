@@ -44,6 +44,10 @@ Thumbs.db
 .env.local
 .env.*.local
 
+# Firebase Service Account Key (절대 커밋 금지)
+serviceAccountKey.json
+*serviceAccount*.json
+
 # Build outputs
 build/
 out/

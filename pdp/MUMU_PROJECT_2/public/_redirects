@@ -1,3 +1,14 @@
 # Netlify 리다이렉트 규칙
 # 모든 경로를 index.html로 리다이렉트 (SPA 라우팅 지원)
-/*    /index.html   200
+# 단, 특정 HTML 파일들은 제외
+/login_creator.html /login_creator.html 200
+/creator_studio.html /creator_studio.html 200
+/creator_dashboard.html /creator_dashboard.html 200
+/creator_feed.html /creator_feed.html 200
+/creator_work_detail.html /creator_work_detail.html 200
+/creator_work_preview.html /creator_work_preview.html 200
+/creator_works_list.html /creator_works_list.html 200
+/creator_pending.html /creator_pending.html 200
+/creator_rejected.html /creator_rejected.html 200
+/onboarding_reader.html /onboarding_reader.html 200
+/* /index.html 200

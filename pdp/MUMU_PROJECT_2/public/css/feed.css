@@ -1,10 +1,84 @@
 /* ================================
    Feed Page Base Layout
 ================================ */
+html,
 body {
   margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
   background: #000;
   font-family: Pretendard, sans-serif;
+  -webkit-text-size-adjust: none;
+}
+
+/* 전체 화면 로딩 스피너 */
+.full-page-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.full-page-loader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.loader-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #f5f5f5;
+  border-top-color: #ff5e00;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loader-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333333;
+  margin: 0;
+  font-family: Pretendard, sans-serif;
+}
+
+body {
+  overflow: hidden;
+}
+
+/* Splash Screen */
+#splashLayer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .app-frame {
@@ -12,6 +86,7 @@ body {
   max-width: 402px;
   margin: 0 auto;
   background: #fff;
+  height: 100dvh;
   min-height: 100vh;
   position: relative;
   overflow: visible;
@@ -28,6 +103,8 @@ body {
   padding-bottom: calc(64px + env(safe-area-inset-bottom));
   position: relative;
   min-height: 0;
+  touch-action: pan-y;
+  overscroll-behavior-y: contain;
 }
 
 .feed-page {
@@ -52,18 +129,28 @@ body {
   margin-right: 20px;
 }
 
-
 .header-left {
   width: 60px;
-  height: 60px;
-  border-radius: 8px;
+  height: 30px;
+  border-radius: 4px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
 }
 
+.header-logo {
+  width: 66px;
+  height: 33px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.header-logo svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
 
 .header-title {
   display: none;
@@ -110,14 +197,18 @@ body {
   padding: 0;
 }
 
+.feed-page > .feed-item-section:nth-of-type(n + 4) {
+  display: none;
+}
+
 .carousel-container {
+  touch-action: pan-y;
   position: relative;
   padding: 0;
   width: 100%;
   max-width: 402px;
   display: flex;
   flex-direction: column;
-
 }
 
 .carousel-image {
@@ -130,6 +221,7 @@ body {
   position: relative;
   overflow: hidden;
   margin-bottom: 0;
+  touch-action: pan-y;
 }
 
 .carousel-image img {
@@ -144,7 +236,11 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
   padding: 32px 20px 16px 20px;
   display: flex;
   align-items: flex-end;
@@ -173,7 +269,7 @@ body {
 
 .overlay-arrow {
   font-size: 20px;
-  color: #FF5E00;
+  color: #ff5e00;
   font-weight: bold;
 }
 
@@ -192,7 +288,7 @@ body {
 
 .carousel-dots::before,
 .carousel-dots::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 45px;
   height: 6px;
@@ -203,12 +299,20 @@ body {
 
 .carousel-dots::before {
   left: 0;
-  background: linear-gradient(to right, #ffffff 16.35%, rgba(255, 255, 255, 0) 50%);
+  background: linear-gradient(
+    to right,
+    #ffffff 16.35%,
+    rgba(255, 255, 255, 0) 50%
+  );
 }
 
 .carousel-dots::after {
   right: 0;
-  background: linear-gradient(to left, #ffffff 86.06%, rgba(255, 255, 255, 0) 50%);
+  background: linear-gradient(
+    to left,
+    #ffffff 86.06%,
+    rgba(255, 255, 255, 0) 50%
+  );
 }
 
 .carousel-dots .dot {
@@ -221,7 +325,7 @@ body {
 }
 
 .carousel-dots .dot.active {
-  background: #FF5E00;
+  background: #ff5e00;
 }
 
 .mood-title {
@@ -281,10 +385,10 @@ body {
 
 .follow-btn.following,
 .creator-follow-btn.following {
-  border-color: #FF5E00;
+  border-color: #ff5e00;
   padding: 6px 14px;
   background: #fff;
-  color: #FF5E00;
+  color: #ff5e00;
   height: 33px;
   display: flex;
   align-items: center;
@@ -327,6 +431,7 @@ body {
   -ms-overflow-style: none;
   /* IE and Edge */
   margin: 18px 0 0 0;
+  touch-action: pan-x pan-y;
 }
 
 .content-placeholder-slider::-webkit-scrollbar {
@@ -348,7 +453,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
 }
 
@@ -454,12 +559,12 @@ body {
 }
 
 .stat-icon-heart.active {
-  color: #FF5E00;
+  color: #ff5e00;
 }
 
 .stat-icon-heart.active path {
-  fill: #FF5E00;
-  stroke: #FF5E00;
+  fill: #ff5e00;
+  stroke: #ff5e00;
 }
 
 /* ========================= */
@@ -489,7 +594,6 @@ body {
   overflow: visible;
   margin: 0 auto;
 }
-
 
 .comment-section {
   background: #ffffff;
@@ -541,7 +645,6 @@ body {
   opacity: 0.6;
 }
 
-
 .comment-list {
   flex: 1;
   overflow-y: auto;
@@ -587,7 +690,7 @@ body {
 }
 
 .comment-item::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -25px;
   left: 0;
@@ -678,12 +781,12 @@ body {
 }
 
 .comment-stat-icon-heart.active {
-  color: #FF5E00;
+  color: #ff5e00;
 }
 
 .comment-stat-icon-heart.active path {
-  fill: #FF5E00;
-  stroke: #FF5E00;
+  fill: #ff5e00;
+  stroke: #ff5e00;
 }
 
 /* 댓글 더보기 모달 */
@@ -1082,24 +1185,28 @@ body {
 }
 
 .feed-card.with-gradient .feed-thumbnail {
-  background-image: url('../assets/images/profile-bg.jpg');
+  background-image: url("../assets/images/profile-bg.jpg");
   background-size: cover;
   background-position: center;
 }
 
 .feed-card.with-gradient .feed-thumbnail::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 1) 100%
+  );
   opacity: 0.88;
   z-index: 1;
 }
 
-.feed-card.with-gradient .feed-thumbnail>* {
+.feed-card.with-gradient .feed-thumbnail > * {
   position: relative;
   z-index: 2;
 }
@@ -1120,7 +1227,6 @@ body {
 .feed-card.with-gradient .feed-date {
   color: #ededed;
 }
-
 
 .feed-title {
   font-size: 16px;
@@ -1191,6 +1297,41 @@ body {
   background: #ffffff;
 }
 
+/* 좋아요 활성화 상태 */
+.feed-card-stat.active svg path {
+  stroke: #ff5e00;
+}
+
+/* 기본 상태 */
+.feed-card-stat svg path {
+  stroke: #a0a0a0;
+}
+
+/* 로딩 스피너 */
+.stat-loading-spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #ff5e00;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.stat-count:has(.stat-loading-spinner) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 12px;
+  min-height: 12px;
+}
+
 /* post-more-btn 스타일 */
 .post-more-btn {
   position: absolute;
@@ -1259,15 +1400,14 @@ body {
   width: 100%;
   padding: 12px 0;
   background: #ffffff;
-  color: #FF5E00;
-  border: 1px solid #FF5E00;
+  color: #ff5e00;
+  border: 1px solid #ff5e00;
   border-radius: 4px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease;
 }
-
 
 @keyframes slideUp {
   from {

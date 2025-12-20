@@ -1,27 +1,50 @@
 {
-  "hosting": {
-    "public": "public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
+  "firestore": {
+    "rules": "firestore.rules"
   },
   "functions": {
     "source": "functions",
-    "runtime": "nodejs20",
-    "ignore": [
-      "node_modules",
-      ".git",
-      "firebase-debug.log",
-      "firebase-debug.*.log",
-      "*.local"
+    "runtime": "nodejs20"
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      { "source": "/login_creator.html", "destination": "/login_creator.html" },
+      {
+        "source": "/creator_studio.html",
+        "destination": "/creator_studio.html"
+      },
+      {
+        "source": "/creator_dashboard.html",
+        "destination": "/creator_dashboard.html"
+      },
+      { "source": "/creator_feed.html", "destination": "/creator_feed.html" },
+      {
+        "source": "/creator_work_detail.html",
+        "destination": "/creator_work_detail.html"
+      },
+      {
+        "source": "/creator_work_preview.html",
+        "destination": "/creator_work_preview.html"
+      },
+      {
+        "source": "/creator_works_list.html",
+        "destination": "/creator_works_list.html"
+      },
+      {
+        "source": "/creator_pending.html",
+        "destination": "/creator_pending.html"
+      },
+      {
+        "source": "/creator_rejected.html",
+        "destination": "/creator_rejected.html"
+      },
+      {
+        "source": "/onboarding_reader.html",
+        "destination": "/onboarding_reader.html"
+      },
+      { "source": "**", "destination": "/index.html" }
     ]
   }
 }

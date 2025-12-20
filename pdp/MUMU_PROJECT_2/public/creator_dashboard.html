@@ -5,8 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MUMU – Creator Dashboard</title>
-  <link rel="stylesheet" href="/public/css/tabbar.css" />
-  <link rel="stylesheet" href="/public/css/creator_dashboard.css" />
+  <link rel="stylesheet" href="css/tabbar.css" />
+  <link rel="stylesheet" href="css/creator_dashboard.css" />
 </head>
 
 <body>
@@ -24,7 +24,7 @@
             <div class="profile-avatar-wrapper">
               <div class="profile-avatar"></div>
               <div class="setting-icon">
-                <img src="/public/assets/icons/setting.svg" alt="setting" loading="lazy">
+                <img src="assets/icons/setting.svg" alt="setting" loading="lazy">
               </div>
             </div>
             <div class="profile-follow">
@@ -521,19 +521,12 @@
       <!-- end dash section -->
     </div>
 
-    <!-- 하단 탭바 -->
-    <div id="tabbar" class="tabbar"></div>
-
-    <script>
-      /* ========================== 
-         Tabbar 로드
-      ========================== */
-      fetch("/public/components/tabbar.html")
-        .then((r) => r.text())
-        .then((html) => (document.getElementById("tabbar").innerHTML = html))
-        .catch((error) => console.error("Error fetching tabbar.html:", error));
-    </script>
-    <script src="/public/js/creator_dashboard.js" defer></script>
+    <!-- Bottom Tab Bar -->
+    <div id="tabbar"></div>
+    <!-- Supabase Client -->
+    <script type="module" src="js/supabase_client.js"></script>
+    <script src="js/tabbar-init.js"></script>
+    <script src="js/creator_dashboard.js" defer></script>
 </body>
 
 </html>

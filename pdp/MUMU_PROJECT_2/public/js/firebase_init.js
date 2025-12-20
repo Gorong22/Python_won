@@ -29,3 +29,10 @@ if (existingApps.length === 0) {
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export { app };
+
+// 일반 스크립트에서도 사용할 수 있도록 전역 변수로 노출
+if (typeof window !== 'undefined') {
+  window.firebaseAuth = auth;
+  window.firebaseDb = db;
+  window.firebaseApp = app;
+}

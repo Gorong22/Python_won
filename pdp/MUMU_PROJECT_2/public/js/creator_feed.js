@@ -1,367 +1,334 @@
-/* ========================== 
-   Header 커스터마이징
-========================== */
-fetch("/public/components/header.html")
-  .then((r) => r.text())
-  .then((html) => {
-    document.getElementById("header").innerHTML = html;
-    // 헤더 내용 변경
-    const headerTitle = document.querySelector("#header .header-title");
-    if (headerTitle) {
-      headerTitle.remove();
-    }
-    const headerLeft = document.querySelector("#header .header-left");
-    if (headerLeft) {
-      headerLeft.innerHTML = '<a href="/index.html" style="display: flex; width: 100%; height: 100%; align-items: center; justify-content: center;"><img loading="lazy" src="/public/assets/logos/mumu-logo.webp" alt="MUMU Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;"></a>';
-    }
-    const headerLink = document.querySelector("#header .header-link");
-    if (headerLink) {
-      headerLink.textContent = "업로드";
-      headerLink.href = "/public/upload.html";
-    }
-  })
-  .catch((error) => console.error("Error fetching header.html:", error));
+// Creator Feed 관리 스크립트
+// - feeds 목록 조회/렌더
+// - 수동 피드 생성
+// - 공개/비공개 토글
+// - 수동 피드 삭제
+// - 추천 피드 노출 (수정/삭제 불가)
 
-/* ========================== 
-   Tabbar 로드
-========================== */
-fetch("/public/components/tabbar.html")
-  .then((r) => r.text())
-  .then((html) => (document.getElementById("tabbar").innerHTML = html))
-  .catch((error) => console.error("Error fetching tabbar.html:", error));
-
-// ============================
-// CreatorMoreModal 기능
-// ============================
-
-// CreatorMoreModal 열기
-function openCreatorMoreModal(button) {
-  const modal = document.getElementById('CreatorMoreModal');
-  if (modal && button) {
-    const rect = button.getBoundingClientRect();
-    modal.style.display = 'flex';
-    const modalContent = modal.querySelector('.CreatorMoreModal-content');
-    if (modalContent) {
-      const top = rect.top;
-      const right = window.innerWidth - rect.right;
-      modalContent.style.top = top + 'px';
-      modalContent.style.right = right + 'px';
-
-      // 스크롤 이벤트 리스너 추가
-      if (!modal.hasAttribute('data-scroll-listener')) {
-        modal.setAttribute('data-scroll-listener', 'true');
-        window.addEventListener('scroll', handleCreatorMoreModalScroll, { passive: true });
-      }
-    }
-  }
-}
-
-// CreatorMoreModal 닫기
-function closeCreatorMoreModal() {
-  const modal = document.getElementById('CreatorMoreModal');
-  if (modal) {
-    modal.style.animation = 'fadeOut 0.2s ease forwards';
-    setTimeout(() => {
-      modal.style.display = 'none';
-      modal.style.animation = 'fadeIn 0.2s ease';
-      window.removeEventListener('scroll', handleCreatorMoreModalScroll);
-      modal.removeAttribute('data-scroll-listener');
-    }, 200);
-  }
-}
-
-// CreatorMoreModal 스크롤 핸들러
-function handleCreatorMoreModalScroll() {
-  const modal = document.getElementById('CreatorMoreModal');
-  if (modal && modal.style.display === 'flex') {
-    closeCreatorMoreModal();
-  }
-}
-
-// 준비중인 기능 팝업 모달 표시
-function showComingSoonModal() {
-  const modal = document.getElementById('comingSoonModal');
-  if (modal) {
-    modal.style.display = 'flex';
-    modal.style.animation = 'fadeIn 0.2s ease';
-  }
-}
-
-// 준비중인 기능 팝업 모달 닫기
-function closeComingSoonModal() {
-  const modal = document.getElementById('comingSoonModal');
-  if (modal) {
-    modal.style.display = 'none';
-  }
-}
-
-// 댓글 모달 열기
-function openCommentModal() {
-  const modal = document.getElementById('commentModal');
-  if (modal) {
-    modal.style.display = 'flex';
-  }
-}
-
-// 댓글 모달 닫기 (전역 함수로 선언)
-window.closeCommentModal = function () {
-  const modal = document.getElementById('commentModal');
-  if (modal) {
-    const commentSection = modal.querySelector('.comment-section');
-    if (commentSection) {
-      commentSection.style.animation = 'slideDown 0.3s ease forwards';
-    }
-    modal.style.animation = 'fadeOut 0.3s ease forwards';
-    setTimeout(() => {
-      modal.style.display = 'none';
-      modal.style.animation = 'fadeIn 0.3s ease';
-      if (commentSection) {
-        commentSection.style.animation = 'slideUp 0.3s ease';
-      }
-    }, 300);
-  }
+const state = {
+  supabaseClient: null,
+  feeds: [],
 };
-
-// 댓글 더보기 모달 열기
-function openCommentMoreModal(button, commentItem) {
-  const modal = document.getElementById('commentMoreModal');
-  if (modal && button) {
-    const rect = button.getBoundingClientRect();
-    modal.style.display = 'flex';
-    const modalContent = modal.querySelector('.comment-more-modal-content');
-    if (modalContent) {
-      const top = rect.top;
-      const right = window.innerWidth - rect.right;
-      modalContent.style.top = top + 'px';
-      modalContent.style.right = right + 'px';
-
-      if (!modal.hasAttribute('data-scroll-listener')) {
-        modal.setAttribute('data-scroll-listener', 'true');
-        window.addEventListener('scroll', handleCommentMoreModalScroll, { passive: true });
-      }
-    }
-  }
-}
-
-// 댓글 더보기 모달 닫기
-function closeCommentMoreModal() {
-  const modal = document.getElementById('commentMoreModal');
-  if (modal) {
-    modal.style.animation = 'fadeOut 0.2s ease forwards';
-    setTimeout(() => {
-      modal.style.display = 'none';
-      modal.style.animation = 'fadeIn 0.2s ease';
-      window.removeEventListener('scroll', handleCommentMoreModalScroll);
-      modal.removeAttribute('data-scroll-listener');
-    }, 200);
-  }
-}
-
-// 댓글 더보기 모달 스크롤 핸들러
-function handleCommentMoreModalScroll() {
-  const modal = document.getElementById('commentMoreModal');
-  if (modal && modal.style.display === 'flex') {
-    closeCommentMoreModal();
-  }
-}
-
-// ESC 키로 모달 닫기
-document.addEventListener('keydown', function (e) {
-  if (e.key === 'Escape') {
-    const commentModal = document.getElementById('commentModal');
-    if (commentModal && commentModal.style.display === 'flex') {
-      closeCommentModal();
-    }
-    const creatorMoreModal = document.getElementById('CreatorMoreModal');
-    if (creatorMoreModal && creatorMoreModal.style.display === 'flex') {
-      closeCreatorMoreModal();
-    }
-    const comingSoonModal = document.getElementById('comingSoonModal');
-    if (comingSoonModal && comingSoonModal.style.display === 'flex') {
-      closeComingSoonModal();
-    }
-  }
+document.addEventListener("DOMContentLoaded", () => {
+  initPage();
 });
 
-// ============================
-// 이벤트 위임 및 버튼 활성화
-// ============================
+async function initPage() {
+  try {
+    await loadHeaderAndTabbar();
+    await initializeSupabase();
+    ensureCreatorId();
+    await loadWorks();
+    renderWorkSelect();
+    bindCreateButton();
+    await loadFeeds();
+    renderFeedList();
+  } catch (error) {
+    console.error("Creator feed init failed:", error);
+    showStatus("피드를 불러오는 중 문제가 발생했습니다.", "error");
+  }
+}
 
-document.addEventListener('DOMContentLoaded', () => {
-  // creator_feed.html 진입 시 준비중 팝업 표시
-  showComingSoonModal();
-
-  // top-tab 클릭 시 (작가 피드 탭) 준비중 팝업 표시
-  document.addEventListener('click', function (e) {
-    if (e.target.closest('.top-tab.active')) {
-      const activeTab = e.target.closest('.top-tab.active');
-      e.preventDefault();
-      e.stopPropagation();
-      showComingSoonModal();
-      return;
+async function loadHeaderAndTabbar() {
+  try {
+    const headerRes = await fetch("components/header.html");
+    if (headerRes.ok) {
+      const html = await headerRes.text();
+      const headerEl = document.getElementById("header");
+      if (headerEl) {
+        headerEl.innerHTML = html;
+      }
     }
+  } catch (e) {
+    console.warn("Header load failed:", e);
+  }
+
+  try {
+    const tabRes = await fetch("components/tabbar.html");
+    if (tabRes.ok) {
+      const html = await tabRes.text();
+      const tabEl = document.getElementById("tabbar");
+      if (tabEl) {
+        tabEl.innerHTML = html;
+      }
+    }
+  } catch (e) {
+    console.warn("Tabbar load failed:", e);
+  }
+}
+
+function ensureCreatorId() {
+  if (!window.__CREATOR_ID__) {
+    throw new Error(
+      "creator_id가 설정되지 않았습니다. 로그인 후 다시 시도하세요."
+    );
+  }
+}
+
+async function initializeSupabase() {
+  const { getSupabase } = await import("./auth.js");
+  state.supabaseClient = getSupabase();
+}
+
+function showStatus(message, type = "info") {
+  const statusEl = document.getElementById("create-feed-status");
+  if (!statusEl) return;
+  statusEl.textContent = message || "";
+  statusEl.className = `status-text ${type}`;
+}
+
+async function loadWorks() {
+  const { data, error } = await state.supabaseClient
+    .from("works")
+    .select("id, title, thumbnail_url, created_at")
+    .eq("creator_id", window.__CREATOR_ID__)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.warn("Failed to load works:", error);
+    state.works = [];
+    return;
+  }
+
+  state.works = data || [];
+}
+
+function renderWorkSelect() {
+  const select = document.getElementById("work-select");
+  if (!select) return;
+
+  select.innerHTML = '<option value="">작품을 선택하세요</option>';
+  state.works.forEach((work) => {
+    const option = document.createElement("option");
+    option.value = work.id;
+    option.textContent = work.title || work.id;
+    select.appendChild(option);
   });
+}
 
-  // 동적으로 생성된 요소를 위해 이벤트 위임 사용
-  document.addEventListener('click', function (e) {
-    // creator-follow-btn 및 follow-btn 클릭
-    if (e.target.closest('.creator-follow-btn') || e.target.closest('.follow-btn')) {
-      const followBtn = e.target.closest('.creator-follow-btn') || e.target.closest('.follow-btn');
-      e.preventDefault();
-      e.stopPropagation();
-      followBtn.classList.toggle('following');
-      if (followBtn.classList.contains('following')) {
-        followBtn.textContent = '팔로잉';
-      } else {
-        followBtn.textContent = '팔로우';
-      }
+function bindCreateButton() {
+  const btn = document.getElementById("create-feed-btn");
+  if (!btn) return;
+  btn.addEventListener("click", async () => {
+    if (state.creating) return;
+    const select = document.getElementById("work-select");
+    const workId = select?.value;
+    if (!workId) {
+      showStatus("먼저 작품을 선택하세요.", "error");
       return;
     }
-
-    // creator-more-btn 클릭
-    if (e.target.closest('.creator-more-btn')) {
-      const btn = e.target.closest('.creator-more-btn');
-      e.preventDefault();
-      e.stopPropagation();
-      const modal = document.getElementById('CreatorMoreModal');
-      if (modal && modal.style.display === 'flex') {
-        closeCreatorMoreModal();
-      } else {
-        openCreatorMoreModal(btn);
-      }
-      return;
-    }
-
-    // CreatorMoreModal-option 클릭 시 팝업 표시
-    if (e.target.closest('.CreatorMoreModal-option')) {
-      const optionBtn = e.target.closest('.CreatorMoreModal-option');
-      e.preventDefault();
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-      closeCreatorMoreModal();
-      setTimeout(() => {
-        showComingSoonModal();
-      }, 200);
-      return;
-    }
-
-    // stat-icon-heart 클릭
-    if (e.target.closest('.stat-icon-heart')) {
-      const icon = e.target.closest('.stat-icon-heart');
-      e.preventDefault();
-      e.stopPropagation();
-      icon.classList.toggle('active');
-
-      const statItem = icon.parentElement.querySelector('.stat-item');
-      if (statItem) {
-        let currentCount = parseInt(statItem.textContent) || 0;
-        if (icon.classList.contains('active')) {
-          statItem.textContent = currentCount + 1;
-        } else {
-          statItem.textContent = Math.max(0, currentCount - 1);
-        }
-      }
-      return;
-    }
-
-    // stat-icon-comment 클릭 시 댓글 모달 열기
-    if (e.target.closest('.stat-icon-comment')) {
-      e.preventDefault();
-      openCommentModal();
-      return;
-    }
-
-    // comment-stat-icon-heart 클릭 (댓글 모달 내부)
-    if (e.target.closest('.comment-stat-icon-heart')) {
-      const icon = e.target.closest('.comment-stat-icon-heart');
-      e.preventDefault();
-      e.stopPropagation();
-      icon.classList.toggle('active');
-
-      const statItem = icon.parentElement.querySelector('span');
-      if (statItem) {
-        let currentCount = parseInt(statItem.textContent) || 0;
-        if (icon.classList.contains('active')) {
-          statItem.textContent = currentCount + 1;
-        } else {
-          statItem.textContent = Math.max(0, currentCount - 1);
-        }
-      }
-      return;
-    }
-
-    // comment-more-btn 클릭
-    if (e.target.closest('.comment-more-btn')) {
-      const btn = e.target.closest('.comment-more-btn');
-      e.preventDefault();
-      e.stopPropagation();
-      const commentItem = btn.closest('.comment-item');
-      if (commentItem) {
-        const modal = document.getElementById('commentMoreModal');
-        if (modal && modal.style.display === 'flex') {
-          closeCommentMoreModal();
-        } else {
-          openCommentMoreModal(btn, commentItem);
-        }
-      }
-      return;
-    }
-
-    // comment-more-option 클릭 시 팝업 표시
-    if (e.target.closest('.comment-more-option')) {
-      const optionBtn = e.target.closest('.comment-more-option');
-      e.preventDefault();
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-      closeCommentMoreModal();
-      setTimeout(() => {
-        showComingSoonModal();
-      }, 200);
-      return;
-    }
+    await createManualFeed(workId);
   });
+}
 
-  // CreatorMoreModal 배경 클릭 시 닫기
-  document.addEventListener('click', function (e) {
-    const creatorMoreModal = document.getElementById('CreatorMoreModal');
-    if (creatorMoreModal && creatorMoreModal.style.display === 'flex') {
-      // CreatorMoreModal-option 클릭은 제외 (위의 핸들러에서 처리)
-      if (e.target.closest('.CreatorMoreModal-option')) {
-        return;
-      }
-      // 모달 내용이나 버튼이 아닌 곳을 클릭하면 닫기
-      if (!e.target.closest('.CreatorMoreModal-content') && !e.target.closest('.creator-more-btn')) {
-        closeCreatorMoreModal();
-      }
+async function createManualFeed(workId) {
+  state.creating = true;
+  showStatus("피드를 생성 중입니다...", "info");
+  try {
+    const work = state.works.find((w) => w.id === workId);
+    if (!work) {
+      showStatus("선택한 작품을 찾을 수 없습니다.", "error");
+      return;
     }
 
-    // 준비중인 기능 팝업 배경 클릭 시 닫기
-    const comingSoonModal = document.getElementById('comingSoonModal');
-    if (comingSoonModal && comingSoonModal.style.display === 'flex') {
-      if (e.target === comingSoonModal || e.target.closest('.coming-soon-modal-close')) {
-        closeComingSoonModal();
-      }
+    const thumbnailUrl = await resolveWorkThumbnail(workId, work.thumbnail_url);
+    const insertPayload = {
+      creator_id: window.__CREATOR_ID__,
+      type: "work",
+      ref_id: workId,
+      title: work.title || "작품",
+      thumbnail_url: thumbnailUrl || null,
+      source: "manual",
+      is_public: true,
+    };
+
+    const { error } = await state.supabaseClient
+      .from("feeds")
+      .insert(insertPayload);
+    if (error) {
+      console.warn("Failed to create feed:", error);
+      showStatus("피드 생성에 실패했습니다. 다시 시도해주세요.", "error");
+      return;
     }
 
-    // 댓글 모달 배경 클릭 시 닫기
-    const commentModal = document.getElementById('commentModal');
-    if (commentModal && commentModal.style.display === 'flex') {
-      if (e.target === commentModal) {
-        closeCommentModal();
-      }
+    showStatus("피드가 생성되었습니다.", "success");
+    await loadFeeds();
+    renderFeedList();
+  } catch (error) {
+    console.warn("createManualFeed error:", error);
+    showStatus("피드 생성 중 오류가 발생했습니다.", "error");
+  } finally {
+    state.creating = false;
+  }
+}
+
+async function resolveWorkThumbnail(workId, fallbackThumbnail) {
+  const { data, error } = await state.supabaseClient
+    .from("cuts")
+    .select("image_url")
+    .eq("work_id", workId)
+    .order("order_index", { ascending: true })
+    .limit(1);
+
+  if (error) {
+    console.warn("Failed to resolve work thumbnail:", error);
+  }
+
+  const firstCutUrl =
+    Array.isArray(data) && data.length > 0 ? data[0].image_url : null;
+  return firstCutUrl || fallbackThumbnail || null;
+}
+
+async function loadFeeds() {
+  state.loadingFeeds = true;
+  const { data, error } = await state.supabaseClient
+    .from("feeds")
+    .select("*")
+    .eq("creator_id", window.__CREATOR_ID__)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.warn("Failed to load feeds:", error);
+    state.feeds = [];
+  } else {
+    state.feeds = data || [];
+  }
+  state.loadingFeeds = false;
+}
+
+function renderFeedList() {
+  const list = document.getElementById("feed-list");
+  const empty = document.getElementById("feed-empty");
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  if (!state.feeds.length) {
+    if (empty) empty.style.display = "block";
+    return;
+  }
+  if (empty) empty.style.display = "none";
+
+  state.feeds.forEach((feed) => {
+    const card = document.createElement("div");
+    card.className = "feed-card";
+    card.dataset.feedId = feed.id;
+
+    const thumb = document.createElement("div");
+    thumb.className = "feed-thumb";
+    if (feed.thumbnail_url) {
+      const img = document.createElement("img");
+      img.src = feed.thumbnail_url;
+      img.alt = feed.title || "피드 썸네일";
+      img.loading = "lazy";
+      img.style.objectFit = "cover";
+      thumb.appendChild(img);
+    } else {
+      thumb.textContent = "썸네일 없음";
     }
 
-    // 댓글 더보기 모달 배경 클릭 시 닫기
-    const commentMoreModal = document.getElementById('commentMoreModal');
-    if (commentMoreModal && commentMoreModal.style.display === 'flex') {
-      // comment-more-option 클릭은 제외 (위의 핸들러에서 처리)
-      if (e.target.closest('.comment-more-option')) {
-        return;
-      }
-      if (!e.target.closest('.comment-more-modal-content') && !e.target.closest('.comment-more-btn')) {
-        closeCommentMoreModal();
-      }
+    const meta = document.createElement("div");
+    meta.className = "feed-meta";
+
+    const title = document.createElement("div");
+    title.className = "feed-title";
+    title.textContent = feed.title || "(제목 없음)";
+
+    const badges = document.createElement("div");
+    badges.className = "feed-badges";
+
+    const typeBadge = document.createElement("span");
+    typeBadge.className = "badge badge-type";
+    typeBadge.textContent = feed.type === "cut" ? "컷" : "작품";
+    badges.appendChild(typeBadge);
+
+    const sourceBadge = document.createElement("span");
+    sourceBadge.className = "badge badge-source";
+    sourceBadge.textContent = feed.source === "algorithm" ? "추천" : "수동";
+    badges.appendChild(sourceBadge);
+
+    if (feed.source === "algorithm" && typeof feed.score === "number") {
+      const scoreBadge = document.createElement("span");
+      scoreBadge.className = "badge badge-score";
+      scoreBadge.textContent = `추천점수 ${feed.score}`;
+      badges.appendChild(scoreBadge);
     }
+
+    if (!feed.is_public) {
+      const privateBadge = document.createElement("span");
+      privateBadge.className = "badge badge-private";
+      privateBadge.textContent = "비공개";
+      badges.appendChild(privateBadge);
+    }
+
+    meta.appendChild(title);
+    meta.appendChild(badges);
+
+    const actions = document.createElement("div");
+    actions.className = "feed-actions";
+
+    if (feed.source === "manual") {
+      const toggleBtn = document.createElement("button");
+      toggleBtn.className = "btn-secondary";
+      toggleBtn.textContent = feed.is_public ? "비공개로 전환" : "공개로 전환";
+      toggleBtn.addEventListener("click", () => toggleFeedVisibility(feed));
+      actions.appendChild(toggleBtn);
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.className = "btn-danger";
+      deleteBtn.textContent = "삭제";
+      deleteBtn.addEventListener("click", () => deleteFeed(feed));
+      actions.appendChild(deleteBtn);
+    } else {
+      const info = document.createElement("span");
+      info.className = "badge badge-disabled";
+      info.textContent = "추천됨";
+      actions.appendChild(info);
+    }
+
+    card.appendChild(thumb);
+    card.appendChild(meta);
+    card.appendChild(actions);
+    list.appendChild(card);
   });
+}
 
-});
+async function toggleFeedVisibility(feed) {
+  const next = !feed.is_public;
+  const { error } = await state.supabaseClient
+    .from("feeds")
+    .update({ is_public: next })
+    .eq("id", feed.id)
+    .eq("creator_id", window.__CREATOR_ID__);
+
+  if (error) {
+    console.warn("Failed to toggle feed visibility:", error);
+    showStatus("공개 상태 변경에 실패했습니다.", "error");
+    return;
+  }
+
+  const target = state.feeds.find((f) => f.id === feed.id);
+  if (target) target.is_public = next;
+  renderFeedList();
+  showStatus("공개 상태가 변경되었습니다.", "success");
+}
+
+async function deleteFeed(feed) {
+  if (feed.source !== "manual") return;
+  const { error } = await state.supabaseClient
+    .from("feeds")
+    .delete()
+    .eq("id", feed.id)
+    .eq("creator_id", window.__CREATOR_ID__)
+    .eq("source", "manual");
+
+  if (error) {
+    console.warn("Failed to delete feed:", error);
+    showStatus("피드 삭제에 실패했습니다.", "error");
+    return;
+  }
+
+  state.feeds = state.feeds.filter((f) => f.id !== feed.id);
+  renderFeedList();
+  showStatus("피드가 삭제되었습니다.", "success");
+}

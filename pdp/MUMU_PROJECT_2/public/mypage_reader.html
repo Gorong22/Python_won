@@ -1,290 +1,1551 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>MUMU – 마이페이지 (독자)</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MUMU – 마이페이지 (독자)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts for text styling -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Nanum+Gothic:wght@400;700;800&family=Nanum+Pen+Script&family=Gamja+Flower&family=Dongle:wght@300;400;700&family=Gowun+Batang:wght@400;700&family=Jua&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/tabbar.css" />
+    <link rel="stylesheet" href="css/mypage_reader.css" />
+    <!-- interact.js for drag, resize, rotate -->
+    <script src="https://cdn.jsdelivr.net/npm/interactjs@1.10.24/dist/interact.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      window.SUPABASE_URL = "https://ksipcrcimsnjkgmwzovo.supabase.co";
+      window.SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtzaXBjcmNpbXNuamtnbXd6b3ZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1MDMxMTYsImV4cCI6MjA4MTA3OTExNn0.0drLdNZnd1t-Dk6W_TUSt8_raVWn17WMSvIzCGUD8sw";
+    </script>
+  </head>
 
-  <!-- 필요하면 global.css, layout.css 위에 두고 -->
-  <!-- 내 파일은 마지막에 로드해서 우선순위 갖도록 -->
-  <!-- <link rel="stylesheet" href="/public/css/global.css" />
-    <link rel="stylesheet" href="/public/css/layout.css" /> -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/public/css/tabbar.css" />
-  <link rel="stylesheet" href="/public/css/mypage_reader.css" />
-</head>
-
-<body>
-  <div class="app-frame">
-    <!-- 상단 헤더 -->
-    <!-- <header class="header">
-      <div class="header-title">MUMU</div>
-      <button class="header-right">마이페이지</button>
-    </header> -->
-
-    <!-- 스크롤 영역 -->
-    <div class="app-scroll">
-      <!-- 프로필 -->
-      <section class="profile-box">
-        <div class="profile-bg"></div>
-
-        <!-- <button class="reader-mode-btn">독자모드</button> -->
-
-        <div class="profile-content">
-          <div class="profile-header-row">
-            <div class="profile-avatar-wrapper">
-              <div class="profile-avatar"></div>
-              <div class="setting-icon">
-                <img src="/public/assets/icons/setting.svg" alt="setting" loading="lazy">
+  <body>
+    <style>
+      /* 초기 로딩 상태 - 깜빡임 방지 */
+      .app-frame {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+      }
+      .app-frame.loaded {
+        opacity: 1;
+      }
+      /* 초기에는 빈 상태 숨기기 */
+      #featured-empty,
+      #moodboards-empty {
+        display: none !important;
+      }
+    </style>
+    <div class="app-frame">
+      <!-- 스크롤 영역 -->
+      <div class="app-scroll">
+        <!-- 프로필 영역 (최소화) -->
+        <section class="profile-box">
+          <div class="profile-content">
+            <div class="profile-header-row">
+              <div class="profile-avatar-wrapper">
+                <div class="profile-avatar"></div>
+                <div
+                  class="setting-icon"
+                  onclick="openSettingsModal()"
+                  id="profile-setting-btn"
+                  style="display: none"
+                >
+                  <img
+                    src="assets/icons/setting.svg"
+                    alt="setting"
+                    loading="lazy"
+                  />
+                </div>
               </div>
             </div>
-            <div class="profile-follow">
-              <div class="follow">
-                <div class="follow-num">12</div>
-                <div class="follow-label">팔로우</div>
-              </div>
-              <div class="follow-line">
-                <div class="line"></div>
-              </div>
-              <div class="follow">
-                <div class="follow-num">12</div>
-                <div class="follow-label">팔로워</div>
-              </div>
+            <div class="profile-name">독자</div>
+            <!-- 팔로우/팔로워 정보 (MY MOOD 탭에만 표시) -->
+            <div class="profile-stats" id="profile-stats">
+              <span class="follow-num">0</span> 팔로우
+              <span class="follow-num">0</span> 팔로워
             </div>
+            <div class="profile-desc" style="display: none"></div>
           </div>
-          <div class="profile-name">박햇살</div>
-          <div class="tag-list">
-            <span class="tag">액션</span>
-            <span class="tag">판타지</span>
-            <span class="tag">개그</span>
+        </section>
+
+        <!-- TABS -->
+        <div class="tab-wrap">
+          <div class="tab active" data-tab="mood" onclick="switchTab('mood')">
+            MY MOOD
           </div>
-          <div class="profile-desc">
-            독자 자기소개<br />
-            링크 연동
-          </div>
+          <div class="tab" data-tab="my" onclick="switchTab('my')">MY</div>
         </div>
-      </section>
 
-      <!-- TABS -->
-      <div class="tab-wrap">
-        <div class="tab active" onclick="goMyFeed()">MY MOOD</div>
-        <div class="tab" onclick="goMy()">MY</div>
+        <!-- ========================= -->
+        <!--  TAB 1 : MY MOOD          -->
+        <!-- ========================= -->
+        <section id="tab-mood" class="tab-content active">
+          <!-- 대표 무드보드 (화면 대부분 차지) -->
+          <section class="featured-moodboard-section">
+            <div class="featured-header">
+              <h3 class="featured-title">MY MOOD</h3>
+              <div class="featured-header-actions">
+                <button
+                  class="edit-btn featured-change-btn"
+                  onclick="openFeaturedMoodboardSettingsModal()"
+                  id="featured-change-btn"
+                  style="display: none"
+                >
+                  대표 변경
+                </button>
+                <button
+                  class="edit-btn"
+                  onclick="editFeaturedMoodboard()"
+                  id="featured-edit-btn"
+                  style="display: none"
+                >
+                  편집
+                </button>
+              </div>
+            </div>
+            <div id="featured-moodboard" class="featured-moodboard-preview">
+              <!-- 대표 무드 문구 표시 영역 -->
+              <div
+                id="featured-mood-text"
+                class="featured-mood-text"
+                style="display: none"
+              ></div>
+              <!-- 대표 무드보드가 있으면 여기에 표시 -->
+              <div id="featured-content" class="featured-content"></div>
+              <!-- 대표 무드보드가 없으면 초기 상태 표시 -->
+              <div id="featured-empty" class="featured-empty-state">
+                <div class="empty-state-illustration">✨</div>
+                <p class="empty-state-text">대표 무드보드를 설정해 주세요</p>
+                <div class="featured-empty-actions">
+                  <button
+                    class="empty-state-btn"
+                    onclick="openFeaturedMoodboardSettingsModal()"
+                  >
+                    무드보드에서 선택
+                  </button>
+                  <button
+                    class="empty-state-btn empty-state-btn-secondary"
+                    onclick="createNewMoodboard()"
+                  >
+                    새 무드보드 만들기
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- ========================= -->
+        <!--  TAB 2 : MY               -->
+        <!-- ========================= -->
+        <section id="tab-my" class="tab-content">
+          <!-- 대표급 무드보드 미리보기 3개 (동적으로 생성됨) -->
+          <!-- featured-moodboards-preview 섹션이 여기에 동적으로 추가됨 -->
+
+          <!-- 무드보드 그리드 (전체 목록, 기본적으로 숨김) -->
+          <section class="moodboards-section" style="display: none">
+            <div class="moodboards-header">
+              <h3 class="moodboards-title">무드보드</h3>
+              <button class="create-btn" onclick="createNewMoodboard()">
+                + 새 무드보드
+              </button>
+            </div>
+            <div id="moodboards-grid" class="moodboards-grid">
+              <!-- 무드보드 카드들이 여기에 동적으로 추가됨 -->
+            </div>
+            <div
+              id="moodboards-empty"
+              class="moodboards-empty-state"
+              style="display: none"
+            >
+              <div class="empty-state-illustration">🎨</div>
+              <p class="empty-state-text">아직 무드보드가 없습니다</p>
+              <p class="empty-state-hint">
+                새 무드보드를 만들어 감정을 표현해보세요
+              </p>
+            </div>
+          </section>
+
+          <!-- 폴더 리스트 뷰 (맨 위로 이동) -->
+          <div id="folder-list-view" class="folder-list-view">
+            <div class="folders-header">
+              <h3 class="folders-title">폴더</h3>
+              <button class="create-btn" onclick="createNewFolder()">
+                + 새 폴더
+              </button>
+            </div>
+            <div id="folders-grid" class="folders-grid">
+              <!-- 폴더 카드들이 여기에 동적으로 추가됨 -->
+            </div>
+            <div
+              id="folders-empty"
+              class="folders-empty-state"
+              style="display: none"
+            >
+              <div class="empty-state-illustration">📁</div>
+              <p class="empty-state-text">폴더가 없습니다</p>
+              <p class="empty-state-hint">
+                새 폴더를 만들어 저장된 컷을 정리하세요
+              </p>
+            </div>
+          </div>
+
+          <!-- 저장된 컷 전체 섹션 (폴더 아래로 이동) -->
+          <section class="saved-cuts-section">
+            <div class="saved-cuts-header">
+              <h3 class="saved-cuts-title">저장된 컷 전체</h3>
+            </div>
+            <div id="saved-cuts-grid" class="saved-cuts-grid">
+              <!-- 저장된 컷 카드들이 여기에 동적으로 추가됨 -->
+            </div>
+            <div
+              id="saved-cuts-empty"
+              class="saved-cuts-empty-state"
+              style="display: none"
+            >
+              <div class="empty-state-illustration">🖼️</div>
+              <p class="empty-state-text">저장된 컷이 없습니다</p>
+              <p class="empty-state-hint">
+                피드에서 컷을 저장하면 여기에 표시됩니다
+              </p>
+            </div>
+          </section>
+
+          <!-- 폴더 내용 뷰 (기본적으로 숨김) -->
+          <div
+            id="folder-content-view"
+            class="folder-content-view"
+            style="display: none"
+          >
+            <div class="folder-content-header">
+              <button class="back-btn" onclick="backToFolderList()">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="21"
+                  height="20"
+                  viewBox="0 0 21 20"
+                  fill="none"
+                >
+                  <path
+                    d="M0.292893 9.29289C-0.0976311 9.68342 -0.0976311 10.3166 0.292893 10.7071L6.65685 17.0711C7.04738 17.4616 7.68054 17.4616 8.07107 17.0711C8.46159 16.6805 8.46159 16.0474 8.07107 15.6569L2.41421 10L8.07107 4.34315C8.46159 3.95262 8.46159 3.31946 8.07107 2.92893C7.68054 2.53841 7.04738 2.53841 6.65685 2.92893L0.292893 9.29289ZM19.7139 11C20.2662 11 20.7139 10.5523 20.7139 10C20.7139 9.44772 20.2662 9 19.7139 9V10V11ZM1 10V11H19.7139V10V9H1V10Z"
+                    fill="black"
+                  />
+                </svg>
+              </button>
+              <h3 id="folder-content-title" class="folder-content-title">
+                폴더 이름
+              </h3>
+              <button class="folder-menu-btn" onclick="openFolderMenu()">
+                ⋯
+              </button>
+            </div>
+            <div id="folder-cuts-grid" class="folder-cuts-grid">
+              <!-- 폴더 내 저장된 컷들이 여기에 표시됨 -->
+            </div>
+            <div
+              id="folder-cuts-empty"
+              class="folder-cuts-empty-state"
+              style="display: none"
+            >
+              <div class="empty-state-illustration">🖼️</div>
+              <p class="empty-state-text">이 폴더에 저장된 컷이 없습니다</p>
+              <p class="empty-state-hint">
+                피드에서 컷을 저장하면 여기에 표시됩니다
+              </p>
+            </div>
+          </div>
+        </section>
       </div>
 
-      <!-- ========================= -->
-      <!--  TAB 1 : MY MOOD          -->
-      <!-- ========================= -->
-      <section id="tab-feed" class="tab-content active">
-        <section id="postList" class="feed-grid">
-          <div class="feed-item add-btn">+</div>
-          <div class="feed-item"></div>
-          <div class="feed-item"></div>
-          <div class="feed-item"></div>
-        </section>
-      </section>
+      <!-- 하단 탭바 (고정) -->
+      <div id="tabbar"></div>
 
       <!-- ========================= -->
-      <!--  TAB 2 : MY               -->
+      <!-- 모달들 -->
       <!-- ========================= -->
-      <section id="tab-my" class="tab-content">
-        <!-- MY FEED 요약 -->
-        <div class="section-title-row">
-          <p>MY FEED</p>
-          <button class="more">더보기</button>
-        </div>
 
-        <div class="myfeed-grid">
-          <div class="myfeed-thumb"><img src="/public/assets/random/스크린샷 2025-12-09 14.56.01.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
-          <div class="myfeed-thumb"><img src="/public/assets/random/스크린샷 2025-12-09 14.56.01.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
-          <div class="myfeed-thumb"><img src="/public/assets/random/스크린샷 2025-12-09 14.56.01.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
-        </div>
-
-        <!-- 취향 분석 -->
-        <div class="section-title-row">
-          <p>내 취향 분석</p>
-          <button class="more">더보기</button>
-        </div>
-
-        <div class="taste-box">
-          <div class="taste-row">
-            <span>로맨스</span>
-            <div class="bar">
-              <div class="bar-fill" style="width: 57%"></div>
-            </div>
-            <span class="percent">57%</span>
-          </div>
-
-          <div class="taste-row">
-            <span>스릴러</span>
-            <div class="bar">
-              <div class="bar-fill" style="width: 57%"></div>
-            </div>
-            <span class="percent">57%</span>
-          </div>
-
-          <div class="taste-row">
-            <span>일상</span>
-            <div class="bar">
-              <div class="bar-fill" style="width: 57%"></div>
-            </div>
-            <span class="percent">57%</span>
-          </div>
-        </div>
-
-        <!-- 구매 / 찜 / 댓글 내역: 더미 -->
-        <div class="section-title-row">
-          <p>구매 내역</p>
-        </div>
-        <p class="empty-box">최근 구매 내역이 없습니다.</p>
-
-        <div class="section-title-row">
-          <p>찜한 내역</p>
-        </div>
-        <p class="empty-box">찜한 작품이 없습니다.</p>
-
-        <div class="section-title-row">
-          <p>댓글 내역</p>
-        </div>
-        <p class="empty-box">작성한 댓글이 없습니다.</p>
-      </section>
-    </div>
-
-    <!-- 하단 탭바 (고정) -->
-    <div id="tabbar"></div>
-
-
-    <!-- 댓글 모달 -->
-    <div id="commentModal" class="comment-modal">
-      <div class="comment-modal-content">
-
-        <!-- 댓글 섹션 -->
-        <div class="comment-section">
-          <div class="comment-modal-header">
-            <h2 class="comment-count">36개의 댓글</h2>
-            <button class="comment-modal-close" onclick="closeCommentModal()">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M18 6L6 18M6 6L18 18" stroke="#000000" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round" />
-              </svg>
+      <!-- 무드보드 생성 모달 (템플릿 선택) -->
+      <div id="moodboardCreateModal" class="moodboard-create-modal">
+        <div class="moodboard-create-content">
+          <div class="moodboard-create-header">
+            <h3>무드보드 만들기</h3>
+            <button class="modal-close" onclick="closeMoodboardCreateModal()">
+              ×
             </button>
           </div>
-          <div class="comment-list">
-            <div class="comment-item">
-              <div class="comment-avatar"><img src="/public/assets/random/d1.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
-              <div class="comment-content">
-                <div class="comment-header">
-                  <span class="comment-author">독자 이름</span>
-                  <span class="comment-date">2025.11.27</span>
+          <div class="moodboard-create-body">
+            <p class="create-prompt">어떻게 시작하시겠어요?</p>
+            <div class="create-options">
+              <button
+                class="create-option-btn"
+                onclick="startFreeformMoodboard()"
+              >
+                <div class="option-icon">🎨</div>
+                <div class="option-text">
+                  <div class="option-title">자유롭게 꾸미기</div>
+                  <div class="option-desc">빈 캔버스에서 시작</div>
                 </div>
-                <div class="comment-text">얼레리꼴레리 이거 봐라~</div>
-                <div class="comment-stats">
-                  <div class="comment-stat-item">
-                    <svg class="comment-stat-icon-heart" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                      viewBox="0 0 22 20" fill="none">
-                      <path
-                        d="M19.4949 2.31617C18.9986 1.81965 18.4093 1.42577 17.7608 1.15704C17.1122 0.888315 16.4171 0.75 15.715 0.75C15.013 0.75 14.3179 0.888315 13.6693 1.15704C13.0208 1.42577 12.4315 1.81965 11.9352 2.31617L10.9053 3.34615L9.87528 2.31617C8.87281 1.3137 7.51317 0.75052 6.09547 0.75052C4.67776 0.75052 3.31812 1.3137 2.31565 2.31617C1.31318 3.31864 0.75 4.67828 0.75 6.09599C0.75 7.51369 1.31318 8.87333 2.31565 9.8758L3.34563 10.9058L10.9053 18.4654L18.4649 10.9058L19.4949 9.8758C19.9914 9.37951 20.3853 8.79026 20.654 8.14171C20.9227 7.49315 21.061 6.79801 21.061 6.09599C21.061 5.39396 20.9227 4.69882 20.654 4.05027C20.3853 3.40171 19.9914 2.81246 19.4949 2.31617Z"
-                        stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <span>30</span>
-                  </div>
-                  <div class="comment-stat-item">
-                    <svg class="comment-stat-icon-comment" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                      fill="none">
-                      <path
-                        d="M18.4658 9.11582C18.4692 10.4148 18.1657 11.6963 17.58 12.8558C16.8856 14.2453 15.818 15.414 14.4969 16.231C13.1758 17.048 11.6533 17.481 10.1 17.4816C8.80097 17.485 7.51951 17.1815 6.36 16.5958L0.75 18.4658L2.62 12.8558C2.03433 11.6963 1.73082 10.4148 1.73421 9.11582C1.73481 7.5625 2.16787 6.04001 2.98487 4.71891C3.80187 3.3978 4.97055 2.33024 6.36 1.63582C7.51951 1.05014 8.80097 0.746641 10.1 0.750028H10.5921C12.6435 0.863204 14.5812 1.72908 16.0339 3.18187C17.4867 4.63466 18.3526 6.57228 18.4658 8.62371V9.11582Z"
-                        stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <span>1</span>
-                  </div>
+              </button>
+              <button class="create-option-btn" onclick="showTemplates()">
+                <div class="option-icon">📐</div>
+                <div class="option-text">
+                  <div class="option-title">템플릿으로 시작하기</div>
+                  <div class="option-desc">구조화된 레이아웃 선택</div>
                 </div>
-              </div>
-              <button class="comment-more-btn">
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
               </button>
             </div>
-            <div class="comment-item">
-              <div class="comment-avatar"><img src="/public/assets/random/스크린샷 2025-12-09 15.01.38.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
-              <div class="comment-content">
-                <div class="comment-header">
-                  <span class="comment-author">독자 이름</span>
-                  <span class="comment-date">2025.11.27</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 템플릿 선택 모달 -->
+      <div id="templateSelectModal" class="template-select-modal">
+        <div class="template-select-content">
+          <div class="template-select-header">
+            <button class="modal-back" onclick="backToCreateOptions()">
+              ←
+            </button>
+            <h3>템플릿 선택</h3>
+            <button class="modal-close" onclick="closeTemplateSelectModal()">
+              ×
+            </button>
+          </div>
+          <div class="template-select-body">
+            <div class="templates-grid">
+              <div class="template-card" onclick="selectTemplate('clean-grid')">
+                <div class="template-preview clean-grid-preview">
+                  <div class="template-grid-item"></div>
+                  <div class="template-grid-item"></div>
+                  <div class="template-grid-item"></div>
+                  <div class="template-grid-item"></div>
                 </div>
-                <div class="comment-text">얼레리꼴레리 이거 봐라~</div>
-                <div class="comment-stats">
-                  <div class="comment-stat-item">
-                    <svg class="comment-stat-icon-heart" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                      viewBox="0 0 22 20" fill="none">
-                      <path
-                        d="M19.4949 2.31617C18.9986 1.81965 18.4093 1.42577 17.7608 1.15704C17.1122 0.888315 16.4171 0.75 15.715 0.75C15.013 0.75 14.3179 0.888315 13.6693 1.15704C13.0208 1.42577 12.4315 1.81965 11.9352 2.31617L10.9053 3.34615L9.87528 2.31617C8.87281 1.3137 7.51317 0.75052 6.09547 0.75052C4.67776 0.75052 3.31812 1.3137 2.31565 2.31617C1.31318 3.31864 0.75 4.67828 0.75 6.09599C0.75 7.51369 1.31318 8.87333 2.31565 9.8758L3.34563 10.9058L10.9053 18.4654L18.4649 10.9058L19.4949 9.8758C19.9914 9.37951 20.3853 8.79026 20.654 8.14171C20.9227 7.49315 21.061 6.79801 21.061 6.09599C21.061 5.39396 20.9227 4.69882 20.654 4.05027C20.3853 3.40171 19.9914 2.81246 19.4949 2.31617Z"
-                        stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <span>30</span>
+                <div class="template-name">Clean Grid</div>
+              </div>
+              <div
+                class="template-card"
+                onclick="selectTemplate('editorial-vertical')"
+              >
+                <div class="template-preview editorial-vertical-preview">
+                  <div class="template-vertical-item large"></div>
+                  <div class="template-vertical-item small"></div>
+                  <div class="template-vertical-item small"></div>
+                </div>
+                <div class="template-name">Editorial Vertical</div>
+              </div>
+              <div class="template-card" onclick="selectTemplate('scrapbook')">
+                <div class="template-preview scrapbook-preview">
+                  <div class="template-scrap-item"></div>
+                  <div class="template-scrap-item"></div>
+                  <div class="template-scrap-item"></div>
+                  <div class="template-scrap-item"></div>
+                  <div class="template-scrap-item"></div>
+                </div>
+                <div class="template-name">Scrapbook</div>
+              </div>
+              <div
+                class="template-card"
+                onclick="selectTemplate('minimal-gallery')"
+              >
+                <div class="template-preview minimal-gallery-preview">
+                  <div class="template-gallery-item"></div>
+                  <div class="template-gallery-item"></div>
+                  <div class="template-gallery-item"></div>
+                </div>
+                <div class="template-name">Minimal Gallery</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 무드보드 편집 모달 -->
+      <div id="moodboardEditorModal" class="moodboard-editor-modal">
+        <div class="moodboard-editor-content">
+          <div class="moodboard-editor-header">
+            <button
+              class="editor-btn editor-btn-back"
+              onclick="closeMoodboardEditor()"
+              title="뒤로가기"
+            >
+              ←
+            </button>
+            <input
+              type="text"
+              id="editor-title-input"
+              class="editor-title-input"
+              placeholder="무드보드 이름을 입력하세요"
+              value="새 무드보드"
+              style="
+                font-size: 18px;
+                font-weight: 600;
+                border: none;
+                background: transparent;
+                padding: 0;
+                width: 300px;
+                outline: none;
+              "
+            />
+            <div class="editor-actions">
+              <button
+                class="editor-btn editor-btn-undo"
+                onclick="undoLastAction()"
+                id="undoBtn"
+                title="되돌리기"
+                disabled
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2 8L8 2M2 8L8 14M2 8H14"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+              <button class="editor-btn" onclick="saveMoodboardEditor()">
+                저장
+              </button>
+              <button
+                class="editor-btn close-btn"
+                onclick="closeMoodboardEditor()"
+              >
+                닫기
+              </button>
+            </div>
+          </div>
+          <div class="moodboard-editor-body">
+            <div class="editor-sidebar">
+              <!-- 블록 스타일링 패널 (블록 선택 시 표시) -->
+              <div
+                id="block-style-panel"
+                class="sidebar-section block-style-panel"
+                style="display: none"
+              >
+                <h4>스타일</h4>
+                <div class="style-controls">
+                  <!-- 텍스트 블록 스타일 -->
+                  <div id="text-style-controls" style="display: none">
+                    <div class="style-control-item">
+                      <label>폰트</label>
+                      <select id="text-font-select" class="style-select">
+                        <option value="Pretendard, sans-serif">
+                          기본 폰트
+                        </option>
+                        <option value="'Gowun Batang', serif">고운 바탕</option>
+                        <option value="'Jua', sans-serif">주아</option>
+                        <option value="'Noto Sans KR', sans-serif">
+                          Noto Sans
+                        </option>
+                        <option value="'Nanum Gothic', sans-serif">
+                          나눔 고딕
+                        </option>
+                        <option value="'Nanum Myeongjo', serif">
+                          나눔 명조
+                        </option>
+                      </select>
+                    </div>
+                    <div class="style-control-item">
+                      <label>색상</label>
+                      <input
+                        type="color"
+                        id="text-color-picker"
+                        class="style-color-picker"
+                        value="#333333"
+                      />
+                    </div>
+                    <div class="style-control-item">
+                      <label>크기</label>
+                      <input
+                        type="range"
+                        id="text-size-slider"
+                        class="style-slider"
+                        min="12"
+                        max="72"
+                        value="18"
+                      />
+                      <span id="text-size-value">18px</span>
+                    </div>
+                    <div class="style-control-item">
+                      <label>이모티콘</label>
+                      <button
+                        class="style-btn"
+                        onclick="openEmojiPickerForSelectedBlock()"
+                      >
+                        이모티콘 추가
+                      </button>
+                    </div>
                   </div>
-                  <div class="comment-stat-item">
-                    <svg class="comment-stat-icon-comment" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                      fill="none">
-                      <path
-                        d="M18.4658 9.11582C18.4692 10.4148 18.1657 11.6963 17.58 12.8558C16.8856 14.2453 15.818 15.414 14.4969 16.231C13.1758 17.048 11.6533 17.481 10.1 17.4816C8.80097 17.485 7.51951 17.1815 6.36 16.5958L0.75 18.4658L2.62 12.8558C2.03433 11.6963 1.73082 10.4148 1.73421 9.11582C1.73481 7.5625 2.16787 6.04001 2.98487 4.71891C3.80187 3.3978 4.97055 2.33024 6.36 1.63582C7.51951 1.05014 8.80097 0.746641 10.1 0.750028H10.5921C12.6435 0.863204 14.5812 1.72908 16.0339 3.18187C17.4867 4.63466 18.3526 6.57228 18.4658 8.62371V9.11582Z"
-                        stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    <span>1</span>
+                  <!-- 이미지 블록 스타일 -->
+                  <div id="image-style-controls" style="display: none">
+                    <div class="style-control-item">
+                      <label>필터</label>
+                      <select id="image-filter-select" class="style-select">
+                        <option value="none">없음</option>
+                        <option value="grayscale(100%)">흑백</option>
+                        <option value="sepia(100%)">세피아</option>
+                        <option value="brightness(1.2)">밝게</option>
+                        <option value="brightness(0.8)">어둡게</option>
+                        <option value="contrast(1.3)">대비</option>
+                        <option value="saturate(1.5)">채도+</option>
+                        <option value="saturate(0.5)">채도-</option>
+                        <option value="blur(2px)">블러</option>
+                        <option value="hue-rotate(90deg)">색조</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
-              <button class="comment-more-btn">
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
+
+              <div class="sidebar-section">
+                <h4>폴더</h4>
+                <div id="editor-folder-list" class="editor-folder-list">
+                  <!-- 폴더 리스트 -->
+                </div>
+              </div>
+              <div class="sidebar-section">
+                <h4>저장된 컷</h4>
+                <div id="editor-cuts-grid" class="editor-cuts-grid">
+                  <!-- 선택된 폴더의 컷들 -->
+                </div>
+                <div
+                  id="editor-cuts-empty"
+                  class="editor-cuts-empty"
+                  style="display: none"
+                >
+                  <p>폴더를 선택하세요</p>
+                </div>
+              </div>
+            </div>
+            <div class="editor-canvas">
+              <div class="canvas-toolbar">
+                <button class="toolbar-btn" onclick="openAddBlockModal()">
+                  + 블록 추가
+                </button>
+                <button
+                  class="toolbar-btn"
+                  onclick="openBackgroundColorPicker()"
+                >
+                  배경색
+                </button>
+                <div class="toolbar-ratio-selector">
+                  <label
+                    for="canvas-ratio-select"
+                    style="font-size: 12px; margin-right: 4px"
+                    >비율:</label
+                  >
+                  <select
+                    id="canvas-ratio-select"
+                    class="toolbar-select"
+                    onchange="applyCanvasRatio(this.value)"
+                  >
+                    <option value="16:9">가로형 (16:9)</option>
+                    <option value="1:1">정사각형 (1:1)</option>
+                    <option value="9:16">세로형 (9:16)</option>
+                  </select>
+                </div>
+                <button
+                  class="toolbar-btn toolbar-tab-btn"
+                  onclick="openFontPickerTab()"
+                  id="fontTabBtn"
+                >
+                  폰트
+                </button>
+                <button
+                  class="toolbar-btn toolbar-tab-btn"
+                  onclick="openEmojiPickerTab()"
+                  id="emojiTabBtn"
+                >
+                  이모티콘
+                </button>
+                <button
+                  class="toolbar-btn"
+                  onclick="setAsRepresentativeFromEditor()"
+                >
+                  대표 보드로 설정
+                </button>
+              </div>
+              <div id="editor-moodboard-canvas" class="editor-moodboard-canvas">
+                <!-- 무드보드 캔버스 -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 블록 추가 모달 -->
+      <div id="addBlockModal" class="block-modal">
+        <div class="block-modal-content">
+          <div class="block-modal-header">
+            <h3>블록 추가</h3>
+            <button class="block-modal-close" onclick="closeAddBlockModal()">
+              ×
+            </button>
+          </div>
+          <div class="block-type-options">
+            <button class="block-type-btn" onclick="addImageBlock()">
+              <span class="block-type-icon">🖼️</span>
+              <span>이미지 블록</span>
+            </button>
+            <button class="block-type-btn" onclick="addTextBlock()">
+              <span class="block-type-icon">📝</span>
+              <span>텍스트 블록</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 폴더 메뉴 모달 -->
+      <div id="folderMenuModal" class="folder-menu-modal">
+        <div class="folder-menu-content">
+          <button class="folder-menu-item" onclick="renameCurrentFolder()">
+            이름 변경
+          </button>
+          <button class="folder-menu-item" onclick="toggleFolderPrivacy()">
+            공개/비공개
+          </button>
+          <button class="folder-menu-item" onclick="deleteCurrentFolder()">
+            삭제
+          </button>
+          <button class="folder-menu-item" onclick="closeFolderMenu()">
+            취소
+          </button>
+        </div>
+      </div>
+
+      <!-- 폴더 이름 모달 -->
+      <div id="folderNameModal" class="folder-name-modal">
+        <div class="folder-name-content">
+          <div class="folder-name-header">
+            <h3 id="folder-name-title">폴더 이름</h3>
+            <button class="folder-name-close" onclick="closeFolderNameModal()">
+              ×
+            </button>
+          </div>
+          <div class="folder-name-body">
+            <div class="folder-emoji-selector" style="margin-bottom: 16px">
+              <label
+                style="
+                  display: block;
+                  margin-bottom: 8px;
+                  font-size: 14px;
+                  color: #666;
+                "
+                >이모티콘 선택:</label
+              >
+              <div
+                class="emoji-options"
+                style="
+                  display: flex;
+                  gap: 8px;
+                  flex-wrap: wrap;
+                  margin-bottom: 8px;
+                "
+              >
+                <button
+                  type="button"
+                  class="emoji-option"
+                  data-emoji="📁"
+                  onclick="selectFolderEmoji('📁')"
+                  style="
+                    font-size: 24px;
+                    padding: 8px;
+                    border: 2px solid #ddd;
+                    background: white;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  "
+                >
+                  📁
+                </button>
+                <button
+                  type="button"
+                  class="emoji-option"
+                  data-emoji="📂"
+                  onclick="selectFolderEmoji('📂')"
+                  style="
+                    font-size: 24px;
+                    padding: 8px;
+                    border: 2px solid #ddd;
+                    background: white;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  "
+                >
+                  📂
+                </button>
+                <button
+                  type="button"
+                  class="emoji-option"
+                  data-emoji="🗂️"
+                  onclick="selectFolderEmoji('🗂️')"
+                  style="
+                    font-size: 24px;
+                    padding: 8px;
+                    border: 2px solid #ddd;
+                    background: white;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  "
+                >
+                  🗂️
+                </button>
+                <button
+                  type="button"
+                  class="emoji-option"
+                  data-emoji="💼"
+                  onclick="selectFolderEmoji('💼')"
+                  style="
+                    font-size: 24px;
+                    padding: 8px;
+                    border: 2px solid #ddd;
+                    background: white;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  "
+                >
+                  💼
+                </button>
+                <button
+                  type="button"
+                  class="emoji-option"
+                  data-emoji="🎨"
+                  onclick="selectFolderEmoji('🎨')"
+                  style="
+                    font-size: 24px;
+                    padding: 8px;
+                    border: 2px solid #ddd;
+                    background: white;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  "
+                >
+                  🎨
+                </button>
+                <button
+                  type="button"
+                  class="emoji-option"
+                  data-emoji="❤️"
+                  onclick="selectFolderEmoji('❤️')"
+                  style="
+                    font-size: 24px;
+                    padding: 8px;
+                    border: 2px solid #ddd;
+                    background: white;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  "
+                >
+                  ❤️
+                </button>
+                <button
+                  type="button"
+                  class="emoji-option"
+                  data-emoji="⭐"
+                  onclick="selectFolderEmoji('⭐')"
+                  style="
+                    font-size: 24px;
+                    padding: 8px;
+                    border: 2px solid #ddd;
+                    background: white;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  "
+                >
+                  ⭐
+                </button>
+                <button
+                  type="button"
+                  class="emoji-option"
+                  data-emoji="🔥"
+                  onclick="selectFolderEmoji('🔥')"
+                  style="
+                    font-size: 24px;
+                    padding: 8px;
+                    border: 2px solid #ddd;
+                    background: white;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                  "
+                >
+                  🔥
+                </button>
+              </div>
+              <div
+                class="selected-emoji-display"
+                style="text-align: center; font-size: 32px; padding: 8px"
+              >
+                <span id="selectedFolderEmoji">📁</span>
+              </div>
+            </div>
+            <input
+              type="text"
+              id="folderNameInput"
+              class="folder-name-input"
+              placeholder="폴더 이름을 입력하세요"
+            />
+            <div class="folder-name-actions">
+              <button class="folder-name-btn" onclick="saveFolderName()">
+                저장
               </button>
+              <button
+                class="folder-name-btn cancel-btn"
+                onclick="closeFolderNameModal()"
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 무드보드 메뉴 모달 -->
+      <div id="moodboardMenuModal" class="moodboard-menu-modal">
+        <div class="moodboard-menu-content">
+          <button class="moodboard-menu-item" data-action="edit">편집</button>
+          <button class="moodboard-menu-item" data-action="set-representative">
+            대표 보드로 설정
+          </button>
+          <button class="moodboard-menu-item" data-action="toggle-privacy">
+            공개/비공개
+          </button>
+          <button class="moodboard-menu-item" data-action="hide">숨기기</button>
+          <button class="moodboard-menu-item danger" data-action="delete">
+            삭제
+          </button>
+          <button class="moodboard-menu-item" data-action="cancel">취소</button>
+        </div>
+      </div>
+
+      <!-- 텍스트 색상 선택 모달 -->
+      <div id="textColorModal" class="text-style-modal">
+        <div class="text-style-modal-content">
+          <div class="text-style-modal-header">
+            <h3>텍스트 색상</h3>
+            <button
+              class="text-style-modal-close"
+              onclick="closeTextColorModal()"
+            >
+              ×
+            </button>
+          </div>
+          <div class="color-picker-grid">
+            <div
+              class="color-option"
+              data-color="#000000"
+              style="background: #000000"
+            ></div>
+            <div
+              class="color-option"
+              data-color="#ffffff"
+              style="background: #ffffff; border: 1px solid #ddd"
+            ></div>
+            <div
+              class="color-option"
+              data-color="#ff5e00"
+              style="background: #ff5e00"
+            ></div>
+            <div
+              class="color-option"
+              data-color="#ff4444"
+              style="background: #ff4444"
+            ></div>
+            <div
+              class="color-option"
+              data-color="#ff6b9d"
+              style="background: #ff6b9d"
+            ></div>
+            <div
+              class="color-option"
+              data-color="#ffa500"
+              style="background: #ffa500"
+            ></div>
+            <div
+              class="color-option"
+              data-color="#ffd700"
+              style="background: #ffd700"
+            ></div>
+            <div
+              class="color-option"
+              data-color="#90ee90"
+              style="background: #90ee90"
+            ></div>
+            <div
+              class="color-option"
+              data-color="#87ceeb"
+              style="background: #87ceeb"
+            ></div>
+            <div
+              class="color-option"
+              data-color="#9370db"
+              style="background: #9370db"
+            ></div>
+            <div
+              class="color-option"
+              data-color="#ff69b4"
+              style="background: #ff69b4"
+            ></div>
+            <div
+              class="color-option"
+              data-color="#ffb6c1"
+              style="background: #ffb6c1"
+            ></div>
+          </div>
+          <div
+            class="color-input-wrapper"
+            style="
+              margin-top: 16px;
+              padding-top: 16px;
+              border-top: 1px solid #eee;
+            "
+          >
+            <label
+              style="
+                display: block;
+                margin-bottom: 8px;
+                font-size: 14px;
+                font-weight: 500;
+              "
+              >커스텀 색상</label
+            >
+            <input
+              type="color"
+              id="customColorInput"
+              class="color-input"
+              value="#333333"
+              style="
+                width: 100%;
+                height: 40px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                cursor: pointer;
+              "
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 텍스트 폰트 선택 모달 -->
+      <div id="textFontModal" class="text-style-modal">
+        <div class="text-style-modal-content">
+          <div class="text-style-modal-header">
+            <h3>텍스트 폰트</h3>
+            <button
+              class="text-style-modal-close"
+              onclick="closeTextFontModal()"
+            >
+              ×
+            </button>
+          </div>
+          <div class="font-options">
+            <div
+              class="font-option"
+              data-font="Pretendard, sans-serif"
+              style="font-family: 'Pretendard', sans-serif"
+            >
+              기본 폰트
+            </div>
+            <div
+              class="font-option"
+              data-font="'Noto Sans KR', sans-serif"
+              style="font-family: 'Noto Sans KR', sans-serif"
+            >
+              노토 산스
+            </div>
+            <div
+              class="font-option"
+              data-font="'Nanum Gothic', sans-serif"
+              style="font-family: 'Nanum Gothic', sans-serif"
+            >
+              나눔 고딕
+            </div>
+            <div
+              class="font-option"
+              data-font="'Nanum Pen Script', cursive"
+              style="font-family: 'Nanum Pen Script', cursive"
+            >
+              나눔 펜체
+            </div>
+            <div
+              class="font-option"
+              data-font="'Gamja Flower', cursive"
+              style="font-family: 'Gamja Flower', cursive"
+            >
+              감자꽃
+            </div>
+            <div
+              class="font-option"
+              data-font="'Dongle', sans-serif"
+              style="font-family: 'Dongle', sans-serif"
+            >
+              동글
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 텍스트 폰트 선택 모달 -->
+      <div id="textFontModal" class="text-style-modal">
+        <div class="text-style-modal-content">
+          <div class="text-style-modal-header">
+            <h3>텍스트 폰트</h3>
+            <button
+              class="text-style-modal-close"
+              onclick="closeTextFontModal()"
+            >
+              ×
+            </button>
+          </div>
+          <div class="font-options">
+            <div
+              class="font-option"
+              data-font="Pretendard, sans-serif"
+              style="font-family: 'Pretendard', sans-serif"
+            >
+              기본 폰트
+            </div>
+            <div
+              class="font-option"
+              data-font="'Noto Sans KR', sans-serif"
+              style="font-family: 'Noto Sans KR', sans-serif"
+            >
+              노토 산스
+            </div>
+            <div
+              class="font-option"
+              data-font="'Nanum Gothic', sans-serif"
+              style="font-family: 'Nanum Gothic', sans-serif"
+            >
+              나눔 고딕
+            </div>
+            <div
+              class="font-option"
+              data-font="'Nanum Pen Script', cursive"
+              style="font-family: 'Nanum Pen Script', cursive"
+            >
+              나눔 펜체
+            </div>
+            <div
+              class="font-option"
+              data-font="'Gamja Flower', cursive"
+              style="font-family: 'Gamja Flower', cursive"
+            >
+              감자꽃
+            </div>
+            <div
+              class="font-option"
+              data-font="'Dongle', sans-serif"
+              style="font-family: 'Dongle', sans-serif"
+            >
+              동글
+            </div>
+            <div
+              class="font-option"
+              data-font="'Gowun Batang', serif"
+              style="font-family: 'Gowun Batang', serif"
+            >
+              고운 바탕
+            </div>
+            <div
+              class="font-option"
+              data-font="'Jua', sans-serif"
+              style="font-family: 'Jua', sans-serif"
+            >
+              주아
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 배경 색상 선택 모달 -->
+      <div id="backgroundColorModal" class="text-style-modal">
+        <div class="text-style-modal-content">
+          <div class="text-style-modal-header">
+            <h3>배경 색상</h3>
+            <button
+              class="text-style-modal-close"
+              onclick="closeBackgroundColorModal()"
+            >
+              ×
+            </button>
+          </div>
+          <div class="color-picker-grid">
+            <div
+              class="bg-color-option"
+              data-color="#fafafa"
+              style="background: #fafafa; border: 1px solid #ddd"
+            ></div>
+            <div
+              class="bg-color-option"
+              data-color="#ffffff"
+              style="background: #ffffff; border: 1px solid #ddd"
+            ></div>
+            <div
+              class="bg-color-option"
+              data-color="#ffe5e5"
+              style="background: #ffe5e5"
+            ></div>
+            <div
+              class="bg-color-option"
+              data-color="#fff5e5"
+              style="background: #fff5e5"
+            ></div>
+            <div
+              class="bg-color-option"
+              data-color="#fffce5"
+              style="background: #fffce5"
+            ></div>
+            <div
+              class="bg-color-option"
+              data-color="#e5ffe5"
+              style="background: #e5ffe5"
+            ></div>
+            <div
+              class="bg-color-option"
+              data-color="#e5f5ff"
+              style="background: #e5f5ff"
+            ></div>
+            <div
+              class="bg-color-option"
+              data-color="#f0e5ff"
+              style="background: #f0e5ff"
+            ></div>
+            <div
+              class="bg-color-option"
+              data-color="#ffe5f5"
+              style="background: #ffe5f5"
+            ></div>
+            <div
+              class="bg-color-option"
+              data-color="#e8e8e8"
+              style="background: #e8e8e8"
+            ></div>
+            <div
+              class="bg-color-option"
+              data-color="#f5f5f5"
+              style="background: #f5f5f5"
+            ></div>
+            <div
+              class="bg-color-option"
+              data-color="#000000"
+              style="background: #000000"
+            ></div>
+          </div>
+          <div
+            class="color-input-wrapper"
+            style="
+              margin-top: 16px;
+              padding-top: 16px;
+              border-top: 1px solid #eee;
+            "
+          >
+            <label
+              style="
+                display: block;
+                margin-bottom: 8px;
+                font-size: 14px;
+                font-weight: 500;
+              "
+              >커스텀 색상</label
+            >
+            <input
+              type="color"
+              id="customBgColorInput"
+              class="color-input"
+              value="#fafafa"
+              style="
+                width: 100%;
+                height: 40px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                cursor: pointer;
+              "
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 이미지 필터 선택 모달 -->
+      <div id="imageFilterModal" class="text-style-modal">
+        <div class="text-style-modal-content">
+          <div class="text-style-modal-header">
+            <h3>이미지 필터</h3>
+            <button
+              class="text-style-modal-close"
+              onclick="closeImageFilterModal()"
+            >
+              ×
+            </button>
+          </div>
+          <div class="filter-options">
+            <div class="filter-option" data-filter="none">
+              <div class="filter-preview" style="filter: none">원본</div>
+            </div>
+            <div class="filter-option" data-filter="grayscale(100%)">
+              <div class="filter-preview" style="filter: grayscale(100%)">
+                흑백
+              </div>
+            </div>
+            <div class="filter-option" data-filter="sepia(100%)">
+              <div class="filter-preview" style="filter: sepia(100%)">
+                세피아
+              </div>
+            </div>
+            <div class="filter-option" data-filter="brightness(1.2)">
+              <div class="filter-preview" style="filter: brightness(1.2)">
+                밝게
+              </div>
+            </div>
+            <div class="filter-option" data-filter="brightness(0.8)">
+              <div class="filter-preview" style="filter: brightness(0.8)">
+                어둡게
+              </div>
+            </div>
+            <div class="filter-option" data-filter="contrast(1.3)">
+              <div class="filter-preview" style="filter: contrast(1.3)">
+                대비
+              </div>
+            </div>
+            <div class="filter-option" data-filter="saturate(1.5)">
+              <div class="filter-preview" style="filter: saturate(1.5)">
+                채도+
+              </div>
+            </div>
+            <div class="filter-option" data-filter="saturate(0.5)">
+              <div class="filter-preview" style="filter: saturate(0.5)">
+                채도-
+              </div>
+            </div>
+            <div class="filter-option" data-filter="blur(2px)">
+              <div class="filter-preview" style="filter: blur(2px)">블러</div>
+            </div>
+            <div class="filter-option" data-filter="hue-rotate(90deg)">
+              <div class="filter-preview" style="filter: hue-rotate(90deg)">
+                색조
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 이모티콘 선택 모달 -->
+      <div id="emojiPickerModal" class="text-style-modal">
+        <div class="text-style-modal-content">
+          <div class="text-style-modal-header">
+            <h3>이모티콘 선택</h3>
+            <button
+              class="text-style-modal-close"
+              onclick="closeEmojiPickerModal()"
+            >
+              ×
+            </button>
+          </div>
+          <div
+            class="emoji-picker-grid"
+            style="
+              display: grid;
+              grid-template-columns: repeat(8, 1fr);
+              gap: 8px;
+              padding: 10px;
+              max-height: 300px;
+              overflow-y: auto;
+            "
+          >
+            <!-- 이모티콘 목록 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 대표 무드보드 설정 모달 -->
+      <div
+        id="setRepresentativeModal"
+        class="set-representative-modal"
+        style="display: none"
+      >
+        <div class="set-representative-modal-content">
+          <div class="set-representative-modal-header">
+            <h3>대표 무드보드 설정</h3>
+            <button
+              class="set-representative-modal-close"
+              onclick="closeSetRepresentativeModal()"
+            >
+              ×
+            </button>
+          </div>
+          <div class="set-representative-modal-body">
+            <p>이 무드보드를 대표 무드보드로 설정하시겠습니까?</p>
+            <p class="set-representative-modal-hint">
+              대표 무드보드는 마이페이지 상단에 표시됩니다.
+            </p>
+          </div>
+          <div class="set-representative-modal-actions">
+            <button
+              class="set-representative-btn set-representative-btn-cancel"
+              onclick="closeSetRepresentativeModal(false)"
+            >
+              나중에
+            </button>
+            <button
+              class="set-representative-btn set-representative-btn-confirm"
+              onclick="confirmSetRepresentative()"
+            >
+              대표로 설정
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 대표 캔버스에 배치할 무드보드 선택 모달 -->
+      <div id="featuredMoodboardSettingsModal" class="featured-settings-modal">
+        <div class="featured-settings-modal-content">
+          <div class="featured-settings-modal-header">
+            <h3>대표 캔버스에 배치할 무드보드 선택</h3>
+            <button
+              class="featured-settings-modal-close"
+              onclick="closeFeaturedMoodboardSettingsModal()"
+            >
+              ×
+            </button>
+          </div>
+          <div class="featured-settings-modal-body">
+            <p class="featured-settings-hint" style="margin-bottom: 16px">
+              대표 캔버스에 배치할 무드보드를 선택하세요. 여러 무드보드를
+              자유롭게 배치할 수 있습니다.
+            </p>
+            <div
+              id="featured-moodboard-selector"
+              class="featured-moodboard-selector"
+            >
+              <!-- 무드보드 목록이 여기에 동적으로 추가됨 -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 대표 캔버스 편집기 모달 -->
+      <div id="featuredCanvasEditorModal" class="featured-canvas-editor-modal">
+        <div class="featured-canvas-editor-content">
+          <div class="featured-canvas-editor-header">
+            <button
+              class="featured-canvas-editor-back"
+              onclick="closeFeaturedCanvasEditor()"
+              title="뒤로가기"
+            >
+              ←
+            </button>
+            <h3>대표 캔버스 편집</h3>
+            <button
+              class="featured-canvas-editor-close"
+              onclick="closeFeaturedCanvasEditor()"
+              title="닫기"
+            >
+              ×
+            </button>
+          </div>
+          <div class="featured-canvas-editor-body">
+            <!-- 비율 선택 툴바 -->
+            <div class="featured-canvas-ratio-toolbar">
+              <label style="font-size: 12px; margin-right: 8px">비율:</label>
+              <select
+                id="featured-canvas-ratio-select"
+                class="featured-canvas-ratio-select"
+                onchange="applyFeaturedCanvasRatio(this.value)"
+              >
+                <option value="9:16">세로형 (9:16)</option>
+                <option value="1:1">정사각형 (1:1)</option>
+                <option value="16:9">가로형 (16:9)</option>
+              </select>
+            </div>
+            <!-- 템플릿 선택 툴바 -->
+            <div class="featured-canvas-template-toolbar">
+              <label style="font-size: 12px; margin-right: 8px">템플릿:</label>
+              <select
+                id="featured-canvas-template-select"
+                class="featured-canvas-template-select"
+                onchange="applyFeaturedCanvasTemplate(this.value)"
+              >
+                <option value="none">없음</option>
+                <option value="clean-grid">Clean Grid</option>
+                <option value="editorial-vertical">Editorial Vertical</option>
+                <option value="scrapbook">Scrapbook</option>
+                <option value="minimal-gallery">Minimal Gallery</option>
+              </select>
+            </div>
+            <!-- 캔버스 래퍼 -->
+            <div id="featured-canvas-wrapper" class="featured-canvas-wrapper">
+              <div class="featured-canvas" id="featured-canvas">
+                <!-- 배치된 무드보드들이 여기에 draggable 블록으로 추가됨 -->
+                <!-- 템플릿 가이드 박스가 여기에 표시됨 -->
+              </div>
+            </div>
+            <div class="featured-canvas-toolbar">
+              <button
+                class="canvas-toolbar-btn"
+                onclick="openFeaturedMoodboardSettingsModal()"
+              >
+                + 무드보드 추가
+              </button>
+            </div>
+          </div>
+          <div class="featured-canvas-editor-actions">
+            <button
+              class="featured-settings-btn featured-settings-btn-cancel"
+              onclick="closeFeaturedCanvasEditor()"
+            >
+              취소
+            </button>
+            <button
+              class="featured-settings-btn featured-settings-btn-save"
+              onclick="saveFeaturedCanvasLayout()"
+            >
+              저장
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Modal (기존 유지) -->
+      <div id="settingsModal" class="settings-modal">
+        <div class="settings-modal-content">
+          <div class="settings-modal-header">
+            <h3>마이페이지 설정</h3>
+            <button class="settings-modal-close" onclick="closeSettingsModal()">
+              ×
+            </button>
+          </div>
+          <div class="settings-content">
+            <div class="settings-section">
+              <h4>프로필</h4>
+              <div class="settings-item">
+                <label>프로필 이미지</label>
+                <div class="profile-image-upload">
+                  <div
+                    class="profile-image-preview"
+                    id="profileImagePreview"
+                  ></div>
+                  <input
+                    type="file"
+                    id="profileImageInput"
+                    accept="image/*"
+                    class="file-input"
+                  />
+                  <button
+                    class="settings-btn"
+                    onclick="document.getElementById('profileImageInput').click()"
+                  >
+                    이미지 변경
+                  </button>
+                </div>
+              </div>
+              <div class="settings-item">
+                <label>닉네임</label>
+                <input
+                  type="text"
+                  id="profileNameInput"
+                  class="settings-input"
+                  placeholder="닉네임을 입력하세요"
+                />
+              </div>
+              <div class="settings-item">
+                <label>자기소개</label>
+                <textarea
+                  id="profileBioInput"
+                  class="settings-textarea"
+                  rows="3"
+                  placeholder="자기소개를 입력하세요"
+                ></textarea>
+              </div>
+              <div class="settings-item">
+                <button class="settings-btn" onclick="saveProfileSettings()">
+                  프로필 저장
+                </button>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <h4>무드보드 설정</h4>
+              <div class="settings-item">
+                <button
+                  class="settings-btn"
+                  onclick="setAsRepresentative(); closeSettingsModal();"
+                >
+                  대표 보드로 설정
+                </button>
+              </div>
+              <div class="settings-item">
+                <button
+                  class="settings-btn danger-btn"
+                  onclick="resetMoodboard()"
+                >
+                  무드보드 초기화
+                </button>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <h4>알림 설정</h4>
+              <div class="settings-item">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="notificationToggle" checked />
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-label">푸시 알림 받기</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <h4>계정</h4>
+              <div class="settings-item">
+                <button
+                  class="settings-btn danger-btn"
+                  onclick="handleLogout()"
+                >
+                  로그아웃
+                </button>
+              </div>
+              <div class="settings-item">
+                <button
+                  class="settings-btn danger-btn"
+                  onclick="handleDeleteAccount()"
+                >
+                  계정 삭제
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 댓글 더보기 옵션 모달 -->
-    <div id="commentMoreModal" class="comment-more-modal">
-      <div class="comment-more-modal-content">
-        <button class="comment-more-option">공유</button>
-        <div class="comment-more-divider"></div>
-        <button class="comment-more-option">댓글 신고</button>
-      </div>
-    </div>
-
-    <!-- 작가 더보기 옵션 모달 -->
-    <div id="CreatorMoreModal" class="CreatorMoreModal">
-      <div class="CreatorMoreModal-content">
-        <button class="CreatorMoreModal-option">공유</button>
-        <div class="CreatorMoreModal-divider"></div>
-        <button class="CreatorMoreModal-option">게시글 신고</button>
-        <div class="CreatorMoreModal-divider"></div>
-        <button class="CreatorMoreModal-option">게시글 차단</button>
-      </div>
-    </div>
-
-    <!-- 준비중인 기능 팝업 -->
-    <div id="comingSoonModal" class="coming-soon-modal">
-      <div class="coming-soon-modal-content">
-        <p class="coming-soon-modal-text">준비중인 기능입니다</p>
-        <button class="coming-soon-modal-close">확인</button>
-      </div>
-    </div>
-
-    <script>
-      /* ========================== 
-         Tabbar 로드
-      ========================== */
-      fetch("/public/components/tabbar.html")
-        .then((r) => r.text())
-        .then((html) => (document.getElementById("tabbar").innerHTML = html))
-        .catch((error) => console.error("Error fetching tabbar.html:", error));
-    </script>
-    <script src="/public/js/mypage_reader.js" defer></script>
-</body>
-
+    <!-- JavaScript -->
+    <script type="module" src="js/reader_auth.js"></script>
+    <script src="js/tabbar-init.js"></script>
+    <script type="module" src="js/mypage_reader.js"></script>
+  </body>
 </html>

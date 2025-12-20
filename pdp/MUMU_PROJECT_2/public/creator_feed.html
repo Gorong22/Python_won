@@ -1,338 +1,514 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>MUMU – Creator Feed</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MUMU – Creator Feed</title>
+    <link rel="stylesheet" href="css/tabbar.css" />
+    <link rel="stylesheet" href="css/creator_feed.css" />
+  </head>
 
-  <link rel="stylesheet" href="/public/css/tabbar.css" />
-  <link rel="stylesheet" href="/public/css/creator_feed.css" />
-</head>
+  <body>
+    <div class="app-frame">
+      <!-- 상단 고정 헤더 -->
+      <div id="header"></div>
 
-<body>
-  <div class="app-frame">
-    <!-- 상단 고정 헤더 -->
-    <div id="header"></div>
-
-    <!-- 스크롤 영역 -->
-    <div class="app-scroll">
-      <main class="page-container">
-        <!-- 상단 탭 -->
-        <div class="community-top-tabs">
-          <a href="/public/community.html" class="top-tab">게시글</a>
-          <a href="/public/creator_feed.html" class="top-tab active">작가 피드</a>
-        </div>
-
-        <!-- 카테고리 태그 -->
-        <div class="category-tags">
-          <span class="tag active">전체</span>
-          <span class="tag">판타지</span>
-          <span class="tag">액션</span>
-          <span class="tag">일상</span>
-          <span class="tag">스릴러</span>
-          <span class="tag">개그</span>
-        </div>
-
-        <!-- 팔로우한 작가 -->
-        <section class="follow-section">
-          <div class="follow-header">
-            <span class="follow-title">팔로우한 작가</span>
+      <!-- 스크롤 영역 -->
+      <div class="app-scroll">
+        <main class="page-container">
+          <!-- 상단 탭 -->
+          <div class="community-top-tabs">
+            <a href="community.html" class="top-tab">게시글</a>
+            <a href="creator_feed.html" class="top-tab active">작가 피드</a>
           </div>
 
-          <div class="follow-list-horizontal">
-            <div class="follow-card">
-              <div class="follow-card-avatar"><img src="/public/assets/random/스크린샷 2025-12-09 15.00.18.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
-              <div class="follow-card-name">작성자 이름</div>
-              <div class="follow-card-date">2025.11.27</div>
-            </div>
-            <div class="follow-card">
-              <div class="follow-card-avatar"><img src="/public/assets/random/스크린샷 2025-12-09 14.59.09.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
-              <div class="follow-card-name">작성자 이름</div>
-              <div class="follow-card-date">2025.11.27</div>
-            </div>
-            <div class="follow-card">
-              <div class="follow-card-avatar"><img src="/public/assets/random/i2.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
-              <div class="follow-card-name">작성자 이름</div>
-              <div class="follow-card-date">2025.11.27</div>
-            </div>
+          <!-- 카테고리 태그 -->
+          <div class="category-tags">
+            <span class="tag active">전체</span>
+            <span class="tag">판타지</span>
+            <span class="tag">액션</span>
+            <span class="tag">일상</span>
+            <span class="tag">스릴러</span>
+            <span class="tag">개그</span>
           </div>
-        </section>
 
-        <!-- 피드 제목 -->
-        <h3 class="creator-feed-title">피드</h3>
+          <!-- 팔로우한 작가 -->
+          <section class="follow-section">
+            <div class="follow-header">
+              <span class="follow-title">팔로우한 작가</span>
+            </div>
 
-        <!-- 피드 리스트 -->
-        <section class="creator-feed-list">
-          <!-- 카드 1 -->
-          <div class="creator-card">
-            <div class="creator-card-header">
-              <div class="creator-profile">
-                <div class="creator-profile-thumb"><img src="/public/assets/random/스크린샷 2025-12-09 14.59.09.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
-                <div class="creator-profile-info">
-                  <span class="creator-nickname">작성자 이름</span>
-                  <span class="creator-date">2025.11.27</span>
+            <div class="follow-list-horizontal">
+              <div class="follow-card">
+                <div class="follow-card-avatar">
+                  <img
+                    src="assets/random/스크린샷 2025-12-09 15.00.18.webp"
+                    loading="lazy"
+                    style="object-fit: cover; width: 100%; height: 100%"
+                    alt=""
+                  />
+                </div>
+                <div class="follow-card-name">작성자 이름</div>
+                <div class="follow-card-date">2025.11.27</div>
+              </div>
+              <div class="follow-card">
+                <div class="follow-card-avatar">
+                  <img
+                    src="assets/random/스크린샷 2025-12-09 14.59.09.webp"
+                    loading="lazy"
+                    style="object-fit: cover; width: 100%; height: 100%"
+                    alt=""
+                  />
+                </div>
+                <div class="follow-card-name">작성자 이름</div>
+                <div class="follow-card-date">2025.11.27</div>
+              </div>
+              <div class="follow-card">
+                <div class="follow-card-avatar">
+                  <img
+                    src="assets/random/i2.webp"
+                    loading="lazy"
+                    style="object-fit: cover; width: 100%; height: 100%"
+                    alt=""
+                  />
+                </div>
+                <div class="follow-card-name">작성자 이름</div>
+                <div class="follow-card-date">2025.11.27</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 피드 제목 -->
+          <h3 class="creator-feed-title">피드</h3>
+
+          <!-- 피드 리스트 -->
+          <section class="creator-feed-list">
+            <!-- 카드 1 -->
+            <div class="creator-card">
+              <div class="creator-card-header">
+                <div class="creator-profile">
+                  <div class="creator-profile-thumb">
+                    <img
+                      src="assets/random/스크린샷 2025-12-09 14.59.09.webp"
+                      loading="lazy"
+                      style="object-fit: cover; width: 100%; height: 100%"
+                      alt=""
+                    />
+                  </div>
+                  <div class="creator-profile-info">
+                    <span class="creator-nickname">작성자 이름</span>
+                    <span class="creator-date">2025.11.27</span>
+                  </div>
+                </div>
+                <div class="creator-header-right">
+                  <button class="creator-follow-btn">팔로우</button>
+                  <button class="creator-more-btn">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                  </button>
                 </div>
               </div>
-              <div class="creator-header-right">
-                <button class="creator-follow-btn">팔로우</button>
-                <button class="creator-more-btn">
-                  <div class="dot"></div>
-                  <div class="dot"></div>
-                  <div class="dot"></div>
-                </button>
+
+              <div class="creator-work-title">얼레리꼴레리</div>
+              <div class="creator-desc">훌라훌라 짱구야 노올자~~</div>
+
+              <div class="creator-tags">
+                <span>액션</span>
+                <span>판타지</span>
+                <span>개그</span>
               </div>
-            </div>
 
-            <div class="creator-work-title">얼레리꼴레리</div>
-            <div class="creator-desc">훌라훌라 짱구야 노올자~~</div>
-
-            <div class="creator-tags">
-              <span>액션</span>
-              <span>판타지</span>
-              <span>개그</span>
-            </div>
-
-            <div class="creator-feed-thumb"><img src="/public/assets/random/f3.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
-
-            <div class="creator-feed-stats">
-              <div class="stat-group">
-                <svg class="stat-icon-heart" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                  viewBox="0 0 22 20" fill="none">
-                  <path
-                    d="M19.4949 2.31617C18.9986 1.81965 18.4093 1.42577 17.7608 1.15704C17.1122 0.888315 16.4171 0.75 15.715 0.75C15.013 0.75 14.3179 0.888315 13.6693 1.15704C13.0208 1.42577 12.4315 1.81965 11.9352 2.31617L10.9053 3.34615L9.87528 2.31617C8.87281 1.3137 7.51317 0.75052 6.09547 0.75052C4.67776 0.75052 3.31812 1.3137 2.31565 2.31617C1.31318 3.31864 0.75 4.67828 0.75 6.09599C0.75 7.51369 1.31318 8.87333 2.31565 9.8758L3.34563 10.9058L10.9053 18.4654L18.4649 10.9058L19.4949 9.8758C19.9914 9.37951 20.3853 8.79026 20.654 8.14171C20.9227 7.49315 21.061 6.79801 21.061 6.09599C21.061 5.39396 20.9227 4.69882 20.654 4.05027C20.3853 3.40171 19.9914 2.81246 19.4949 2.31617Z"
-                    stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                <span class="stat-item">30</span>
+              <div class="creator-feed-thumb">
+                <img
+                  src="assets/random/f3.webp"
+                  loading="lazy"
+                  style="object-fit: cover; width: 100%; height: 100%"
+                  alt=""
+                />
               </div>
-              <div class="stat-group">
-                <svg class="stat-icon-comment" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
-                  <path
-                    d="M18.4658 9.11582C18.4692 10.4148 18.1657 11.6963 17.58 12.8558C16.8856 14.2453 15.818 15.414 14.4969 16.231C13.1758 17.048 11.6533 17.481 10.1 17.4816C8.80097 17.485 7.51951 17.1815 6.36 16.5958L0.75 18.4658L2.62 12.8558C2.03433 11.6963 1.73082 10.4148 1.73421 9.11582C1.73481 7.5625 2.16787 6.04001 2.98487 4.71891C3.80187 3.3978 4.97055 2.33024 6.36 1.63582C7.51951 1.05014 8.80097 0.746641 10.1 0.750028H10.5921C12.6435 0.863204 14.5812 1.72908 16.0339 3.18187C17.4867 4.63466 18.3526 6.57228 18.4658 8.62371V9.11582Z"
-                    stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                <span class="stat-item">30</span>
-              </div>
-            </div>
-          </div>
 
-          <!-- 카드 2 -->
-          <div class="creator-card">
-            <div class="creator-card-header">
-              <div class="creator-profile">
-                <div class="creator-profile-thumb"><img src="/public/assets/random/f1.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
-                <div class="creator-profile-info">
-                  <span class="creator-nickname">작성자 이름</span>
-                  <span class="creator-date">2025.11.27</span>
-                </div>
-              </div>
-              <div class="creator-header-right">
-                <button class="creator-follow-btn">팔로우</button>
-                <button class="creator-more-btn">
-                  <div class="dot"></div>
-                  <div class="dot"></div>
-                  <div class="dot"></div>
-                </button>
-              </div>
-            </div>
-
-            <div class="creator-work-title">얼레리꼴레리</div>
-            <div class="creator-desc">훌라훌라 짱구야 노올자~~</div>
-
-            <div class="creator-tags">
-              <span>액션</span>
-              <span>판타지</span>
-              <span>개그</span>
-            </div>
-
-            <div class="creator-feed-thumb"><img src="/public/assets/random/f3.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
-
-            <div class="creator-feed-stats">
-              <div class="stat-group">
-                <svg class="stat-icon-heart" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                  viewBox="0 0 22 20" fill="none">
-                  <path
-                    d="M19.4949 2.31617C18.9986 1.81965 18.4093 1.42577 17.7608 1.15704C17.1122 0.888315 16.4171 0.75 15.715 0.75C15.013 0.75 14.3179 0.888315 13.6693 1.15704C13.0208 1.42577 12.4315 1.81965 11.9352 2.31617L10.9053 3.34615L9.87528 2.31617C8.87281 1.3137 7.51317 0.75052 6.09547 0.75052C4.67776 0.75052 3.31812 1.3137 2.31565 2.31617C1.31318 3.31864 0.75 4.67828 0.75 6.09599C0.75 7.51369 1.31318 8.87333 2.31565 9.8758L3.34563 10.9058L10.9053 18.4654L18.4649 10.9058L19.4949 9.8758C19.9914 9.37951 20.3853 8.79026 20.654 8.14171C20.9227 7.49315 21.061 6.79801 21.061 6.09599C21.061 5.39396 20.9227 4.69882 20.654 4.05027C20.3853 3.40171 19.9914 2.81246 19.4949 2.31617Z"
-                    stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                <span class="stat-item">30</span>
-              </div>
-              <div class="stat-group">
-                <svg class="stat-icon-comment" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
-                  <path
-                    d="M18.4658 9.11582C18.4692 10.4148 18.1657 11.6963 17.58 12.8558C16.8856 14.2453 15.818 15.414 14.4969 16.231C13.1758 17.048 11.6533 17.481 10.1 17.4816C8.80097 17.485 7.51951 17.1815 6.36 16.5958L0.75 18.4658L2.62 12.8558C2.03433 11.6963 1.73082 10.4148 1.73421 9.11582C1.73481 7.5625 2.16787 6.04001 2.98487 4.71891C3.80187 3.3978 4.97055 2.33024 6.36 1.63582C7.51951 1.05014 8.80097 0.746641 10.1 0.750028H10.5921C12.6435 0.863204 14.5812 1.72908 16.0339 3.18187C17.4867 4.63466 18.3526 6.57228 18.4658 8.62371V9.11582Z"
-                    stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                <span class="stat-item">30</span>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
-
-    <!-- 탭바 -->
-    <div id="tabbar"></div>
-  </div>
-
-  <!-- 작가 더보기 옵션 모달 -->
-  <div id="CreatorMoreModal" class="CreatorMoreModal">
-    <div class="CreatorMoreModal-content">
-      <button class="CreatorMoreModal-option">공유</button>
-      <div class="CreatorMoreModal-divider"></div>
-      <button class="CreatorMoreModal-option">게시글 신고</button>
-      <div class="CreatorMoreModal-divider"></div>
-      <button class="CreatorMoreModal-option">게시글 차단</button>
-    </div>
-  </div>
-
-  <!-- 준비중인 기능 팝업 -->
-  <div id="comingSoonModal" class="coming-soon-modal">
-    <div class="coming-soon-modal-content">
-      <p class="coming-soon-modal-text">준비중인 기능입니다</p>
-      <button class="coming-soon-modal-close">확인</button>
-    </div>
-  </div>
-
-  <!-- 댓글 더보기 옵션 모달 -->
-  <div id="commentMoreModal" class="comment-more-modal">
-    <div class="comment-more-modal-content">
-      <button class="comment-more-option">공유</button>
-      <div class="comment-more-divider"></div>
-      <button class="comment-more-option">댓글 신고</button>
-    </div>
-  </div>
-
-  <!-- 댓글 모달 -->
-  <div id="commentModal" class="comment-modal">
-    <div class="comment-modal-content">
-
-      <!-- 댓글 섹션 -->
-      <div class="comment-section">
-        <div class="comment-modal-header">
-          <h2 class="comment-count">36개의 댓글</h2>
-          <button class="comment-modal-close" onclick="closeCommentModal()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18 6L6 18M6 6L18 18" stroke="#000000" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-          </button>
-        </div>
-        <div class="comment-list">
-          <!-- 댓글 항목 1 -->
-          <div class="comment-item">
-            <div class="comment-avatar"><img src="/public/assets/random/b2.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
-            <div class="comment-content">
-              <div class="comment-header">
-                <span class="comment-author">독자 이름</span>
-                <span class="comment-date">2025.11.27</span>
-              </div>
-              <div class="comment-text">얼레리꼴레리 이거 봐라~</div>
-              <div class="comment-stats">
-                <div class="comment-stat-item">
-                  <svg class="comment-stat-icon-heart" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                    viewBox="0 0 22 20" fill="none">
+              <div class="creator-feed-stats">
+                <div class="stat-group">
+                  <svg
+                    class="stat-icon-heart"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 22 20"
+                    fill="none"
+                  >
                     <path
                       d="M19.4949 2.31617C18.9986 1.81965 18.4093 1.42577 17.7608 1.15704C17.1122 0.888315 16.4171 0.75 15.715 0.75C15.013 0.75 14.3179 0.888315 13.6693 1.15704C13.0208 1.42577 12.4315 1.81965 11.9352 2.31617L10.9053 3.34615L9.87528 2.31617C8.87281 1.3137 7.51317 0.75052 6.09547 0.75052C4.67776 0.75052 3.31812 1.3137 2.31565 2.31617C1.31318 3.31864 0.75 4.67828 0.75 6.09599C0.75 7.51369 1.31318 8.87333 2.31565 9.8758L3.34563 10.9058L10.9053 18.4654L18.4649 10.9058L19.4949 9.8758C19.9914 9.37951 20.3853 8.79026 20.654 8.14171C20.9227 7.49315 21.061 6.79801 21.061 6.09599C21.061 5.39396 20.9227 4.69882 20.654 4.05027C20.3853 3.40171 19.9914 2.81246 19.4949 2.31617Z"
-                      stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                      stroke="#A0A0A0"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
                   </svg>
-                  <span>30</span>
+                  <span class="stat-item">30</span>
                 </div>
-                <div class="comment-stat-item">
-                  <svg class="comment-stat-icon-comment" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                    fill="none">
+                <div class="stat-group">
+                  <svg
+                    class="stat-icon-comment"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
                     <path
                       d="M18.4658 9.11582C18.4692 10.4148 18.1657 11.6963 17.58 12.8558C16.8856 14.2453 15.818 15.414 14.4969 16.231C13.1758 17.048 11.6533 17.481 10.1 17.4816C8.80097 17.485 7.51951 17.1815 6.36 16.5958L0.75 18.4658L2.62 12.8558C2.03433 11.6963 1.73082 10.4148 1.73421 9.11582C1.73481 7.5625 2.16787 6.04001 2.98487 4.71891C3.80187 3.3978 4.97055 2.33024 6.36 1.63582C7.51951 1.05014 8.80097 0.746641 10.1 0.750028H10.5921C12.6435 0.863204 14.5812 1.72908 16.0339 3.18187C17.4867 4.63466 18.3526 6.57228 18.4658 8.62371V9.11582Z"
-                      stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                      stroke="#A0A0A0"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
                   </svg>
-                  <span>1</span>
+                  <span class="stat-item">30</span>
                 </div>
               </div>
             </div>
-            <button class="comment-more-btn">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-            </button>
-          </div>
-          <!-- 댓글 항목 2 -->
-          <div class="comment-item">
-            <div class="comment-avatar"><img src="/public/assets/random/d1.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
-            <div class="comment-content">
-              <div class="comment-header">
-                <span class="comment-author">독자 이름</span>
-                <span class="comment-date">2025.11.27</span>
+
+            <!-- 카드 2 -->
+            <div class="creator-card">
+              <div class="creator-card-header">
+                <div class="creator-profile">
+                  <div class="creator-profile-thumb">
+                    <img
+                      src="assets/random/f1.webp"
+                      loading="lazy"
+                      style="object-fit: cover; width: 100%; height: 100%"
+                      alt=""
+                    />
+                  </div>
+                  <div class="creator-profile-info">
+                    <span class="creator-nickname">작성자 이름</span>
+                    <span class="creator-date">2025.11.27</span>
+                  </div>
+                </div>
+                <div class="creator-header-right">
+                  <button class="creator-follow-btn">팔로우</button>
+                  <button class="creator-more-btn">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                  </button>
+                </div>
               </div>
-              <div class="comment-text">얼레리꼴레리 이거 봐라~</div>
-              <div class="comment-stats">
-                <div class="comment-stat-item">
-                  <svg class="comment-stat-icon-heart" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                    viewBox="0 0 22 20" fill="none">
+
+              <div class="creator-work-title">얼레리꼴레리</div>
+              <div class="creator-desc">훌라훌라 짱구야 노올자~~</div>
+
+              <div class="creator-tags">
+                <span>액션</span>
+                <span>판타지</span>
+                <span>개그</span>
+              </div>
+
+              <div class="creator-feed-thumb">
+                <img
+                  src="assets/random/f3.webp"
+                  loading="lazy"
+                  style="object-fit: cover; width: 100%; height: 100%"
+                  alt=""
+                />
+              </div>
+
+              <div class="creator-feed-stats">
+                <div class="stat-group">
+                  <svg
+                    class="stat-icon-heart"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 22 20"
+                    fill="none"
+                  >
                     <path
                       d="M19.4949 2.31617C18.9986 1.81965 18.4093 1.42577 17.7608 1.15704C17.1122 0.888315 16.4171 0.75 15.715 0.75C15.013 0.75 14.3179 0.888315 13.6693 1.15704C13.0208 1.42577 12.4315 1.81965 11.9352 2.31617L10.9053 3.34615L9.87528 2.31617C8.87281 1.3137 7.51317 0.75052 6.09547 0.75052C4.67776 0.75052 3.31812 1.3137 2.31565 2.31617C1.31318 3.31864 0.75 4.67828 0.75 6.09599C0.75 7.51369 1.31318 8.87333 2.31565 9.8758L3.34563 10.9058L10.9053 18.4654L18.4649 10.9058L19.4949 9.8758C19.9914 9.37951 20.3853 8.79026 20.654 8.14171C20.9227 7.49315 21.061 6.79801 21.061 6.09599C21.061 5.39396 20.9227 4.69882 20.654 4.05027C20.3853 3.40171 19.9914 2.81246 19.4949 2.31617Z"
-                      stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                      stroke="#A0A0A0"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
                   </svg>
-                  <span>30</span>
+                  <span class="stat-item">30</span>
                 </div>
-                <div class="comment-stat-item">
-                  <svg class="comment-stat-icon-comment" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                    fill="none">
+                <div class="stat-group">
+                  <svg
+                    class="stat-icon-comment"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
                     <path
                       d="M18.4658 9.11582C18.4692 10.4148 18.1657 11.6963 17.58 12.8558C16.8856 14.2453 15.818 15.414 14.4969 16.231C13.1758 17.048 11.6533 17.481 10.1 17.4816C8.80097 17.485 7.51951 17.1815 6.36 16.5958L0.75 18.4658L2.62 12.8558C2.03433 11.6963 1.73082 10.4148 1.73421 9.11582C1.73481 7.5625 2.16787 6.04001 2.98487 4.71891C3.80187 3.3978 4.97055 2.33024 6.36 1.63582C7.51951 1.05014 8.80097 0.746641 10.1 0.750028H10.5921C12.6435 0.863204 14.5812 1.72908 16.0339 3.18187C17.4867 4.63466 18.3526 6.57228 18.4658 8.62371V9.11582Z"
-                      stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                      stroke="#A0A0A0"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
                   </svg>
-                  <span>1</span>
+                  <span class="stat-item">30</span>
                 </div>
               </div>
             </div>
-            <button class="comment-more-btn">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
+          </section>
+        </main>
+      </div>
+
+      <!-- 탭바 -->
+      <div id="tabbar"></div>
+    </div>
+
+    <!-- 작가 더보기 옵션 모달 -->
+    <div id="CreatorMoreModal" class="CreatorMoreModal">
+      <div class="CreatorMoreModal-content">
+        <button class="CreatorMoreModal-option">공유</button>
+        <div class="CreatorMoreModal-divider"></div>
+        <button class="CreatorMoreModal-option">게시글 신고</button>
+        <div class="CreatorMoreModal-divider"></div>
+        <button class="CreatorMoreModal-option">게시글 차단</button>
+      </div>
+    </div>
+
+    <!-- 준비중인 기능 팝업 -->
+    <div id="comingSoonModal" class="coming-soon-modal">
+      <div class="coming-soon-modal-content">
+        <p class="coming-soon-modal-text">준비중인 기능입니다</p>
+        <button class="coming-soon-modal-close">확인</button>
+      </div>
+    </div>
+
+    <!-- 댓글 더보기 옵션 모달 -->
+    <div id="commentMoreModal" class="comment-more-modal">
+      <div class="comment-more-modal-content">
+        <button class="comment-more-option">공유</button>
+        <div class="comment-more-divider"></div>
+        <button class="comment-more-option">댓글 신고</button>
+      </div>
+    </div>
+
+    <!-- 댓글 모달 -->
+    <div id="commentModal" class="comment-modal">
+      <div class="comment-modal-content">
+        <!-- 댓글 섹션 -->
+        <div class="comment-section">
+          <div class="comment-modal-header">
+            <h2 class="comment-count">36개의 댓글</h2>
+            <button class="comment-modal-close" onclick="closeCommentModal()">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M18 6L6 18M6 6L18 18"
+                  stroke="#000000"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
             </button>
           </div>
-          <!-- 댓글 항목 3 -->
-          <div class="comment-item">
-            <div class="comment-avatar"><img src="/public/assets/random/f1.webp" loading="lazy" style="object-fit: cover; width: 100%; height: 100%;" alt="" /></div>
-            <div class="comment-content">
-              <div class="comment-header">
-                <span class="comment-author">작가 이름</span>
-                <span class="comment-date">2025.11.27</span>
+          <div class="comment-list">
+            <!-- 댓글 항목 1 -->
+            <div class="comment-item">
+              <div class="comment-avatar">
+                <img
+                  src="assets/random/b2.webp"
+                  loading="lazy"
+                  style="object-fit: cover; width: 100%; height: 100%"
+                  alt=""
+                />
               </div>
-              <div class="comment-text">얼레리꼴레리 이거 봐라~</div>
-              <div class="comment-stats">
-                <div class="comment-stat-item">
-                  <svg class="comment-stat-icon-heart" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                    viewBox="0 0 22 20" fill="none">
-                    <path
-                      d="M19.4949 2.31617C18.9986 1.81965 18.4093 1.42577 17.7608 1.15704C17.1122 0.888315 16.4171 0.75 15.715 0.75C15.013 0.75 14.3179 0.888315 13.6693 1.15704C13.0208 1.42577 12.4315 1.81965 11.9352 2.31617L10.9053 3.34615L9.87528 2.31617C8.87281 1.3137 7.51317 0.75052 6.09547 0.75052C4.67776 0.75052 3.31812 1.3137 2.31565 2.31617C1.31318 3.31864 0.75 4.67828 0.75 6.09599C0.75 7.51369 1.31318 8.87333 2.31565 9.8758L3.34563 10.9058L10.9053 18.4654L18.4649 10.9058L19.4949 9.8758C19.9914 9.37951 20.3853 8.79026 20.654 8.14171C20.9227 7.49315 21.061 6.79801 21.061 6.09599C21.061 5.39396 20.9227 4.69882 20.654 4.05027C20.3853 3.40171 19.9914 2.81246 19.4949 2.31617Z"
-                      stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                  <span>30</span>
+              <div class="comment-content">
+                <div class="comment-header">
+                  <span class="comment-author">독자 이름</span>
+                  <span class="comment-date">2025.11.27</span>
                 </div>
-                <div class="comment-stat-item">
-                  <svg class="comment-stat-icon-comment" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                    fill="none">
-                    <path
-                      d="M18.4658 9.11582C18.4692 10.4148 18.1657 11.6963 17.58 12.8558C16.8856 14.2453 15.818 15.414 14.4969 16.231C13.1758 17.048 11.6533 17.481 10.1 17.4816C8.80097 17.485 7.51951 17.1815 6.36 16.5958L0.75 18.4658L2.62 12.8558C2.03433 11.6963 1.73082 10.4148 1.73421 9.11582C1.73481 7.5625 2.16787 6.04001 2.98487 4.71891C3.80187 3.3978 4.97055 2.33024 6.36 1.63582C7.51951 1.05014 8.80097 0.746641 10.1 0.750028H10.5921C12.6435 0.863204 14.5812 1.72908 16.0339 3.18187C17.4867 4.63466 18.3526 6.57228 18.4658 8.62371V9.11582Z"
-                      stroke="#A0A0A0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                  <span>1</span>
+                <div class="comment-text">얼레리꼴레리 이거 봐라~</div>
+                <div class="comment-stats">
+                  <div class="comment-stat-item">
+                    <svg
+                      class="comment-stat-icon-heart"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 22 20"
+                      fill="none"
+                    >
+                      <path
+                        d="M19.4949 2.31617C18.9986 1.81965 18.4093 1.42577 17.7608 1.15704C17.1122 0.888315 16.4171 0.75 15.715 0.75C15.013 0.75 14.3179 0.888315 13.6693 1.15704C13.0208 1.42577 12.4315 1.81965 11.9352 2.31617L10.9053 3.34615L9.87528 2.31617C8.87281 1.3137 7.51317 0.75052 6.09547 0.75052C4.67776 0.75052 3.31812 1.3137 2.31565 2.31617C1.31318 3.31864 0.75 4.67828 0.75 6.09599C0.75 7.51369 1.31318 8.87333 2.31565 9.8758L3.34563 10.9058L10.9053 18.4654L18.4649 10.9058L19.4949 9.8758C19.9914 9.37951 20.3853 8.79026 20.654 8.14171C20.9227 7.49315 21.061 6.79801 21.061 6.09599C21.061 5.39396 20.9227 4.69882 20.654 4.05027C20.3853 3.40171 19.9914 2.81246 19.4949 2.31617Z"
+                        stroke="#A0A0A0"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <span>30</span>
+                  </div>
+                  <div class="comment-stat-item">
+                    <svg
+                      class="comment-stat-icon-comment"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                    >
+                      <path
+                        d="M18.4658 9.11582C18.4692 10.4148 18.1657 11.6963 17.58 12.8558C16.8856 14.2453 15.818 15.414 14.4969 16.231C13.1758 17.048 11.6533 17.481 10.1 17.4816C8.80097 17.485 7.51951 17.1815 6.36 16.5958L0.75 18.4658L2.62 12.8558C2.03433 11.6963 1.73082 10.4148 1.73421 9.11582C1.73481 7.5625 2.16787 6.04001 2.98487 4.71891C3.80187 3.3978 4.97055 2.33024 6.36 1.63582C7.51951 1.05014 8.80097 0.746641 10.1 0.750028H10.5921C12.6435 0.863204 14.5812 1.72908 16.0339 3.18187C17.4867 4.63466 18.3526 6.57228 18.4658 8.62371V9.11582Z"
+                        stroke="#A0A0A0"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <span>1</span>
+                  </div>
                 </div>
               </div>
+              <button class="comment-more-btn">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </button>
             </div>
-            <button class="comment-more-btn">
-              <div class="dot"></div>
-              <div class="dot"></div>
-              <div class="dot"></div>
-            </button>
+            <!-- 댓글 항목 2 -->
+            <div class="comment-item">
+              <div class="comment-avatar">
+                <img
+                  src="assets/random/d1.webp"
+                  loading="lazy"
+                  style="object-fit: cover; width: 100%; height: 100%"
+                  alt=""
+                />
+              </div>
+              <div class="comment-content">
+                <div class="comment-header">
+                  <span class="comment-author">독자 이름</span>
+                  <span class="comment-date">2025.11.27</span>
+                </div>
+                <div class="comment-text">얼레리꼴레리 이거 봐라~</div>
+                <div class="comment-stats">
+                  <div class="comment-stat-item">
+                    <svg
+                      class="comment-stat-icon-heart"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 22 20"
+                      fill="none"
+                    >
+                      <path
+                        d="M19.4949 2.31617C18.9986 1.81965 18.4093 1.42577 17.7608 1.15704C17.1122 0.888315 16.4171 0.75 15.715 0.75C15.013 0.75 14.3179 0.888315 13.6693 1.15704C13.0208 1.42577 12.4315 1.81965 11.9352 2.31617L10.9053 3.34615L9.87528 2.31617C8.87281 1.3137 7.51317 0.75052 6.09547 0.75052C4.67776 0.75052 3.31812 1.3137 2.31565 2.31617C1.31318 3.31864 0.75 4.67828 0.75 6.09599C0.75 7.51369 1.31318 8.87333 2.31565 9.8758L3.34563 10.9058L10.9053 18.4654L18.4649 10.9058L19.4949 9.8758C19.9914 9.37951 20.3853 8.79026 20.654 8.14171C20.9227 7.49315 21.061 6.79801 21.061 6.09599C21.061 5.39396 20.9227 4.69882 20.654 4.05027C20.3853 3.40171 19.9914 2.81246 19.4949 2.31617Z"
+                        stroke="#A0A0A0"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <span>30</span>
+                  </div>
+                  <div class="comment-stat-item">
+                    <svg
+                      class="comment-stat-icon-comment"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                    >
+                      <path
+                        d="M18.4658 9.11582C18.4692 10.4148 18.1657 11.6963 17.58 12.8558C16.8856 14.2453 15.818 15.414 14.4969 16.231C13.1758 17.048 11.6533 17.481 10.1 17.4816C8.80097 17.485 7.51951 17.1815 6.36 16.5958L0.75 18.4658L2.62 12.8558C2.03433 11.6963 1.73082 10.4148 1.73421 9.11582C1.73481 7.5625 2.16787 6.04001 2.98487 4.71891C3.80187 3.3978 4.97055 2.33024 6.36 1.63582C7.51951 1.05014 8.80097 0.746641 10.1 0.750028H10.5921C12.6435 0.863204 14.5812 1.72908 16.0339 3.18187C17.4867 4.63466 18.3526 6.57228 18.4658 8.62371V9.11582Z"
+                        stroke="#A0A0A0"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <span>1</span>
+                  </div>
+                </div>
+              </div>
+              <button class="comment-more-btn">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </button>
+            </div>
+            <!-- 댓글 항목 3 -->
+            <div class="comment-item">
+              <div class="comment-avatar">
+                <img
+                  src="assets/random/f1.webp"
+                  loading="lazy"
+                  style="object-fit: cover; width: 100%; height: 100%"
+                  alt=""
+                />
+              </div>
+              <div class="comment-content">
+                <div class="comment-header">
+                  <span class="comment-author">작가 이름</span>
+                  <span class="comment-date">2025.11.27</span>
+                </div>
+                <div class="comment-text">얼레리꼴레리 이거 봐라~</div>
+                <div class="comment-stats">
+                  <div class="comment-stat-item">
+                    <svg
+                      class="comment-stat-icon-heart"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 22 20"
+                      fill="none"
+                    >
+                      <path
+                        d="M19.4949 2.31617C18.9986 1.81965 18.4093 1.42577 17.7608 1.15704C17.1122 0.888315 16.4171 0.75 15.715 0.75C15.013 0.75 14.3179 0.888315 13.6693 1.15704C13.0208 1.42577 12.4315 1.81965 11.9352 2.31617L10.9053 3.34615L9.87528 2.31617C8.87281 1.3137 7.51317 0.75052 6.09547 0.75052C4.67776 0.75052 3.31812 1.3137 2.31565 2.31617C1.31318 3.31864 0.75 4.67828 0.75 6.09599C0.75 7.51369 1.31318 8.87333 2.31565 9.8758L3.34563 10.9058L10.9053 18.4654L18.4649 10.9058L19.4949 9.8758C19.9914 9.37951 20.3853 8.79026 20.654 8.14171C20.9227 7.49315 21.061 6.79801 21.061 6.09599C21.061 5.39396 20.9227 4.69882 20.654 4.05027C20.3853 3.40171 19.9914 2.81246 19.4949 2.31617Z"
+                        stroke="#A0A0A0"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <span>30</span>
+                  </div>
+                  <div class="comment-stat-item">
+                    <svg
+                      class="comment-stat-icon-comment"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                    >
+                      <path
+                        d="M18.4658 9.11582C18.4692 10.4148 18.1657 11.6963 17.58 12.8558C16.8856 14.2453 15.818 15.414 14.4969 16.231C13.1758 17.048 11.6533 17.481 10.1 17.4816C8.80097 17.485 7.51951 17.1815 6.36 16.5958L0.75 18.4658L2.62 12.8558C2.03433 11.6963 1.73082 10.4148 1.73421 9.11582C1.73481 7.5625 2.16787 6.04001 2.98487 4.71891C3.80187 3.3978 4.97055 2.33024 6.36 1.63582C7.51951 1.05014 8.80097 0.746641 10.1 0.750028H10.5921C12.6435 0.863204 14.5812 1.72908 16.0339 3.18187C17.4867 4.63466 18.3526 6.57228 18.4658 8.62371V9.11582Z"
+                        stroke="#A0A0A0"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    <span>1</span>
+                  </div>
+                </div>
+              </div>
+              <button class="comment-more-btn">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script src="/public/js/creator_feed.js" defer></script>
-</body>
-
+    <!-- Bottom Tab Bar -->
+    <div id="tabbar"></div>
+    <script src="js/tabbar-init.js"></script>
+    <script src="js/creator_feed.js" defer></script>
+  </body>
 </html>

@@ -1,59 +1,161 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>MUMU – 회원가입</title>
+    <link rel="stylesheet" href="css/tabbar.css" />
+    <style>
+      /* Mobile-first layout */
+      body {
+        margin: 0;
+        background: #000;
+        font-family: -apple-system, BlinkMacSystemFont, "Pretendard", sans-serif;
+      }
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>회원가입</title>
+      .app-frame {
+        width: 100%;
+        max-width: 402px;
+        margin: 0 auto;
+        background: #ffffff;
+        min-height: 100vh;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: calc(64px + env(safe-area-inset-bottom));
+        box-sizing: border-box;
+      }
 
-  <!-- CSS 경로 (public/css/) -->
-  <!-- <link rel="stylesheet" href="/public/css/global.css" />
-    <link rel="stylesheet" href="/public/css/layout.css" /> -->
-  <link rel="stylesheet" href="/public/css/signup.css" />
-</head>
+      .signup-container {
+        flex: 1;
+        padding: 40px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
 
-<body>
-  <div class="app-frame">
-    <main class="signup-container">
-      <h2 class="title">당신의 정보를 입력해주세요</h2>
+      .signup-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
 
-      <!-- 아이디 -->
-      <label class="label">아이디</label>
-      <input type="text" class="input" placeholder="아이디 입력" id="userId" />
+      .signup-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #000;
+        margin: 0 0 8px 0;
+      }
 
-      <!-- 비밀번호 -->
-      <label class="label">비밀번호</label>
-      <input type="password" class="input" placeholder="비밀번호 입력" id="password" />
+      .signup-subtitle {
+        font-size: 14px;
+        color: #666;
+        margin: 0;
+      }
 
-      <!-- 이름 -->
-      <label class="label">이름</label>
-      <input type="text" class="input" placeholder="이름을 입력해주세요" id="name" />
+      .role-selector {
+        width: 100%;
+        max-width: 320px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
 
-      <!-- 닉네임 -->
-      <label class="label">닉네임</label>
-      <input type="text" class="input" placeholder="닉네임을 입력해주세요" id="nickname" />
+      .role-btn {
+        width: 100%;
+        padding: 20px;
+        border: 2px solid #ddd;
+        border-radius: 12px;
+        background: #fff;
+        font-size: 18px;
+        font-weight: 600;
+        color: #000;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+      }
 
-      <!-- 나이 -->
-      <label class="label">나이</label>
-      <div class="birth-row">
-        <input type="number" class="birth-input" placeholder="년도" />
-        <input type="number" class="birth-input" placeholder="월" />
-        <input type="number" class="birth-input" placeholder="일" />
-      </div>
+      .role-btn:hover {
+        border-color: #ff5e00;
+        background: #fff5f0;
+      }
 
-      <!-- 성별 -->
-      <label class="label">성별</label>
-      <div class="gender-row">
-        <button type="button" class="gender-btn">남자</button>
-        <button type="button" class="gender-btn">여자</button>
-        <button type="button" class="gender-btn">알리지 않음</button>
-      </div>
+      .role-btn.selected {
+        border-color: #ff5e00;
+        background: #ff5e00;
+        color: #fff;
+      }
 
-      <button class="submit-btn" id="nextBtn">다음</button>
-    </main>
-  </div>
+      .login-link {
+        text-align: center;
+        margin-top: 24px;
+        font-size: 14px;
+        color: #666;
+      }
 
-  <script src="/public/js/signup.js" defer></script>
-</body>
+      .login-link a {
+        color: #ff5e00;
+        text-decoration: none;
+        font-weight: 500;
+      }
+    </style>
+  </head>
 
+  <body>
+    <div class="app-frame">
+      <main class="signup-container">
+        <div class="signup-header">
+          <h1 class="signup-title">회원가입</h1>
+          <p class="signup-subtitle">MUMU에서 시작하세요</p>
+        </div>
+
+        <div class="role-selector">
+          <button
+            class="role-btn"
+            id="readerBtn"
+            onclick="selectRole('reader')"
+          >
+            독자에요
+          </button>
+          <button
+            class="role-btn"
+            id="creatorBtn"
+            onclick="selectRole('creator')"
+          >
+            창작자에요
+          </button>
+        </div>
+
+        <div class="login-link">
+          이미 계정이 있으신가요? <a href="login.html">로그인</a>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      function selectRole(role) {
+        // Remove selected class from all buttons
+        document.getElementById("readerBtn").classList.remove("selected");
+        document.getElementById("creatorBtn").classList.remove("selected");
+
+        // Add selected class to clicked button
+        if (role === "reader") {
+          document.getElementById("readerBtn").classList.add("selected");
+          // Redirect to reader signup flow (Step 1: Terms)
+          setTimeout(() => {
+            window.location.href = "reader_signup_terms.html";
+          }, 300);
+        } else if (role === "creator") {
+          document.getElementById("creatorBtn").classList.add("selected");
+          // Redirect to creator studio
+          setTimeout(() => {
+            window.location.href = "creator_studio.html";
+          }, 300);
+        }
+      }
+    </script>
+  </body>
 </html>

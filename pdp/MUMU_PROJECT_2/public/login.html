@@ -2,69 +2,283 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MUMU – 회원가입</title>
-
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>MUMU – 로그인</title>
+    <link rel="stylesheet" href="css/tabbar.css" />
     <style>
-      /* 전체 화면 - 검은 배경 + 가운데 정렬 */
+      /* Mobile-first layout */
       body {
-        background: #000; /* 바깥 배경 검은색 */
         margin: 0;
-        padding: 0;
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        overflow: hidden;
-        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        background: #000;
+        font-family: -apple-system, BlinkMacSystemFont, "Pretendard", sans-serif;
       }
 
-      /* 폰 화면 사이즈 고정 */
-      .app-container {
-        width: 390px; /* 모든 기기에서 동일한 모바일 화면 */
+      .app-frame {
+        width: 100%;
+        max-width: 402px;
+        margin: 0 auto;
+        background: #ffffff;
         min-height: 100vh;
-        background: #fff;
-        padding: 24px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: calc(64px + env(safe-area-inset-bottom));
         box-sizing: border-box;
-        overflow-y: auto;
-        padding-top: env(safe-area-inset-top);
-        padding-bottom: env(safe-area-inset-bottom);
       }
 
-      /* 로고 박스 */
-      .logo-box {
-        width: 100%;
-        height: 150px;
-        background: #e4e4e4;
-        border-radius: 14px;
-        margin: 60px 0 40px;
+      .login-container {
+        flex: 1;
+        padding: 40px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
       }
 
-      /* 버튼 */
-      .signup-btn {
-        width: 100%;
-        padding: 16px 0;
-        border-radius: 10px;
-        border: 1px solid #dcdcdc;
-        font-size: 15px;
-        background: #fff;
-        color: #333;
+      .login-header {
         text-align: center;
-        margin-bottom: 14px;
+        margin-bottom: 40px;
+      }
+
+      .login-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #000;
+        margin: 0 0 8px 0;
+      }
+
+      .login-subtitle {
+        font-size: 14px;
+        color: #666;
+        margin: 0;
+      }
+
+      .login-form {
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        color: #000;
+        margin-bottom: 8px;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        box-sizing: border-box;
+        font-family: inherit;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: #ff5e00;
+      }
+
+      .login-btn {
+        width: 100%;
+        padding: 14px;
+        background: #ff5e00;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
         cursor: pointer;
+        margin-top: 8px;
+        transition: background 0.2s ease;
+      }
+
+      .login-btn:hover {
+        background: #e55500;
+      }
+
+      .login-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      .divider {
+        display: flex;
+        align-items: center;
+        margin: 24px 0;
+        color: #999;
+        font-size: 12px;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #eee;
+      }
+
+      .divider span {
+        padding: 0 16px;
+      }
+
+      .social-login {
+        width: 100%;
+        max-width: 320px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .social-btn {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #fff;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      .social-btn:hover {
+        background: #f5f5f5;
+      }
+
+      .creator-login-btn {
+        width: 100%;
+        max-width: 320px;
+        padding: 12px;
+        border: 1px solid #ff5e00;
+        border-radius: 8px;
+        background: #fff;
+        color: #ff5e00;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        margin-top: 12px;
+        transition: all 0.2s ease;
+      }
+
+      .creator-login-btn:hover {
+        background: #fff5f0;
+        border-color: #e55500;
+        color: #e55500;
+      }
+
+      .signup-link {
+        text-align: center;
+        margin-top: 24px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .signup-link a {
+        color: #ff5e00;
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .error-message {
+        background: #ffebee;
+        color: #c62828;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        margin-bottom: 20px;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
       }
     </style>
   </head>
 
   <body>
-    <div class="app-container">
-      <div class="logo-box"></div>
+    <div class="app-frame">
+      <main class="login-container">
+        <div class="login-header">
+          <h1 class="login-title">로그인</h1>
+          <p class="login-subtitle">MUMU에 오신 것을 환영합니다</p>
+        </div>
 
-      <div class="signup-btn">간편 회원가입</div>
-      <div class="signup-btn">SNS 연동</div>
-      <div class="signup-btn">SNS 연동</div>
-      <div class="signup-btn">SNS 연동</div>
+        <div class="error-message" id="errorMessage"></div>
+
+        <form class="login-form" id="loginForm">
+          <div class="form-group">
+            <label class="form-label" for="username">사용자명</label>
+            <input
+              type="text"
+              id="username"
+              class="form-input"
+              placeholder="사용자명을 입력하세요"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">비밀번호</label>
+            <input
+              type="password"
+              id="password"
+              class="form-input"
+              placeholder="비밀번호를 입력하세요"
+              required
+            />
+          </div>
+
+          <button type="submit" class="login-btn" id="loginBtn">로그인</button>
+        </form>
+
+        <div class="divider">
+          <span>또는</span>
+        </div>
+
+        <div class="social-login">
+          <button class="social-btn" onclick="handleSocialLogin('google')">
+            Google로 로그인
+          </button>
+          <button class="social-btn" onclick="handleSocialLogin('kakao')">
+            카카오로 로그인
+          </button>
+          <button class="social-btn" onclick="handleSocialLogin('naver')">
+            네이버로 로그인
+          </button>
+        </div>
+
+        <button
+          class="creator-login-btn"
+          onclick="window.location.href='login_creator.html'"
+        >
+          창작자로 로그인하기
+        </button>
+
+        <div class="signup-link">
+          계정이 없으신가요? <a href="signup.html">회원가입</a>
+        </div>
+      </main>
     </div>
+
+    <!-- Firebase Auth Module -->
+    <!-- reader_auth.js가 로드되면 자동으로 로그인 폼 이벤트를 바인딩합니다 -->
+    <script type="module" src="js/reader_auth.js"></script>
+
+    <!-- Social Login Handler (독립적으로 유지) -->
+    <script>
+      // Placeholder for social login
+      function handleSocialLogin(provider) {
+        alert(`${provider} 로그인은 준비 중입니다.`);
+      }
+    </script>
   </body>
 </html>

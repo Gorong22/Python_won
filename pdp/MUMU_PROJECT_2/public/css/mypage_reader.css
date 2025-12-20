@@ -9,7 +9,7 @@ body {
 
 .app-frame {
   width: 100%;
-  max-width: 402px;
+  max-width: 390px;
   margin: 0 auto;
   background: #ffffff;
   min-height: 100vh;
@@ -18,8 +18,25 @@ body {
   z-index: 1;
   display: flex;
   flex-direction: column;
-  padding-bottom: calc(91px + env(safe-area-inset-bottom));
+  padding-bottom: calc(64px + env(safe-area-inset-bottom));
   box-sizing: border-box;
+}
+
+/* Desktop: Center the mobile frame - 좌우 여백만, UI는 절대 늘어나지 않음 */
+@media (min-width: 391px) {
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px 0;
+  }
+
+  .app-frame {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+    max-width: 390px;
+    width: 390px;
+  }
 }
 
 /* ========================= */
@@ -61,47 +78,141 @@ body {
   min-height: 0;
 }
 
-/* ========================= */
-/* PROFILE                   */
-/* ========================= */
-.profile-box {
+/* MY MOOD 탭에서 스크롤 차단 - 하나의 완성된 장면으로 */
+body.my-mood-view {
+  height: 100vh;
+  overflow: hidden;
+}
+
+body.my-mood-view .app-frame {
+  height: 100vh;
+  overflow: hidden;
+}
+
+body.my-mood-view .app-scroll {
+  height: calc(100vh - 64px - env(safe-area-inset-bottom));
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
+#tab-mood.tab-content.active {
+  height: calc(100vh - 64px - env(safe-area-inset-bottom));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
   position: relative;
 }
 
-.profile-bg {
-  width: 100%;
-  height: 120px;
-  background: #e8e8e8;
-  background-image: url('../assets/images/profile-bg.jpg');
-  background-size: cover;
-  background-position: center;
+/* MY MOOD 탭 내부 섹션은 전체 높이 사용 */
+body.my-mood-view #tab-mood.tab-content.active .featured-moodboard-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  box-sizing: border-box;
+  min-height: 0;
 }
 
-.reader-mode-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  font-size: 14px;
-  padding: 6px 16px;
-  background-color: #ffffff90;
-  border: 1px solid #ffffff;
-  border-radius: 4px;
-  color: #FF5E00;
-  font-weight: 500;
-  z-index: 10;
+body.my-mood-view #tab-mood.tab-content.active .featured-header {
+  padding: 12px 20px;
+  margin-bottom: 0;
+  flex-shrink: 0;
+  border-bottom: 1px solid #eee;
+}
+
+body.my-mood-view #tab-mood.tab-content.active .featured-moodboard-preview {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  border-radius: 0;
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
+  background: #fafafa;
+}
+
+/* 다른 무드보드 섹션 */
+.other-moodboards-section {
+  padding: 20px;
+  background: #fff;
+  border-top: 1px solid #eee;
+}
+
+.other-moodboards-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.other-moodboards-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: #000;
+}
+
+.more-btn {
+  font-size: 12px;
+  color: #666;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.more-btn:hover {
+  color: #ff5e00;
+}
+
+.other-moodboards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.other-moodboard-item {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  background: #f5f5f5;
+}
+
+.other-moodboard-item:hover {
+  transform: scale(1.02);
+}
+
+.other-moodboard-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ========================= */
+/* PROFILE (최소화)          */
+/* ========================= */
+.profile-box {
+  position: relative;
+  padding: 16px 20px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
 }
 
 .profile-content {
-  margin-top: -45px;
-  padding: 20px;
+  margin-top: 0;
+  padding: 0;
   position: relative;
 }
 
 .profile-header-row {
   display: flex;
   align-items: center;
-  gap: 55px;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  margin-bottom: 12px;
 }
 
 .profile-avatar-wrapper {
@@ -111,20 +222,29 @@ body {
 }
 
 .profile-avatar {
-  width: 80px;
-  height: 80px;
+  width: 48px;
+  height: 48px;
   background: #ccc;
   border-radius: 50%;
   border: 2px solid #fff;
 }
 
 .setting-icon {
-  width: 17px;
-  height: 17px;
+  width: 20px;
+  height: 20px;
   position: absolute;
-  top: 0;
-  right: -20px;
+  top: -4px;
+  right: -4px;
   cursor: pointer;
+  transition: opacity 0.2s ease;
+  background: #fff;
+  border-radius: 50%;
+  padding: 2px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.setting-icon:hover {
+  opacity: 0.7;
 }
 
 .setting-icon img {
@@ -133,53 +253,42 @@ body {
   display: block;
 }
 
-.profile-follow {
-  display: flex;
-  align-items: center;
-  gap: 60px;
-  margin-top: 35px;
+.profile-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 0;
+  text-align: left;
 }
 
-.follow {
-  text-align: center;
+/* MY 탭에서 프로필 영역 우측 정렬 + 컴팩트하게 */
+#tab-my .profile-box {
+  padding: 12px 20px;
+}
+
+#tab-my .profile-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
+  align-items: flex-end;
+  text-align: right;
 }
 
-.follow-num {
-  font-size: 20px;
-  font-weight: 700;
-  color: #000;
-  line-height: 24px;
+#tab-my .profile-header-row {
+  justify-content: flex-end;
+  margin-bottom: 8px;
 }
 
-.follow-label {
-  color: #000;
-  font-size: 12px;
-  margin-top: 3px;
-  line-height: 15px;
+#tab-my .profile-name {
+  text-align: right;
+  margin-top: 4px;
 }
 
-.follow-line {
-  width: 1px;
-  height: 20px;
-  background: #000;
-  flex-shrink: 0;
+#tab-my .profile-stats {
+  text-align: right;
+  margin-top: 4px;
 }
 
-.follow-line .line {
-  width: 1px;
-  height: 20px;
-  background: #000;
-}
-
-.profile-name {
-  font-size: 18px;
-  font-weight: 600;
-  margin-top: 12px;
-  text-align: left;
+#tab-my .profile-desc {
+  text-align: right;
 }
 
 .tag-list {
@@ -224,12 +333,11 @@ body {
 }
 
 .tab.active {
-  color: #FF5E00;
+  color: #ff5e00;
   font-weight: 700;
   font-size: 20px;
-  border-bottom: 3px solid #FF5E00;
+  border-bottom: 3px solid #ff5e00;
 }
-
 
 /* ========================= */
 /* TAB CONTENT               */
@@ -241,6 +349,55 @@ body {
 .tab-content.active {
   display: block;
   padding: 20px;
+}
+
+/* ========================= */
+/* 새 무드보드 만들기 토글 (MY 탭 최상단 고정) */
+/* ========================= */
+.new-moodboard-toggle-section {
+  margin-bottom: 24px;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.new-moodboard-toggle-btn {
+  width: 100%;
+  padding: 16px 20px;
+  background: #fff;
+  border: 2px solid #ff5e00;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ff5e00;
+  box-sizing: border-box;
+}
+
+.new-moodboard-toggle-btn:hover {
+  background: #fff5f0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 94, 0, 0.15);
+}
+
+.new-moodboard-toggle-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(255, 94, 0, 0.1);
+}
+
+.toggle-btn-icon {
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.toggle-btn-text {
+  font-size: 16px;
+  font-weight: 600;
 }
 
 /* ========================= */
@@ -332,19 +489,23 @@ body {
 }
 
 .feed-card.with-gradient .feed-thumbnail::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 1) 100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 1) 100%
+  );
   opacity: 1;
   z-index: 1;
   border-radius: 4px;
 }
 
-.feed-card.with-gradient .feed-thumbnail>* {
+.feed-card.with-gradient .feed-thumbnail > * {
   position: relative;
   z-index: 2;
   border-radius: 4px;
@@ -604,14 +765,13 @@ body {
 .comment-modal-content {
   background: transparent;
   width: 100%;
-  max-width: 402px;
+  max-width: 390px;
   display: flex;
   flex-direction: column;
   position: relative;
   overflow: visible;
   margin: 0 auto;
 }
-
 
 .comment-section {
   background: #ffffff;
@@ -663,7 +823,6 @@ body {
   opacity: 0.6;
 }
 
-
 .comment-list {
   flex: 1;
   overflow-y: auto;
@@ -709,7 +868,7 @@ body {
 }
 
 .comment-item::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -25px;
   left: 0;
@@ -800,12 +959,12 @@ body {
 }
 
 .comment-stat-icon-heart.active {
-  color: #FF5E00;
+  color: #ff5e00;
 }
 
 .comment-stat-icon-heart.active path {
-  fill: #FF5E00;
-  stroke: #FF5E00;
+  fill: #ff5e00;
+  stroke: #ff5e00;
 }
 
 .comment-stat-item span {
@@ -972,8 +1131,8 @@ body {
   width: 100%;
   padding: 12px 0;
   background: #ffffff;
-  color: #FF5E00;
-  border: 1px solid #FF5E00;
+  color: #ff5e00;
+  border: 1px solid #ff5e00;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
@@ -1054,10 +1213,4460 @@ body {
 }
 
 .stat-icon-heart.active {
-  color: #FF5E00;
+  color: #ff5e00;
 }
 
 .stat-icon-heart.active path {
-  fill: #FF5E00;
-  stroke: #FF5E00;
+  fill: #ff5e00;
+  stroke: #ff5e00;
+}
+
+/* ========================= */
+/* MOODBOARD CANVAS          */
+/* ========================= */
+.moodboard-section {
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 40px;
+}
+
+.moodboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.moodboard-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #000;
+}
+
+.moodboard-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.moodboard-btn {
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.moodboard-btn:hover {
+  background: #f5f5f5;
+}
+
+.moodboard-btn:active {
+  background: #eee;
+}
+
+.moodboard-grid {
+  min-height: 400px;
+  background: #fff;
+  padding: 20px;
+}
+
+/* Gridstack overrides */
+.grid-stack {
+  background: transparent;
+}
+
+.grid-stack-item {
+  cursor: move;
+}
+
+.grid-stack-item-content {
+  background: #fff;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  position: relative;
+  overflow: hidden;
+  min-height: 100px;
+}
+
+.grid-stack-item-content:hover {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.grid-stack-item.ui-draggable-dragging .grid-stack-item-content {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.grid-stack-item.ui-resizable-resizing .grid-stack-item-content {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Block types */
+.moodboard-block {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  padding-bottom: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.grid-stack-item-content:hover .block-header {
+  opacity: 1;
+}
+
+.block-type-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: #999;
+  text-transform: uppercase;
+}
+
+.block-settings-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.block-settings-btn:hover {
+  background: #f0f0f0;
+}
+
+.block-settings-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: #999;
+}
+
+.block-settings-btn:hover svg {
+  stroke: #666;
+}
+
+.block-content {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.block-image-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+.block-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.block-image-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  color: #999;
+  font-size: 12px;
+  text-align: center;
+  padding: 20px;
+}
+
+.block-image-empty .empty-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+
+.block-image-empty .empty-text {
+  font-size: 12px;
+  color: #999;
+}
+
+/* Text block */
+.block-text {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 12px;
+  background: transparent;
+  color: #000;
+  box-sizing: border-box;
+}
+
+.block-text::placeholder {
+  color: #ccc;
+  font-style: italic;
+}
+
+/* Content block */
+.block-content-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+}
+
+.block-content-item {
+  background: #f5f5f5;
+  border-radius: 4px;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.block-content-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Collection block */
+.block-collection-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.block-collection-item {
+  padding: 8px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* Modals */
+.block-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 64px;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10004;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.2s ease;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.block-modal.active {
+  display: flex;
+}
+
+.block-modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: calc(100vw - 32px);
+  width: 100%;
+  max-height: calc(100vh - 64px - 32px);
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.block-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.block-modal-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  color: #000;
+}
+
+.block-modal-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.block-modal-close:hover {
+  background: #f0f0f0;
+}
+
+.block-type-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.block-type-btn {
+  padding: 20px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.block-type-btn:hover {
+  border-color: #ff5e00;
+  background: #fff5f0;
+}
+
+.block-type-icon {
+  font-size: 32px;
+}
+
+.block-type-btn span:last-child {
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+}
+
+.block-settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.setting-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.setting-group label:first-child {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+}
+
+.color-input {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.toggle-switch input[type="checkbox"] {
+  display: none;
+}
+
+.toggle-slider {
+  width: 44px;
+  height: 24px;
+  background: #ccc;
+  border-radius: 12px;
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+.toggle-slider::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.3s ease;
+}
+
+.toggle-switch input[type="checkbox"]:checked + .toggle-slider {
+  background: #ff5e00;
+}
+
+.toggle-switch input[type="checkbox"]:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
+
+.toggle-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.block-action-btn {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+}
+
+.block-action-btn:hover {
+  background: #f5f5f5;
+}
+
+.block-action-btn.delete-btn {
+  border-color: #f44336;
+  color: #f44336;
+}
+
+.block-action-btn.delete-btn:hover {
+  background: #ffebee;
+}
+
+.setting-group:last-child {
+  flex-direction: row;
+  gap: 8px;
+}
+
+.file-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ========================= */
+/* SETTINGS MODAL            */
+/* ========================= */
+.settings-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 64px;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10005;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.2s ease;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.settings-modal.active {
+  display: flex;
+}
+
+.settings-modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: calc(100vw - 32px);
+  width: 100%;
+  max-height: calc(100vh - 64px - 32px);
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.settings-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.settings-modal-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  color: #000;
+}
+
+.settings-modal-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.settings-modal-close:hover {
+  background: #f0f0f0;
+}
+
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settings-section h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: #000;
+}
+
+.settings-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-item label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+}
+
+.settings-input,
+.settings-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #000;
+  box-sizing: border-box;
+}
+
+.settings-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.settings-btn {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.settings-btn:hover {
+  background: #f5f5f5;
+}
+
+.settings-btn.danger-btn {
+  border-color: #f44336;
+  color: #f44336;
+}
+
+.settings-btn.danger-btn:hover {
+  background: #ffebee;
+}
+
+.profile-image-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.profile-image-preview {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #e8e8e8;
+  border: 2px solid #fff;
+  background-size: cover;
+  background-position: center;
+}
+
+#profileImageInput {
+  display: none;
+}
+
+/* ========================= */
+/* SAVED CUTS SECTION        */
+/* ========================= */
+.saved-cuts-section {
+  margin-top: 40px;
+  padding: 0;
+}
+
+.saved-cuts-header {
+  margin-bottom: 20px;
+}
+
+.saved-cuts-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: #000;
+}
+
+.saved-cuts-subtitle {
+  font-size: 12px;
+  color: #666;
+  margin: 0;
+}
+
+.saved-cuts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.saved-cut-item {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f7f7f7;
+  padding: 0;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.saved-cut-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.saved-cut-item:active {
+  cursor: grabbing;
+}
+
+.saved-cut-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.saved-cut-item.is-broken {
+  background: #fff;
+}
+
+.saved-cut-item.is-broken::after {
+  content: "이미지 로드 실패";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 12px;
+  color: #999;
+}
+
+.saved-cut-item.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.saved-cuts-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.saved-cuts-empty p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.saved-cuts-empty .empty-hint {
+  font-size: 12px;
+  color: #bbb;
+}
+
+/* Saved cuts selector in modal */
+.saved-cuts-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 8px;
+  background: #fafafa;
+  border-radius: 4px;
+}
+
+.saved-cut-selector-item {
+  aspect-ratio: 1;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  background: #f5f5f5;
+}
+
+.saved-cut-selector-item:hover {
+  border-color: #ff5e00;
+  transform: scale(1.05);
+}
+
+.saved-cut-selector-item.selected {
+  border-color: #ff5e00;
+  box-shadow: 0 0 0 2px rgba(255, 94, 0, 0.2);
+}
+
+.saved-cut-selector-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ========================= */
+/* MOODBOARD VIEW (감상용)    */
+/* ========================= */
+.moodboard-view {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  width: 100%;
+  height: 100%;
+}
+
+.moodboard-primary {
+  width: 100%;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.moodboard-secondary {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.moodboard-tertiary {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.moodboard-block {
+  overflow: hidden;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+  position: relative;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.moodboard-block:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.moodboard-block-primary {
+  width: 100%;
+  min-height: 400px;
+  aspect-ratio: 4 / 5;
+}
+
+.moodboard-block-medium {
+  width: 100%;
+  min-height: 200px;
+  aspect-ratio: 1;
+}
+
+.moodboard-block-small {
+  width: 100%;
+  min-height: 150px;
+  aspect-ratio: 1;
+}
+
+/* ========================= */
+/* FEATURED MOODBOARD        */
+/* ========================= */
+.featured-moodboard-section {
+  margin-bottom: 40px;
+  /* 섹션 자체는 padding 유지 */
+}
+
+/* MY MOOD 탭에서는 하단 여백 제거 - 스크롤이 없으므로 */
+body.my-mood-view .featured-moodboard-section {
+  margin-bottom: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* MY MOOD 탭은 전시용 - 무드보드 리스트는 MY 탭에만 표시 */
+#tab-mood .moodboards-section,
+#tab-mood .moodboards-header,
+#tab-mood .moodboards-grid {
+  display: none !important;
+}
+
+/* MY MOOD 탭의 empty state에서 "새 무드보드 만들기" 버튼 숨김 (관리는 MY 탭에서) */
+#tab-mood .empty-state-btn-secondary {
+  display: none;
+}
+
+/* MY MOOD 탭이 아닐 때만 padding 적용 */
+.featured-moodboard-section {
+  margin-bottom: 40px;
+}
+
+/* MY MOOD 탭에서는 full-width hero */
+body.my-mood-view .featured-moodboard-section {
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
+}
+
+.featured-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0;
+  position: relative;
+  background: white;
+  z-index: 5;
+  padding: 12px 20px;
+}
+
+.featured-header-actions {
+  display: none !important; /* MY MOOD는 전시 공간이므로 관리 UI 제거 */
+}
+
+.featured-change-btn {
+  font-size: 12px;
+}
+
+.featured-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #000;
+}
+
+/* MY MOOD 탭에서는 편집 버튼 숨김 (전시만) */
+#tab-mood .edit-btn,
+#tab-mood .more-btn,
+#tab-mood .featured-header-actions {
+  display: none !important;
+}
+
+.edit-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-btn:hover {
+  background: #f5f5f5;
+}
+
+/* 대표 무드보드 전체 프레임 - 프로필 히어로 영역 */
+.featured-moodboard-preview {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 200px);
+  background: #fafafa;
+  border-radius: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* MY MOOD 탭에서는 full-width hero */
+body.my-mood-view .featured-moodboard-preview {
+  border-radius: 0;
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
+}
+
+/* 가독성용 그라데이션 오버레이 (상단) */
+.featured-moodboard-preview::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 40%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 시네마틱 하단 페이드 아웃 - 텍스트 가독성을 위한 그라데이션 */
+.featured-moodboard-preview::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 200px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+  border-radius: 0 0 16px 16px;
+}
+
+/* MY MOOD 탭에서는 border-radius 제거 */
+body.my-mood-view .featured-moodboard-preview::after {
+  border-radius: 0;
+}
+
+/* 대표 무드 문구를 이미지 위에 오버레이 - 감정 카피 느낌 */
+.featured-mood-text {
+  position: absolute;
+  left: 16px;
+  bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+  pointer-events: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  max-width: calc(100% - 32px);
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+.featured-preview {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 내부 콘텐츠를 감상용 레이아웃으로 재배치 */
+.featured-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.featured-content.moodboard-view {
+  gap: 16px;
+}
+
+@keyframes slowFloat {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* 편집기에서 만든 블록들 - absolute position 유지 */
+.featured-content > div {
+  position: absolute;
+  /* 블록들이 위에 몰리지 않고 자연스럽게 배치되도록 */
+}
+
+/* 이미지가 없을 경우 - 텍스트만 */
+.featured-content.has-text-only {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.featured-thumbnail {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: transparent;
+  overflow: hidden;
+}
+
+.featured-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 14px;
+}
+
+.featured-info {
+  padding: 12px;
+}
+
+.featured-name {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  color: #000;
+}
+
+.featured-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.featured-empty p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.featured-empty .empty-hint {
+  font-size: 12px;
+  color: #bbb;
+}
+
+/* ========================= */
+/* FEATURED MOODBOARDS PREVIEW (MY 탭) */
+/* ========================= */
+.featured-moodboards-preview-section {
+  margin-bottom: 40px;
+}
+
+.featured-moodboards-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.featured-moodboards-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #000;
+}
+
+.featured-moodboards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.featured-moodboard-preview-card {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.featured-moodboard-preview-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.featured-moodboard-preview-thumbnail {
+  width: 100%;
+  background: #fafafa;
+  position: relative;
+  overflow: hidden;
+}
+
+.featured-moodboard-preview-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured-moodboard-preview-thumbnail .moodboard-preview-canvas {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.moodboard-privacy-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  backdrop-filter: blur(4px);
+}
+
+.moodboard-privacy-badge.public {
+  background: rgba(76, 175, 80, 0.9);
+  color: #fff;
+}
+
+.moodboard-privacy-badge.private {
+  background: rgba(158, 158, 158, 0.9);
+  color: #fff;
+}
+
+.featured-moodboard-preview-info {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.featured-moodboard-preview-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #000;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* ========================= */
+/* MOODBOARDS GRID           */
+/* ========================= */
+.moodboards-section {
+  margin-bottom: 40px;
+}
+
+.moodboards-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.moodboards-header .back-btn {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.moodboards-header .moodboards-title {
+  flex: 1;
+  text-align: center;
+}
+
+.moodboards-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #000;
+}
+
+.create-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.create-btn:hover {
+  background: #f5f5f5;
+}
+
+/* 무드보드 그리드 - 항상 2열 고정 */
+.moodboards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  max-width: 100%;
+}
+
+.moodboard-item {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.moodboard-item:hover {
+  transform: translateY(-2px);
+}
+
+/* 무드보드 비율별 스타일 */
+.moodboard-item.moodboard-ratio-landscape {
+  aspect-ratio: 16 / 9;
+}
+
+.moodboard-item.moodboard-ratio-square {
+  aspect-ratio: 1 / 1;
+}
+
+.moodboard-item.moodboard-ratio-portrait {
+  aspect-ratio: 9 / 16;
+}
+
+.moodboard-canvas-preview {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background: #fafafa;
+  border-radius: 12px 12px 0 0;
+  margin-bottom: 8px;
+}
+
+.moodboard-preview-canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.moodboard-preview-block {
+  pointer-events: none;
+}
+
+.moodboard-preview-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  opacity: 0.3;
+}
+
+.moodboard-thumbnail {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #fafafa;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.moodboard-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.moodboard-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: #ddd;
+}
+
+.moodboard-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.moodboard-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: #000;
+}
+
+.moodboard-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #999;
+}
+
+.moodboard-meta span {
+  padding: 2px 6px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-size: 10px;
+}
+
+.moodboard-badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.moodboard-badge.public {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.moodboard-badge.private {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.moodboard-menu-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.moodboard-item:hover .moodboard-menu-btn {
+  opacity: 1;
+}
+
+.moodboards-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.moodboards-empty p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.moodboards-empty .empty-hint {
+  font-size: 12px;
+  color: #bbb;
+}
+
+/* ========================= */
+/* FOLDERS                   */
+/* ========================= */
+.folders-section {
+  margin-bottom: 40px;
+}
+
+.folders-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.folders-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #000;
+}
+
+.folders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+}
+
+.folder-item {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  position: relative;
+}
+
+.folder-item:hover {
+  transform: translateY(-2px);
+}
+
+.folder-menu-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+.folder-item:hover .folder-menu-btn {
+  opacity: 1;
+}
+
+.folder-thumbnail {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #fafafa;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.folder-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.folder-thumbnail-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: #ddd;
+}
+
+.folder-thumbnail-grid {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 2px;
+  overflow: hidden;
+}
+
+.folder-thumbnail-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.folder-thumbnail-grid img:first-child {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
+.folder-thumbnail-grid img:nth-child(2) {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.folder-thumbnail-grid img:nth-child(3) {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.folder-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.folder-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: #000;
+}
+
+.folder-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #999;
+}
+
+.folders-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.folders-empty p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.folders-empty .empty-hint {
+  font-size: 12px;
+  color: #bbb;
+}
+
+/* ========================= */
+/* FOLDER CONTENT VIEW       */
+/* ========================= */
+.folder-content-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.back-btn {
+  padding: 6px 12px;
+  font-size: 14px;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+  background: #f5f5f5;
+}
+
+.folder-content-title {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #000;
+}
+
+.folder-menu-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #000;
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.folder-menu-btn:hover {
+  background: #f5f5f5;
+}
+
+.folder-cuts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+}
+
+.folder-cut-item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.folder-cut-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cut-remove-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.folder-cut-item:hover .cut-remove-btn {
+  opacity: 1;
+}
+
+.folder-cuts-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.folder-cuts-empty p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.folder-cuts-empty .empty-hint {
+  font-size: 12px;
+  color: #bbb;
+}
+
+/* ========================= */
+/* MOODBOARD EDITOR MODAL    */
+/* ========================= */
+.moodboard-editor-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 10010;
+  animation: fadeIn 0.2s ease;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.moodboard-editor-modal.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.moodboard-editor-content {
+  width: 100%;
+  max-width: 390px; /* 모바일 기준 너비 고정 */
+  height: 100%;
+  max-height: 100vh;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* PC에서도 모바일 UI 고정 */
+@media (min-width: 391px) {
+  .moodboard-editor-modal {
+    padding: 20px 0;
+  }
+
+  .moodboard-editor-content {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+  }
+}
+
+.moodboard-editor-modal,
+.moodboard-editor-modal * {
+  box-sizing: border-box;
+}
+
+.moodboard-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 12px;
+  gap: 8px;
+  width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
+  border-bottom: 1px solid #eee;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.moodboard-editor-header .right-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.moodboard-editor-header button {
+  white-space: nowrap;
+}
+
+.moodboard-editor-toolbar {
+  width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.editor-btn-back {
+  padding: 6px 12px;
+  font-size: 18px;
+  font-weight: 500;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editor-btn-back:hover {
+  background: #f5f5f5;
+}
+
+.moodboard-editor-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #000;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+}
+
+.editor-btn {
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: fit-content;
+}
+
+.editor-btn:hover {
+  background: #f5f5f5;
+}
+
+.editor-btn.close-btn {
+  border-color: #999;
+  color: #999;
+}
+
+.editor-btn-undo {
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+}
+
+.editor-btn-undo:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.editor-btn-undo:not(:disabled):hover {
+  background: #f5f5f5;
+}
+
+.editor-btn-undo svg {
+  width: 16px;
+  height: 16px;
+}
+
+.emoji-option.selected {
+  border-color: #000 !important;
+  background: #f5f5f5 !important;
+  transform: scale(1.1);
+}
+
+.emoji-option:hover {
+  border-color: #999 !important;
+  background: #f9f9f9 !important;
+}
+
+.moodboard-editor-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: calc(100vh - 150px);
+}
+
+/* 모바일 중심: 사이드바 제거, 캔버스가 전체 너비 사용 */
+.editor-sidebar {
+  display: none; /* 모바일에서는 사이드바 숨김 */
+}
+
+/* 데스크탑에서도 사이드바 사용 안 함 (모바일 UI 고정) */
+@media (min-width: 391px) {
+  .editor-sidebar {
+    display: none;
+  }
+}
+
+.sidebar-section {
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.sidebar-section h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #000;
+}
+
+.block-style-panel {
+  background: #fff;
+  border-bottom: 2px solid #ff5e00;
+}
+
+.style-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.style-control-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.style-control-item label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+}
+
+.style-select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 13px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.style-select:focus {
+  outline: none;
+  border-color: #ff5e00;
+}
+
+.style-color-picker {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.style-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #ddd;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.style-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ff5e00;
+  cursor: pointer;
+}
+
+.style-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ff5e00;
+  cursor: pointer;
+  border: none;
+}
+
+.style-btn {
+  padding: 8px 12px;
+  background: #ff5e00;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.style-btn:hover {
+  background: #e04e00;
+}
+
+.editor-folder-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.editor-folder-item {
+  padding: 8px 12px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 13px;
+}
+
+.editor-folder-item:hover {
+  border-color: #ff5e00;
+  background: #fff5f0;
+}
+
+.editor-folder-item.active {
+  border-color: #ff5e00;
+  background: #fff5f0;
+  font-weight: 500;
+}
+
+.editor-cuts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.editor-cut-item {
+  aspect-ratio: 1;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: grab;
+  background: #f5f5f5;
+}
+
+.editor-cut-item:active {
+  cursor: grabbing;
+}
+
+.editor-cut-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.editor-cuts-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-size: 12px;
+}
+
+.editor-canvas {
+  height: 100%;
+  min-height: calc(100vh - 200px);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+  max-width: 390px; /* 모바일 기준 너비 고정 */
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* 상단 고정 툴바 */
+.canvas-toolbar {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.canvas-toolbar.toolbar-fixed {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.toolbar-btn.active {
+  background: #ff5e00;
+  color: #fff;
+  border-color: #ff5e00;
+}
+
+.toolbar-btn.active:hover {
+  background: #e55500;
+  border-color: #e55500;
+}
+
+/* 비율 선택 패널 */
+.ratio-selector-panel {
+  padding: 12px 16px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.ratio-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.ratio-card {
+  cursor: pointer;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 8px;
+  background: #fff;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.ratio-card:hover {
+  border-color: #ff5e00;
+  background: #fff5f0;
+}
+
+.ratio-card.selected {
+  border-color: #ff5e00;
+  background: #fff5f0;
+}
+
+.ratio-card-preview {
+  width: 100%;
+  max-width: 50px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.ratio-card-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* 캔버스 스크롤 영역 */
+.canvas-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px 16px;
+  width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.toolbar-btn {
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.toolbar-btn:hover {
+  background: #f5f5f5;
+}
+
+.toolbar-ratio-selector {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.toolbar-select {
+  padding: 6px 8px;
+  font-size: 12px;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toolbar-select:hover {
+  background: #f5f5f5;
+}
+
+.toolbar-select:focus {
+  outline: none;
+  border-color: #ff5e00;
+}
+
+.toolbar-tab-btn {
+  position: relative;
+}
+
+.toolbar-tab-btn.active {
+  background: #ff5e00;
+  color: #fff;
+  border-color: #ff5e00;
+}
+
+.toolbar-tab-btn.active:hover {
+  background: #e55500;
+  border-color: #e55500;
+}
+
+.editor-moodboard-grid {
+  flex: 1;
+  background: #fff;
+  padding: 20px;
+  overflow: auto;
+}
+
+/* ========================= */
+/* FOLDER MENU MODAL         */
+/* ========================= */
+.folder-menu-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10011;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.folder-menu-modal.active {
+  display: flex;
+}
+
+/* ========================= */
+/* FOLDER/CUTS SELECT MODAL  */
+/* ========================= */
+.folder-cuts-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10012;
+  justify-content: center;
+  align-items: flex-end;
+  animation: fadeIn 0.2s ease;
+}
+
+.folder-cuts-modal.active {
+  display: flex;
+}
+
+.folder-cuts-modal-content {
+  background: #fff;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  width: 100%;
+  max-width: 390px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+  box-sizing: border-box;
+}
+
+.folder-cuts-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eee;
+  flex-shrink: 0;
+}
+
+.folder-cuts-modal-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #000;
+}
+
+.folder-cuts-modal-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.folder-cuts-modal-close:hover {
+  background: #f0f0f0;
+}
+
+.folder-cuts-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.folder-cuts-section {
+  margin-bottom: 24px;
+}
+
+.folder-cuts-section:last-child {
+  margin-bottom: 0;
+}
+
+.folder-cuts-section h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #000;
+}
+
+.modal-folder-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.modal-folder-item {
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  text-align: left;
+}
+
+.modal-folder-item:hover {
+  border-color: #ff5e00;
+  background: #fff5f0;
+}
+
+.modal-folder-item.active {
+  border-color: #ff5e00;
+  background: #fff5f0;
+  font-weight: 500;
+}
+
+.modal-cuts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.modal-cut-item {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: grab;
+  background: #f5f5f5;
+  position: relative;
+}
+
+.modal-cut-item:active {
+  cursor: grabbing;
+}
+
+.modal-cut-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.modal-cuts-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-size: 14px;
+}
+
+.folder-menu-content {
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px;
+  min-width: 200px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.folder-menu-item {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-size: 14px;
+  color: #000;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.folder-menu-item:hover {
+  background: #f5f5f5;
+}
+
+/* ========================= */
+/* FOLDER NAME MODAL         */
+/* ========================= */
+.folder-name-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10012;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.folder-name-modal.active {
+  display: flex;
+}
+
+.folder-name-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  width: 90%;
+  max-width: 360px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.folder-name-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.folder-name-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #000;
+}
+
+.folder-name-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.folder-name-close:hover {
+  background: #f0f0f0;
+}
+
+.folder-name-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #000;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+}
+
+.folder-name-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.folder-name-btn {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.folder-name-btn:hover {
+  background: #f5f5f5;
+}
+
+.folder-name-btn.cancel-btn {
+  border-color: #999;
+  color: #999;
+}
+
+/* ========================= */
+/* MOODBOARD MENU MODAL      */
+/* ========================= */
+.moodboard-menu-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10013;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.moodboard-menu-modal.active {
+  display: flex;
+}
+
+.moodboard-menu-content {
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px;
+  min-width: 200px;
+  max-width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.moodboard-menu-item {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-size: 14px;
+  color: #000;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+  display: block;
+  box-sizing: border-box;
+}
+
+.moodboard-menu-item:hover {
+  background: #f5f5f5;
+}
+
+.moodboard-menu-item.danger {
+  color: #f44336;
+}
+
+/* ========================= */
+/* SET REPRESENTATIVE MODAL  */
+/* ========================= */
+.set-representative-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10025;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.set-representative-modal-content {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 90%;
+  width: 320px;
+  animation: slideUp 0.3s ease;
+}
+
+.set-representative-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.set-representative-modal-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  color: #000;
+}
+
+.set-representative-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.set-representative-modal-close:hover {
+  color: #000;
+}
+
+.set-representative-modal-body {
+  margin-bottom: 24px;
+}
+
+.set-representative-modal-body p {
+  font-size: 14px;
+  color: #333;
+  margin: 0 0 8px 0;
+  line-height: 1.5;
+}
+
+.set-representative-modal-hint {
+  font-size: 12px;
+  color: #999;
+  margin-top: 8px;
+}
+
+.set-representative-modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.set-representative-btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.set-representative-btn-cancel {
+  background: #fff;
+  color: #666;
+  border-color: #ddd;
+}
+
+.set-representative-btn-cancel:hover {
+  background: #f5f5f5;
+}
+
+.set-representative-btn-confirm {
+  background: #ff5e00;
+  color: #fff;
+  border-color: #ff5e00;
+}
+
+.set-representative-btn-confirm:hover {
+  background: #e55500;
+  border-color: #e55500;
+}
+
+/* ========================= */
+/* MOODBOARD CREATE MODAL    */
+/* ========================= */
+.moodboard-create-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10020;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.moodboard-create-modal.active {
+  display: flex;
+}
+
+.moodboard-create-content {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  max-width: calc(100vw - 32px);
+  width: 100%;
+  max-height: calc(100vh - 64px - 32px);
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.moodboard-create-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.moodboard-create-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  color: #000;
+}
+
+.modal-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.modal-close:hover {
+  background: #f0f0f0;
+}
+
+.create-prompt {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+.create-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.create-option-btn {
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.create-option-btn:hover {
+  border-color: #ff5e00;
+  background: #fff5f0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 94, 0, 0.1);
+}
+
+.option-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.option-text {
+  flex: 1;
+}
+
+.option-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 4px;
+}
+
+.option-desc {
+  font-size: 12px;
+  color: #999;
+}
+
+/* ========================= */
+/* TEMPLATE SELECT MODAL    */
+/* ========================= */
+.template-select-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 64px;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10021;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.2s ease;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.template-select-modal.active {
+  display: flex;
+}
+
+.template-select-content {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  max-width: calc(100vw - 32px);
+  width: 100%;
+  max-height: calc(100vh - 64px - 32px);
+  box-sizing: border-box;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+  -webkit-overflow-scrolling: touch;
+}
+
+.template-select-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.template-select-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  color: #000;
+  flex: 1;
+  text-align: center;
+}
+
+.modal-back {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.modal-back:hover {
+  background: #f0f0f0;
+}
+
+.templates-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.template-card {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.template-card:hover {
+  transform: translateY(-4px);
+}
+
+.template-preview {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-content: flex-start;
+}
+
+.template-grid-item {
+  width: calc(50% - 2px);
+  aspect-ratio: 1;
+  background: #e0e0e0;
+  border-radius: 2px;
+}
+
+.clean-grid-preview {
+  gap: 4px;
+}
+
+.editorial-vertical-preview {
+  flex-direction: column;
+  gap: 4px;
+}
+
+.template-vertical-item {
+  width: 100%;
+  background: #e0e0e0;
+  border-radius: 2px;
+}
+
+.template-vertical-item.large {
+  height: 50%;
+}
+
+.template-vertical-item.small {
+  height: 25%;
+}
+
+.scrapbook-preview {
+  gap: 3px;
+}
+
+.template-scrap-item {
+  width: calc(33.33% - 2px);
+  aspect-ratio: 1;
+  background: #e0e0e0;
+  border-radius: 2px;
+}
+
+.minimal-gallery-preview {
+  flex-direction: column;
+  gap: 4px;
+}
+
+.template-gallery-item {
+  width: 100%;
+  height: calc(33.33% - 3px);
+  background: #e0e0e0;
+  border-radius: 2px;
+}
+
+.template-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: #000;
+  text-align: center;
+}
+
+/* ========================= */
+/* EMPTY STATES              */
+/* ========================= */
+.empty-state-illustration {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.empty-state-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #000;
+  margin: 0 0 8px 0;
+}
+
+.empty-state-hint {
+  font-size: 12px;
+  color: #999;
+  margin: 0;
+}
+
+.empty-state-btn {
+  margin-top: 0;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.empty-state-btn:hover {
+  background: #f5f5f5;
+}
+
+.empty-state-btn-secondary {
+  border-color: #999;
+  color: #666;
+  background: #fafafa;
+}
+
+.empty-state-btn-secondary:hover {
+  background: #f0f0f0;
+}
+
+.featured-empty-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 280px;
+}
+
+.featured-empty-actions .empty-state-btn {
+  width: 100%;
+}
+
+.featured-empty-state,
+.moodboards-empty-state,
+.folders-empty-state,
+.folder-cuts-empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 대표 무드보드 empty state는 전시 공간 높이 유지 */
+.featured-empty-state {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  height: 100%;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ========================= */
+/* FEATURED MOODBOARD SETTINGS MODAL */
+/* ========================= */
+.featured-settings-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 64px;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10028;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.2s ease;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.featured-settings-modal.active {
+  display: flex;
+}
+
+.featured-settings-modal-content {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  max-width: calc(100vw - 32px);
+  width: calc(100vw - 32px);
+  max-height: calc(100vh - 64px - 32px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  animation: slideUp 0.3s ease;
+  position: relative;
+  margin: 16px auto;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  min-width: 0;
+}
+
+.featured-settings-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.featured-settings-modal-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  color: #000;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.featured-settings-modal-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.featured-settings-modal-close:hover {
+  background: #f0f0f0;
+}
+
+.featured-settings-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.featured-settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.featured-settings-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+}
+
+.featured-moodboard-selector {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.featured-moodboard-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.featured-moodboard-card:hover {
+  border-color: #ff5e00;
+  box-shadow: 0 2px 8px rgba(255, 94, 0, 0.1);
+}
+
+.featured-moodboard-card-thumbnail {
+  width: 100%;
+  overflow: hidden;
+  background: #f5f5f5;
+  position: relative;
+}
+
+.featured-moodboard-card-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured-moodboard-card-thumbnail .moodboard-preview-canvas {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.featured-moodboard-card-info {
+  padding: 8px 12px;
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.featured-moodboard-card-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #000;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.featured-moodboard-card-btn {
+  margin: 8px 12px 12px;
+  padding: 8px 16px;
+  background: #ff5e00;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: calc(100% - 24px);
+  max-width: calc(100% - 24px);
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.featured-moodboard-card-btn:hover {
+  background: #e55500;
+}
+
+/* 여러 무드보드 조합 스타일 */
+.my-mood-composition {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 20px;
+}
+
+.moodboard-view-container {
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.moodboard-view-container[data-ratio="vertical"] {
+  aspect-ratio: 4 / 5;
+}
+
+.moodboard-view-container[data-ratio="horizontal"] {
+  aspect-ratio: 16 / 9;
+}
+
+.moodboard-view-container[data-ratio="square"] {
+  aspect-ratio: 1 / 1;
+}
+
+.moodboard-primary-view {
+  margin-bottom: 16px;
+}
+
+.moodboard-secondary-view {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.moodboard-tertiary-view {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.featured-mood-text-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #000;
+  box-sizing: border-box;
+}
+
+.featured-mood-text-input:focus {
+  outline: none;
+  border-color: #ff5e00;
+}
+
+.featured-settings-hint {
+  font-size: 12px;
+  color: #999;
+  margin: 0;
+  line-height: 1.4;
+  width: 100%;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.featured-settings-modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+  justify-content: flex-end;
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.featured-settings-btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.featured-settings-btn-cancel {
+  background: #fff;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.featured-settings-btn-cancel:hover {
+  background: #f5f5f5;
+}
+
+.featured-settings-btn-save {
+  background: #ff5e00;
+  color: #fff;
+  border: 1px solid #ff5e00;
+}
+
+.featured-settings-btn-save:hover {
+  background: #e55500;
+  border-color: #e55500;
+}
+
+/* ========================= */
+/* FEATURED CANVAS EDITOR    */
+/* ========================= */
+.featured-canvas-editor-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 64px;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10027;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.2s ease;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.featured-canvas-editor-modal.active {
+  display: flex;
+}
+
+.featured-canvas-editor-content {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  width: 100%;
+  max-width: 390px;
+  max-height: calc(100vh - 64px - 32px);
+  height: calc(100vh - 64px - 32px);
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+  box-sizing: border-box;
+  overflow: hidden;
+  margin: 16px;
+}
+
+.featured-canvas-editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.featured-canvas-editor-back {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 18px;
+  color: #000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.featured-canvas-editor-back:hover {
+  background: #f5f5f5;
+  border-color: #999;
+}
+
+.featured-canvas-editor-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  color: #000;
+  flex: 1;
+  text-align: center;
+}
+
+.featured-canvas-editor-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.featured-canvas-editor-close:hover {
+  background: #f0f0f0;
+}
+
+.featured-canvas-editor-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  /* 하단 버튼이 가려지지 않도록 패딩 추가 */
+  padding-bottom: 12px;
+  /* 스크롤 가능 영역만 스크롤, 버튼은 항상 보이게 */
+  max-height: calc(100vh - 200px);
+}
+
+/* 대표 캔버스 래퍼 - 모바일 기준 고정 비율 */
+.featured-canvas-wrapper {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 8px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  overflow: hidden;
+  /* 하단 버튼 공간 확보 */
+  max-height: calc(100vh - 450px);
+  min-height: 200px;
+}
+
+/* PC에서 모바일 기준(390px)으로 중앙 고정 */
+@media (min-width: 768px) {
+  .featured-canvas-editor-content {
+    max-width: 390px;
+    width: 390px;
+    max-height: calc(100vh - 64px - 32px);
+    height: auto;
+    padding: 16px;
+    border-radius: 16px;
+    margin: 16px auto;
+  }
+
+  .featured-canvas-editor-body {
+    background: transparent;
+    padding: 0;
+  }
+
+  .featured-canvas-wrapper {
+    max-width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 8px;
+  }
+
+  .featured-canvas {
+    max-height: calc(100vh - 400px);
+  }
+}
+
+/* 대표 캔버스 - 모바일 비율 유지 */
+.featured-canvas {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 9 / 16;
+  max-height: calc(100vh - 300px);
+  max-width: calc(100% - 16px);
+  border: 2px dashed #ddd;
+  background: #fafafa;
+  overflow: hidden;
+  margin: 0 auto;
+  transition: aspect-ratio 0.3s ease;
+  box-sizing: border-box;
+}
+
+/* 드래그 오버 상태 */
+.featured-canvas.drag-over {
+  border-color: #ff5e00;
+  background: rgba(255, 94, 0, 0.05);
+}
+
+/* 무드보드 카드 드래그 중 */
+.moodboard-item[draggable="true"] {
+  cursor: grab;
+}
+
+.moodboard-item[draggable="true"]:active {
+  cursor: grabbing;
+  opacity: 0.5;
+}
+
+/* 비율별 캔버스 크기 - 즉시 반영 */
+.featured-canvas[data-ratio="9:16"] {
+  aspect-ratio: 9 / 16 !important;
+}
+
+.featured-canvas[data-ratio="1:1"] {
+  aspect-ratio: 1 / 1 !important;
+}
+
+.featured-canvas[data-ratio="16:9"] {
+  aspect-ratio: 16 / 9 !important;
+}
+
+/* 비율 가이드 표시 */
+.featured-canvas.has-ratio-guide {
+  border: 2px dashed rgba(255, 94, 0, 0.5);
+  background-color: #fff;
+  position: relative;
+}
+
+.featured-canvas.has-ratio-guide::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(255, 94, 0, 0.3);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 템플릿 가이드 박스 */
+.featured-canvas-template-guide {
+  position: absolute;
+  border: 2px dashed rgba(255, 94, 0, 0.4);
+  background: rgba(255, 94, 0, 0.05);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.featured-canvas-template-guide::after {
+  content: "여기에 이미지를 넣으세요";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  color: rgba(255, 94, 0, 0.6);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* 비율 선택 툴바 */
+.featured-canvas-ratio-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  gap: 8px;
+  border-bottom: 1px solid #eee;
+  flex-shrink: 0;
+}
+
+.featured-canvas-ratio-select {
+  padding: 6px 12px;
+  font-size: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.featured-canvas-ratio-select:focus {
+  outline: none;
+  border-color: #ff5e00;
+}
+
+/* 템플릿 선택 툴바 */
+.featured-canvas-template-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  gap: 8px;
+  border-bottom: 1px solid #eee;
+  flex-shrink: 0;
+}
+
+.featured-canvas-template-select {
+  padding: 6px 12px;
+  font-size: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.featured-canvas-template-select:focus {
+  outline: none;
+  border-color: #ff5e00;
+}
+
+/* 기존 컨테이너 스타일 제거 (더 이상 사용 안 함) */
+.featured-canvas-container {
+  display: none;
+}
+
+/* 캔버스 아이템 (무드보드) */
+.canvas-item {
+  position: absolute;
+  background: #fff;
+  border: 2px solid #ff5e00;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  user-select: none;
+  z-index: 10;
+  cursor: grab;
+}
+
+.canvas-item:active {
+  cursor: grabbing;
+}
+
+.canvas-item.dragging {
+  opacity: 0.8;
+  z-index: 1000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* 기존 블록 스타일 (호환성 유지) */
+.featured-canvas-block {
+  position: absolute;
+  background: #fff;
+  border: 2px solid #ff5e00;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  user-select: none;
+  z-index: 10;
+  cursor: grab;
+}
+
+.featured-canvas-block:active {
+  cursor: grabbing;
+}
+
+.featured-canvas-block:hover {
+  border-color: #e55500;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.featured-canvas-block.dragging {
+  opacity: 0.8;
+  z-index: 1000;
+}
+
+.canvas-block-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.canvas-block-content img {
+  width: 100%;
+  height: calc(100% - 30px);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.canvas-block-name {
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #000;
+  background: rgba(255, 255, 255, 0.9);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.canvas-block-delete {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  background: rgba(255, 0, 0, 0.8);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  transition: all 0.2s ease;
+}
+
+.canvas-block-delete:hover {
+  background: rgba(255, 0, 0, 1);
+  transform: scale(1.1);
+}
+
+.featured-canvas-toolbar {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+  border-top: 1px solid #eee;
+  flex-shrink: 0;
+}
+
+.canvas-toolbar-btn {
+  padding: 10px 20px;
+  background: #fff;
+  color: #ff5e00;
+  border: 1px solid #ff5e00;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.canvas-toolbar-btn:hover {
+  background: #fff5f0;
+}
+
+.featured-canvas-editor-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 0;
+  justify-content: flex-end;
+  padding-top: 12px;
+  padding-bottom: 0;
+  border-top: 1px solid #eee;
+  flex-shrink: 0;
+  background: #fff;
+  position: relative;
+  z-index: 10;
+}
+
+/* ========================= */
+/* MOODBOARD CANVAS         */
+/* ========================= */
+.editor-moodboard-canvas {
+  background: #fafafa !important;
+  padding: 20px;
+  overflow: visible; /* 스크롤은 부모에서 처리 */
+  position: relative;
+  box-sizing: border-box;
+  /* 모바일 기준: 전체 너비 사용, 비율은 동적으로 조정 */
+  width: 100%;
+  max-width: 358px; /* 패딩 제외 */
+  margin: 0 auto;
+  min-height: 400px;
+  display: block;
+  /* 다이어리 느낌을 위한 배경 */
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 24px,
+    rgba(0, 0, 0, 0.03) 24px,
+    rgba(0, 0, 0, 0.03) 25px
+  ) !important;
+  background-size: 100% 25px;
+  background-color: #fafafa !important;
+  /* 캔버스 최소 너비 확보 */
+  min-width: 0;
+}
+
+/* PC에서도 모바일 프레임처럼 표시 */
+@media (min-width: 768px) {
+  .editor-moodboard-canvas {
+    width: 375px;
+    aspect-ratio: 9 / 16;
+    margin: 0 auto;
+  }
+}
+
+/* 캔버스 placeholder 스타일 */
+.canvas-placeholder {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #999;
+  font-size: 14px;
+  text-align: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.editor-moodboard-canvas.canvas-ratio-guide {
+  border: 2px dashed rgba(255, 94, 0, 0.3);
+  background-color: #fff !important;
+}
+
+/* 비율별 캔버스 크기 조정 */
+.editor-moodboard-canvas[data-ratio="square"] {
+  aspect-ratio: 1 / 1;
+}
+
+.editor-moodboard-canvas[data-ratio="portrait"] {
+  aspect-ratio: 4 / 5;
+}
+
+.editor-moodboard-canvas[data-ratio="landscape"] {
+  aspect-ratio: 16 / 9;
+}
+
+.editor-moodboard-canvas[data-ratio="free"] {
+  aspect-ratio: 9 / 16; /* 기본 모바일 비율 */
+}
+
+.editor-moodboard-canvas.custom-bg-color {
+  background-image: none !important;
+  background-size: auto !important;
+}
+
+.editor-moodboard-canvas[data-bg-color-value] {
+  background-image: none !important;
+  background-size: auto !important;
+}
+
+/* 중복 요소 제거 */
+.featured-content + .featured-empty-state {
+  display: none !important;
+}
+
+.featured-empty-state:has(+ .featured-content) {
+  display: none !important;
+}
+
+.canvas-block {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: move;
+  transition: box-shadow 0.2s ease;
+}
+
+.canvas-block:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.canvas-block.dragging {
+  opacity: 0.7;
+  z-index: 1000;
+}
+
+.canvas-block img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.canvas-block-resize {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  background: #ff5e00;
+  cursor: nwse-resize;
+  border-radius: 4px 0 0 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.canvas-block:hover .canvas-block-resize {
+  opacity: 1;
+}
+
+/* Freeform canvas background - diary/scrapbook feeling */
+.canvas-freeform {
+  background: linear-gradient(to bottom, #fafafa 0%, #ffffff 100%);
+  background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 24px,
+      rgba(0, 0, 0, 0.03) 24px,
+      rgba(0, 0, 0, 0.03) 25px
+    ),
+    linear-gradient(to bottom, #fafafa 0%, #ffffff 100%);
+  background-size: 100% 25px, 100% 100%;
+  min-height: 600px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Template-based canvas backgrounds */
+.canvas-template-clean-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  background: #fff;
+}
+
+.canvas-template-editorial-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #fff;
+}
+
+.canvas-template-scrapbook {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: #f5f5f5;
+}
+
+.canvas-template-minimal-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #fff;
+}
+
+/* ========================= */
+/* MOBILE-FIRST ENHANCEMENTS */
+/* ========================= */
+
+/* 모바일 기준: 캔버스는 이미 위에서 정의됨 */
+
+/* Pinterest-style masonry for saved cuts */
+.folder-cuts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+  padding: 0;
+}
+
+/* Clean, minimal borders */
+.folder-item,
+.moodboard-item {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Editorial spacing */
+.tab-content {
+  padding: 20px;
+}
+
+.featured-moodboard-section,
+.moodboards-section,
+.folders-header {
+  margin-bottom: 32px;
+}
+
+/* Diary-like soft backgrounds */
+.featured-moodboard-preview,
+.moodboard-thumbnail,
+.folder-thumbnail {
+  background: #fafafa;
+  border-radius: 8px;
+}
+
+/* Remove heavy borders, use subtle shadows */
+.moodboard-item,
+.folder-item {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.moodboard-item:hover,
+.folder-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Calm, editorial typography */
+.featured-title,
+.moodboards-title,
+.folders-title {
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+/* Natural spacing for empty states */
+.empty-state-illustration {
+  margin-bottom: 16px;
+}
+
+/* Mobile-first adjustments */
+@media (max-width: 480px) {
+  .moodboard-create-content,
+  .template-select-content {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .templates-grid {
+    gap: 12px;
+  }
+
+  .editor-sidebar {
+    width: 100px;
+    min-width: 80px;
+  }
+
+  .tab-content {
+    padding: 16px;
+  }
+
+  .featured-moodboard-section,
+  .moodboards-section {
+    margin-bottom: 24px;
+  }
+
+  /* 대표 캔버스 편집 모달 - 모바일 최적화 */
+  .featured-canvas-editor-modal {
+    bottom: 64px !important;
+  }
+
+  .featured-canvas-editor-content {
+    padding: 12px;
+    border-radius: 0;
+    max-width: calc(100vw - 32px) !important;
+    width: calc(100vw - 32px) !important;
+    max-height: calc(100vh - 64px - 32px) !important;
+    height: auto !important;
+    margin: 16px !important;
+  }
+
+  .featured-canvas-editor-header {
+    margin-bottom: 8px;
+  }
+
+  .featured-canvas-editor-header h3 {
+    font-size: 18px;
+  }
+
+  .featured-canvas-wrapper {
+    padding: 4px;
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow: hidden;
+  }
+
+  .featured-canvas {
+    max-width: calc(100% - 8px) !important;
+    width: 100% !important;
+    max-height: calc(100vh - 450px) !important;
+  }
+
+  .featured-canvas-wrapper {
+    max-height: calc(100vh - 450px) !important;
+  }
+
+  .featured-canvas-editor-body {
+    max-height: calc(100vh - 250px) !important;
+  }
+
+  .featured-canvas-ratio-toolbar,
+  .featured-canvas-template-toolbar {
+    padding: 6px;
+  }
+
+  .featured-canvas-ratio-select,
+  .featured-canvas-template-select {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  /* 캔버스가 모바일 뷰포트를 벗어나지 않도록 */
+  .featured-canvas {
+    max-height: calc(100vh - 250px) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .featured-canvas-wrapper {
+    max-width: 100% !important;
+    padding: 4px !important;
+  }
+
+  /* 무드보드 선택 팝업 - 하단 네비게이션 바 고려 */
+  .featured-settings-modal {
+    bottom: 64px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .featured-settings-modal-content {
+    max-width: calc(100vw - 32px) !important;
+    width: calc(100vw - 32px) !important;
+    max-height: calc(100vh - 64px - 32px) !important;
+    overflow-x: hidden !important;
+    padding: 16px !important;
+    margin: 16px auto !important;
+    box-sizing: border-box !important;
+  }
+
+  .featured-moodboard-selector {
+    gap: 8px !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .featured-settings-modal-header,
+  .featured-settings-modal-body {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .featured-moodboard-selector {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+    gap: 8px !important;
+  }
+
+  .featured-moodboard-card {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* 모든 모달이 모바일 뷰포트를 벗어나지 않도록 보장 */
+  .moodboard-create-content,
+  .template-select-content,
+  .block-modal-content,
+  .settings-modal-content {
+    max-width: calc(100vw - 32px) !important;
+    width: 100% !important;
+    max-height: calc(100vh - 64px - 32px) !important;
+  }
+
+  .text-style-modal-content {
+    max-width: calc(100vw - 32px) !important;
+    width: 100% !important;
+    max-height: calc(100vh - 64px - 32px) !important;
+  }
+
+  /* 모든 모달이 하단 네비게이션 바를 고려 */
+  .block-modal,
+  .settings-modal,
+  .moodboard-create-modal,
+  .template-select-modal,
+  .text-style-modal {
+    bottom: 64px !important;
+    padding: 16px !important;
+  }
+}
+
+/* 텍스트 스타일 모달 */
+.text-style-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 64px;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10030;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.2s ease;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.text-style-modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: calc(100vw - 32px);
+  width: 100%;
+  max-height: calc(100vh - 64px - 32px);
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.text-style-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.text-style-modal-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  color: #000;
+}
+
+.text-style-modal-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.text-style-modal-close:hover {
+  background: #f0f0f0;
+}
+
+.color-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.color-option {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.color-option:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.font-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.font-option {
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 16px;
+  text-align: center;
+}
+
+.font-option:hover {
+  border-color: #ff5e00;
+  background: #fff5f0;
+  transform: translateY(-2px);
+}
+
+.bg-color-option {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.bg-color-option:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.filter-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.filter-option {
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  background: #fafafa;
+}
+
+.filter-option:hover {
+  border-color: #ff5e00;
+  background: #fff5f0;
+  transform: translateY(-2px);
+}
+
+.filter-preview {
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(45deg, #ff5e00, #ff8c42);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.emoji-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+  padding: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.emoji-option {
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emoji-option:hover {
+  background: #f0f0f0;
+}
+
+.folder-item.drag-over {
+  border: 2px dashed #ff5e00;
+  background: #fff5f0;
+  transform: scale(1.02);
+}
+
+.saved-cut-item[draggable="true"] {
+  cursor: move;
+}
+
+.saved-cut-item[draggable="true"]:active {
+  opacity: 0.5;
+}
+
+/* 모바일 최적화: 사이드바는 항상 숨김, 캔버스는 전체 너비 */
+@media (max-width: 480px) {
+  .editor-sidebar {
+    display: none; /* 모바일에서는 사이드바 완전히 숨김 */
+  }
+
+  .editor-moodboard-canvas {
+    padding: 16px;
+    min-height: 400px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .moodboard-editor-content {
+    max-width: 100vw;
+    width: 100%;
+  }
+
+  .canvas-toolbar {
+    padding: 10px 12px;
+    flex-wrap: wrap;
+    gap: 6px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .toolbar-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
 }

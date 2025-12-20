@@ -28,6 +28,7 @@ body {
   max-width: 402px;
   margin: 0 auto;
   background: #fff;
+  height: 100dvh;
   min-height: 100vh;
   position: relative;
   overflow: visible;
@@ -47,6 +48,8 @@ body {
   padding-bottom: calc(64px + env(safe-area-inset-bottom));
   position: relative;
   min-height: 0;
+  touch-action: pan-y;
+  overscroll-behavior-y: contain;
 }
 
 /* ====================================

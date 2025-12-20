@@ -1,92 +1,210 @@
 <!DOCTYPE html>
 <html lang="ko">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MUMU – Creator MY PAGE</title>
-  <link rel="stylesheet" href="/public/css/tabbar.css" />
-  <link rel="stylesheet" href="/public/css/mypage_creator.css" />
-</head>
-
-<body>
-  <div class="app-frame">
-    <!-- SCROLL영역 -->
-    <main class="app-scroll">
-      <!-- HEADER (무조건 scroll 안쪽) -->
-      <!-- <header class="header">
-        <div class="header-title">MUMU</div>
-        <div class="header-right">마이페이지</div>
-      </header> -->
-
-      <!-- PROFILE -->
-      <section class="profile-box">
-        <div class="profile-bg"></div>
-
-        <!-- <button class="creator-mode-btn">창작자모드</button> -->
-
-        <div class="profile-content">
-          <div class="profile-header-row">
-            <div class="profile-avatar-wrapper">
-              <div class="profile-avatar"></div>
-              <div class="setting-icon">
-                <img src="/public/assets/icons/setting.svg" alt="setting" loading="lazy">
-              </div>
-            </div>
-            <div class="profile-follow">
-              <div class="follow">
-                <div class="follow-num">12</div>
-                <div class="follow-label">팔로우</div>
-              </div>
-              <div class="follow-line">
-                <div class="line"></div>
-              </div>
-              <div class="follow">
-                <div class="follow-num">12</div>
-                <div class="follow-label">팔로워</div>
-              </div>
-            </div>
-          </div>
-          <div class="profile-name">박햇살</div>
-          <div class="tag-list">
-            <span class="tag">액션</span>
-            <span class="tag">판타지</span>
-            <span class="tag">개그</span>
-          </div>
-          <div class="profile-desc">작가 설명을 적는 구간<br />링크 연동</div>
-        </div>
-      </section>
-
-      <!-- TAB -->
-      <div class="tab-wrap">
-        <div class="tab active" onclick="goMyFeed()">MY FEED</div>
-        <div class="tab" onclick="goStudio()">스튜디오</div>
-      </div>
-
-      <!-- FEED GRID -->
-      <section class="feed-grid">
-        <div class="feed-item add-btn">+</div>
-        <div class="feed-item"></div>
-        <div class="feed-item"></div>
-        <div class="feed-item"></div>
-      </section>
-    </main>
-
-    <!-- 하단 탭바 -->
-    <div id="tabbar" class="tabbar">
-    </div>
-
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>MUMU – Creator MY PAGE</title>
+    <link rel="stylesheet" href="css/tabbar.css" />
+    <link rel="stylesheet" href="css/mypage_creator.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-      /* ========================== 
-         Tabbar 로드
-      ========================== */
-      fetch("/public/components/tabbar.html")
-        .then((r) => r.text())
-        .then((html) => (document.getElementById("tabbar").innerHTML = html))
-        .catch((error) => console.error("Error fetching tabbar.html:", error));
+      window.SUPABASE_URL = "https://ksipcrcimsnjkgmwzovo.supabase.co";
+      window.SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtzaXBjcmNpbXNuamtnbXd6b3ZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1MDMxMTYsImV4cCI6MjA4MTA3OTExNn0.0drLdNZnd1t-Dk6W_TUSt8_raVWn17WMSvIzCGUD8sw";
     </script>
-    <script src="/public/js/mypage_creator.js" defer></script>
-</body>
+    <script type="module" src="js/supabase_client.js"></script>
+  </head>
 
+  <body>
+    <div class="app-frame">
+      <!-- SCROLL영역 -->
+      <main class="app-scroll">
+        <!-- PROFILE HEADER -->
+        <section class="profile-header-section">
+          <button
+            class="profile-back-btn"
+            onclick="history.back()"
+            aria-label="뒤로가기"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="21"
+              height="20"
+              viewBox="0 0 21 20"
+              fill="none"
+            >
+              <path
+                d="M0.292893 9.29289C-0.0976311 9.68342 -0.0976311 10.3166 0.292893 10.7071L6.65685 17.0711C7.04738 17.4616 7.68054 17.4616 8.07107 17.0711C8.46159 16.6805 8.46159 16.0474 8.07107 15.6569L2.41421 10L8.07107 4.34315C8.46159 3.95262 8.46159 3.31946 8.07107 2.92893C7.68054 2.53841 7.04738 2.53841 6.65685 2.92893L0.292893 9.29289ZM19.7139 11C20.2662 11 20.7139 10.5523 20.7139 10C20.7139 9.44772 20.2662 9 19.7139 9V10V11ZM1 10V11H19.7139V10V9H1V10Z"
+                fill="black"
+              />
+            </svg>
+          </button>
+          <button class="profile-follow-btn">팔로우</button>
+        </section>
+
+        <!-- PROFILE -->
+        <section class="profile-box">
+          <div class="profile-bg">
+            <div class="profile-content">
+              <div class="profile-header-row">
+                <div class="profile-name-section">
+                  <div class="profile-text-group">
+                    <h1 class="profile-name">사용자</h1>
+                    <p class="profile-intro">작가 소개글이 없습니다.</p>
+                  </div>
+                  <div class="tag-list">
+                    <span class="tag">액션</span>
+                    <span class="tag">판타지</span>
+                  </div>
+                </div>
+                <div class="profile-stats">
+                  <div class="profile-stat-item">
+                    <div class="profile-stat-num">12</div>
+                    <div class="profile-stat-label">무드보드</div>
+                  </div>
+                  <div class="profile-stat-item">
+                    <div class="profile-stat-num">12</div>
+                    <div class="profile-stat-label">팔로우</div>
+                  </div>
+                  <div class="profile-stat-item">
+                    <div class="profile-stat-num">12</div>
+                    <div class="profile-stat-label">팔로워</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- WORKS SECTION -->
+            <section class="works-section">
+              <div class="works-banner">
+                <h2 class="works-title">작품</h2>
+                <button class="works-more-btn">더보기</button>
+              </div>
+              <div class="works-scroll">
+                <div class="work-card">
+                  <div class="work-card-arrow">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="21"
+                      height="15"
+                      viewBox="0 0 21 15"
+                      fill="none"
+                    >
+                      <path
+                        d="M1 6.36328C0.447715 6.36328 0 6.811 0 7.36328C0 7.91557 0.447715 8.36328 1 8.36328V7.36328V6.36328ZM20.421 8.07039C20.8115 7.67986 20.8115 7.0467 20.421 6.65617L14.057 0.292213C13.6665 -0.0983109 13.0333 -0.0983109 12.6428 0.292213C12.2523 0.682738 12.2523 1.3159 12.6428 1.70643L18.2997 7.36328L12.6428 13.0201C12.2523 13.4107 12.2523 14.0438 12.6428 14.4343C13.0333 14.8249 13.6665 14.8249 14.057 14.4343L20.421 8.07039ZM1 7.36328V8.36328H19.7139V7.36328V6.36328H1V7.36328Z"
+                        fill="#FF5E00"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div class="work-card">
+                  <div class="work-card-arrow">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="21"
+                      height="15"
+                      viewBox="0 0 21 15"
+                      fill="none"
+                    >
+                      <path
+                        d="M1 6.36328C0.447715 6.36328 0 6.811 0 7.36328C0 7.91557 0.447715 8.36328 1 8.36328V7.36328V6.36328ZM20.421 8.07039C20.8115 7.67986 20.8115 7.0467 20.421 6.65617L14.057 0.292213C13.6665 -0.0983109 13.0333 -0.0983109 12.6428 0.292213C12.2523 0.682738 12.2523 1.3159 12.6428 1.70643L18.2997 7.36328L12.6428 13.0201C12.2523 13.4107 12.2523 14.0438 12.6428 14.4343C13.0333 14.8249 13.6665 14.8249 14.057 14.4343L20.421 8.07039ZM1 7.36328V8.36328H19.7139V7.36328V6.36328H1V7.36328Z"
+                        fill="#FF5E00"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div class="work-card">
+                  <div class="work-card-arrow">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="21"
+                      height="15"
+                      viewBox="0 0 21 15"
+                      fill="none"
+                    >
+                      <path
+                        d="M1 6.36328C0.447715 6.36328 0 6.811 0 7.36328C0 7.91557 0.447715 8.36328 1 8.36328V7.36328V6.36328ZM20.421 8.07039C20.8115 7.67986 20.8115 7.0467 20.421 6.65617L14.057 0.292213C13.6665 -0.0983109 13.0333 -0.0983109 12.6428 0.292213C12.2523 0.682738 12.2523 1.3159 12.6428 1.70643L18.2997 7.36328L12.6428 13.0201C12.2523 13.4107 12.2523 14.0438 12.6428 14.4343C13.0333 14.8249 13.6665 14.8249 14.057 14.4343L20.421 8.07039ZM1 7.36328V8.36328H19.7139V7.36328V6.36328H1V7.36328Z"
+                        fill="#FF5E00"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div class="work-card">
+                  <div class="work-card-arrow">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="21"
+                      height="15"
+                      viewBox="0 0 21 15"
+                      fill="none"
+                    >
+                      <path
+                        d="M1 6.36328C0.447715 6.36328 0 6.811 0 7.36328C0 7.91557 0.447715 8.36328 1 8.36328V7.36328V6.36328ZM20.421 8.07039C20.8115 7.67986 20.8115 7.0467 20.421 6.65617L14.057 0.292213C13.6665 -0.0983109 13.0333 -0.0983109 12.6428 0.292213C12.2523 0.682738 12.2523 1.3159 12.6428 1.70643L18.2997 7.36328L12.6428 13.0201C12.2523 13.4107 12.2523 14.0438 12.6428 14.4343C13.0333 14.8249 13.6665 14.8249 14.057 14.4343L20.421 8.07039ZM1 7.36328V8.36328H19.7139V7.36328V6.36328H1V7.36328Z"
+                        fill="#FF5E00"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <!-- NEWS SECTION -->
+        <section class="news-section">
+          <h2 class="news-title">소식</h2>
+          <div class="news-list">
+            <a href="creator-post-details.html" class="news-item">
+              <div class="news-timeline">
+                <div class="news-date-circle"></div>
+                <div class="news-timeline-line"></div>
+              </div>
+              <div class="news-content">
+                <div class="news-date">2025.11.27</div>
+                <h3 class="news-item-title">오늘의 내용</h3>
+                <p class="news-item-text">
+                  게시글 본문 내용입니다. 여기에 텍스트를 입...
+                </p>
+                <div class="news-item-image"></div>
+              </div>
+            </a>
+            <a href="creator-post-details.html" class="news-item">
+              <div class="news-timeline">
+                <div class="news-date-circle"></div>
+                <div class="news-timeline-line"></div>
+              </div>
+              <div class="news-content">
+                <div class="news-date">2025.11.20</div>
+                <h3 class="news-item-title">오늘의 내용</h3>
+                <p class="news-item-text">
+                  게시글 본문 내용입니다. 여기에 텍스트를 입...
+                </p>
+              </div>
+            </a>
+            <a href="creator-post-details.html" class="news-item">
+              <div class="news-timeline">
+                <div class="news-date-circle"></div>
+                <div class="news-timeline-line"></div>
+              </div>
+              <div class="news-content">
+                <div class="news-date">2025.11.12</div>
+                <h3 class="news-item-title">오늘의 내용</h3>
+                <p class="news-item-text">
+                  게시글 본문 내용입니다. 여기에 텍스트를 입...
+                </p>
+              </div>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <!-- Bottom Tab Bar -->
+      <div id="tabbar"></div>
+      <script src="js/tabbar-init.js"></script>
+      <script src="js/mypage_creator.js" defer></script>
+    </div>
+  </body>
 </html>

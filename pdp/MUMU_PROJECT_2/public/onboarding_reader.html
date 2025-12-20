@@ -1,77 +1,482 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>MUMU – 취향 설정</title>
+    <link rel="stylesheet" href="css/tabbar.css" />
+    <style>
+      /* Mobile-first layout */
+      body {
+        margin: 0;
+        background: #000;
+        font-family: -apple-system, BlinkMacSystemFont, "Pretendard", sans-serif;
+      }
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>독자 온보딩</title>
-  <link rel="stylesheet" href="/public/css/tabbar.css" />
-  <link rel="stylesheet" href="/public/css/onboarding_reader.css" />
-</head>
+      .app-frame {
+        width: 100%;
+        max-width: 402px;
+        margin: 0 auto;
+        background: #ffffff;
+        min-height: 100vh;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: calc(64px + env(safe-area-inset-bottom));
+        box-sizing: border-box;
+      }
 
-<body>
-  <div class="app-frame">
-    <main class="onboarding-container">
-      <h2 class="title">당신은 누구?</h2>
+      .onboarding-container {
+        flex: 1;
+        padding: 24px 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+      }
 
-      <!-- 당신은 누구? -->
-      <label class="label">당신은 누구?</label>
-      <div class="select-row">
-        <button class="select-btn active" data-value="독자">독자</button>
-        <button class="select-btn" data-value="창작자">창작자</button>
-      </div>
+      .onboarding-header {
+        text-align: center;
+        margin-bottom: 32px;
+      }
 
-      <!-- 선호 포맷 -->
-      <label class="label">선호하는 포맷</label>
-      <div class="select-row">
-        <button class="format-btn" data-value="숏툰">숏툰</button>
-        <button class="format-btn" data-value="롱툰">롱툰</button>
-      </div>
+      .onboarding-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #000;
+        margin: 0 0 8px 0;
+      }
 
-      <!-- 선호 장르 -->
-      <label class="label">선호하는 장르</label>
-      <div class="tag-area" id="genreArea">
-        <button class="tag-btn">로맨스</button>
-        <button class="tag-btn">판타지</button>
-        <button class="tag-btn">액션</button>
-        <button class="tag-btn">스포츠</button>
-        <button class="tag-btn">스릴러</button>
-        <button class="tag-btn">무협/사극</button>
-        <button class="tag-btn">드라마</button>
-        <button class="tag-btn">감성</button>
-        <button class="tag-btn">개그</button>
-        <button class="tag-btn">일상</button>
-      </div>
+      .onboarding-subtitle {
+        font-size: 14px;
+        color: #666;
+        margin: 0;
+      }
 
-      <!-- 취향 -->
-      <label class="label">취향</label>
-      <div class="tag-area" id="tasteArea">
-        <button class="tag-btn">빠른 전개</button>
-        <button class="tag-btn">잔잔한 전개</button>
-        <button class="tag-btn">개그 / 코믹</button>
-        <button class="tag-btn">감성 / 힐링</button>
-        <button class="tag-btn">자극적 · 몰입감</button>
-        <button class="tag-btn">진지한 분위기</button>
-        <button class="tag-btn">밝은 톤</button>
-        <button class="tag-btn">어두운 톤</button>
-        <button class="tag-btn">작화 중심</button>
-        <button class="tag-btn">스토리 중심</button>
-      </div>
+      /* 섹션 스타일 */
+      .section {
+        margin-bottom: 32px;
+      }
 
-      <button class="submit-btn" id="finishBtn">완료</button>
-    </main>
-  </div>
+      .section-label {
+        display: block;
+        font-size: 16px;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 16px;
+      }
 
-  <script>
-    /* ========================== 
-       Tabbar 로드
-    ========================== */
-    fetch("/public/components/tabbar.html")
-      .then((r) => r.text())
-      .then((html) => (document.getElementById("tabbar").innerHTML = html))
-      .catch((error) => console.error("Error fetching tabbar.html:", error));
-  </script>
-  <script src="/public/js/onboarding_reader.js" defer></script>
-</body>
+      .section-label.sub {
+        font-size: 14px;
+        font-weight: 500;
+        color: #666;
+        margin-bottom: 12px;
+      }
 
+      /* 장르 섹션 - Pill 버튼 그리드 */
+      .genre-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .pill-btn {
+        padding: 10px 18px;
+        border: 1px solid #e0e0e0;
+        border-radius: 20px;
+        background: #fff;
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .pill-btn:hover {
+        border-color: #ff5e00;
+      }
+
+      .pill-btn.selected {
+        border-color: #ff5e00;
+        background: #fff3ed;
+        color: #ff5e00;
+      }
+
+      .pill-btn:active {
+        transform: scale(0.98);
+      }
+
+      /* 취향 섹션 - 스크롤 가능한 키워드 영역 */
+      .taste-container {
+        max-height: 300px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .taste-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding-right: 4px;
+      }
+
+      .taste-keyword {
+        padding: 8px 16px;
+        border: 1px solid #e0e0e0;
+        border-radius: 20px;
+        background: #fff;
+        font-size: 13px;
+        font-weight: 400;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .taste-keyword:hover {
+        border-color: #ff5e00;
+      }
+
+      .taste-keyword.selected {
+        border-color: #ff5e00;
+        background: #fff3ed;
+        color: #ff5e00;
+      }
+
+      .taste-keyword:active {
+        transform: scale(0.98);
+      }
+
+      /* 스크롤바 스타일링 (선택사항) */
+      .taste-container::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      .taste-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 2px;
+      }
+
+      .taste-container::-webkit-scrollbar-thumb {
+        background: #ddd;
+        border-radius: 2px;
+      }
+
+      .taste-container::-webkit-scrollbar-thumb:hover {
+        background: #ccc;
+      }
+
+      /* CTA 버튼 */
+      .cta-wrapper {
+        margin-top: auto;
+        padding-top: 24px;
+      }
+
+      .cta-btn {
+        width: 100%;
+        padding: 16px;
+        background: #ff5e00;
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .cta-btn:hover {
+        background: #e55500;
+      }
+
+      .cta-btn:active {
+        background: #e55500;
+        transform: scale(0.98);
+      }
+
+      .cta-btn:disabled {
+        background: #ddd;
+        color: #999;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* 선택 개수 힌트 (선택사항) */
+      .selection-hint {
+        font-size: 12px;
+        color: #999;
+        margin-top: 8px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app-frame">
+      <main class="onboarding-container">
+        <div class="onboarding-header">
+          <h1 class="onboarding-title">취향을 알려주세요</h1>
+          <p class="onboarding-subtitle">
+            맞춤 추천을 위해 선호하는 장르와 취향을 선택해주세요
+          </p>
+        </div>
+
+        <!-- 선호하는 장르 섹션 -->
+        <div class="section">
+          <label class="section-label">선호하는 장르</label>
+          <div class="genre-grid" id="genreGrid">
+            <button type="button" class="pill-btn" data-genre="romance">
+              로맨스
+            </button>
+            <button type="button" class="pill-btn" data-genre="fantasy">
+              판타지
+            </button>
+            <button type="button" class="pill-btn" data-genre="action">
+              액션
+            </button>
+            <button type="button" class="pill-btn" data-genre="comedy">
+              코미디
+            </button>
+            <button type="button" class="pill-btn" data-genre="drama">
+              드라마
+            </button>
+            <button type="button" class="pill-btn" data-genre="thriller">
+              스릴러
+            </button>
+            <button type="button" class="pill-btn" data-genre="horror">
+              공포
+            </button>
+            <button type="button" class="pill-btn" data-genre="sports">
+              스포츠
+            </button>
+            <button type="button" class="pill-btn" data-genre="slice-of-life">
+              일상
+            </button>
+            <button type="button" class="pill-btn" data-genre="sci-fi">
+              SF
+            </button>
+            <button type="button" class="pill-btn" data-genre="historical">
+              사극
+            </button>
+            <button type="button" class="pill-btn" data-genre="mystery">
+              미스터리
+            </button>
+          </div>
+          <p class="selection-hint">여러 개 선택 가능합니다</p>
+        </div>
+
+        <!-- 취향 섹션 -->
+        <div class="section">
+          <label class="section-label sub">취향</label>
+          <div class="taste-container">
+            <div class="taste-grid" id="tasteGrid">
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="happy-ending"
+              >
+                해피엔딩
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="strong-female-lead"
+              >
+                강한 여주
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="second-lead-syndrome"
+              >
+                2차 남주
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="villain-romance"
+              >
+                빌런 로맨스
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="time-travel"
+              >
+                타임슬립
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="reincarnation"
+              >
+                환생
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="contract-marriage"
+              >
+                계약결혼
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="childhood-friends"
+              >
+                소꿉친구
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="enemies-to-lovers"
+              >
+                적에서 연인으로
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="office-romance"
+              >
+                직장 로맨스
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="school-life"
+              >
+                학원물
+              </button>
+              <button type="button" class="taste-keyword" data-taste="isekai">
+                이세계
+              </button>
+              <button type="button" class="taste-keyword" data-taste="system">
+                시스템
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="regression"
+              >
+                회귀
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="transmigration"
+              >
+                빙의
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="otome-game"
+              >
+                오토메 게임
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="reverse-harem"
+              >
+                역하렘
+              </button>
+              <button type="button" class="taste-keyword" data-taste="yandere">
+                얀데레
+              </button>
+              <button type="button" class="taste-keyword" data-taste="tsundere">
+                츤데레
+              </button>
+              <button type="button" class="taste-keyword" data-taste="kuudere">
+                쿨데레
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="slow-burn"
+              >
+                슬로우 번
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="love-triangle"
+              >
+                삼각관계
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="friends-to-lovers"
+              >
+                친구에서 연인으로
+              </button>
+              <button type="button" class="taste-keyword" data-taste="age-gap">
+                연상연하
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="noona-romance"
+              >
+                누나 로맨스
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="brother-complex"
+              >
+                브라콘
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="sister-complex"
+              >
+                시스콘
+              </button>
+              <button type="button" class="taste-keyword" data-taste="mafia">
+                마피아
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="ceo-romance"
+              >
+                재벌 로맨스
+              </button>
+              <button type="button" class="taste-keyword" data-taste="idol">
+                아이돌
+              </button>
+              <button
+                type="button"
+                class="taste-keyword"
+                data-taste="celebrity"
+              >
+                연예계
+              </button>
+            </div>
+          </div>
+          <p class="selection-hint">관심 있는 키워드를 선택해주세요</p>
+        </div>
+
+        <!-- CTA 버튼 -->
+        <div class="cta-wrapper">
+          <button type="button" class="cta-btn" id="completeBtn" disabled>
+            추천 시작하기
+          </button>
+        </div>
+      </main>
+    </div>
+
+    <!-- Main Script -->
+    <script type="module" src="/js/onboarding_reader.js"></script>
+  </body>
 </html>

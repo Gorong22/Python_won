@@ -1,45 +1,117 @@
+/* Bottom Tab Bar - BASELINE from index.html */
+/* DO NOT MODIFY - This is the SINGLE SOURCE OF TRUTH */
 .tabbar {
-    width: 100%;
-    max-width: 402px;
-    height: 91px;
-    display: flex;
-    padding: 14px 16.5px 28px 16.5px;
-    gap: 0;
-    justify-content: space-around;
-    align-items: center;
-    position: fixed;
-    left: 50%;
-    bottom: 0;
-    transform: translateX(-50%);
-    z-index: 100;
-    box-sizing: border-box;
-    background: #fff;
-    border-top: 1px solid #DDD;
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: calc(28px + env(safe-area-inset-bottom));
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 402px;
+  height: 64px;
+  background-color: #ffffff;
+  border-top: 1px solid #e5e5e5;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 0;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  z-index: 1000;
+  box-sizing: border-box;
 }
 
-.tabbar .tabbar-tab,
-.tabbar a.tabbar-tab {
-    width: 60px;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.tabbar-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex: 1;
+  text-decoration: none;
+  color: #808080;
+  padding: 4px;
+  transition: color 0.2s;
 }
 
-.tabbar-tab img {
-    width: 30px;
-    height: 30px;
+.tabbar-icon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }
 
 .tabbar-label {
-    font-size: 12px;
-    width: 60px;
-    color: #A0A0A0;
-    margin-top: 4px;
-    display: block;
-    text-align: center;
+  font-size: 11px;
+  font-weight: 400;
+  color: #808080;
+  transition: color 0.2s;
+}
+
+.tabbar-tab.active .tabbar-label {
+  color: #ff6b35;
+}
+
+.tabbar-tab.active .tabbar-icon {
+  filter: brightness(0) saturate(100%) invert(58%) sepia(95%) saturate(1352%)
+    hue-rotate(345deg) brightness(101%) contrast(101%);
+}
+
+.tabbar-tab:active .tabbar-label {
+  color: #1a1a1a;
+}
+
+.tabbar-tab:active .tabbar-icon {
+  opacity: 0.7;
+  transform: scale(0.95);
+  transition: opacity 0.1s, transform 0.1s;
+}
+
+/* Ensure active state persists after click */
+.tabbar-tab.active .tabbar-icon {
+  filter: brightness(0) saturate(100%) invert(58%) sepia(95%) saturate(1352%)
+    hue-rotate(345deg) brightness(101%) contrast(101%) !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Tabbar Container */
+#tabbar {
+  flex-shrink: 0;
+  z-index: 10001;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 402px;
+  margin: 0 auto;
+}
+
+/* Ensure nav.tabbar inside #tabbar gets proper styling */
+#tabbar .tabbar,
+#tabbar nav.tabbar {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 100% !important;
+  max-width: 402px !important;
+  height: 64px !important;
+  background-color: #ffffff !important;
+  border-top: 1px solid #e5e5e5 !important;
+  display: flex !important;
+  justify-content: space-around !important;
+  align-items: center !important;
+  padding: 8px 0 !important;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom)) !important;
+  z-index: 10000 !important;
+  box-sizing: border-box !important;
+}
+
+/* Responsive adjustments */
+@media (min-width: 403px) {
+  .tabbar,
+  #tabbar .tabbar,
+  #tabbar nav.tabbar {
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+  }
 }

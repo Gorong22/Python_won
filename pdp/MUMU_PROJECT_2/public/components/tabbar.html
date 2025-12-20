@@ -1,31 +1,27 @@
 <nav class="tabbar">
-  <!-- 1. 홈 -->
-  <a href="/index.html" class="tabbar-tab">
-    <img src="/public/assets/icons/home.svg" alt="home" loading="lazy" />
+  <a href="index.html" class="tabbar-tab" data-page="index">
+    <img src="assets/icons/home.svg" alt="홈" class="tabbar-icon" />
     <span class="tabbar-label">홈</span>
   </a>
-
-  <!-- 2. 게시판 -->
-  <a href="/public/community.html" class="tabbar-tab">
-    <img src="/public/assets/icons/community.svg" alt="community" loading="lazy" />
-    <span class="tabbar-label">게시글</span>
+  <a href="community.html" class="tabbar-tab" data-page="community">
+    <img src="assets/icons/community.svg" alt="커뮤니티" class="tabbar-icon" />
+    <span class="tabbar-label">커뮤니티</span>
   </a>
-
-  <!-- 3. 발견 -->
-  <a href="/public/explore.html" class="tabbar-tab">
-    <img src="/public/assets/icons/explore.svg" alt="explore" loading="lazy" />
-    <span class="tabbar-label">발견</span>
+  <a href="explore.html" class="tabbar-tab" data-page="explore">
+    <img src="assets/icons/explore.svg" alt="탐색" class="tabbar-icon" />
+    <span class="tabbar-label">탐색</span>
   </a>
-
-  <!-- 4. 스토어 -->
-  <a href="/public/store.html" class="tabbar-tab">
-    <img src="/public/assets/icons/store.svg" alt="store" loading="lazy" />
+  <a href="store.html" class="tabbar-tab" data-page="store">
+    <img src="assets/icons/store.svg" alt="스토어" class="tabbar-icon" />
     <span class="tabbar-label">스토어</span>
   </a>
-
-  <!-- 5. 마이페이지 -->
-  <a href="/public/mypage_reader.html" class="tabbar-tab">
-    <img src="/public/assets/icons/mypage.svg" alt="mypage" loading="lazy" />
+  <a
+    href="mypage_reader.html"
+    class="tabbar-tab"
+    id="mypage-link"
+    data-page="mypage_reader"
+  >
+    <img src="assets/icons/mypage.svg" alt="마이페이지" class="tabbar-icon" />
     <span class="tabbar-label">마이페이지</span>
   </a>
 </nav>
