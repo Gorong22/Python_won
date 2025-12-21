@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>MUMU – 마이페이지 (독자)</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Nanum+Gothic:wght@400;700;800&family=Nanum+Pen+Script&family=Gamja+Flower&family=Dongle:wght@300;400;700&family=Gowun+Batang:wght@400;700&family=Jua&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../css/tabbar.css">
+  <link rel="stylesheet" href="reader_mypage.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    window.SUPABASE_URL = "https://ksipcrcimsnjkgmwzovo.supabase.co";
+    window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtzaXBjcmNpbXNuamtnbXd6b3ZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1MDMxMTYsImV4cCI6MjA4MTA3OTExNn0.0drLdNZnd1t-Dk6W_TUSt8_raVWn17WMSvIzCGUD8sw";
+  </script>
+</head>
+<body>
+  <div class="app-frame">
+    <div class="app-scroll">
+      <!-- 프로필 영역 -->
+      <section class="profile-box">
+        <div class="profile-content">
+          <div class="profile-header-row">
+            <div class="profile-avatar-wrapper">
+              <div class="profile-avatar" id="profile-avatar"></div>
+            </div>
+          </div>
+          <div class="profile-name" id="profile-name">독자</div>
+          <div class="profile-stats" id="profile-stats">
+            <span class="follow-stat-item" onclick="openFollowListModal('following')">
+              <span class="follow-num" id="following-count">0</span> 팔로우
+            </span>
+            <span class="follow-stat-item" onclick="openFollowListModal('followers')">
+              <span class="follow-num" id="followers-count">0</span> 팔로워
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 탭 구조 -->
+      <div class="tab-wrap">
+        <div class="tab active" data-tab="mood" onclick="switchTab('mood')">MY MOOD</div>
+        <div class="tab" data-tab="my" onclick="switchTab('my')">MY</div>
+      </div>
+
+      <!-- MY MOOD 탭 -->
+      <section id="tab-mood" class="tab-content active">
+        <!-- 대표 무드보드 (Hero) -->
+        <section class="featured-moodboard-section">
+          <div class="featured-header">
+            <h3 class="featured-title">MY MOOD</h3>
+          </div>
+          <div id="featured-moodboard" class="featured-moodboard-preview">
+            <div id="featured-mood-text" class="featured-mood-text" style="display: none"></div>
+            <div id="featured-content" class="featured-content"></div>
+            <div id="featured-empty" class="featured-empty-state">
+              <div class="empty-state-illustration">✨</div>
+              <p class="empty-state-text">대표 무드보드를 설정해 주세요</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 무드보드 Grid -->
+        <section class="moodboards-grid-section">
+          <div class="moodboards-grid-header">
+            <h4 class="moodboards-grid-title">무드보드</h4>
+          </div>
+          <div id="moodboards-grid" class="moodboards-grid">
+            <!-- 무드보드 카드들이 동적으로 추가됨 -->
+          </div>
+          <div id="moodboards-empty" class="empty-state-card" style="display: none">
+            <div class="empty-state-illustration">🎨</div>
+            <p class="empty-state-text">무드보드가 없습니다</p>
+          </div>
+        </section>
+      </section>
+
+      <!-- MY 탭 -->
+      <section id="tab-my" class="tab-content">
+        <!-- 저장한 컷 섹션 -->
+        <section class="saved-content-section-card">
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <h3 class="settings-card-title">저장한 컷</h3>
+            </div>
+            <div class="settings-card-body">
+              <!-- 폴더 리스트 뷰 -->
+              <div id="folder-list-view" class="folder-list-view">
+                <div class="folders-header-inline">
+                  <h4 class="folders-title-inline">폴더</h4>
+                </div>
+                <div id="folders-grid" class="folders-grid">
+                  <!-- 폴더 카드들이 동적으로 추가됨 -->
+                </div>
+                <div id="folders-empty" class="empty-state-card" style="display: none">
+                  <div class="empty-state-illustration">📁</div>
+                  <p class="empty-state-text">폴더가 없습니다</p>
+                </div>
+              </div>
+
+              <!-- 저장된 컷 전체 섹션 -->
+              <div class="saved-cuts-section-inline">
+                <h4 class="saved-cuts-title-inline">저장된 컷 전체</h4>
+                <div id="saved-cuts-grid" class="saved-cuts-grid">
+                  <!-- 저장된 컷 카드들이 동적으로 추가됨 -->
+                </div>
+                <div id="saved-cuts-empty" class="empty-state-card" style="display: none">
+                  <div class="empty-state-illustration">🖼️</div>
+                  <p class="empty-state-text">저장된 컷이 없습니다</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 좋아요한 작품 섹션 -->
+        <section class="interactions-section-card">
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <h3 class="settings-card-title">좋아요한 작품</h3>
+            </div>
+            <div class="settings-card-body">
+              <div id="liked-works-grid" class="works-grid-compact">
+                <!-- 좋아요한 작품 카드들이 동적으로 추가됨 -->
+              </div>
+              <div id="liked-works-empty" class="empty-state-card" style="display: none">
+                <div class="empty-state-illustration">📚</div>
+                <p class="empty-state-text">좋아요한 작품이 없습니다</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 설정 버튼 -->
+        <section class="settings-section-card">
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <h3 class="settings-card-title">설정</h3>
+            </div>
+            <div class="settings-card-body">
+              <button class="settings-item-btn" onclick="openSettingsModal()">
+                <div class="settings-item-content">
+                  <div class="settings-item-icon">⚙️</div>
+                  <div class="settings-item-text">
+                    <span class="settings-item-label">설정</span>
+                  </div>
+                </div>
+                <svg class="settings-item-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 폴더 내용 뷰 (기본적으로 숨김) -->
+        <div id="folder-content-view" class="folder-content-view" style="display: none">
+          <div class="folder-content-header">
+            <button class="back-btn" onclick="backToFolderList()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                <path d="M0.292893 9.29289C-0.0976311 9.68342 -0.0976311 10.3166 0.292893 10.7071L6.65685 17.0711C7.04738 17.4616 7.68054 17.4616 8.07107 17.0711C8.46159 16.6805 8.46159 16.0474 8.07107 15.6569L2.41421 10L8.07107 4.34315C8.46159 3.95262 8.46159 3.31946 8.07107 2.92893C7.68054 2.53841 7.04738 2.53841 6.65685 2.92893L0.292893 9.29289ZM19.7139 11C20.2662 11 20.7139 10.5523 20.7139 10C20.7139 9.44772 20.2662 9 19.7139 9V10V11ZM1 10V11H19.7139V10V9H1V10Z" fill="black"/>
+              </svg>
+            </button>
+            <h3 id="folder-content-title" class="folder-content-title">폴더 이름</h3>
+          </div>
+          <div id="folder-cuts-grid" class="folder-cuts-grid">
+            <!-- 폴더 내 저장된 컷들이 여기에 표시됨 -->
+          </div>
+          <div id="folder-cuts-empty" class="folder-cuts-empty-state" style="display: none">
+            <div class="empty-state-illustration">🖼️</div>
+            <p class="empty-state-text">이 폴더에 저장된 컷이 없습니다</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 하단 탭바 -->
+    <div id="tabbar"></div>
+
+    <!-- 팔로우/팔로워 리스트 모달 -->
+    <div id="followListModal" class="follow-list-modal">
+      <div class="follow-list-modal-backdrop" onclick="closeFollowListModal()"></div>
+      <div class="follow-list-modal-content">
+        <div class="follow-list-modal-header">
+          <h3 id="follow-list-title" class="follow-list-title">팔로워</h3>
+          <button class="follow-list-close" onclick="closeFollowListModal()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 6L6 18M6 6L18 18" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="follow-list-body" id="follow-list-body">
+          <!-- 팔로우/팔로워 리스트가 동적으로 추가됨 -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 설정 모달 -->
+    <div id="settingsModal" class="settings-modal">
+      <div class="settings-modal-content">
+        <div class="settings-modal-header">
+          <h3>설정</h3>
+          <button class="settings-modal-close" onclick="closeSettingsModal()">×</button>
+        </div>
+        <div class="settings-content">
+          <div class="settings-section">
+            <h4>프로필</h4>
+            <div class="settings-item">
+              <label>닉네임</label>
+              <input type="text" id="profileNameInput" class="settings-input" placeholder="닉네임을 입력하세요">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 무드보드 전체화면 상세 모달 -->
+    <div id="moodboardDetailModal" class="moodboard-detail-modal">
+      <div class="moodboard-detail-backdrop" onclick="closeMoodboardDetailModal()"></div>
+      <div class="moodboard-detail-content">
+        <div class="moodboard-detail-header">
+          <h3 id="moodboard-detail-title" class="moodboard-detail-title"></h3>
+          <button class="moodboard-detail-close" onclick="closeMoodboardDetailModal()">×</button>
+        </div>
+        <div class="moodboard-detail-body" id="moodboard-detail-body">
+          <!-- 무드보드 상세 내용이 동적으로 추가됨 -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script type="module" src="../js/reader_auth.js"></script>
+  <script src="../js/tabbar-init.js"></script>
+  <script type="module" src="reader_mypage.js"></script>
+</body>
+</html>
+

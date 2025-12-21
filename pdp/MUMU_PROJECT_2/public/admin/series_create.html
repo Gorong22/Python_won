@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>작품 등록 - MUMU</title>
+    <link rel="stylesheet" href="series_create.css">
+</head>
+<body>
+    <div class="container">
+        <h1>작품 등록</h1>
+        
+        <form id="seriesForm">
+            <div class="form-group">
+                <label for="title">작품 제목 <span class="required">*</span></label>
+                <input type="text" id="title" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">작품 설명</label>
+                <textarea id="description" name="description" rows="5"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="genre">장르</label>
+                <input type="text" id="genre" name="genre">
+            </div>
+
+            <div class="form-group">
+                <label for="thumbnail">썸네일 이미지 <span class="required">*</span></label>
+                <input type="file" id="thumbnail" name="thumbnail" accept="image/*" required>
+                <div id="thumbnailPreview" class="image-preview"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="background">배경 이미지 (선택)</label>
+                <input type="file" id="background" name="background" accept="image/*">
+                <div id="backgroundPreview" class="image-preview"></div>
+            </div>
+
+            <button type="submit" id="submitBtn">작품 등록</button>
+        </form>
+    </div>
+
+    <!-- Firebase Auth -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+    
+    <!-- Supabase -->
+    <script type="module" src="../js/supabase-auth.js"></script>
+    
+    <!-- Main Script -->
+    <script type="module" src="series_create.js"></script>
+</body>
+</html>
+
+
+
+

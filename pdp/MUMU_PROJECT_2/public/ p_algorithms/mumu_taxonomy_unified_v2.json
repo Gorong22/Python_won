@@ -1,0 +1,337 @@
+{
+  "version": "2.0",
+  "canonical_genres": {
+    "fantasy": {
+      "key": "fantasy",
+      "display_name": "판타지",
+      "description": "판타지 요소가 포함된 작품"
+    },
+    "action": {
+      "key": "action",
+      "display_name": "액션",
+      "description": "액션 요소가 포함된 작품"
+    },
+    "daily": {
+      "key": "daily",
+      "display_name": "일상",
+      "description": "일상적 요소가 포함된 작품"
+    },
+    "thriller": {
+      "key": "thriller",
+      "display_name": "스릴러",
+      "description": "스릴러 요소가 포함된 작품"
+    },
+    "comedy": {
+      "key": "comedy",
+      "display_name": "코미디",
+      "description": "코미디 요소가 포함된 작품"
+    }
+  },
+  "sub_tags": {
+    "reincarnation": {
+      "tag_id": "reincarnation",
+      "display_name": "환생",
+      "aliases": ["전생", "환생물", "전생/환생"],
+      "category": "story_element",
+      "parent_genres": ["fantasy"],
+      "genre_weights": {
+        "fantasy": 0.85,
+        "action": 0.20,
+        "daily": 0.10,
+        "thriller": 0.05,
+        "comedy": 0.15
+      }
+    },
+    "regression": {
+      "tag_id": "regression",
+      "display_name": "회귀",
+      "aliases": ["회귀물", "타임슬립", "회귀/타임슬립", "귀환"],
+      "category": "story_element",
+      "parent_genres": ["fantasy", "action"],
+      "genre_weights": {
+        "fantasy": 0.80,
+        "action": 0.30,
+        "daily": 0.15,
+        "thriller": 0.10,
+        "comedy": 0.20
+      }
+    },
+    "transmigration": {
+      "tag_id": "transmigration",
+      "display_name": "빙의",
+      "aliases": ["영혼체인지/빙의", "빙의물"],
+      "category": "story_element",
+      "parent_genres": ["fantasy"],
+      "genre_weights": {
+        "fantasy": 0.75,
+        "action": 0.15,
+        "daily": 0.40,
+        "thriller": 0.10,
+        "comedy": 0.25
+      }
+    },
+    "happy-ending": {
+      "tag_id": "happy-ending",
+      "display_name": "해피엔딩",
+      "aliases": ["해피엔딩물"],
+      "category": "mood",
+      "parent_genres": ["fantasy", "daily"],
+      "genre_weights": {
+        "fantasy": 0.60,
+        "action": 0.10,
+        "daily": 0.70,
+        "thriller": 0.05,
+        "comedy": 0.40
+      }
+    },
+    "strong-female-lead": {
+      "tag_id": "strong-female-lead",
+      "display_name": "강한 여주",
+      "aliases": ["우월녀", "여주중심", "강한"],
+      "category": "character",
+      "parent_genres": ["fantasy", "action"],
+      "genre_weights": {
+        "fantasy": 0.70,
+        "action": 0.80,
+        "daily": 0.30,
+        "thriller": 0.40,
+        "comedy": 0.20
+      }
+    },
+    "healing": {
+      "tag_id": "healing",
+      "display_name": "치유물",
+      "aliases": ["치유물", "힐링물", "힐링"],
+      "category": "mood",
+      "parent_genres": ["daily", "fantasy"],
+      "genre_weights": {
+        "fantasy": 0.50,
+        "action": 0.10,
+        "daily": 0.85,
+        "thriller": 0.05,
+        "comedy": 0.30
+      }
+    },
+    "romance": {
+      "tag_id": "romance",
+      "display_name": "로맨스",
+      "aliases": ["로맨스", "로맨틱"],
+      "category": "mood",
+      "parent_genres": ["fantasy", "daily"],
+      "genre_weights": {
+        "fantasy": 0.65,
+        "action": 0.15,
+        "daily": 0.60,
+        "thriller": 0.20,
+        "comedy": 0.35
+      }
+    },
+    "school-life": {
+      "tag_id": "school-life",
+      "display_name": "학원물",
+      "aliases": ["학원물", "학생"],
+      "category": "setting",
+      "parent_genres": ["daily", "comedy"],
+      "genre_weights": {
+        "fantasy": 0.30,
+        "action": 0.20,
+        "daily": 0.80,
+        "thriller": 0.10,
+        "comedy": 0.60
+      }
+    },
+    "office-romance": {
+      "tag_id": "office-romance",
+      "display_name": "직장 로맨스",
+      "aliases": ["재벌", "회사원", "직장물"],
+      "category": "setting",
+      "parent_genres": ["daily", "fantasy"],
+      "genre_weights": {
+        "fantasy": 0.30,
+        "action": 0.10,
+        "daily": 0.70,
+        "thriller": 0.15,
+        "comedy": 0.40
+      }
+    },
+    "tsundere": {
+      "tag_id": "tsundere",
+      "display_name": "츤데레",
+      "aliases": ["츤데레"],
+      "category": "character",
+      "parent_genres": ["daily", "comedy"],
+      "genre_weights": {
+        "fantasy": 0.40,
+        "action": 0.15,
+        "daily": 0.60,
+        "thriller": 0.10,
+        "comedy": 0.70
+      }
+    },
+    "slow-burn": {
+      "tag_id": "slow-burn",
+      "display_name": "슬로우 번",
+      "aliases": ["잔잔한", "달달물"],
+      "category": "mood",
+      "parent_genres": ["daily", "fantasy"],
+      "genre_weights": {
+        "fantasy": 0.50,
+        "action": 0.05,
+        "daily": 0.80,
+        "thriller": 0.05,
+        "comedy": 0.45
+      }
+    },
+    "action-packed": {
+      "tag_id": "action-packed",
+      "display_name": "액션 중심",
+      "aliases": ["탑등반", "레이드", "무림", "격투"],
+      "category": "story_element",
+      "parent_genres": ["action", "fantasy"],
+      "genre_weights": {
+        "fantasy": 0.60,
+        "action": 0.90,
+        "daily": 0.20,
+        "thriller": 0.50,
+        "comedy": 0.15
+      }
+    },
+    "mystery": {
+      "tag_id": "mystery",
+      "display_name": "미스터리",
+      "aliases": ["미스터리", "추리물", "범죄"],
+      "category": "story_element",
+      "parent_genres": ["thriller"],
+      "genre_weights": {
+        "fantasy": 0.30,
+        "action": 0.40,
+        "daily": 0.20,
+        "thriller": 0.85,
+        "comedy": 0.15
+      }
+    },
+    "horror": {
+      "tag_id": "horror",
+      "display_name": "공포",
+      "aliases": ["호러", "오컬트", "귀신"],
+      "category": "mood",
+      "parent_genres": ["thriller"],
+      "genre_weights": {
+        "fantasy": 0.40,
+        "action": 0.30,
+        "daily": 0.15,
+        "thriller": 0.90,
+        "comedy": 0.10
+      }
+    },
+    "comedy-focused": {
+      "tag_id": "comedy-focused",
+      "display_name": "코미디 중심",
+      "aliases": ["로맨틱코미디", "개그", "개그물"],
+      "category": "mood",
+      "parent_genres": ["comedy", "daily"],
+      "genre_weights": {
+        "fantasy": 0.35,
+        "action": 0.20,
+        "daily": 0.65,
+        "thriller": 0.10,
+        "comedy": 0.85
+      }
+    },
+    "family": {
+      "tag_id": "family",
+      "display_name": "가족물",
+      "aliases": ["가족물", "가족후회물", "육아물"],
+      "category": "setting",
+      "parent_genres": ["daily"],
+      "genre_weights": {
+        "fantasy": 0.40,
+        "action": 0.10,
+        "daily": 0.85,
+        "thriller": 0.05,
+        "comedy": 0.50
+      }
+    },
+    "revenge": {
+      "tag_id": "revenge",
+      "display_name": "복수물",
+      "aliases": ["사이다남", "후회"],
+      "category": "story_element",
+      "parent_genres": ["fantasy", "thriller"],
+      "genre_weights": {
+        "fantasy": 0.70,
+        "action": 0.50,
+        "daily": 0.30,
+        "thriller": 0.60,
+        "comedy": 0.20
+      }
+    },
+    "male-lead-focused": {
+      "tag_id": "male-lead-focused",
+      "display_name": "남주중심",
+      "aliases": ["남주중심"],
+      "category": "character",
+      "parent_genres": ["fantasy", "action"],
+      "genre_weights": {
+        "fantasy": 0.65,
+        "action": 0.70,
+        "daily": 0.35,
+        "thriller": 0.45,
+        "comedy": 0.30
+      }
+    },
+    "sweet": {
+      "tag_id": "sweet",
+      "display_name": "달달물",
+      "aliases": ["달달물", "두근거리는"],
+      "category": "mood",
+      "parent_genres": ["daily", "fantasy"],
+      "genre_weights": {
+        "fantasy": 0.55,
+        "action": 0.10,
+        "daily": 0.75,
+        "thriller": 0.05,
+        "comedy": 0.50
+      }
+    },
+    "historical": {
+      "tag_id": "historical",
+      "display_name": "시대물",
+      "aliases": ["시대물", "사극", "무협/사극"],
+      "category": "setting",
+      "parent_genres": ["action", "fantasy"],
+      "genre_weights": {
+        "fantasy": 0.50,
+        "action": 0.70,
+        "daily": 0.30,
+        "thriller": 0.40,
+        "comedy": 0.25
+      }
+    }
+  },
+  "genre_mapping": {
+    "ui_to_canonical": {
+      "fantasy": "fantasy",
+      "action": "action",
+      "slice-of-life": "daily",
+      "daily": "daily",
+      "thriller": "thriller",
+      "comedy": "comedy",
+      "romance": "fantasy",
+      "drama": "daily",
+      "horror": "thriller",
+      "sports": "action",
+      "mystery": "thriller",
+      "sci-fi": "fantasy",
+      "historical": "daily",
+      "개그": "comedy",
+      "로맨스": "fantasy",
+      "드라마": "daily",
+      "공포": "thriller",
+      "스포츠": "action",
+      "무협/사극": "action",
+      "감성": "daily"
+    }
+  }
+}
+

@@ -1,0 +1,972 @@
+/* ========================= */
+/* GLOBAL                    */
+/* ========================= */
+body {
+  margin: 0;
+  background: #000;
+  font-family: 'Noto Sans KR', Pretendard, sans-serif;
+}
+
+.app-frame {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  background: #ffffff;
+  min-height: 100vh;
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(64px + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+@media (min-width: 421px) {
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px 0;
+  }
+
+  .app-frame {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+    max-width: 420px;
+    width: 420px;
+  }
+}
+
+/* ========================= */
+/* SCROLL AREA               */
+/* ========================= */
+.app-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(64px + env(safe-area-inset-bottom) + 60px);
+  position: relative;
+  min-height: 0;
+}
+
+body.my-mood-view {
+  height: 100vh;
+  overflow: hidden;
+}
+
+body.my-mood-view .app-frame {
+  height: 100vh;
+  overflow: hidden;
+}
+
+body.my-mood-view .app-scroll {
+  height: calc(100vh - 64px - env(safe-area-inset-bottom));
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
+#tab-mood.tab-content.active {
+  height: calc(100vh - 64px - env(safe-area-inset-bottom));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  position: relative;
+}
+
+body.my-mood-view #tab-mood.tab-content.active .featured-moodboard-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  box-sizing: border-box;
+  min-height: 0;
+}
+
+body.my-mood-view #tab-mood.tab-content.active .featured-header {
+  padding: 12px 20px;
+  margin-bottom: 0;
+  flex-shrink: 0;
+  border-bottom: 1px solid #eee;
+}
+
+body.my-mood-view #tab-mood.tab-content.active .featured-moodboard-preview {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  border-radius: 0;
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
+  background: #fafafa;
+}
+
+/* ========================= */
+/* PROFILE                   */
+/* ========================= */
+.profile-box {
+  position: relative;
+  padding: 24px 20px;
+  background: #ffffff;
+  border-bottom: none;
+}
+
+#tab-mood .profile-box {
+  height: 112px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.profile-content {
+  margin-top: 0;
+  padding: 0;
+  position: relative;
+  width: 100%;
+}
+
+.profile-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+#tab-mood .profile-header-row {
+  margin-bottom: 0;
+  align-items: center;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+#tab-mood .profile-avatar {
+  width: 52px;
+  height: 52px;
+}
+
+.profile-avatar {
+  width: 48px;
+  height: 48px;
+  background: #ccc;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#tab-mood .profile-name {
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 4px;
+}
+
+.profile-name {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 8px;
+  text-align: left;
+  color: #111111;
+}
+
+.profile-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.follow-stat-item {
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+}
+
+.follow-stat-item:hover {
+  color: #ff5a2e;
+}
+
+.follow-num {
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+#tab-my .profile-box {
+  padding: 12px 20px;
+}
+
+#tab-my .profile-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+#tab-my .profile-header-row {
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+#tab-my .profile-name {
+  text-align: right;
+  margin-top: 4px;
+}
+
+#tab-my .profile-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+  text-align: left;
+}
+
+/* ========================= */
+/* TABS                      */
+/* ========================= */
+.tab-wrap {
+  display: flex;
+  position: relative;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 14px 0;
+  font-size: 15px;
+  cursor: pointer;
+  color: #666666;
+  font-weight: 500;
+  border-bottom: 1px solid #e5e5e5;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.tab.active {
+  color: #FF5A2E;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #FF5A2E;
+}
+
+/* ========================= */
+/* TAB CONTENT               */
+/* ========================= */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+  padding: 0 16px;
+}
+
+#tab-my.tab-content.active {
+  padding: 0;
+}
+
+/* ========================= */
+/* MY MOOD - Featured        */
+/* ========================= */
+.featured-moodboard-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  box-sizing: border-box;
+  min-height: 0;
+}
+
+.featured-header {
+  padding: 12px 20px;
+  margin-bottom: 0;
+  flex-shrink: 0;
+  border-bottom: 1px solid #eee;
+}
+
+.featured-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  color: #000;
+}
+
+.featured-moodboard-preview {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  border-radius: 0;
+  margin: 0;
+  width: 100%;
+  background: #fafafa;
+  position: relative;
+  overflow: hidden;
+}
+
+.featured-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.featured-mood-text {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.featured-empty-state {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.empty-state-illustration {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.empty-state-text {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+/* ========================= */
+/* MY MOOD - Grid            */
+/* ========================= */
+.moodboards-grid-section {
+  padding: 20px;
+  background: #fff;
+  border-top: 1px solid #eee;
+}
+
+.moodboards-grid-header {
+  margin-bottom: 16px;
+}
+
+.moodboards-grid-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: #000;
+}
+
+.moodboards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.moodboard-card {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  background: #f5f5f5;
+  position: relative;
+}
+
+.moodboard-card:hover {
+  transform: scale(1.02);
+}
+
+.moodboard-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.moodboard-card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+  padding: 12px;
+  color: #fff;
+}
+
+.moodboard-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.empty-state-card {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+/* ========================= */
+/* MY - Settings Card        */
+/* ========================= */
+.settings-section-card,
+.saved-content-section-card,
+.interactions-section-card {
+  margin-bottom: 20px;
+}
+
+.settings-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.settings-card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.settings-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #000;
+}
+
+.settings-card-body {
+  padding: 16px 20px;
+}
+
+.settings-item-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s ease;
+}
+
+.settings-item-btn:hover {
+  background: #f9f9f9;
+}
+
+.settings-item-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.settings-item-icon {
+  font-size: 20px;
+}
+
+.settings-item-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-item-label {
+  font-size: 15px;
+  font-weight: 500;
+  color: #000;
+}
+
+.settings-item-arrow {
+  color: #999;
+  flex-shrink: 0;
+}
+
+/* ========================= */
+/* MY - Saved Cuts          */
+/* ========================= */
+.folder-list-view {
+  margin-bottom: 24px;
+}
+
+.folders-header-inline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.folders-title-inline {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: #000;
+}
+
+.folders-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.folder-card {
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #eee;
+}
+
+.folder-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.folder-card-emoji {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.folder-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+  margin: 0 0 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.folder-card-count {
+  font-size: 12px;
+  color: #666;
+  margin: 0;
+}
+
+.saved-cuts-section-inline {
+  margin-top: 24px;
+}
+
+.saved-cuts-title-inline {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #000;
+}
+
+.saved-cuts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.saved-cut-card {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  background: #f5f5f5;
+}
+
+.saved-cut-card:hover {
+  transform: scale(1.05);
+}
+
+.saved-cut-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ========================= */
+/* MY - Folder Content View  */
+/* ========================= */
+.folder-content-view {
+  padding: 0;
+}
+
+.folder-content-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.folder-content-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+}
+
+.folder-cuts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 16px;
+}
+
+.folder-cuts-empty-state {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+/* ========================= */
+/* MY - Liked Works          */
+/* ========================= */
+.works-grid-compact {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.work-card-compact {
+  background: #f9f9f9;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.work-card-compact:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.work-card-image {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+.work-card-info {
+  padding: 12px;
+}
+
+.work-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+  margin: 0 0 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.work-card-author {
+  font-size: 12px;
+  color: #666;
+  margin: 0;
+}
+
+/* ========================= */
+/* MODALS                    */
+/* ========================= */
+.follow-list-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.follow-list-modal.active {
+  display: flex;
+}
+
+.follow-list-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.follow-list-modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+}
+
+.follow-list-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.follow-list-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.follow-list-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.follow-list-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.follow-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.follow-list-item:last-child {
+  border-bottom: none;
+}
+
+.follow-list-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e5e5e5;
+  background-size: cover;
+  background-position: center;
+}
+
+.follow-list-name {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 500;
+  color: #000;
+}
+
+.settings-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.settings-modal.active {
+  display: flex;
+}
+
+.settings-modal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.settings-modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+}
+
+.settings-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.settings-modal-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.settings-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.settings-section {
+  margin-bottom: 24px;
+}
+
+.settings-section h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #000;
+}
+
+.settings-item {
+  margin-bottom: 16px;
+}
+
+.settings-item label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.settings-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.moodboard-detail-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.moodboard-detail-modal.active {
+  display: flex;
+}
+
+.moodboard-detail-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.moodboard-detail-content {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  background: #fff;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.3s ease;
+}
+
+.moodboard-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.moodboard-detail-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.moodboard-detail-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.moodboard-detail-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+

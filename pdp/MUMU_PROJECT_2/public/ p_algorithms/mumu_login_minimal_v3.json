@@ -1,0 +1,67 @@
+{
+  "schema_version": "3.0",
+  "flow_id": "mumu_login_minimal_v3_no_role",
+  "generated_at": "2025-12-16T07:19:38.542515+00:00",
+  "steps": [
+    {
+      "id": "genres",
+      "type": "multi_choice",
+      "title": "선호하시는 장르를 알려주세요",
+      "subtitle": "최대 3개까지 선택하실 수 있어요.",
+      "answer_key": "genres",
+      "min_select": 1,
+      "max_select": 3,
+      "options": [
+        "로맨스",
+        "판타지",
+        "액션",
+        "스포츠",
+        "스릴러",
+        "무협/사극",
+        "드라마",
+        "감성",
+        "개그",
+        "일상"
+      ],
+      "ui": {
+        "layout": "chips_wrap"
+      }
+    },
+    {
+      "id": "tags",
+      "type": "tag_picker_from_clusters",
+      "title": "취향 키워드를 조금만 더 골라주실래요?",
+      "subtitle": "선택하신 장르에 맞춰, 자주 사랑받는 키워드부터 보여드릴게요. (최대 3개)",
+      "answer_key": "tags",
+      "max_select": 3,
+      "source": {
+        "taxonomy_ref": "mumu_cluster_taxonomy_v1.json",
+        "cluster_filter": {
+          "mode": "genre_overlap_any",
+          "from_answer_key": "genres"
+        },
+        "display_policy": {
+          "max_clusters": 8,
+          "two_tags_upto_rank": 4,
+          "default_tags_per_cluster": 1
+        }
+      },
+      "ui": {
+        "layout": "chips_wrap",
+        "grouped": true
+      }
+    },
+    {
+      "id": "submit",
+      "type": "submit",
+      "title": "선택해 주셔서 감사합니다 :)",
+      "subtitle": "지금 선택하신 취향으로 첫 추천을 준비해 드릴게요.",
+      "payload": {
+        "answers": "$answers"
+      },
+      "ui": {
+        "primary_button_label": "완료하기"
+      }
+    }
+  ]
+}

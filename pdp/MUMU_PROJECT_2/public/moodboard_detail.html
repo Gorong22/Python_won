@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>MUMU – 무드보드</title>
+  <link rel="stylesheet" href="css/tabbar.css" />
+  <link rel="stylesheet" href="css/moodboard_detail.css" />
+</head>
+<body>
+  <div class="app-frame">
+    <!-- Header -->
+    <header class="moodboard-header" id="moodboardHeader">
+      <button class="back-btn" onclick="handleBack()" aria-label="뒤로가기">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="header-title-area">
+        <h1 class="moodboard-title-text" id="moodboardTitle">무드보드</h1>
+        <div class="creator-info" id="creatorInfo">
+          <span class="creator-name" id="creatorName">작가</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="action-btn" id="editBtn" onclick="toggleEditMode()" style="display: none;">편집</button>
+        <button class="action-btn" id="saveBtn" onclick="saveMoodboard()" style="display: none;">저장</button>
+        <button class="action-btn" id="followBtn" onclick="toggleFollow()">팔로우</button>
+      </div>
+    </header>
+
+    <!-- Canvas Area -->
+    <div class="app-scroll">
+      <div class="moodboard-canvas-container">
+        <div class="moodboard-canvas" id="moodboardCanvas">
+          <!-- 블록들이 absolute로 렌더링됨 -->
+        </div>
+      </div>
+
+      <!-- Editor Panel (편집 모드일 때만 표시) -->
+      <div class="editor-panel" id="editorPanel" style="display: none;">
+        <div class="editor-tabs">
+          <button class="editor-tab active" data-tab="add" onclick="switchEditorTab('add')">추가</button>
+          <button class="editor-tab" data-tab="style" onclick="switchEditorTab('style')">스타일</button>
+          <button class="editor-tab" data-tab="preset" onclick="switchEditorTab('preset')">프리셋</button>
+        </div>
+
+        <!-- Add Tab -->
+        <div class="editor-tab-content active" id="editorTabAdd">
+          <div class="add-block-options">
+            <button class="add-block-btn" onclick="addBlock('cut')">
+              <span class="icon">🖼️</span>
+              <span>컷 추가</span>
+            </button>
+            <button class="add-block-btn" onclick="addBlock('text')">
+              <span class="icon">📝</span>
+              <span>텍스트</span>
+            </button>
+            <button class="add-block-btn" onclick="addBlock('emoji')">
+              <span class="icon">😊</span>
+              <span>이모지</span>
+            </button>
+            <button class="add-block-btn" onclick="addBlock('color')">
+              <span class="icon">🎨</span>
+              <span>색상</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Style Tab -->
+        <div class="editor-tab-content" id="editorTabStyle">
+          <div class="style-panel" id="stylePanel">
+            <p class="style-hint">블록을 선택하면 스타일을 편집할 수 있습니다</p>
+          </div>
+        </div>
+
+        <!-- Preset Tab -->
+        <div class="editor-tab-content" id="editorTabPreset">
+          <div class="preset-grids" id="presetGrids">
+            <!-- 프리셋 그리드들이 동적으로 생성됨 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Comment Section -->
+      <div class="comment-section" id="commentSection">
+        <h3 class="comment-section-title">댓글</h3>
+        <div class="comment-list" id="commentList">
+          <!-- 댓글들이 동적으로 로드됨 -->
+        </div>
+        <div class="comment-input-area">
+          <input type="text" class="comment-input" id="commentInput" placeholder="댓글을 입력하세요..." />
+          <button class="comment-submit-btn" onclick="submitComment()">등록</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabbar -->
+    <div id="tabbar"></div>
+  </div>
+
+  <!-- Cut Selection Modal -->
+  <div class="modal-overlay" id="cutSelectionModal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>컷 선택</h2>
+        <button class="modal-close" onclick="closeCutSelectionModal()">×</button>
+      </div>
+      <div class="cut-grid" id="cutGrid">
+        <!-- 컷들이 동적으로 로드됨 -->
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/supabase-auth.js"></script>
+  <script src="js/tabbar-init.js"></script>
+  <script type="module" src="js/moodboard_detail.js"></script>
+</body>
+</html>
+

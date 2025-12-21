@@ -1,0 +1,1713 @@
+// Firebase UID 가져오기
+async function getCurrentFirebaseUid() {
+  try {
+    if (typeof window.getCurrentFirebaseUser === "function") {
+      const user = await window.getCurrentFirebaseUser();
+      return user?.uid || null;
+    }
+    const { auth } = await import("/js/firebase_init.js");
+    const { onAuthStateChanged } = await import(
+      "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"
+    );
+    return new Promise((resolve) => {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        unsubscribe();
+        resolve(user?.uid || null);
+      });
+    });
+  } catch (error) {
+    console.error("Firebase UID 가져오기 실패:", error);
+    return null;
+  }
+}
+
+// Supabase client 대기
+function waitForSupabase(cb, maxAttempts = 100) {
+  let attempts = 0;
+  function check() {
+    attempts++;
+    if (window.supabase) {
+      cb(window.supabase);
+      return;
+    }
+    if (attempts >= maxAttempts) {
+      console.warn("window.supabase를 찾을 수 없습니다.");
+      return;
+    }
+    setTimeout(check, 50);
+  }
+  check();
+}
+
+// UUID 판별 함수
+function isUUID(str) {
+  if (!str || typeof str !== "string") return false;
+  // UUID v4 형식: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(str);
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  console.debug("[CREATOR][PAGE] 페이지 로드 시작");
+
+  // URL에서 creator_id 가져오기 (firebase_uid)
+  const urlParams = new URLSearchParams(window.location.search);
+  const creatorId = urlParams.get("creator_id");
+
+  // 🔍 UUID 추적 로그
+  console.log("[CREATOR_TRACE][SOURCE=URL_PARAM]");
+  console.log("creatorId value:", creatorId);
+  console.log("creatorId typeof:", typeof creatorId);
+  console.log("isUUID:", isUUID(creatorId));
+  console.log("isFirebaseUID:", creatorId && !isUUID(creatorId));
+
+  // ⚠️ UUID 차단 로직
+  if (creatorId && isUUID(creatorId)) {
+    console.error(
+      "[CREATOR_TRACE][ERROR] UUID가 URL 파라미터로 유입됨:",
+      creatorId
+    );
+    const nameEl = document.querySelector(".profile-name");
+    const introEl = document.querySelector(".profile-intro");
+    if (nameEl) nameEl.textContent = "잘못된 작가 경로";
+    if (introEl)
+      introEl.textContent =
+        "작가 정보를 찾을 수 없습니다. 올바른 경로로 접근해주세요.";
+    return;
+  }
+
+  console.debug(
+    "[CREATOR][DEBUG] URL 파라미터 creator_id(firebase_uid):",
+    creatorId
+  );
+
+  // 로그인한 사용자 확인
+  const currentUserId = await getCurrentFirebaseUid();
+  console.debug("[CREATOR][DEBUG] 현재 사용자 UID:", currentUserId);
+
+  const targetCreatorId = creatorId || currentUserId;
+  console.debug(
+    "[CREATOR][DEBUG] 대상 작가 UID(firebase_uid):",
+    targetCreatorId
+  );
+
+  if (!targetCreatorId) {
+    console.warn("[CREATOR][PAGE] 작가 UID가 없습니다 - 페이지 로드 불가");
+    return;
+  }
+
+  // ⚠️ targetCreatorId도 UUID 체크
+  if (isUUID(targetCreatorId)) {
+    console.error(
+      "[CREATOR_TRACE][ERROR] targetCreatorId가 UUID임:",
+      targetCreatorId
+    );
+    const nameEl = document.querySelector(".profile-name");
+    const introEl = document.querySelector(".profile-intro");
+    if (nameEl) nameEl.textContent = "잘못된 작가 경로";
+    if (introEl) introEl.textContent = "작가 정보를 찾을 수 없습니다.";
+    return;
+  }
+
+  // 작가 정보 로드
+  await loadCreatorProfile(targetCreatorId);
+
+  // 작품 목록 로드
+  await loadWorksList(targetCreatorId);
+
+  // 팔로우/팔로워 숫자 로드
+  await loadFollowStats(targetCreatorId);
+
+  // work-card 클릭 이벤트 (이벤트 위임)
+  document.addEventListener("click", (e) => {
+    const workCard = e.target.closest(".work-card");
+    if (!workCard) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const workId = workCard.getAttribute("data-work-id");
+    if (workId) {
+      window.location.href = `creator_work_detail.html?work_id=${workId}`;
+    } else {
+      window.location.href = "creator_work_detail.html";
+    }
+  });
+
+  // profile-follow-btn 클릭 이벤트
+  const followBtn = document.querySelector(".profile-follow-btn");
+  if (followBtn) {
+    // 본인 페이지면 팔로우 버튼 숨기기
+    if (!creatorId || creatorId === currentUserId) {
+      console.log("[CREATOR][PAGE] 본인 페이지 - 팔로우 버튼 숨김");
+      followBtn.style.display = "none";
+    } else {
+      console.debug(
+        "[CREATOR][PAGE] 팔로우 버튼 이벤트 연결 - creatorId:",
+        creatorId,
+        "currentUserId:",
+        currentUserId
+      );
+      followBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.debug("[FOLLOW] 팔로우 버튼 클릭", {
+          creatorId,
+          currentUserId,
+        });
+        await toggleFollow(creatorId, currentUserId, followBtn);
+      });
+
+      // 팔로우 상태 확인
+      if (currentUserId) {
+        await checkFollowStatus(creatorId, currentUserId, followBtn);
+      } else {
+        console.warn(
+          "[CREATOR][PAGE] 로그인하지 않은 사용자 - 팔로우 상태 확인 건너뜀"
+        );
+      }
+    }
+  } else {
+    console.warn("[CREATOR][PAGE] 팔로우 버튼 요소를 찾을 수 없습니다");
+  }
+
+  // works-more-btn 클릭 이벤트
+  const worksMoreBtn = document.querySelector(".works-more-btn");
+  if (worksMoreBtn) {
+    worksMoreBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const targetCreatorId = creatorId || currentUserId;
+      if (targetCreatorId) {
+        window.location.href = `creator_works_list.html?creator_id=${targetCreatorId}`;
+      } else {
+        window.location.href = "creator_works_list.html";
+      }
+    });
+  }
+});
+
+// 작가 프로필 로드
+async function loadCreatorProfile(creatorId) {
+  if (!creatorId) {
+    console.warn("[CREATOR][PAGE] creatorId 없음");
+    return;
+  }
+
+  // ⚠️ UUID 차단
+  if (isUUID(creatorId)) {
+    console.error(
+      "[CREATOR_TRACE][ERROR] loadCreatorProfile에 UUID 유입:",
+      creatorId
+    );
+    const nameEl = document.querySelector(".profile-name");
+    const introEl = document.querySelector(".profile-intro");
+    if (nameEl) nameEl.textContent = "잘못된 작가 경로";
+    if (introEl) introEl.textContent = "작가 정보를 찾을 수 없습니다.";
+    return;
+  }
+
+  console.debug(
+    "[CREATOR][DATA] 작가 프로필 로드 시작 - creatorId:",
+    creatorId
+  );
+
+  waitForSupabase(async () => {
+    try {
+      console.debug("[CREATOR][DEBUG] creatorId(firebase_uid):", creatorId);
+      console.debug("[CREATOR][DATA] creators 조회 쿼리 실행 전");
+
+      // 🔍 추적 로그
+      console.log("[CREATOR_TRACE][SOURCE=PROFILE_LOAD]");
+      console.log("creatorId value:", creatorId);
+      console.log("creatorId typeof:", typeof creatorId);
+      console.log("isUUID:", isUUID(creatorId));
+      console.log("isFirebaseUID:", !isUUID(creatorId));
+
+      const { data: creators, error } = await window.supabase
+        .from("creators")
+        .select("firebase_uid, pen_name, introduction, profile_image_url, background_image_url, bg_x, bg_y, bg_scale, bio_text, bio_color, bio_font_size, status_text, status_color")
+        .eq("firebase_uid", creatorId)
+        .limit(1);
+
+      console.debug("[CREATOR][DATA] creators 조회 결과:", {
+        data: creators,
+        error,
+        dataLength: creators?.length || 0,
+        firebase_uid: creatorId,
+      });
+
+      const creator = creators && creators.length > 0 ? creators[0] : null;
+
+      if (error) {
+        console.error("[CREATOR][PAGE] 작가 프로필 로드 실패:", error);
+        // 기본값 표시
+        const nameEl = document.querySelector(".profile-name");
+        const introEl = document.querySelector(".profile-intro");
+        if (nameEl) nameEl.textContent = "사용자";
+        if (introEl) introEl.textContent = "작가 소개글이 없습니다.";
+        return;
+      }
+
+      if (creator) {
+        console.debug("[CREATOR][DATA] 작가 정보 발견:", creator);
+        const nameEl = document.querySelector(".profile-name");
+        const introEl = document.querySelector(".profile-intro");
+
+        if (nameEl) {
+          const displayName = creator.pen_name || "사용자";
+          nameEl.textContent = displayName;
+          console.debug("[CREATOR][DATA] 작가 이름 업데이트:", displayName);
+        }
+
+        if (introEl) {
+          const displayIntro =
+            creator.introduction || "작가 소개글이 없습니다.";
+          introEl.textContent = displayIntro;
+          console.debug("[CREATOR][DATA] 작가 소개 업데이트:", displayIntro);
+        }
+
+        // bio 텍스트 복원
+        const bioEl = document.getElementById("profile-intro");
+        if (bioEl && creator.bio_text) {
+          bioEl.textContent = creator.bio_text;
+          if (creator.bio_color) {
+            bioEl.style.color = creator.bio_color;
+          }
+          if (creator.bio_font_size) {
+            const fontSizeMap = { small: "12px", normal: "14px", large: "16px" };
+            bioEl.style.fontSize = fontSizeMap[creator.bio_font_size] || "14px";
+          }
+        }
+
+        // status 텍스트 복원
+        const statusEl = document.getElementById("profile-status");
+        if (statusEl && creator.status_text) {
+          statusEl.textContent = creator.status_text;
+          if (creator.status_color) {
+            statusEl.style.color = creator.status_color;
+          }
+        } else if (statusEl) {
+          statusEl.style.display = "none";
+        }
+
+        // 배경 이미지 복원 (object-fit: cover 고정, scale/position 미적용)
+        if (creator.background_image_url) {
+          const profileBg = document.getElementById("profile-bg");
+          if (profileBg) {
+            profileBg.style.backgroundImage = `url(${creator.background_image_url})`;
+            profileBg.style.backgroundSize = "cover";
+            profileBg.style.backgroundPosition = "center";
+            profileBg.style.transform = "";
+            profileBg.style.transformOrigin = "";
+          }
+        }
+
+        // 본인 페이지면 편집 버튼 표시
+        const currentUserId = await getCurrentFirebaseUid();
+        if (creatorId === currentUserId) {
+          const bgEditBtn = document.getElementById("profile-bg-edit-btn");
+          if (bgEditBtn) {
+            bgEditBtn.style.display = "block";
+            if (!bgEditBtn.hasAttribute("data-initialized")) {
+              bgEditBtn.setAttribute("data-initialized", "true");
+              initializeProfileBackgroundEditor(creatorId);
+            }
+          }
+          
+          const bioEditBtn = document.getElementById("profile-bio-edit-btn");
+          if (bioEditBtn) {
+            bioEditBtn.style.display = "block";
+            if (!bioEditBtn.hasAttribute("data-initialized")) {
+              bioEditBtn.setAttribute("data-initialized", "true");
+              initializeBioEditor(creatorId);
+            }
+          }
+          
+          const statusEditBtn = document.getElementById("profile-status-edit-btn");
+          if (statusEditBtn) {
+            statusEditBtn.style.display = "block";
+            if (!statusEditBtn.hasAttribute("data-initialized")) {
+              statusEditBtn.setAttribute("data-initialized", "true");
+              initializeStatusEditor(creatorId);
+            }
+          }
+          
+          const worksEditBtn = document.getElementById("profile-works-edit-btn");
+          if (worksEditBtn) {
+            worksEditBtn.style.display = "block";
+            if (!worksEditBtn.hasAttribute("data-initialized")) {
+              worksEditBtn.setAttribute("data-initialized", "true");
+              initializeWorksThumbnailEditor(creatorId);
+            }
+          }
+        }
+      } else {
+        console.warn(
+          "[CREATOR][DATA] 작가 정보를 찾을 수 없음 - creatorId:",
+          creatorId
+        );
+        const nameEl = document.querySelector(".profile-name");
+        const introEl = document.querySelector(".profile-intro");
+        if (nameEl) nameEl.textContent = "사용자";
+        if (introEl) introEl.textContent = "작가 소개글이 없습니다.";
+      }
+    } catch (err) {
+      console.error("[CREATOR][PAGE] 작가 프로필 로드 예외:", err);
+      const nameEl = document.querySelector(".profile-name");
+      const introEl = document.querySelector(".profile-intro");
+      if (nameEl) nameEl.textContent = "사용자";
+      if (introEl) introEl.textContent = "작가 소개글이 없습니다.";
+    }
+  });
+}
+
+// 작품 목록 로드
+async function loadWorksList(creatorId) {
+  if (!creatorId) return;
+
+  // ⚠️ UUID 차단
+  if (isUUID(creatorId)) {
+    console.error(
+      "[CREATOR_TRACE][ERROR] loadWorksList에 UUID 유입:",
+      creatorId
+    );
+    return;
+  }
+
+  waitForSupabase(async () => {
+    try {
+      // creatorId는 firebase_uid이므로, 먼저 creators 테이블에서 id (UUID)를 가져와야 함
+      const { data: creator, error: creatorError } = await window.supabase
+        .from("creators")
+        .select("id")
+        .eq("firebase_uid", creatorId)
+        .limit(1)
+        .single();
+
+      if (creatorError || !creator) {
+        console.error("[CREATOR][DATA] 작가 UUID 조회 실패:", creatorError);
+        return;
+      }
+
+      const creatorUuid = creator.id;
+
+      // works 테이블은 creator_id (UUID)로 조회
+      const { data: works, error } = await window.supabase
+        .from("works")
+        .select("id, title, thumbnail_url, created_at")
+        .eq("creator_id", creatorUuid)
+        .order("created_at", { ascending: false })
+        .limit(3);
+
+      if (error) {
+        console.error("작품 목록 로드 실패:", error);
+        return;
+      }
+
+      const worksScroll = document.querySelector(".works-scroll");
+      if (!worksScroll) return;
+
+      // 기존 카드 제거
+      worksScroll.innerHTML = "";
+
+      if (!works || works.length === 0) {
+        // 작품이 없을 때
+        return;
+      }
+
+      // 작품 카드 생성
+      works.forEach((work) => {
+        const workCard = document.createElement("div");
+        workCard.className = "work-card";
+        workCard.setAttribute("data-work-id", work.id);
+
+        const thumbnailUrl = work.thumbnail_url || "";
+        workCard.style.backgroundImage = thumbnailUrl
+          ? `url(${thumbnailUrl})`
+          : "none";
+        workCard.style.backgroundSize = "cover";
+        workCard.style.backgroundPosition = "center";
+
+        workCard.innerHTML = `
+          <div class="work-card-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="15" viewBox="0 0 21 15" fill="none">
+              <path d="M1 6.36328C0.447715 6.36328 0 6.811 0 7.36328C0 7.91557 0.447715 8.36328 1 8.36328V7.36328V6.36328ZM20.421 8.07039C20.8115 7.67986 20.8115 7.0467 20.421 6.65617L14.057 0.292213C13.6665 -0.0983109 13.0333 -0.0983109 12.6428 0.292213C12.2523 0.682738 12.2523 1.3159 12.6428 1.70643L18.2997 7.36328L12.6428 13.0201C12.2523 13.4107 12.2523 14.0438 12.6428 14.4343C13.0333 14.8249 13.6665 14.8249 14.057 14.4343L20.421 8.07039ZM1 7.36328V8.36328H19.7139V7.36328V6.36328H1V7.36328Z" fill="#FF5E00"/>
+            </svg>
+          </div>
+        `;
+
+        worksScroll.appendChild(workCard);
+      });
+    } catch (err) {
+      console.error("작품 목록 로드 예외:", err);
+    }
+  });
+}
+
+// 팔로우 토글
+async function toggleFollow(creatorId, userId, followBtn) {
+  // ⚠️ UUID 차단
+  if (creatorId && isUUID(creatorId)) {
+    console.error(
+      "[CREATOR_TRACE][ERROR] toggleFollow에 UUID 유입:",
+      creatorId
+    );
+    showToast("작가 정보를 찾을 수 없습니다.");
+    return;
+  }
+
+  console.debug("[FOLLOW][DEBUG] 팔로우 토글 시작", {
+    creatorId: creatorId,
+    userId: userId,
+    creatorId_type: typeof creatorId,
+    userId_type: typeof userId,
+  });
+
+  if (!window.supabase || !userId) {
+    console.warn("[FOLLOW] Supabase 클라이언트 없음 또는 userId 없음");
+    showToast("로그인이 필요합니다.");
+    return;
+  }
+
+  if (!creatorId) {
+    console.warn("[FOLLOW] creatorId 없음");
+    showToast("작가 정보를 찾을 수 없습니다.");
+    return;
+  }
+
+  const isFollowing = followBtn.classList.contains("following");
+  console.debug(
+    "[FOLLOW][DEBUG] 현재 팔로우 상태:",
+    isFollowing ? "팔로잉 중" : "팔로우 안 함"
+  );
+
+  try {
+    if (isFollowing) {
+      // 팔로우 취소
+      const deletePayload = {
+        reader_id: userId,
+        creator_id: creatorId,
+      };
+      console.debug("[FOLLOW][DEBUG] DELETE payload:", deletePayload);
+
+      const { error } = await window.supabase
+        .from("creator_follows")
+        .delete()
+        .eq("reader_id", userId)
+        .eq("creator_id", creatorId);
+
+      console.debug("[FOLLOW][DEBUG] DELETE result:", { error });
+
+      if (error) {
+        console.error("[FOLLOW] DELETE 실패:", error);
+        showToast("팔로우 취소에 실패했습니다.");
+        return;
+      }
+
+      followBtn.textContent = "팔로우";
+      followBtn.classList.remove("following");
+      showToast("팔로우를 취소했습니다");
+      console.debug("[FOLLOW] DELETE 성공");
+
+      // 팔로워 숫자 업데이트
+      await updateFollowStats(creatorId);
+    } else {
+      // 팔로우 추가
+      const insertPayload = {
+        reader_id: userId,
+        creator_id: creatorId,
+      };
+      console.debug("[FOLLOW][DEBUG] INSERT payload:", insertPayload);
+
+      const { error } = await window.supabase
+        .from("creator_follows")
+        .insert(insertPayload);
+
+      console.debug("[FOLLOW][DEBUG] INSERT result:", { error });
+
+      if (error) {
+        console.error("[FOLLOW] INSERT 실패:", error);
+        if (error.code === "23505" || error.code === "409") {
+          followBtn.textContent = "팔로잉";
+          followBtn.classList.add("following");
+          showToast("이미 팔로우 중입니다.");
+        } else {
+          showToast("팔로우에 실패했습니다.");
+        }
+        return;
+      }
+
+      followBtn.textContent = "팔로잉";
+      followBtn.classList.add("following");
+      showToast("팔로우 되었습니다!");
+      console.debug("[FOLLOW] INSERT 성공");
+
+      // 팔로워 숫자 업데이트
+      await updateFollowStats(creatorId);
+    }
+  } catch (err) {
+    console.error("[FOLLOW] 팔로우 토글 예외:", err);
+    showToast("오류가 발생했습니다.");
+  }
+}
+
+// 팔로우 상태 확인
+async function checkFollowStatus(creatorId, userId, followBtn) {
+  // ⚠️ UUID 차단
+  if (creatorId && isUUID(creatorId)) {
+    console.error(
+      "[CREATOR_TRACE][ERROR] checkFollowStatus에 UUID 유입:",
+      creatorId
+    );
+    return;
+  }
+
+  if (!window.supabase || !userId) {
+    console.warn("[FOLLOW] Supabase 클라이언트 없음 또는 userId 없음");
+    return;
+  }
+
+  console.debug("[FOLLOW] 팔로우 상태 확인 시작", { creatorId, userId });
+
+  try {
+    // creator_follows 테이블의 creator_id는 firebase_uid를 사용해야 함
+    const { data, error } = await window.supabase
+      .from("creator_follows")
+      .select("id")
+      .eq("reader_id", userId)
+      .eq("creator_id", creatorId)
+      .limit(1);
+
+    console.debug("[FOLLOW] creator_follows 조회 결과:", {
+      data,
+      error,
+      dataLength: data?.length || 0,
+    });
+
+    if (error && error.code !== "PGRST116") {
+      console.error("[FOLLOW] 팔로우 상태 확인 실패:", error);
+      return;
+    }
+
+    const isFollowing = data && data.length > 0;
+
+    if (isFollowing) {
+      followBtn.textContent = "팔로잉";
+      followBtn.classList.add("following");
+      console.debug("[FOLLOW] 팔로우 상태: 팔로잉 중");
+    } else {
+      followBtn.textContent = "팔로우";
+      followBtn.classList.remove("following");
+      console.debug("[FOLLOW] 팔로우 상태: 팔로우 안 함");
+    }
+  } catch (err) {
+    console.error("[FOLLOW] 팔로우 상태 확인 예외:", err);
+  }
+}
+
+// 팔로우/팔로워 통계 로드
+async function loadFollowStats(creatorId) {
+  if (!creatorId) {
+    console.warn("[CREATOR][DATA] creatorId 없음 - 통계 로드 건너뜀");
+    return;
+  }
+
+  // ⚠️ UUID 차단
+  if (isUUID(creatorId)) {
+    console.error(
+      "[CREATOR_TRACE][ERROR] loadFollowStats에 UUID 유입:",
+      creatorId
+    );
+    return;
+  }
+
+  console.debug("[CREATOR][DATA] 팔로우 통계 로드 시작", { creatorId });
+
+  waitForSupabase(async () => {
+    try {
+      await updateFollowStats(creatorId);
+    } catch (err) {
+      console.error("[CREATOR][DATA] 팔로우 통계 로드 실패:", err);
+    }
+  });
+}
+
+// 팔로우/팔로워 통계 업데이트
+async function updateFollowStats(creatorId) {
+  if (!window.supabase || !creatorId) {
+    console.warn(
+      "[CREATOR][DATA] Supabase 클라이언트 없음 또는 creatorId 없음"
+    );
+    return;
+  }
+
+  console.debug("[CREATOR][DATA] 팔로우 통계 업데이트 시작", { creatorId });
+
+  try {
+    // 팔로워 수 조회 (creator_follows where creator_id = creatorId)
+    console.debug("[CREATOR][DATA] 팔로워 수 조회 쿼리 실행 전");
+    const { count: followerCount, error: followerError } = await window.supabase
+      .from("creator_follows")
+      .select("*", { count: "exact", head: true })
+      .eq("creator_id", creatorId);
+
+    console.debug("[CREATOR][DATA] 팔로워 수 조회 결과:", {
+      count: followerCount,
+      error: followerError,
+    });
+
+    if (followerError) {
+      console.error("[CREATOR][DATA] 팔로워 수 조회 실패:", followerError);
+    }
+
+    // 작가가 팔로우하는 작가 수 조회 (creator_follows where reader_id = creatorId)
+    console.debug("[CREATOR][DATA] 팔로우 수 조회 쿼리 실행 전");
+    const { count: followingCount, error: followingError } =
+      await window.supabase
+        .from("creator_follows")
+        .select("*", { count: "exact", head: true })
+        .eq("reader_id", creatorId);
+
+    console.debug("[CREATOR][DATA] 팔로우 수 조회 결과:", {
+      count: followingCount,
+      error: followingError,
+    });
+
+    if (followingError) {
+      console.error("[CREATOR][DATA] 팔로우 수 조회 실패:", followingError);
+    }
+
+    // UI 업데이트
+    const statItems = document.querySelectorAll(".profile-stat-item");
+    console.debug("[CREATOR][DATA] 통계 항목 개수:", statItems.length);
+
+    if (statItems.length >= 3) {
+      // 첫 번째: 무드보드 (숨김 처리)
+      const moodboardItem = statItems[0];
+      if (moodboardItem) {
+        moodboardItem.style.display = "none";
+        console.debug("[CREATOR][DATA] 무드보드 항목 숨김");
+      }
+
+      // 두 번째: 팔로우 (작가가 팔로우하는 작가 수)
+      const followingNumEl = statItems[1]?.querySelector(".profile-stat-num");
+      if (followingNumEl) {
+        followingNumEl.textContent = followingCount || 0;
+        console.debug(
+          "[CREATOR][DATA] 팔로우 수 업데이트:",
+          followingCount || 0
+        );
+      }
+
+      // 세 번째: 팔로워
+      const followerNumEl = statItems[2]?.querySelector(".profile-stat-num");
+      if (followerNumEl) {
+        followerNumEl.textContent = followerCount || 0;
+        console.debug(
+          "[CREATOR][DATA] 팔로워 수 업데이트:",
+          followerCount || 0
+        );
+      }
+    } else {
+      console.warn(
+        "[CREATOR][DATA] 통계 항목이 3개 미만입니다:",
+        statItems.length
+      );
+    }
+  } catch (err) {
+    console.error("[CREATOR][DATA] 팔로우 통계 업데이트 실패:", err);
+  }
+}
+
+// 프로필 배경 이미지 편집 초기화
+function initializeProfileBackgroundEditor(creatorId) {
+  const editBtn = document.getElementById("profile-bg-edit-btn");
+  const profileBg = document.getElementById("profile-bg");
+  if (!editBtn || !profileBg) return;
+
+  let bgImageUrl = null; // 미리보기용 Blob URL
+  let bgUploadFile = null; // 업로드용 File 객체
+  let bgX = 50;
+  let bgY = 50;
+  let bgScale = 1;
+
+  // 편집 모달 생성
+  function createEditModal() {
+    const modal = document.createElement("div");
+    modal.id = "profile-bg-edit-modal";
+    modal.style.cssText = "position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 10000; display: none; align-items: center; justify-content: center;";
+    
+    const content = document.createElement("div");
+    content.style.cssText = "background: white; padding: 24px; border-radius: 8px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;";
+    
+    content.innerHTML = `
+      <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 700;">배경 이미지 편집</h3>
+      <input type="file" id="bg-image-input" accept="image/*" style="margin-bottom: 16px; width: 100%; padding: 8px;">
+      <div id="bg-image-preview" style="width: 100%; height: 200px; background: #f0f0f0; margin-bottom: 16px; position: relative; overflow: hidden; border-radius: 4px;">
+        <div id="bg-image-container" style="width: 100%; height: 100%; background-size: cover; background-position: center;"></div>
+      </div>
+      <div style="margin-bottom: 16px; padding: 12px; background: #f9f9f9; border-radius: 4px; font-size: 13px; color: #666; line-height: 1.6;">
+        배경 이미지는 가로형 이미지를 추천해요.<br>
+        권장 사이즈: 1080×540, 1200×600 (2:1 비율)<br>
+        해당 비율을 사용하면 가장 예쁘게 보여요.
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button id="bg-save-btn" style="flex: 1; padding: 12px; background: #FF5E00; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 600;">저장</button>
+        <button id="bg-cancel-btn" style="flex: 1; padding: 12px; background: #f0f0f0; color: #333; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">취소</button>
+      </div>
+    `;
+    
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+    return modal;
+  }
+
+  const modal = createEditModal();
+  const imageInput = document.getElementById("bg-image-input");
+  const imageContainer = document.getElementById("bg-image-container");
+  const saveBtn = document.getElementById("bg-save-btn");
+  const cancelBtn = document.getElementById("bg-cancel-btn");
+
+  // 이미지 선택
+  imageInput.addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // 업로드용 File 객체 갱신 (change 이벤트마다 반드시 재할당)
+    bgUploadFile = file;
+    
+    // 디버그 로그
+    console.log("[PROFILE_BG][DEBUG][FILE] 파일 선택:", {
+      name: file.name,
+      size: file.size,
+      lastModified: new Date(file.lastModified).toISOString()
+    });
+
+    try {
+      // 미리보기용 Blob URL 생성
+      const webpBlob = await convertBackgroundImageToWebP(file);
+      
+      // 이전 Blob URL 해제
+      if (bgImageUrl && bgImageUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(bgImageUrl);
+      }
+      
+      const imageUrl = URL.createObjectURL(webpBlob);
+      bgImageUrl = imageUrl;
+      imageContainer.style.backgroundImage = `url(${imageUrl})`;
+      imageContainer.style.backgroundSize = "cover";
+      imageContainer.style.backgroundPosition = "center";
+      imageContainer.style.transform = "";
+    } catch (error) {
+      console.error("[PROFILE_BG] 이미지 변환 실패:", error);
+      alert("이미지 처리에 실패했습니다.");
+      bgUploadFile = null;
+      bgImageUrl = null;
+    }
+  });
+
+  // 저장
+  saveBtn.addEventListener("click", async () => {
+    // 새 파일이 선택되었는지 확인
+    const hasNewFile = bgUploadFile !== null;
+    const hasExistingImage = bgImageUrl && !bgImageUrl.startsWith("blob:");
+
+    if (!hasNewFile && !hasExistingImage) {
+      alert("이미지를 선택해주세요.");
+      return;
+    }
+
+    console.log("[PROFILE_BG][START] 배경 이미지 저장 시작");
+
+    waitForSupabase(async () => {
+      try {
+        let webpBlob;
+        
+        let finalImageUrl;
+        
+        if (hasNewFile) {
+          // 업로드 직전 디버그 로그
+          console.log("[PROFILE_BG][DEBUG][FILE] 업로드 직전:", {
+            name: bgUploadFile.name,
+            size: bgUploadFile.size,
+            lastModified: new Date(bgUploadFile.lastModified).toISOString()
+          });
+          
+          // bgUploadFile만 사용하여 WebP 변환 (fileInput.files[0] 재읽기 금지)
+          webpBlob = await convertBackgroundImageToWebP(bgUploadFile);
+          
+          // 변환 후 Blob 크기 로그
+          console.log("[PROFILE_BG][DEBUG][BLOB] 변환 후:", {
+            originalSize: bgUploadFile.size,
+            convertedSize: webpBlob.size,
+            format: "webp"
+          });
+          
+          // Storage 업로드 경로에 timestamp 포함 (동일 경로 overwrite 방지)
+          const timestamp = Date.now();
+          const filePath = `profile_bg/${creatorId}/${timestamp}.webp`;
+          
+          console.log("[PROFILE_BG][DEBUG][PATH] 업로드 경로:", {
+            filePath: filePath,
+            fileName: bgUploadFile.name
+          });
+          
+          const { error: uploadError } = await window.supabase.storage
+            .from("creator-images")
+            .upload(filePath, webpBlob, {
+              contentType: "image/webp",
+              upsert: false,
+            });
+
+          if (uploadError) {
+            console.error("[PROFILE_BG][SAVE][FAIL] 업로드 실패:", uploadError);
+            alert("이미지 업로드에 실패했습니다.");
+            return;
+          }
+
+          // Public URL 가져오기
+          const { data: urlData } = window.supabase.storage
+            .from("creator-images")
+            .getPublicUrl(filePath);
+
+          finalImageUrl = urlData.publicUrl;
+          
+          console.log("[PROFILE_BG][DEBUG][PATH] 업로드 완료:", {
+            filePath: filePath,
+            publicUrl: finalImageUrl
+          });
+        } else {
+          // 기존 이미지가 있는 경우 (수정 없이 저장)
+          finalImageUrl = bgImageUrl;
+        }
+
+        // DB 저장 (기존 scale/offset 값 유지, 새 파일인 경우에만 URL 업데이트)
+        const updateData = {
+          background_image_url: finalImageUrl,
+        };
+        
+        // 기존 값이 있으면 유지, 없으면 기본값
+        const { data: existingCreator } = await window.supabase
+          .from("creators")
+          .select("bg_scale, bg_x, bg_y, background_scale, background_offset_x, background_offset_y")
+          .eq("firebase_uid", creatorId)
+          .single();
+        
+        if (existingCreator) {
+          // 사용자 요구사항에 맞는 컬럼명 사용 (없으면 기존 컬럼명 사용)
+          if (existingCreator.background_scale !== undefined) {
+            updateData.background_scale = existingCreator.background_scale || 1;
+          } else {
+            updateData.bg_scale = existingCreator.bg_scale || 1;
+          }
+          
+          if (existingCreator.background_offset_x !== undefined) {
+            updateData.background_offset_x = existingCreator.background_offset_x || 50;
+          } else {
+            updateData.bg_x = existingCreator.bg_x || 50;
+          }
+          
+          if (existingCreator.background_offset_y !== undefined) {
+            updateData.background_offset_y = existingCreator.background_offset_y || 50;
+          } else {
+            updateData.bg_y = existingCreator.bg_y || 50;
+          }
+        } else {
+          // 기본값 설정 (기존 컬럼명 사용)
+          updateData.bg_scale = 1;
+          updateData.bg_x = 50;
+          updateData.bg_y = 50;
+        }
+        
+        const { error: dbError } = await window.supabase
+          .from("creators")
+          .update(updateData)
+          .eq("firebase_uid", creatorId);
+
+        if (dbError) {
+          console.error("[PROFILE_BG][SAVE][FAIL] DB 저장 실패:", dbError);
+          alert("저장에 실패했습니다.");
+          return;
+        }
+
+        console.log("[PROFILE_BG][SAVE][SUCCESS] 배경 이미지 저장 성공");
+
+        // UI 업데이트 (object-fit: cover 고정, scale/position 미적용)
+        profileBg.style.backgroundImage = `url(${finalImageUrl})`;
+        profileBg.style.backgroundSize = "cover";
+        profileBg.style.backgroundPosition = "center";
+        profileBg.style.transform = "";
+        profileBg.style.transformOrigin = "";
+
+        // Blob URL 해제 및 변수 초기화
+        if (bgImageUrl && bgImageUrl.startsWith("blob:")) {
+          URL.revokeObjectURL(bgImageUrl);
+        }
+        bgImageUrl = finalImageUrl;
+        bgUploadFile = null;
+
+        modal.style.display = "none";
+        showToast("배경 이미지가 저장되었습니다.");
+      } catch (error) {
+        console.error("[PROFILE_BG][SAVE][FAIL] 저장 예외:", error);
+        alert("저장 중 오류가 발생했습니다.");
+      }
+    });
+  });
+
+  // 취소
+  cancelBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+    
+    // Blob URL 해제
+    if (bgImageUrl && bgImageUrl.startsWith("blob:")) {
+      URL.revokeObjectURL(bgImageUrl);
+    }
+    
+    bgImageUrl = null;
+    bgUploadFile = null;
+    bgX = 50;
+    bgY = 50;
+    bgScale = 1;
+    if (imageInput) imageInput.value = "";
+    if (imageContainer) {
+      imageContainer.style.backgroundImage = "";
+      imageContainer.style.transform = "";
+      imageContainer.style.backgroundPosition = "center";
+    }
+  });
+
+  // 모달 외부 클릭 시 닫기
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      cancelBtn.click();
+    }
+  });
+
+  // 편집 버튼 클릭
+  editBtn.addEventListener("click", () => {
+    modal.style.display = "flex";
+    
+    // 파일 객체 초기화
+    bgUploadFile = null;
+    
+    // 기존 배경 이미지 로드
+    const currentBg = profileBg.style.backgroundImage;
+    if (currentBg && currentBg !== "none") {
+      const url = currentBg.match(/url\(["']?([^"']+)["']?\)/)?.[1];
+      if (url) {
+        bgImageUrl = url;
+        imageContainer.style.backgroundImage = currentBg;
+        imageContainer.style.backgroundSize = "cover";
+        imageContainer.style.backgroundPosition = "center";
+        imageContainer.style.transform = "";
+      }
+    } else {
+      // 배경 이미지가 없으면 초기화
+      bgImageUrl = null;
+      bgX = 50;
+      bgY = 50;
+      bgScale = 1;
+      if (imageInput) imageInput.value = "";
+      if (imageContainer) {
+        imageContainer.style.backgroundImage = "";
+        imageContainer.style.transform = "";
+        imageContainer.style.backgroundPosition = "center";
+      }
+    }
+  });
+}
+
+// 배경 이미지를 WEBP로 변환 (최대 1200px, 품질 0.7)
+function convertBackgroundImageToWebP(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        
+        const maxWidth = 1200;
+        let width = img.width;
+        let height = img.height;
+        
+        // 가로폭이 1200px 초과인 경우만 리사이즈 (비율 유지)
+        if (width > maxWidth) {
+          const ratio = maxWidth / width;
+          width = maxWidth;
+          height = height * ratio;
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              resolve(blob);
+            } else {
+              reject(new Error("WEBP 변환 실패"));
+            }
+          },
+          "image/webp",
+          0.7
+        );
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// 작품 썸네일을 WEBP로 변환 (최대 800px, 품질 0.7)
+function convertThumbnailImageToWebP(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        
+        const maxWidth = 800;
+        let width = img.width;
+        let height = img.height;
+        
+        // 가로폭이 800px 초과인 경우만 리사이즈 (비율 유지)
+        if (width > maxWidth) {
+          const ratio = maxWidth / width;
+          width = maxWidth;
+          height = height * ratio;
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              resolve(blob);
+            } else {
+              reject(new Error("WEBP 변환 실패"));
+            }
+          },
+          "image/webp",
+          0.7
+        );
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// 토스트 알림 표시
+function showToast(message) {
+  // 기존 토스트 제거
+  const existingToast = document.querySelector(".toast-notification");
+  if (existingToast) {
+    existingToast.remove();
+  }
+
+  // 토스트 요소 생성
+  const toast = document.createElement("div");
+  toast.className = "toast-notification";
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  // 애니메이션을 위해 약간의 지연 후 표시
+  setTimeout(() => {
+    toast.classList.add("show");
+  }, 10);
+
+  // 2초 후 제거
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.remove();
+      }
+    }, 300);
+  }, 2000);
+}
+
+// 작가 소개글(bio) 편집 초기화
+function initializeBioEditor(creatorId) {
+  const editBtn = document.getElementById("profile-bio-edit-btn");
+  const bioEl = document.getElementById("profile-intro");
+  if (!editBtn || !bioEl) return;
+
+  // 편집 모달 생성
+  function createEditModal() {
+    const modal = document.createElement("div");
+    modal.id = "bio-edit-modal";
+    modal.style.cssText = "position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 10000; display: none; align-items: center; justify-content: center;";
+    
+    const content = document.createElement("div");
+    content.style.cssText = "background: white; padding: 24px; border-radius: 8px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;";
+    
+    content.innerHTML = `
+      <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 700;">소개글 편집</h3>
+      <textarea id="bio-text-input" placeholder="소개글을 입력하세요..." style="width: 100%; min-height: 100px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 16px; font-size: 14px; resize: vertical;"></textarea>
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; margin-bottom: 8px; font-size: 14px;">글자 색상:</label>
+        <input type="color" id="bio-color-input" value="#333333" style="width: 100%; height: 40px; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">
+      </div>
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; margin-bottom: 8px; font-size: 14px;">폰트 크기:</label>
+        <select id="bio-font-size-input" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+          <option value="small">작게</option>
+          <option value="normal" selected>보통</option>
+          <option value="large">크게</option>
+        </select>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button id="bio-save-btn" style="flex: 1; padding: 12px; background: #FF5E00; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 600;">저장</button>
+        <button id="bio-cancel-btn" style="flex: 1; padding: 12px; background: #f0f0f0; color: #333; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">취소</button>
+      </div>
+    `;
+    
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+    return modal;
+  }
+
+  const modal = createEditModal();
+  const textInput = document.getElementById("bio-text-input");
+  const colorInput = document.getElementById("bio-color-input");
+  const fontSizeInput = document.getElementById("bio-font-size-input");
+  const saveBtn = document.getElementById("bio-save-btn");
+  const cancelBtn = document.getElementById("bio-cancel-btn");
+
+  // 저장
+  saveBtn.addEventListener("click", async () => {
+    const bioText = textInput.value.trim();
+    const bioColor = colorInput.value;
+    const bioFontSize = fontSizeInput.value;
+
+    waitForSupabase(async () => {
+      try {
+        const { error } = await window.supabase
+          .from("creators")
+          .update({
+            bio_text: bioText || null,
+            bio_color: bioColor,
+            bio_font_size: bioFontSize,
+          })
+          .eq("firebase_uid", creatorId);
+
+        if (error) {
+          console.error("[BIO][SAVE][FAIL] 저장 실패:", error);
+          alert("저장에 실패했습니다.");
+          return;
+        }
+
+        console.log("[BIO][SAVE][SUCCESS] 소개글 저장 성공");
+
+        // UI 업데이트
+        bioEl.textContent = bioText || "작가 소개글이 없습니다.";
+        bioEl.style.color = bioColor;
+        const fontSizeMap = { small: "12px", normal: "14px", large: "16px" };
+        bioEl.style.fontSize = fontSizeMap[bioFontSize] || "14px";
+
+        modal.style.display = "none";
+        showToast("소개글이 저장되었습니다.");
+      } catch (error) {
+        console.error("[BIO][SAVE][FAIL] 저장 예외:", error);
+        alert("저장 중 오류가 발생했습니다.");
+      }
+    });
+  });
+
+  // 취소
+  cancelBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  // 모달 외부 클릭 시 닫기
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      cancelBtn.click();
+    }
+  });
+
+  // 편집 버튼 클릭
+  editBtn.addEventListener("click", () => {
+    // 기존 값 로드
+    waitForSupabase(async () => {
+      const { data } = await window.supabase
+        .from("creators")
+        .select("bio_text, bio_color, bio_font_size")
+        .eq("firebase_uid", creatorId)
+        .single();
+
+      if (data) {
+        textInput.value = data.bio_text || "";
+        colorInput.value = data.bio_color || "#333333";
+        fontSizeInput.value = data.bio_font_size || "normal";
+      } else {
+        textInput.value = "";
+        colorInput.value = "#333333";
+        fontSizeInput.value = "normal";
+      }
+      modal.style.display = "flex";
+    });
+  });
+}
+
+// 알림말(status) 편집 초기화
+function initializeStatusEditor(creatorId) {
+  const editBtn = document.getElementById("profile-status-edit-btn");
+  const statusEl = document.getElementById("profile-status");
+  if (!editBtn || !statusEl) return;
+
+  // 편집 모달 생성
+  function createEditModal() {
+    const modal = document.createElement("div");
+    modal.id = "status-edit-modal";
+    modal.style.cssText = "position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 10000; display: none; align-items: center; justify-content: center;";
+    
+    const content = document.createElement("div");
+    content.style.cssText = "background: white; padding: 24px; border-radius: 8px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;";
+    
+    content.innerHTML = `
+      <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 700;">알림말 편집</h3>
+      <input type="text" id="status-text-input" placeholder="알림말을 입력하세요..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 16px; font-size: 14px;">
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; margin-bottom: 8px; font-size: 14px;">색상:</label>
+        <input type="color" id="status-color-input" value="#666666" style="width: 100%; height: 40px; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button id="status-save-btn" style="flex: 1; padding: 12px; background: #FF5E00; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 600;">저장</button>
+        <button id="status-cancel-btn" style="flex: 1; padding: 12px; background: #f0f0f0; color: #333; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">취소</button>
+      </div>
+    `;
+    
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+    return modal;
+  }
+
+  const modal = createEditModal();
+  const textInput = document.getElementById("status-text-input");
+  const colorInput = document.getElementById("status-color-input");
+  const saveBtn = document.getElementById("status-save-btn");
+  const cancelBtn = document.getElementById("status-cancel-btn");
+
+  // 저장
+  saveBtn.addEventListener("click", async () => {
+    const statusText = textInput.value.trim();
+    const statusColor = colorInput.value;
+
+    waitForSupabase(async () => {
+      try {
+        const { error } = await window.supabase
+          .from("creators")
+          .update({
+            status_text: statusText || null,
+            status_color: statusColor,
+          })
+          .eq("firebase_uid", creatorId);
+
+        if (error) {
+          console.error("[STATUS][SAVE][FAIL] 저장 실패:", error);
+          alert("저장에 실패했습니다.");
+          return;
+        }
+
+        console.log("[STATUS][SAVE][SUCCESS] 알림말 저장 성공");
+
+        // UI 업데이트
+        if (statusText) {
+          statusEl.textContent = statusText;
+          statusEl.style.color = statusColor;
+          statusEl.style.display = "block";
+        } else {
+          statusEl.style.display = "none";
+        }
+
+        modal.style.display = "none";
+        showToast("알림말이 저장되었습니다.");
+      } catch (error) {
+        console.error("[STATUS][SAVE][FAIL] 저장 예외:", error);
+        alert("저장 중 오류가 발생했습니다.");
+      }
+    });
+  });
+
+  // 취소
+  cancelBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  // 모달 외부 클릭 시 닫기
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      cancelBtn.click();
+    }
+  });
+
+  // 편집 버튼 클릭
+  editBtn.addEventListener("click", () => {
+    // 기존 값 로드
+    waitForSupabase(async () => {
+      const { data } = await window.supabase
+        .from("creators")
+        .select("status_text, status_color")
+        .eq("firebase_uid", creatorId)
+        .single();
+
+      if (data) {
+        textInput.value = data.status_text || "";
+        colorInput.value = data.status_color || "#666666";
+      } else {
+        textInput.value = "";
+        colorInput.value = "#666666";
+      }
+      modal.style.display = "flex";
+    });
+  });
+}
+
+// 작품 썸네일 편집 초기화
+function initializeWorksThumbnailEditor(creatorId) {
+  const editBtn = document.getElementById("profile-works-edit-btn");
+  if (!editBtn) return;
+
+  // 편집 모달 생성
+  function createEditModal() {
+    const modal = document.createElement("div");
+    modal.id = "works-thumbnail-edit-modal";
+    modal.style.cssText = "position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 10000; display: none; align-items: center; justify-content: center;";
+    
+    const content = document.createElement("div");
+    content.style.cssText = "background: white; padding: 24px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;";
+    
+    content.innerHTML = `
+      <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 700;">작품 썸네일 설정</h3>
+      <div id="works-thumbnail-list" style="display: flex; flex-direction: column; gap: 16px;">
+        <!-- 작품 썸네일 항목들이 여기에 동적으로 추가됩니다 -->
+      </div>
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button id="works-thumbnail-save-btn" style="flex: 1; padding: 12px; background: #FF5E00; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 600;">저장</button>
+        <button id="works-thumbnail-cancel-btn" style="flex: 1; padding: 12px; background: #f0f0f0; color: #333; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">취소</button>
+      </div>
+    `;
+    
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+    return modal;
+  }
+
+  const modal = createEditModal();
+  const worksList = document.getElementById("works-thumbnail-list");
+  const saveBtn = document.getElementById("works-thumbnail-save-btn");
+  const cancelBtn = document.getElementById("works-thumbnail-cancel-btn");
+
+  // 작품 목록 로드 및 모달에 표시
+  async function loadWorksForEdit() {
+    waitForSupabase(async () => {
+      try {
+        // creatorId(firebase_uid)로 creators 테이블에서 id(UUID) 조회
+        const { data: creator, error: creatorError } = await window.supabase
+          .from("creators")
+          .select("id")
+          .eq("firebase_uid", creatorId)
+          .limit(1)
+          .single();
+
+        if (creatorError || !creator) {
+          console.error("[WORKS_THUMBNAIL] 작가 UUID 조회 실패:", creatorError);
+          return;
+        }
+
+        const creatorUuid = creator.id;
+
+        // works 테이블에서 작품 조회 (최대 3개)
+        const { data: works, error } = await window.supabase
+          .from("works")
+          .select("id, title, thumbnail_url")
+          .eq("creator_id", creatorUuid)
+          .order("created_at", { ascending: false })
+          .limit(3);
+
+        if (error) {
+          console.error("[WORKS_THUMBNAIL] 작품 조회 실패:", error);
+          return;
+        }
+
+        if (!works || works.length === 0) {
+          worksList.innerHTML = '<div style="padding: 20px; text-align: center; color: #999;">작품이 없습니다</div>';
+          return;
+        }
+
+        worksList.innerHTML = "";
+        
+        for (const work of works) {
+          const workItem = createWorkThumbnailItem(work, creatorId);
+          worksList.appendChild(workItem);
+        }
+      } catch (error) {
+        console.error("[WORKS_THUMBNAIL] 작품 로드 실패:", error);
+      }
+    });
+  }
+
+  // 작품 썸네일 항목 생성
+  function createWorkThumbnailItem(work, creatorId) {
+    const item = document.createElement("div");
+    item.className = "work-thumbnail-item";
+    item.setAttribute("data-work-id", work.id);
+    item.style.cssText = "border: 1px solid #ddd; border-radius: 8px; padding: 16px;";
+    
+    let thumbnailFit = "cover";
+    let thumbnailScale = 1;
+    let thumbnailOffsetY = 50;
+    
+    const previewContainer = document.createElement("div");
+    previewContainer.id = `work-preview-${work.id}`;
+    previewContainer.style.cssText = "width: 100%; height: 150px; overflow: hidden; border-radius: 4px; margin-bottom: 12px; position: relative; background: #f0f0f0;";
+    
+    const previewImg = document.createElement("div");
+    previewImg.id = `work-preview-img-${work.id}`;
+    previewImg.style.cssText = `width: 100%; height: 100%; background-image: url(${work.thumbnail_url || ""}); background-size: ${thumbnailFit}; background-position: center ${thumbnailOffsetY}%; transform: scale(${thumbnailScale}); transform-origin: center center;`;
+    
+    previewContainer.appendChild(previewImg);
+    
+    item.innerHTML = `
+      <h4 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600;">${work.title || "작품 제목 없음"}</h4>
+    `;
+    
+    item.appendChild(previewContainer);
+    
+    const controls = document.createElement("div");
+    controls.style.cssText = "display: flex; flex-direction: column; gap: 12px;";
+    
+    // 이미지 선택
+    const imageInputWrapper = document.createElement("div");
+    imageInputWrapper.innerHTML = `
+      <label style="display: block; margin-bottom: 8px; font-size: 14px;">썸네일 이미지:</label>
+      <input type="file" class="work-thumbnail-input" data-work-id="${work.id}" accept="image/*" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+    `;
+    controls.appendChild(imageInputWrapper);
+    
+    // 이미지 맞춤 방식
+    const fitWrapper = document.createElement("div");
+    fitWrapper.innerHTML = `
+      <label style="display: block; margin-bottom: 8px; font-size: 14px;">이미지 맞춤:</label>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="work-fit-btn work-fit-cover" data-work-id="${work.id}" style="flex: 1; padding: 8px; background: #FF5E00; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">Cover</button>
+        <button type="button" class="work-fit-btn work-fit-contain" data-work-id="${work.id}" style="flex: 1; padding: 8px; background: #e0e0e0; color: #333; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">Contain</button>
+      </div>
+    `;
+    controls.appendChild(fitWrapper);
+    
+    // 위치 조정 (상하만)
+    const offsetWrapper = document.createElement("div");
+    offsetWrapper.innerHTML = `
+      <label style="display: block; margin-bottom: 8px; font-size: 14px;">위치 조정 (상하): <span class="work-offset-value" data-work-id="${work.id}">50%</span></label>
+      <input type="range" class="work-offset-slider" data-work-id="${work.id}" min="0" max="100" step="1" value="50" style="width: 100%;">
+    `;
+    controls.appendChild(offsetWrapper);
+    
+    // Scale 조절
+    const scaleWrapper = document.createElement("div");
+    scaleWrapper.innerHTML = `
+      <label style="display: block; margin-bottom: 8px; font-size: 14px;">크기 조절: <span class="work-scale-value" data-work-id="${work.id}">100%</span></label>
+      <input type="range" class="work-scale-slider" data-work-id="${work.id}" min="0.8" max="1.5" step="0.1" value="1" style="width: 100%;">
+    `;
+    controls.appendChild(scaleWrapper);
+    
+    item.appendChild(controls);
+    
+    // 이벤트 리스너
+    const imageInput = item.querySelector(`.work-thumbnail-input[data-work-id="${work.id}"]`);
+    const fitCoverBtn = item.querySelector(`.work-fit-cover[data-work-id="${work.id}"]`);
+    const fitContainBtn = item.querySelector(`.work-fit-contain[data-work-id="${work.id}"]`);
+    const offsetSlider = item.querySelector(`.work-offset-slider[data-work-id="${work.id}"]`);
+    const offsetValue = item.querySelector(`.work-offset-value[data-work-id="${work.id}"]`);
+    const scaleSlider = item.querySelector(`.work-scale-slider[data-work-id="${work.id}"]`);
+    const scaleValue = item.querySelector(`.work-scale-value[data-work-id="${work.id}"]`);
+    
+    // 이미지 선택
+    imageInput.addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      try {
+        const webpBlob = await convertThumbnailImageToWebP(file);
+        const imageUrl = URL.createObjectURL(webpBlob);
+        previewImg.style.backgroundImage = `url(${imageUrl})`;
+        
+        // 파일 객체 저장
+        item.setAttribute("data-upload-file", JSON.stringify({
+          name: file.name,
+          size: file.size,
+          lastModified: file.lastModified
+        }));
+        item.setAttribute("data-blob-url", imageUrl);
+      } catch (error) {
+        console.error("[WORKS_THUMBNAIL] 이미지 변환 실패:", error);
+        alert("이미지 처리에 실패했습니다.");
+      }
+    });
+    
+    // 이미지 맞춤 방식
+    fitCoverBtn.addEventListener("click", () => {
+      thumbnailFit = "cover";
+      fitCoverBtn.style.background = "#FF5E00";
+      fitCoverBtn.style.color = "white";
+      fitContainBtn.style.background = "#e0e0e0";
+      fitContainBtn.style.color = "#333";
+      updatePreview();
+    });
+    
+    fitContainBtn.addEventListener("click", () => {
+      thumbnailFit = "contain";
+      fitContainBtn.style.background = "#FF5E00";
+      fitContainBtn.style.color = "white";
+      fitCoverBtn.style.background = "#e0e0e0";
+      fitCoverBtn.style.color = "#333";
+      updatePreview();
+    });
+    
+    // 위치 조정
+    offsetSlider.addEventListener("input", (e) => {
+      thumbnailOffsetY = parseFloat(e.target.value);
+      offsetValue.textContent = Math.round(thumbnailOffsetY) + "%";
+      updatePreview();
+    });
+    
+    // Scale 조절
+    scaleSlider.addEventListener("input", (e) => {
+      thumbnailScale = parseFloat(e.target.value);
+      scaleValue.textContent = Math.round(thumbnailScale * 100) + "%";
+      updatePreview();
+    });
+    
+    function updatePreview() {
+      previewImg.style.backgroundSize = thumbnailFit;
+      previewImg.style.backgroundPosition = `center ${thumbnailOffsetY}%`;
+      previewImg.style.transform = `scale(${thumbnailScale})`;
+      previewImg.style.transformOrigin = "center center";
+      
+      // 값 저장
+      item.setAttribute("data-thumbnail-fit", thumbnailFit);
+      item.setAttribute("data-thumbnail-scale", thumbnailScale);
+      item.setAttribute("data-thumbnail-offset-y", thumbnailOffsetY);
+    }
+    
+    // 초기값 저장
+    item.setAttribute("data-thumbnail-fit", thumbnailFit);
+    item.setAttribute("data-thumbnail-scale", thumbnailScale);
+    item.setAttribute("data-thumbnail-offset-y", thumbnailOffsetY);
+    
+    return item;
+  }
+
+  // 저장
+  saveBtn.addEventListener("click", async () => {
+    console.log("[WORKS_THUMBNAIL][START] 작품 썸네일 저장 시작");
+    
+    waitForSupabase(async () => {
+      try {
+        const workItems = document.querySelectorAll(".work-thumbnail-item");
+        
+        for (const item of workItems) {
+          const workId = item.getAttribute("data-work-id");
+          const blobUrl = item.getAttribute("data-blob-url");
+          const thumbnailFit = item.getAttribute("data-thumbnail-fit") || "cover";
+          const thumbnailScale = parseFloat(item.getAttribute("data-thumbnail-scale")) || 1;
+          const thumbnailOffsetY = parseFloat(item.getAttribute("data-thumbnail-offset-y")) || 50;
+          
+          if (blobUrl) {
+            // 새 이미지 업로드
+            const response = await fetch(blobUrl);
+            const blob = await response.blob();
+            
+            const timestamp = Date.now();
+            const filePath = `works_thumb/${creatorId}/${workId}/${timestamp}.webp`;
+            
+            console.log("[WORKS_THUMBNAIL][DEBUG][PATH] 업로드 경로:", {
+              workId: workId,
+              filePath: filePath
+            });
+            
+            const { error: uploadError } = await window.supabase.storage
+              .from("creator-images")
+              .upload(filePath, blob, {
+                contentType: "image/webp",
+                upsert: false,
+              });
+
+            if (uploadError) {
+              console.error("[WORKS_THUMBNAIL][SAVE][FAIL] 업로드 실패:", uploadError);
+              continue;
+            }
+
+            const { data: urlData } = window.supabase.storage
+              .from("creator-images")
+              .getPublicUrl(filePath);
+
+            const thumbnailUrl = urlData.publicUrl;
+            
+            // works 테이블 업데이트
+            // 필요한 컬럼: thumbnail_url, thumbnail_fit, thumbnail_scale, thumbnail_offset_y
+            const { error: dbError } = await window.supabase
+              .from("works")
+              .update({
+                thumbnail_url: thumbnailUrl,
+                // 아래 컬럼들이 없을 수 있으므로 주석 처리
+                // thumbnail_fit: thumbnailFit,
+                // thumbnail_scale: thumbnailScale,
+                // thumbnail_offset_y: thumbnailOffsetY,
+              })
+              .eq("id", workId);
+
+            if (dbError) {
+              console.error("[WORKS_THUMBNAIL][SAVE][FAIL] DB 저장 실패:", dbError);
+              console.warn("[WORKS_THUMBNAIL] 필요한 컬럼: thumbnail_url, thumbnail_fit, thumbnail_scale, thumbnail_offset_y");
+            }
+          }
+        }
+        
+        console.log("[WORKS_THUMBNAIL][SAVE][SUCCESS] 작품 썸네일 저장 성공");
+        modal.style.display = "none";
+        showToast("작품 썸네일이 저장되었습니다.");
+        
+        // 페이지 새로고침하여 반영
+        window.location.reload();
+      } catch (error) {
+        console.error("[WORKS_THUMBNAIL][SAVE][FAIL] 저장 예외:", error);
+        alert("저장 중 오류가 발생했습니다.");
+      }
+    });
+  });
+
+  // 취소
+  cancelBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  // 모달 외부 클릭 시 닫기
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      cancelBtn.click();
+    }
+  });
+
+  // 편집 버튼 클릭
+  editBtn.addEventListener("click", () => {
+    modal.style.display = "flex";
+    loadWorksForEdit();
+  });
+}

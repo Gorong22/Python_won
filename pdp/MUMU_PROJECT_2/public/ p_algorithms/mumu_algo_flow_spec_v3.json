@@ -1,0 +1,132 @@
+{
+  "version": "3.0",
+  "generated_at": "2025-12-16T07:19:38.542515+00:00",
+  "segmentation": [
+    "tempo",
+    "impression"
+  ],
+  "login_collection_policy": {
+    "collect_now": [
+      "preferred_genres",
+      "preferred_tags"
+    ],
+    "defer_to_behavior": [
+      "tempo_preference",
+      "deep_mood",
+      "author_affinity",
+      "mumulism_style"
+    ]
+  },
+  "modules": {
+    "S": {
+      "name": "Stat/Trend Scorer",
+      "features": [
+        "views_7d(v1)",
+        "completion_rate(v2)",
+        "growth_rate_7d(v3)",
+        "early_bounce(v4)",
+        "newness",
+        "quality",
+        "moderation_penalty"
+      ]
+    },
+    "T": {
+      "name": "Tag Preference Scorer",
+      "formula": "T(u,i)=cosine(pref_tag[u], item_tag_vec[i])",
+      "build": "pref_tag[u]=Σ(w_event*time_decay*item_tag_vec) then L2 normalize"
+    },
+    "C": {
+      "name": "Co-consumption / Item-Item",
+      "note": "확장 모듈(옵션). co-visitation 또는 임베딩 기반"
+    },
+    "U": {
+      "name": "User360 / Ideal Profile",
+      "note": "확장 모듈(옵션). user embedding + work embedding"
+    }
+  },
+  "rerank": {
+    "5-1_diversity": {
+      "series_max_top10": 3,
+      "creator_max_top10": 4,
+      "min_unique_genres": 3,
+      "min_unique_moods": 2
+    },
+    "5-2_new_longtail": {
+      "days": 14,
+      "view_7d_bottom_percent": 60,
+      "min_new": 2,
+      "gate_min_S": 0.3
+    },
+    "5-3_safety": {
+      "block_tag_work_creator": true,
+      "age_gate": "works.age_rating",
+      "moderation_penalty": "work_moderation_stats.report_hide_rate>=0.08 => -0.2"
+    },
+    "5-4_explore_exploit": {
+      "exploit": 7,
+      "explore": 3,
+      "strategy": [
+        "epsilon-greedy (default)",
+        "thompson (optional)"
+      ]
+    }
+  },
+  "surfaces": {
+    "AUTH/ONBOARDING": {
+      "collect": [
+        "genres",
+        "tags"
+      ],
+      "write_to": [
+        "user_profiles.preferred_*",
+        "user_profiles.pref_tag_vector seed"
+      ]
+    },
+    "HOME/ReaderFeed": {
+      "compute": [
+        "S+T (MVP)",
+        "rerank"
+      ],
+      "log": [
+        "click",
+        "scroll_depth",
+        "like",
+        "save",
+        "comment",
+        "complete_episode",
+        "skip_fast",
+        "view_cut"
+      ]
+    },
+    "DISCOVER": {
+      "compute": [
+        "S/T emphasis"
+      ],
+      "log": [
+        "tag_click(x1.5)",
+        "filter_use",
+        "search_click"
+      ]
+    },
+    "COMMUNITY": {
+      "log": [
+        "post_view",
+        "comment",
+        "like",
+        "creator_follow"
+      ],
+      "effect": [
+        "fauthor↑",
+        "tag boost after mention-click"
+      ]
+    },
+    "CREATOR_DASHBOARD": {
+      "source": [
+        "work_stats_daily",
+        "work_stats_7d",
+        "growth"
+      ],
+      "note": "S 모듈 원천데이터"
+    }
+  }
+}

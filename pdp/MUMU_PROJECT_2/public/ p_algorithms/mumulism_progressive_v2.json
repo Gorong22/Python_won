@@ -1,0 +1,84 @@
+{
+  "schema_version": "2.0",
+  "flow_id": "mumulism_progressive_v2",
+  "generated_at": "2025-12-16T07:19:38.542515+00:00",
+  "trigger": {
+    "after_events": 20,
+    "or_days_since_signup": 3
+  },
+  "steps": [
+    {
+      "id": "color_density",
+      "type": "binary_choice",
+      "title": "색감은 어떤 쪽이 더 끌리시나요?",
+      "subtitle": "더 눈에 띄는 색감 vs 단정한 색감",
+      "answer_key": "mumulism.color_density",
+      "options": [
+        {
+          "label": "색감이 화려한 편",
+          "value": "high"
+        },
+        {
+          "label": "색감이 단정한 편",
+          "value": "low"
+        }
+      ]
+    },
+    {
+      "id": "line_complexity",
+      "type": "binary_choice",
+      "title": "그림 선 느낌은 어느 쪽이 더 좋으신가요?",
+      "subtitle": "선이 디테일한 편 vs 면이 깔끔한 편",
+      "answer_key": "mumulism.line_complexity",
+      "options": [
+        {
+          "label": "선이 디테일한 편",
+          "value": "high"
+        },
+        {
+          "label": "면이 깔끔한 편",
+          "value": "low"
+        }
+      ]
+    },
+    {
+      "id": "tone",
+      "type": "binary_choice",
+      "title": "전체 톤은 어느 쪽이 더 취향이신가요?",
+      "subtitle": "밝고 산뜻한 느낌 vs 차분하고 깊은 느낌",
+      "answer_key": "mumulism.tone",
+      "options": [
+        {
+          "label": "밝은 톤",
+          "value": "bright"
+        },
+        {
+          "label": "깊은 톤",
+          "value": "dark"
+        }
+      ]
+    },
+    {
+      "id": "harmony",
+      "type": "binary_choice",
+      "title": "색 조합은 어떤 쪽이 더 마음에 드시나요?",
+      "subtitle": "부드러운 조화 vs 또렷한 대비",
+      "answer_key": "mumulism.harmony",
+      "options": [
+        {
+          "label": "부드러운 조화",
+          "value": "soft"
+        },
+        {
+          "label": "또렷한 대비",
+          "value": "contrast"
+        }
+      ]
+    }
+  ],
+  "storage": {
+    "table": "user_profiles",
+    "field": "pref_tag_vector",
+    "strategy": "add_style_features_as_sparse_keys"
+  }
+}
