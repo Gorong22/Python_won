@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-NTKT79C2"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-NTKT79C2");
+    </script>
+    <!-- End Google Tag Manager -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MUMU - 가로 슬라이드 컷 기반 웹툰 플랫폼</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <!-- Success Popup -->
+    <div id="successPopup" class="popup-overlay hidden">
+      <div class="popup-content">
+        <div class="popup-msg">
+          <p><strong>신청이 완료되었습니다!</strong></p>
+          <p>
+            MUMU의 베타 서비스 시작 시<br />입력하신 연락처로 안내를 드릴
+            예정입니다.
+          </p>
+        </div>
+        <button
+          class="cta-button-mini"
+          onclick="document.getElementById('successPopup').classList.add('hidden')"
+        >
+          확인
+        </button>
+      </div>
+    </div>
+
+    <header class="main-header">
+      <div class="container mobile-header-content">
+        <div class="logo">MUMU</div>
+        <div class="main-mode-tabs">
+          <div class="mode-tab active" data-target="reader-view">
+            독자 베타테스터
+          </div>
+          <div class="mode-tab" data-target="writer-view">작가 모집</div>
+        </div>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="#main-feature">가로 슬라이드 UX</a></li>
+            <li><a href="#beta-form">베타 신청</a></li>
+          </ul>
+        </nav>
+        <a href="#beta-form" class="cta-button">베타테스터 시작하기</a>
+      </div>
+    </header>
+
+    <main>
+      <!-- [View 1] 독자 베타테스터 랜딩 섹션 -->
+      <div id="reader-view" class="content-view active">
+        <section class="hero-section" id="reader-hero">
+          <div class="container hero-content">
+            <div class="hero-text">
+              <p class="eyebrow">NEW WEBTOON EXPERIENCE</p>
+              <h1>숏폼 시대,<br />웹툰은 더 자유롭게 <br />즐겨도 됩니다.</h1>
+              <p class="subtitle">
+                MUMU는 가로 슬라이드 컷 기반으로 다양한 작품을 더 쉽고 편하게
+                발견하고,<br />나만의 취향으로 다시 엮어보는 새로운 웹툰
+                경험입니다.
+              </p>
+              <!-- <p class="brand-name">MUMU</p> -->
+              <div class="hero-cta-group">
+                <a href="#beta-form" class="cta-button-main"
+                  >베타테스터로 먼저 참여하기</a
+                >
+              </div>
+            </div>
+            <div class="hero-mockup">
+              <div class="mobile-mockup">
+                <div class="mockup-screen">
+                  <div class="mockup-horizontal-rail">
+                    <!-- ✅ 검증된 로컬 이미지 사용 -->
+                    <div class="comic-panel">
+                      <img src="assets/images/회원_독자.png" alt="회원 독자" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Visual Collection Gallery -->
+        <section class="gallery-section fade-in">
+          <div class="container">
+            <div class="section-title-area">
+              <p
+                class="eyebrow"
+                style="text-align: center; color: var(--primary-orange)"
+              >
+                VISUAL GALLERY
+              </p>
+              <h2>취향을 자극하는<br />다채로운 2D 웹툰의 세계</h2>
+              <p>MUMU에서 만날 수 있는 감각적인 컷들을 미리 확인해보세요.</p>
+            </div>
+            <div class="visual-grid">
+              <div class="visual-item card fade-in" style="--order: 1">
+                <img
+                  src="/assets/images/275973388_287491713385873_4559197826228550094_n.jpg"
+                  alt="Fantasy Webtoon"
+                />
+                <div class="visual-overlay"><span>#Fantasy</span></div>
+              </div>
+              <div class="visual-item card fade-in" style="--order: 2">
+                <img src="/assets/images/image 57.png" alt="Romance Webtoon" />
+                <div class="visual-overlay"><span>#Romance</span></div>
+              </div>
+              <div class="visual-item card fade-in" style="--order: 3">
+                <img
+                  src="/assets/images/554385667_18057169259418325_6667952202474654623_n.jpg"
+                  alt="Action Webtoon"
+                />
+                <div class="visual-overlay"><span>#Action</span></div>
+              </div>
+              <div class="visual-item card fade-in" style="--order: 4">
+                <img src="/assets/images/image 60.png" alt="Daily Webtoon" />
+                <div class="visual-overlay"><span>#Daily</span></div>
+              </div>
+              <div class="visual-item card fade-in" style="--order: 5">
+                <img src="/assets/images/image 58.png" alt="Artistic Webtoon" />
+                <div class="visual-overlay"><span>#Artistic</span></div>
+              </div>
+              <div class="visual-item card fade-in" style="--order: 6">
+                <img src="/assets/images/image 55.png" alt="Color Webtoon" />
+                <div class="visual-overlay"><span>#Color</span></div>
+              </div>
+              <div class="visual-item card fade-in" style="--order: 7">
+                <img
+                  src="/assets/images/222733234_1160299907822234_1864611106132541378_n.jpg"
+                  alt="Abstract Webtoon"
+                />
+                <div class="visual-overlay"><span>#Abstract</span></div>
+              </div>
+              <div class="visual-item card fade-in" style="--order: 8">
+                <img
+                  src="/assets/images/image 42.png"
+                  alt="Geometric Webtoon"
+                />
+                <div class="visual-overlay"><span>#Geometric</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Values Section -->
+        <section class="problem-section fade-in">
+          <div class="container">
+            <h2>웹툰을 ‘보는 것’에서<br />‘꾸미고 공유하는 것’으로</h2>
+            <div class="card-grid three-cols">
+              <div class="card fade-in" style="--order: 1">
+                <i class="fas fa-magic"></i>
+                <h3>편안한 큐레이션</h3>
+                <p>
+                  수많은 썸네일 속에서 헤매지 마세요. <br />당신의 무드에 맞는
+                  첫 컷이 찾아옵니다.
+                </p>
+              </div>
+              <div class="card fade-in" style="--order: 2">
+                <i class="fas fa-layer-group"></i>
+                <h3>제2의 창작 경험</h3>
+                <p>
+                  마음에 드는 컷을 모아 나만의 무드보드를 만드세요. 당신의 취향
+                  자체가 하나의 <br />콘텐츠가 됩니다.
+                </p>
+              </div>
+              <div class="card fade-in" style="--order: 3">
+                <i class="fas fa-share-nodes"></i>
+                <h3>공유와 연결</h3>
+                <p>
+                  나만의 ‘웹툰 추구미 보드’를 친구들과 <br />공유해보세요.
+                  취향으로 소통하는 <br />즐거움을 느껴보세요.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Feature Detail -->
+        <section id="main-feature" class="main-feature-section fade-in">
+          <div class="container main-feature-layout">
+            <div class="main-feature-text">
+              <h2>가로 슬라이드 <br />컷 기반 UX</h2>
+              <p>
+                MUMU는 컷 중심의 가로 슬라이드 UX로, 한 컷 한 컷을 감상하는
+                <br />새로운 읽기 경험을 제공합니다.
+              </p>
+              <ul class="feature-bullets">
+                <li>한 손으로 옆으로 넘기는 가로 슬라이드 UX</li>
+                <li>컷 단위 인터랙션(좋아요, 북마크, 공유)</li>
+                <li>감정 변화에 따라 이어지는 시네마틱 프레이밍</li>
+              </ul>
+            </div>
+            <div class="main-feature-mockup">
+              <div class="horizontal-mockup-card">
+                <div class="horizontal-screen slider-container">
+                  <!-- ✅ 실제 슬라이드 가능한 트랙 -->
+                  <div class="slider-track">
+                    <div class="slide-item">
+                      <img
+                        src="/assets/images/272108354_462069905447171_877578646251242648_n.jpg"
+                        alt="Slide 1"
+                      />
+                      <div class="speech-bubble bubble-left">
+                        오늘 날씨 정말 좋다
+                      </div>
+                    </div>
+                    <div class="slide-item">
+                      <img src="/assets/images/image 61.png" alt="Slide 2" />
+                      <div class="speech-bubble bubble-right">
+                        정말? 그게 사실이야?
+                      </div>
+                    </div>
+                    <div class="slide-item">
+                      <img src="/assets/images/image 40.png" alt="Slide 3" />
+                      <div class="speech-bubble bubble-left">
+                        다음에 또 오자!
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="example-image-note">
+                이해를 돕기 위한 예시이미지 입니다
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="beta-form" class="beta-form-section fade-in">
+          <div class="container">
+            <div class="beta-form-container">
+              <h2>베타테스터 신청하기</h2>
+              <p>
+                베타테스터 신청은 간단합니다.<br />남겨주신 정보는 테스트 안내
+                외의 용도로 <br />사용되지 않습니다.
+              </p>
+              <form id="betaTesterForm" class="beta-form">
+                <div class="form-group">
+                  <label>이름 <span class="required pink">*</span></label
+                  ><input
+                    type="text"
+                    name="name"
+                    placeholder="성함을 입력해주세요"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label>성별 <span class="required pink">*</span></label>
+                  <div class="radio-group">
+                    <label
+                      ><input type="radio" name="gender" value="남" required />
+                      남</label
+                    >
+                    <label
+                      ><input type="radio" name="gender" value="여" required />
+                      여</label
+                    >
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>전화번호 <span class="required pink">*</span></label
+                  ><input
+                    type="tel"
+                    name="phone"
+                    placeholder="010-0000-0000"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label>이메일 <span class="required pink">*</span></label
+                  ><input
+                    type="email"
+                    name="email"
+                    placeholder="mumu@example.com"
+                    required
+                  />
+                </div>
+
+                <!-- [Image 4] 개인정보 수집 및 이용 동의 상세 -->
+                <div class="form-section-box">
+                  <p class="section-title">
+                    <span class="orange-dot"></span> MUMU 베타 테스트 참여를
+                    위해 아래와 같이 개인정보를 수집·이용합니다. 내용을 읽고
+                    동의해 주세요. <span class="required pink">*</span>
+                  </p>
+                  <div class="checkbox-list">
+                    <label class="form-checkbox"
+                      ><input
+                        type="checkbox"
+                        name="privacy1"
+                        required
+                        class="privacy-checkbox"
+                      /><span class="checkbox-box"></span
+                      ><span
+                        >수집 개인정보(항목: 이름, 이메일 주소) 수집에
+                        동의합니다.</span
+                      ></label
+                    >
+                    <label class="form-checkbox"
+                      ><input
+                        type="checkbox"
+                        name="privacy2"
+                        required
+                        class="privacy-checkbox"
+                      /><span class="checkbox-box"></span
+                      ><span
+                        >수집 및 이용 목적: 베타 테스터 선정 및 안내 / 진행
+                        커뮤니케이션 및 CS 응대 / 리워드 지급을 위한 연락에
+                        동의합니다.</span
+                      ></label
+                    >
+                    <label class="form-checkbox"
+                      ><input
+                        type="checkbox"
+                        name="privacy3"
+                        required
+                        class="privacy-checkbox"
+                      /><span class="checkbox-box"></span
+                      ><span
+                        >보유 및 이용 기간: 테스트 종료 및 리워드 지급 완료 후
+                        3개월 이내 파기 예정입니다.</span
+                      ></label
+                    >
+                    <label class="form-checkbox"
+                      ><input
+                        type="checkbox"
+                        name="privacy4"
+                        required
+                        class="privacy-checkbox"
+                      /><span class="checkbox-box"></span
+                      ><span
+                        >동의 거부 권리 안내: 동의를 거부할 권리가 있으나, 거부
+                        시 베타 테스트 참여가 제한될 수 있습니다.</span
+                      ></label
+                    >
+                    <label class="form-checkbox all-agree-checkbox"
+                      ><input type="checkbox" id="allAgree" /><span
+                        class="checkbox-box"
+                      ></span
+                      ><span><strong>전체 동의하기</strong></span></label
+                    >
+                  </div>
+                </div>
+
+                <!-- Feedback & Agreement Questions -->
+                <div class="form-section-box">
+                  <div class="survey-group">
+                    <p class="survey-question">
+                      📌 앱/웹을 사용해 보고 마지막에 설문/인터뷰로 피드백
+                      제출이 가능하신가요? <span class="required pink">*</span>
+                    </p>
+                    <div class="survey-options">
+                      <label class="survey-option"
+                        ><input
+                          type="radio"
+                          name="feedback_ready"
+                          value="yes"
+                          required
+                        /><span class="radio-circle"></span
+                        ><span>네, 가능해요!</span></label
+                      >
+                      <label class="survey-option"
+                        ><input
+                          type="radio"
+                          name="feedback_ready"
+                          value="no"
+                          required
+                        /><span class="radio-circle"></span
+                        ><span>지금은 어려워요</span></label
+                      >
+                    </div>
+                  </div>
+
+                  <div class="survey-group">
+                    <p class="survey-question">
+                      📌 베타 테스트 목적의 연락을 받는 것에 동의하시나요?
+                      <span class="required pink">*</span>
+                    </p>
+                    <div class="survey-options">
+                      <label class="survey-option"
+                        ><input
+                          type="radio"
+                          name="contact_agreement"
+                          value="yes"
+                          required
+                        /><span class="radio-circle"></span
+                        ><span>네, 동의합니다.</span></label
+                      >
+                      <label class="survey-option"
+                        ><input
+                          type="radio"
+                          name="contact_agreement"
+                          value="no"
+                          required
+                        /><span class="radio-circle"></span
+                        ><span>아니요</span></label
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <!-- [Image 5] 감상 스타일 체크 -->
+                <div class="form-section-box orange-header">
+                  <p class="section-title main-title">🍋 감상 스타일 체크</p>
+
+                  <div class="survey-group">
+                    <p class="survey-question">
+                      📌 MUMU에서 가장 기대하는 경험은 무엇인가요?
+                      <span class="required pink">*</span>
+                    </p>
+                    <div class="survey-options">
+                      <label class="survey-option"
+                        ><input
+                          type="radio"
+                          name="expect"
+                          value="fast"
+                          required
+                        /><span class="radio-circle"></span
+                        ><span
+                          >바로 재밌는 컷/작품을 빠르게 찾고 싶어요</span
+                        ></label
+                      >
+                      <label class="survey-option"
+                        ><input
+                          type="radio"
+                          name="expect"
+                          value="discover"
+                          required
+                        /><span class="radio-circle"></span
+                        ><span
+                          >새로운 분위기/감성을 발견하고 저장하고 싶어요</span
+                        ></label
+                      >
+                    </div>
+                  </div>
+
+                  <div class="survey-group">
+                    <p class="survey-question">
+                      📌 웹툰을 보다가 지치는 이유로 더 가까운 건?
+                      <span class="required pink">*</span>
+                    </p>
+                    <div class="survey-options">
+                      <label class="survey-option"
+                        ><input
+                          type="radio"
+                          name="tired_reason"
+                          value="slow"
+                          required
+                        /><span class="radio-circle"></span
+                        ><span
+                          >전개가 느리거나 재미있는 장면이 없어서</span
+                        ></label
+                      >
+                      <label class="survey-option"
+                        ><input
+                          type="radio"
+                          name="tired_reason"
+                          value="same"
+                          required
+                        /><span class="radio-circle"></span
+                        ><span
+                          >비슷비슷한 스토리/캐릭터 위주라 새로움이 없어서</span
+                        ></label
+                      >
+                    </div>
+                  </div>
+
+                  <div class="survey-group">
+                    <p class="survey-question">
+                      📌 웹툰/숏툰을 볼 때 가장 피곤한 순간은?
+                      <span class="required pink">*</span>
+                    </p>
+                    <div class="survey-options">
+                      <label class="survey-option"
+                        ><input
+                          type="radio"
+                          name="tired_moment"
+                          value="choice"
+                          required
+                        /><span class="radio-circle"></span
+                        ><span
+                          >뭘 볼지 고르는 과정이 길고 귀찮을 때</span
+                        ></label
+                      >
+                      <label class="survey-option"
+                        ><input
+                          type="radio"
+                          name="tired_moment"
+                          value="search"
+                          required
+                        /><span class="radio-circle"></span
+                        ><span
+                          >새롭고 내 취향인 분위기를 찾기 어려울 때</span
+                        ></label
+                      >
+                    </div>
+                  </div>
+
+                  <div class="survey-group">
+                    <p class="survey-question">
+                      📌 마음에 드는 컷/작품을 발견하면, 나는 보통...
+                      <span class="required pink">*</span>
+                    </p>
+                    <div class="survey-options">
+                      <label class="survey-option"
+                        ><input
+                          type="radio"
+                          name="after_find"
+                          value="next"
+                          required
+                        /><span class="radio-circle"></span
+                        ><span
+                          >바로 다음 컷/다음 화로 쭉 보고 끝내거나 다른 작품을
+                          또 찾는다</span
+                        ></label
+                      >
+                      <label class="survey-option"
+                        ><input
+                          type="radio"
+                          name="after_find"
+                          value="save"
+                          required
+                        /><span class="radio-circle"></span
+                        ><span
+                          >저장/캡쳐해서 모아두고, 가끔 다시 보거나
+                          공유한다</span
+                        ></label
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" class="submit-button">
+                  MUMU 베타테스터 신청하기
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- [View 2] 작가 모집 -->
+      <div id="writer-view" class="content-view">
+        <section class="hero-section">
+          <div class="container hero-content">
+            <div class="hero-text">
+              <p class="eyebrow">FOR CREATORS</p>
+              <h1>숏폼 시대,<br />웹툰도 새롭게 읽혀야 합니다.</h1>
+              <p class="subtitle">
+                가로 슬라이드 컷 기반의 프리미엄 웹툰 플랫폼
+              </p>
+              <div class="hero-cta-group">
+                <a href="#feedback" class="cta-button-main"
+                  >초기 작가로 합류하기</a
+                >
+              </div>
+            </div>
+            <div class="hero-mockup">
+              <div class="mobile-mockup">
+                <div class="mockup-screen">
+                  <div class="mockup-header">
+                    <div class="mockup-series-info">
+                      <p class="mockup-series">EP. 03</p>
+                      <h3>새벽 이후의 우리</h3>
+                    </div>
+                  </div>
+                  <div class="mockup-horizontal-rail">
+                    <!-- ✅ 검증된 로컬 정적 이미지 사용 -->
+                    <div class="comic-panel">
+                      <img src="/assets/images/3-2.png" alt="Writer Mockup" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Problem Section -->
+        <section class="problem-section fade-in">
+          <div class="container">
+            <h2>내 작품,<br />어디에서 독자를 만나고 있나요?</h2>
+            <div class="card-grid three-cols">
+              <div class="card fade-in" style="--order: 1">
+                <i class="fas fa-search"></i>
+                <h3>발견의 어려움</h3>
+                <p>
+                  수만 개의 작품 속에서 신진 작가의 작품이 빛을 보기는 점점 더
+                  어려워지고 있습니다.
+                </p>
+              </div>
+              <div class="card fade-in" style="--order: 2">
+                <i class="fas fa-scroll"></i>
+                <h3>스크롤의 한계</h3>
+                <p>
+                  단순한 세로 스크롤 방식은 독자의 시선을 빠르게 분산시키고
+                  몰입을 방해합니다.
+                </p>
+              </div>
+              <div class="card fade-in" style="--order: 3">
+                <i class="fas fa-chart-line"></i>
+                <h3>불투명한 지표</h3>
+                <p>
+                  내 작품이 정말 독자에게 닿고 있는지, 어떤 컷이 반응이 좋은지
+                  알기 어렵습니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Algorithm Section -->
+        <section class="algorithm-section fade-in">
+          <div class="container">
+            <h2>모든 작품이<br />공평하게 발견되도록</h2>
+            <div class="card-grid four-cols">
+              <div class="card fade-in" style="--order: 1">
+                <i class="fas fa-atom"></i>
+                <h4>취향 매칭</h4>
+                <p>정교한 매칭으로 독자에게 딱 맞는 작품을 연결합니다.</p>
+              </div>
+              <div class="card fade-in" style="--order: 2">
+                <i class="fas fa-rocket"></i>
+                <h4>초기 노출</h4>
+                <p>초기 업로드 작품에 부스팅 존을 제공합니다.</p>
+              </div>
+              <div class="card fade-in" style="--order: 3">
+                <i class="fas fa-check-circle"></i>
+                <h4>공평한 평가</h4>
+                <p>완독률 등으로 작품의 힘을 평가합니다.</p>
+              </div>
+              <div class="card fade-in" style="--order: 4">
+                <i class="fas fa-pen-nib"></i>
+                <h4>포맷 지원</h4>
+                <p>모든 창의적 포맷을 지원합니다.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Why MUMU Section -->
+        <section class="mumu-value-section fade-in">
+          <div class="container">
+            <div
+              class="value-layout"
+              style="display: flex; align-items: center; gap: 60px"
+            >
+              <div class="value-image" style="flex: 1">
+                <!-- ✅ 로컬 이미지 사용 -->
+                <img
+                  src="/assets/images/271213204_989291275277419_8647453710103136974_n.jpg"
+                  alt="Value"
+                  style="
+                    width: 100%;
+                    border-radius: 20px;
+                    box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.1);
+                  "
+                />
+              </div>
+              <div class="value-text" style="flex: 1.2">
+                <h2>MUMU가 제안하는<br />창작자의 가치</h2>
+                <ul class="value-list">
+                  <li>
+                    <i
+                      class="fas fa-coins"
+                      style="color: var(--primary-orange); margin-right: 15px"
+                    ></i
+                    ><strong>유료화 모델 최적화:</strong> 컷 단위 소비를 통한
+                    새로운 수익 모델
+                  </li>
+                  <li>
+                    <i
+                      class="fas fa-globe"
+                      style="color: var(--primary-orange); margin-right: 15px"
+                    ></i
+                    ><strong>글로벌 타겟팅:</strong> 가로 슬라이드 포맷으로
+                    글로벌 독자에게 친숙하게
+                  </li>
+                  <li>
+                    <i
+                      class="fas fa-hand-holding-heart"
+                      style="color: var(--primary-orange); margin-right: 15px"
+                    ></i
+                    ><strong>제작 지원:</strong> 우수 창작자를 위한 컨설팅 및
+                    리소스 지원
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="feedback" class="feedback-section fade-in">
+          <div class="container" style="text-align: center">
+            <div
+              class="feedback-text"
+              style="max-width: 1000px; margin: 0 auto"
+            >
+              <h2>MUMU에게 당신의 웹툰을 보여주세요</h2>
+              <p style="font-size: 1.2rem; margin-bottom: 40px; color: #666">
+                가로 슬라이드 컷 기반 UX에 어울리는 작품이 있다면 함께해주세요.
+              </p>
+              <div class="cta-group">
+                <a href="#" class="cta-button-main"
+                  >초기 크리에이터 피드백 참여</a
+                >
+                <p class="cta-note" style="margin-top: 20px">
+                  * 선정된 작가님들께는 개별 연락을 드립니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="main-footer-bottom">
+      <div class="container">
+        <p>&copy; 2025 MUMU. All Rights Reserved.</p>
+        <div class="footer-links">
+          <a href="#">이용약관</a>
+          <a href="#">개인정보처리방침</a>
+        </div>
+      </div>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>
