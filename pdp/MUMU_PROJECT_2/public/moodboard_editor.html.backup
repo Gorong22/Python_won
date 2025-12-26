@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title>MUMU – 무드보드 에디터</title>
+    <link rel="stylesheet" href="css/tabbar.css" />
+    <link rel="stylesheet" href="css/moodboard_editor.css" />
+    <style>
+      /* 애니메이션 */
+      @keyframes slideUp {
+        from {
+          transform: translateY(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      
+      @keyframes slideDown {
+        from {
+          transform: translateY(0);
+          opacity: 1;
+        }
+        to {
+          transform: translateY(100%);
+          opacity: 0;
+        }
+      }
+      
+      /* 모드 선택 화면 */
+      .mode-selector-screen {
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 430px; /* 모바일 폭 강제 고정 */
+        bottom: 0;
+        background: #fafafa;
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        animation: slideUp 0.3s ease;
+      }
+
+      .mode-selector-screen.hidden {
+        display: none;
+      }
+
+      .mode-selector-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 8px;
+        text-align: center;
+      }
+
+      .mode-selector-subtitle {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 48px;
+        text-align: center;
+      }
+
+      .mode-options {
+        width: 100%;
+        max-width: 400px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .mode-option {
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 16px;
+        padding: 24px;
+        cursor: pointer;
+        transition: all 0.2s;
+        min-height: 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .mode-option:active {
+        transform: scale(0.98);
+        background: #f5f5f5;
+      }
+
+      .mode-option-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 4px;
+      }
+
+      .mode-option-desc {
+        font-size: 13px;
+        color: #666;
+        text-align: center;
+      }
+
+      /* 템플릿 선택 화면 */
+      .template-selector-screen {
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 430px; /* 모바일 폭 강제 고정 */
+        bottom: 0;
+        background: #fafafa;
+        z-index: 9999;
+        display: none;
+        flex-direction: column;
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .template-selector-screen.active {
+        display: flex;
+      }
+
+      .template-selector-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .template-selector-back {
+        width: 44px;
+        height: 44px;
+        border: none;
+        background: transparent;
+        font-size: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .template-selector-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #333;
+        flex: 1;
+        text-align: center;
+        margin-right: 44px;
+      }
+
+      .template-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        max-width: 600px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .template-card {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid #e0e0e0;
+      }
+
+      .template-card:active {
+        transform: scale(0.98);
+        border-color: #667eea;
+      }
+
+      .template-card-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 4px;
+      }
+
+      .template-card-desc {
+        font-size: 12px;
+        color: #666;
+      }
+
+      /* 에디터 화면 */
+      .editor-screen {
+        display: none;
+        height: 100vh;
+        width: 100%;
+        max-width: 430px; /* 모바일 폭 강제 고정 */
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 0;
+        animation: slideUp 0.3s ease;
+      }
+
+      .editor-screen.active {
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* 슬롯 스타일 (템플릿형) */
+      .template-slot {
+        position: absolute;
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        min-height: 60px;
+      }
+
+      .template-slot:hover {
+        border-color: #667eea;
+        background: rgba(102, 126, 234, 0.1);
+      }
+
+      .template-slot.has-content {
+        border: 2px solid #667eea;
+        background: transparent;
+      }
+
+      .template-slot-placeholder {
+        font-size: 32px;
+        color: #ccc;
+      }
+
+      .template-slot.has-content .template-slot-placeholder {
+        display: none;
+      }
+
+      /* 모바일 최적화 */
+      @media (max-width: 768px) {
+        .mode-option {
+          padding: 20px;
+        }
+
+        .template-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body class="moodboard-editor-page">
+    <div id="mobile-root">
+      <div class="app-frame">
+      <!-- 모드 선택 화면 (최초 진입 시) -->
+      <div class="mode-selector-screen" id="modeSelectorScreen">
+        <h1 class="mode-selector-title">무드보드 만들기</h1>
+        <p class="mode-selector-subtitle">원하는 방식을 선택해주세요</p>
+        <div class="mode-options">
+          <div class="mode-option" onclick="selectMode('free')">
+            <div class="mode-option-title">자유롭게 만들기</div>
+            <div class="mode-option-desc">컷을 자유롭게 배치하고 꾸미기</div>
+          </div>
+          <div class="mode-option" onclick="selectMode('template')">
+            <div class="mode-option-title">템플릿으로 만들기</div>
+            <div class="mode-option-desc">템플릿을 선택하고 컷만 채우기</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 템플릿 선택 화면 -->
+      <div class="template-selector-screen" id="templateSelectorScreen">
+        <div class="template-selector-header">
+          <button class="template-selector-back" onclick="backToModeSelector()">←</button>
+          <h2 class="template-selector-title">템플릿 선택</h2>
+        </div>
+        <div class="template-grid" id="templateGrid">
+          <!-- 템플릿 카드들이 동적으로 추가됨 -->
+        </div>
+      </div>
+
+      <!-- 에디터 화면 -->
+      <div class="editor-screen" id="editorScreen">
+        <!-- 레이아웃 복구: 3단 구조 -->
+        <div id="editor-root">
+          <!-- 상단 헤더 -->
+          <header class="editor-header" id="editor-header">
+            <button
+              class="header-btn back-btn"
+              onclick="handleBack()"
+              aria-label="뒤로가기"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15 18L9 12L15 6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <h1 class="header-title" id="editorTitle">새 무드보드</h1>
+            <div class="header-actions">
+              <button
+                class="header-btn save-btn"
+                id="saveBtn"
+                onclick="editor.save()"
+              >
+                저장하기
+              </button>
+            </div>
+          </header>
+
+          <!-- 캔버스 영역 -->
+          <main id="editor-canvas-area">
+            <div class="canvas-container" id="canvasContainer">
+              <div class="moodboard-canvas" id="canvas">
+                <div class="empty-guide" id="emptyState">
+                  <div class="empty-state-icon">📷</div>
+                  <div class="empty-state-text">위에서 요소를 추가해보세요</div>
+                </div>
+              </div>
+            </div>
+          </main>
+
+          <!-- 하단 툴바 -->
+          <nav id="editor-toolbar">
+            <button class="toolbar-btn" data-tool="image" onclick="openToolPanel('image')">
+              <span class="toolbar-icon">📷</span>
+              <span class="toolbar-label">이미지</span>
+            </button>
+            <button class="toolbar-btn" data-tool="text" onclick="openToolPanel('text')">
+              <span class="toolbar-icon">✏️</span>
+              <span class="toolbar-label">텍스트</span>
+            </button>
+            <button class="toolbar-btn" data-tool="sticker" onclick="openToolPanel('sticker')">
+              <span class="toolbar-icon">🎨</span>
+              <span class="toolbar-label">스티커</span>
+            </button>
+            <button class="toolbar-btn" data-tool="background" onclick="openToolPanel('background')">
+              <span class="toolbar-icon">🎨</span>
+              <span class="toolbar-label">배경</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- 편집 도구 툴바 (자유형만 표시) - 임시 숨김 -->
+        <section class="editor-tools" id="editorTools" style="display: none;">
+          <button class="tool-btn" onclick="addBlock('image')" title="컷 추가">
+            <span class="tool-icon">📷</span>
+            <span class="tool-label">컷</span>
+          </button>
+        </section>
+
+        <!-- 바텀 시트 - 임시 비활성화 -->
+        <!-- <div class="bottom-sheet-overlay" id="bottomSheetOverlay"></div>
+        <div class="bottom-sheet" id="bottomSheet">
+          <div class="bottom-sheet-handle"></div>
+          <div class="bottom-sheet-content" id="bottomSheetContent">
+          </div>
+        </div> -->
+      </div>
+
+      <!-- 하단 탭바 -->
+      <div id="tabbar"></div>
+      </div>
+    </div>
+
+    <!-- 컷 선택 모달 (템플릿형 슬롯 클릭 시) -->
+    <div class="modal-overlay" id="imageSelectionModal" style="display: none">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>컷 선택</h2>
+          <button class="modal-close" onclick="closeImageSelectionModal()">
+            ×
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="image-grid" id="imageGrid">
+            <!-- 이미지들이 동적으로 로드됨 -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/templates.js"></script>
+    <script type="module" src="js/reader_auth.js"></script>
+    <script type="module" src="js/supabase-auth.js"></script>
+    <script src="js/tabbar-init.js"></script>
+    <script type="module" src="js/moodboard_editor.js"></script>
+  </body>
+</html>

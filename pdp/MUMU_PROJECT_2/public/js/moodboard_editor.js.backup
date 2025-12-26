@@ -1,0 +1,6345 @@
+// =========================
+// MOODBOARD EDITOR - COMPLETE VERSION
+// =========================
+
+import { getSupabase } from "./supabase-auth.js";
+
+// =========================
+// ERROR LOGGING UTILITY
+// =========================
+
+function logError(context, error, additionalInfo = {}) {
+  const errorInfo = {
+    timestamp: new Date().toISOString(),
+    context: context,
+    error: {
+      message: error?.message || String(error),
+      stack: error?.stack,
+      name: error?.name,
+    },
+    state: {
+      currentMoodboardId,
+      currentUserId,
+      isReaderMode,
+      blocksCount: blocks.length,
+      selectedBlockId,
+    },
+    ...additionalInfo,
+  };
+  console.error("[Editor Error]", JSON.stringify(errorInfo, null, 2));
+  console.error("[Editor Error] Context:", context, "Error:", error);
+}
+
+// 전역 에러 핸들러
+window.addEventListener("error", (event) => {
+  logError("Global Error Handler", event.error, {
+    filename: event.filename,
+    lineno: event.lineno,
+    colno: event.colno,
+  });
+});
+
+window.addEventListener("unhandledrejection", (event) => {
+  // "Asynchronous response message channel error" 같은 브라우저 내부 오류는 무시
+  const errorMessage = event.reason?.message || String(event.reason || "");
+  if (
+    errorMessage.includes("message channel") ||
+    errorMessage.includes("channel closed") ||
+    errorMessage.includes("Extension context invalidated")
+  ) {
+    // 브라우저 확장 프로그램이나 내부 채널 오류는 무시
+    return;
+  }
+
+  logError("Unhandled Promise Rejection", event.reason, {
+    promise: event.promise,
+  });
+
+  // 기본 동작 방지 (콘솔에만 로그하고 계속 진행)
+  event.preventDefault();
+});
+
+// =========================
+// STATE MANAGEMENT
+// =========================
+
+let supabaseClient = null;
+let currentMoodboardId = null;
+let currentUserId = null;
+let blocks = []; // 🔥 단일 소스: 모든 블록 데이터 (레이어로 사용)
+let selectedBlockId = null;
+let isDragging = false;
+let isResizing = false;
+let isRotating = false;
+let dragStart = { x: 0, y: 0 };
+let blockStartPos = { x: 0, y: 0 };
+let blockStartSize = { w: 0, h: 0 };
+let blockStartRotation = 0;
+let touchStartDistance = 0;
+let touchStartAngle = 0;
+let isReaderMode = false; // Reader 모드 플래그
+let editorMode = null; // 'free' or 'template'
+let currentTemplate = null; // 선택된 템플릿
+let currentSlotId = null; // 템플릿형에서 선택 중인 슬롯 ID
+
+// =========================
+// LAYER MANAGER
+// =========================
+
+const LayerManager = {
+  // 레이어 목록 가져오기 (blocks 배열을 레이어로 사용)
+  getLayers() {
+    return blocks.filter((b) => !b.id?.startsWith("decoration-"));
+  },
+
+  // 레이어 추가
+  addLayer(layerData) {
+    blocks.push(layerData);
+    renderLayers();
+  },
+
+  // 레이어 선택
+  selectLayer(id) {
+    selectBlock(id);
+  },
+
+  // 레이어 삭제
+  deleteLayer(id) {
+    deleteBlock(id);
+  },
+
+  // 레이어 업데이트
+  updateLayer(id, updates) {
+    const layer = blocks.find((b) => b.id === id);
+    if (layer) {
+      Object.assign(layer, updates);
+      renderLayers();
+    }
+  },
+};
+
+// 레이어 렌더링 (기존 renderBlocks와 동일)
+function renderLayers() {
+  renderBlocks();
+}
+
+// 전역 함수로 export
+window.LayerManager = LayerManager;
+window.renderLayers = renderLayers;
+
+// =========================
+// MODE SELECTION
+// =========================
+
+// 모드 선택 (자유형 또는 템플릿형)
+function selectMode(mode) {
+  editorMode = mode;
+
+  if (mode === "free") {
+    // 자유형 선택 - 바로 에디터 열기
+    openEditor("free");
+  } else if (mode === "template") {
+    // 템플릿형 선택 - 템플릿 선택 화면 표시
+    showTemplateSelector();
+  }
+}
+
+// 템플릿 선택 화면 표시
+function showTemplateSelector() {
+  const modeSelector = document.getElementById("modeSelectorScreen");
+  const templateSelector = document.getElementById("templateSelectorScreen");
+  const templateGrid = document.getElementById("templateGrid");
+
+  if (!modeSelector || !templateSelector || !templateGrid) return;
+
+  modeSelector.classList.add("hidden");
+  templateSelector.classList.add("active");
+
+  // 템플릿 목록 렌더링
+  const templates = getTemplateList();
+  templateGrid.innerHTML = templates
+    .map(
+      (template) => `
+    <div class="template-card" onclick="selectTemplate('${template.id}')">
+      <div class="template-card-name">${template.name}</div>
+      <div class="template-card-desc">${template.description}</div>
+    </div>
+  `
+    )
+    .join("");
+}
+
+// 템플릿 선택
+function selectTemplate(templateId) {
+  const template = getTemplate(templateId);
+  if (!template) return;
+
+  currentTemplate = template;
+  openEditor("template");
+}
+
+// 모드 선택 화면으로 돌아가기
+function backToModeSelector() {
+  const modeSelector = document.getElementById("modeSelectorScreen");
+  const templateSelector = document.getElementById("templateSelectorScreen");
+
+  if (modeSelector) modeSelector.classList.remove("hidden");
+  if (templateSelector) templateSelector.classList.remove("active");
+
+  editorMode = null;
+  currentTemplate = null;
+}
+
+// 에디터 열기
+function openEditor(mode) {
+  const modeSelector = document.getElementById("modeSelectorScreen");
+  const templateSelector = document.getElementById("templateSelectorScreen");
+  const editorScreen = document.getElementById("editorScreen");
+  const editorTools = document.getElementById("editorTools");
+
+  if (!editorScreen) return;
+
+  // 🚨 템플릿 모드 방어 코드: 템플릿이 선택되지 않았으면 템플릿 선택 화면으로 돌아감
+  if (mode === "template" && !currentTemplate) {
+    console.warn(
+      "[Editor] 템플릿이 선택되지 않았습니다. 템플릿 선택 화면으로 돌아갑니다."
+    );
+    showTemplateSelector();
+    return;
+  }
+
+  // 모든 선택 화면 숨기기
+  if (modeSelector) modeSelector.classList.add("hidden");
+  if (templateSelector) templateSelector.classList.remove("active");
+
+  // 에디터 화면 표시
+  editorScreen.classList.add("active");
+
+  // 자유형이면 도구 표시, 템플릿형이면 숨김
+  if (editorTools) {
+    editorTools.style.display = mode === "free" ? "flex" : "none";
+  }
+
+  // Safe Area 적용: 헤더/하단 네비 영역 고려
+  const canvas = document.getElementById("canvas");
+  if (canvas) {
+    // 헤더 높이(약 60px) + 하단 네비 높이(약 80px) 고려하여 padding 적용
+    canvas.style.paddingTop = "20px";
+    canvas.style.paddingBottom = "20px";
+    canvas.style.paddingLeft = "20px";
+    canvas.style.paddingRight = "20px";
+    canvas.style.overflow = "visible"; // 요소 잘림 방지
+  }
+
+  // 에디터 초기화
+  initializeEditor();
+
+  // 템플릿 모드인 경우 슬롯 렌더링 보장
+  if (mode === "template" && currentTemplate) {
+    setTimeout(() => {
+      applyTemplate(currentTemplate);
+      renderTemplateSlots(currentTemplate);
+    }, 100);
+  }
+}
+
+// =========================
+// INITIALIZATION
+// =========================
+
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    // 0. BottomSheetManager 초기화
+    BottomSheetManager.init();
+
+    // 1. Supabase 초기화 (완료 대기)
+    await initializeSupabase();
+
+    // Reader 모드 확인 (URL 파라미터)
+    const urlParams = new URLSearchParams(window.location.search);
+    const readerParam = urlParams.get("reader");
+    isReaderMode = readerParam === "1" || readerParam === "true";
+
+    // Reader 모드가 아니고 Supabase 초기화 실패 시에만 에러
+    if (!isReaderMode && !supabaseClient) {
+      console.error("[Editor] Supabase 초기화 실패");
+      alert("서비스 연결에 실패했습니다. 페이지를 새로고침해주세요.");
+      return;
+    }
+
+    // 2. 사용자 확인 (필수)
+    const user = await getCurrentUser();
+    if (!user || !user.uid) {
+      console.warn("[Editor] 로그인이 필요합니다");
+      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+      window.location.href = "login.html";
+      return;
+    }
+
+    console.log("[Editor] 사용자 확인 완료:", currentUserId);
+    if (isReaderMode) {
+      console.log("[Editor] Reader 모드로 실행 중");
+    }
+
+    // 3. URL에서 무드보드 ID 확인
+    const urlParams2 = new URLSearchParams(window.location.search);
+    const id = urlParams2.get("id");
+    const isNew = urlParams2.get("new") === "1";
+
+    // 기존 무드보드 편집인 경우 바로 에디터 열기
+    if (id && !isNew) {
+      await loadMoodboardFromURL();
+      // 기존 무드보드는 자유형으로 간주
+      editorMode = "free";
+      openEditor("free");
+      initializeEventListeners();
+      if (blocks.length > 0) {
+        renderBlocks();
+      }
+      setTimeout(() => {
+        if (typeof editor !== "undefined" && editor.init) {
+          editor.init();
+        }
+      }, 100);
+    } else {
+      // 새 무드보드인 경우 모드 선택 화면 표시 (자동 진입 방지)
+      // 모드 선택 화면은 이미 HTML에 있고, 사용자가 선택할 때까지 대기
+      // 아무것도 하지 않음 - 모드 선택 화면이 기본으로 표시됨
+    }
+  } catch (error) {
+    logError("DOMContentLoaded - 초기화", error, {
+      step: "전체 초기화 과정",
+    });
+    alert(
+      "에디터를 불러오는 중 오류가 발생했습니다. 페이지를 새로고침해주세요."
+    );
+  }
+});
+
+// 에디터 초기화 (모드 선택 후)
+async function initializeEditor() {
+  try {
+    // 무드보드 생성 또는 로드
+    await loadMoodboardFromURL();
+
+    // 템플릿이 없으면 기본 템플릿 자동 적용
+    if (!currentTemplate) {
+      const defaultTemplate = getTemplate("clean_grid_4"); // 기본 템플릿
+      if (defaultTemplate) {
+        currentTemplate = defaultTemplate;
+        editorMode = "template";
+      }
+    }
+
+    // 템플릿형인 경우 템플릿 적용
+    if (editorMode === "template" && currentTemplate) {
+      applyTemplate(currentTemplate);
+      // 슬롯 렌더링 보장
+      setTimeout(() => {
+        renderTemplateSlots(currentTemplate);
+      }, 100);
+    } else {
+      // 템플릿이 없는 경우 placeholder 슬롯 표시
+      renderPlaceholderSlot();
+    }
+
+    // 이벤트 리스너 초기화
+    initializeEventListeners();
+
+    // 블록 렌더링
+    renderBlocks();
+
+    // editor 초기화
+    setTimeout(() => {
+      if (typeof editor !== "undefined" && editor.init) {
+        editor.init();
+      }
+    }, 100);
+  } catch (error) {
+    logError("initializeEditor", error);
+    // 에러 발생 시에도 기본 템플릿 적용 시도
+    try {
+      const defaultTemplate = getTemplate("clean_grid_4");
+      if (defaultTemplate) {
+        currentTemplate = defaultTemplate;
+        editorMode = "template";
+        applyTemplate(defaultTemplate);
+        setTimeout(() => {
+          renderTemplateSlots(defaultTemplate);
+        }, 100);
+      }
+    } catch (fallbackError) {
+      console.error("[Editor] 기본 템플릿 적용 실패:", fallbackError);
+    }
+  }
+}
+
+// Placeholder 슬롯 렌더링 (템플릿이 없을 때)
+function renderPlaceholderSlot() {
+  const canvas = document.getElementById("canvas");
+  if (!canvas) return;
+
+  // 기존 슬롯 제거
+  const existingSlots = canvas.querySelectorAll(".template-slot");
+  existingSlots.forEach((slot) => slot.remove());
+
+  const canvasRect = canvas.getBoundingClientRect();
+  const canvasWidth = canvasRect.width - 40;
+  const canvasHeight = canvasRect.height - 40;
+  const size = Math.min(canvasWidth, canvasHeight) * 0.5;
+
+  // 중앙에 placeholder 슬롯 생성
+  const slotEl = document.createElement("div");
+  slotEl.className = "template-slot";
+  slotEl.dataset.slotId = "placeholder-main";
+  slotEl.style.left = `${(canvasWidth - size) / 2}px`;
+  slotEl.style.top = `${(canvasHeight - size) / 2}px`;
+  slotEl.style.width = `${size}px`;
+  slotEl.style.height = `${size}px`;
+
+  const placeholder = document.createElement("div");
+  placeholder.className = "template-slot-placeholder";
+  placeholder.textContent = "+";
+  slotEl.appendChild(placeholder);
+
+  slotEl.addEventListener("click", (e) => {
+    if (!e.target.closest(".slot-cut-block")) {
+      currentSlotId = "placeholder-main";
+      openImageSelectionModalForSlot("placeholder-main");
+    }
+  });
+
+  canvas.appendChild(slotEl);
+}
+
+async function initializeSupabase() {
+  try {
+    supabaseClient = getSupabase();
+    if (!supabaseClient) {
+      logError("initializeSupabase", new Error("Supabase client 초기화 실패"));
+    }
+  } catch (error) {
+    logError("initializeSupabase", error);
+  }
+}
+
+async function getCurrentUser() {
+  try {
+    // 방법 1: window.getCurrentFirebaseUser 사용 (reader_auth.js에서 제공)
+    if (typeof window.getCurrentFirebaseUser === "function") {
+      const user = await window.getCurrentFirebaseUser();
+      if (user && user.uid) {
+        currentUserId = user.uid;
+        console.log("[Editor] 사용자 확인됨:", currentUserId);
+        return user;
+      }
+    }
+
+    // 방법 2: 직접 Firebase Auth 확인 (fallback)
+    try {
+      const { auth } = await import("/js/firebase_init.js");
+      const { onAuthStateChanged } = await import(
+        "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"
+      );
+
+      const user = await new Promise((resolve) => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+          unsubscribe();
+          resolve(user);
+        });
+      });
+
+      if (user && user.uid) {
+        currentUserId = user.uid;
+        console.log("[Editor] Firebase Auth에서 사용자 확인됨:", currentUserId);
+        return user;
+      }
+    } catch (firebaseError) {
+      console.warn("[Editor] Firebase 직접 확인 실패:", firebaseError);
+    }
+
+    console.warn("[Editor] 사용자를 찾을 수 없습니다");
+    return null;
+  } catch (error) {
+    logError("getCurrentUser", error);
+    return null;
+  }
+}
+
+async function loadMoodboardFromURL() {
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get("id");
+    const isNew = urlParams.get("new") === "1";
+    const isEdit = urlParams.get("edit") === "true";
+    const isView = urlParams.get("view") === "true";
+    const readerParam = urlParams.get("reader");
+
+    // Reader 모드 확인
+    isReaderMode = readerParam === "1" || readerParam === "true";
+
+    if (isNew || !id) {
+      // 새 무드보드 생성
+      await createNewMoodboard();
+      return;
+    }
+
+    // Reader 모드 분기
+    if (isReaderMode) {
+      // Reader 모드: UUID 검증 없이 Firestore로 로드
+      currentMoodboardId = id;
+      await loadReaderMoodboard(id, isEdit, isView);
+      await loadReaderBlocks(id);
+      return;
+    }
+
+    // Creator 모드: UUID 검증 후 Supabase로 로드
+    if (!isValidUUID(id)) {
+      logError(
+        "loadMoodboardFromURL - UUID 검증 실패",
+        new Error("잘못된 ID 형식"),
+        { id }
+      );
+      showInvalidLinkUI();
+      return;
+    }
+
+    // moodboards.id는 UUID만 허용
+    currentMoodboardId = id;
+    await loadMoodboard(id, isEdit, isView);
+    await loadBlocks(id);
+  } catch (error) {
+    logError("loadMoodboardFromURL", error, {
+      url: window.location.href,
+    });
+    throw error;
+  }
+}
+
+// UUID 검증 함수
+function isValidUUID(str) {
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(str);
+}
+
+// 잘못된 링크 UI 표시 함수
+function showInvalidLinkUI() {
+  const canvas = document.getElementById("canvas");
+  const titleEl = document.getElementById("editorTitle");
+
+  if (canvas) {
+    canvas.innerHTML = `
+      <div style="text-align: center; padding: 60px 20px;">
+        <div style="font-size: 48px; margin-bottom: 20px;">🔗</div>
+        <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 12px; color: #333;">잘못된 링크입니다</h2>
+        <p style="font-size: 14px; color: #666; margin-bottom: 24px;">무드보드를 찾을 수 없습니다.</p>
+        <button onclick="window.location.href='moodboard_editor.html?new=1'" 
+                style="background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer;">
+          새로 만들기
+        </button>
+      </div>
+    `;
+  }
+
+  if (titleEl) {
+    titleEl.textContent = "잘못된 링크";
+  }
+}
+
+async function createNewMoodboard() {
+  try {
+    // 사용자 재확인 (타이밍 이슈 대비)
+    if (!currentUserId) {
+      const user = await getCurrentUser();
+      if (!user || !user.uid) {
+        alert("로그인이 필요합니다. 로그인 후 다시 시도해주세요.");
+        window.location.href = "login.html";
+        return;
+      }
+      currentUserId = user.uid;
+    }
+
+    // Supabase Auth 세션 확인 (RLS 에러 방지)
+    let hasSupabaseSession = false;
+    if (supabaseClient) {
+      try {
+        const { data: sessionData, error: sessionError } =
+          await supabaseClient.auth.getSession();
+        if (!sessionError && sessionData?.session) {
+          hasSupabaseSession = true;
+        }
+      } catch (e) {
+        console.warn("[Editor] 세션 확인 실패:", e);
+      }
+    }
+
+    // Reader(Firebase Auth만 있는 경우)는 Firestore로 저장
+    if (!hasSupabaseSession) {
+      console.log("[Editor] Reader 모드: Firestore로 무드보드 저장");
+      isReaderMode = true;
+
+      try {
+        // 모듈 방식으로 Firestore 사용
+        const { db } = await import("/js/firebase_init.js");
+        const { collection, doc, setDoc, serverTimestamp } = await import(
+          "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"
+        );
+
+        // Firestore에 저장
+        const moodboardRef = doc(collection(db, "reader_moodboards"));
+        const moodboardId = moodboardRef.id;
+
+        await setDoc(moodboardRef, {
+          owner_id: currentUserId,
+          title: "새 무드보드",
+          description: null,
+          is_public: false,
+          created_at: serverTimestamp(),
+          updated_at: serverTimestamp(),
+        });
+
+        currentMoodboardId = moodboardId;
+
+        // URL에 ID를 쿼리 파라미터로 추가
+        window.history.replaceState(
+          {},
+          "",
+          `?id=${moodboardId}&reader=1&edit=true`
+        );
+        const titleEl = document.getElementById("editorTitle");
+        if (titleEl) {
+          titleEl.textContent = "새 무드보드";
+        }
+
+        // Reader가 만든 무드보드는 커뮤니티에 노출 불가 안내
+        console.warn(
+          "[Editor] Reader 무드보드는 커뮤니티에 노출되지 않습니다."
+        );
+
+        console.log("[Editor] Firestore 무드보드 생성 완료, ID:", moodboardId);
+        return;
+      } catch (error) {
+        logError("createNewMoodboard - Reader 모드", error, {
+          mode: "Reader",
+          userId: currentUserId,
+        });
+        alert(
+          "무드보드를 생성하는 중 오류가 발생했습니다: " +
+            (error.message || "알 수 없는 오류")
+        );
+        return;
+      }
+    }
+
+    // Creator(Supabase Auth 세션이 있는 경우)는 Supabase로 저장
+    console.log("[Editor] Creator 모드: Supabase로 무드보드 저장");
+
+    if (!supabaseClient) {
+      console.error("[Editor] Supabase 클라이언트가 없습니다");
+      alert("서비스 연결에 실패했습니다. 페이지를 새로고침해주세요.");
+      return;
+    }
+
+    console.log("[Editor] 무드보드 생성 시작, userId:", currentUserId);
+
+    // 🔥 moodboards 테이블에 저장 (DB 스키마에 맞게 title만 사용)
+    const { data, error } = await supabaseClient
+      .from("moodboards")
+      .insert([
+        {
+          owner_id: currentUserId,
+          title: "새 무드보드",
+          description: null,
+          is_public: false, // 기본값은 비공개
+        },
+      ])
+      .select()
+      .single();
+
+    if (error) {
+      // RLS 에러 처리
+      if (
+        error.code === "42501" ||
+        error.message?.includes("row-level security") ||
+        error.message?.includes("RLS")
+      ) {
+        console.error("[Editor] RLS 에러 발생:", error);
+        alert("로그인이 필요합니다. 로그인 후 다시 시도해주세요.");
+        return;
+      }
+      throw error;
+    }
+
+    // 생성된 UUID를 무드보드 id로 사용 (Supabase가 자동 생성한 UUID)
+    currentMoodboardId = data.id;
+
+    // UUID 검증: 생성된 ID가 UUID인지 확인
+    if (!isValidUUID(data.id)) {
+      console.error("[Editor] 생성된 ID가 UUID 형식이 아닙니다:", data.id);
+      alert("무드보드 생성 중 오류가 발생했습니다.");
+      return;
+    }
+
+    // URL에 UUID를 쿼리 파라미터로 추가
+    window.history.replaceState({}, "", `?id=${data.id}`);
+    const titleEl = document.getElementById("editorTitle");
+    if (titleEl) {
+      titleEl.textContent = data.title || "무드보드 편집";
+    }
+
+    console.log("[Editor] 무드보드 생성 완료, UUID:", data.id);
+  } catch (error) {
+    logError("createNewMoodboard - Creator 모드", error, {
+      mode: "Creator",
+      userId: currentUserId,
+      errorCode: error.code,
+    });
+    // RLS 에러 처리
+    if (
+      error.code === "42501" ||
+      error.message?.includes("row-level security") ||
+      error.message?.includes("RLS")
+    ) {
+      alert("로그인이 필요합니다. 로그인 후 다시 시도해주세요.");
+    } else {
+      alert(
+        "무드보드를 생성하는 중 오류가 발생했습니다: " +
+          (error.message || "알 수 없는 오류")
+      );
+    }
+  }
+}
+
+async function loadMoodboard(id, isEdit = true, isView = false) {
+  try {
+    // UUID 검증: UUID 형식이 아니면 차단
+    if (!isValidUUID(id)) {
+      console.error("[Editor] 잘못된 ID 형식:", id);
+      showInvalidLinkUI();
+      return;
+    }
+
+    // 🔥 moodboards 테이블에서 무드보드 로드 (UUID만 사용)
+    const { data, error } = await supabaseClient
+      .from("moodboards")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      logError("loadMoodboard - Supabase 쿼리 오류", error, {
+        id,
+        isEdit,
+        isView,
+      });
+      showInvalidLinkUI();
+      return;
+    }
+
+    if (!data) {
+      logError(
+        "loadMoodboard - 데이터 없음",
+        new Error("존재하지 않는 무드보드"),
+        { id }
+      );
+      showInvalidLinkUI();
+      return;
+    }
+
+    // 권한 확인: 편집 모드인데 현재 사용자가 소유자가 아니면 보기 모드로 다운그레이드
+    if (isEdit && currentUserId && data.owner_id !== currentUserId) {
+      console.warn("[Editor] 권한 없음: 소유자가 아니므로 보기 모드로 전환");
+      isEdit = false;
+      isView = true;
+      // URL도 업데이트
+      window.history.replaceState({}, "", `?id=${id}&view=true`);
+    }
+
+    // 편집/보기 모드에 따라 UI 조정
+    if (isView || !isEdit) {
+      // 보기 모드: 툴바/저장 버튼 숨김 또는 비활성화
+      const editorTools = document.getElementById("editorTools");
+      const saveBtns = document.querySelectorAll(
+        ".save-btn, .action-btn.primary"
+      );
+      const resetBtn = document.querySelector(".reset-btn");
+
+      if (editorTools) editorTools.style.display = "none";
+      saveBtns.forEach((btn) => (btn.style.display = "none"));
+      if (resetBtn) resetBtn.style.display = "none";
+
+      // 블록 편집 비활성화
+      document.body.classList.add("view-mode");
+    } else {
+      // 편집 모드: 모든 도구 활성화
+      const editorTools = document.getElementById("editorTools");
+      const saveBtns = document.querySelectorAll(
+        ".save-btn, .action-btn.primary"
+      );
+      const resetBtn = document.querySelector(".reset-btn");
+
+      if (editorTools) editorTools.style.display = "flex";
+      saveBtns.forEach((btn) => (btn.style.display = "block"));
+      if (resetBtn) resetBtn.style.display = "block";
+
+      document.body.classList.remove("view-mode");
+    }
+
+    // 무드보드 정보 설정
+    const titleEl = document.getElementById("editorTitle");
+    if (titleEl) {
+      titleEl.textContent = data.title || "무드보드 편집";
+    }
+
+    // blocks는 moodboard_blocks 테이블에서 별도로 로드 (loadBlocks에서 처리)
+    blocks = [];
+  } catch (error) {
+    logError("loadMoodboard", error, { id, isEdit, isView });
+    alert(
+      "무드보드를 불러오는 중 오류가 발생했습니다: " +
+        (error.message || "알 수 없는 오류")
+    );
+  }
+}
+
+async function loadBlocks(moodboardId) {
+  try {
+    // UUID 검증: UUID가 아니면 쿼리하지 않음
+    if (!isValidUUID(moodboardId)) {
+      console.error("[Editor] 잘못된 무드보드 ID:", moodboardId);
+      blocks = [];
+      return;
+    }
+
+    // 🔥 moodboard_blocks 테이블에서 blocks 가져오기 (UUID만 사용)
+    const { data, error } = await supabaseClient
+      .from("moodboard_blocks")
+      .select("*")
+      .eq("moodboard_id", moodboardId)
+      .order("order_index", { ascending: true });
+
+    if (error) throw error;
+
+    if (data && Array.isArray(data)) {
+      // moodboard_blocks 테이블 구조에 맞게 변환
+      blocks = data.map((block, index) => ({
+        id: block.id,
+        moodboard_id: block.moodboard_id,
+        type: block.block_type, // block_type → type
+        cut_id: block.cut_id,
+        title: block.title,
+        content: block.content || block.title, // content 또는 title
+        emoji: block.emoji,
+        span: block.span || 6,
+        order_index: block.order_index || index,
+        // 위치/크기 정보는 meta JSONB에 저장되어 있을 수 있음
+        x: block.meta?.x || 0.3,
+        y: block.meta?.y || 0.3,
+        w: block.meta?.w || 0.3,
+        h: block.meta?.h || 0.3,
+        z_index: block.order_index || index + 1,
+        rotation: block.meta?.rotation || 0,
+        style: block.meta?.style || {},
+        // 슬롯 내부 조절 속성
+        slotId: block.meta?.slotId || null,
+        slotOffsetX: block.meta?.slotOffsetX || 0,
+        slotOffsetY: block.meta?.slotOffsetY || 0,
+        slotScale: block.meta?.slotScale || 1.0,
+      }));
+    } else {
+      blocks = [];
+    }
+
+    console.log(`[Editor] ${blocks.length}개의 블록을 로드했습니다`);
+  } catch (error) {
+    logError("loadBlocks", error, { moodboardId });
+    blocks = [];
+  }
+}
+
+// Reader 모드 무드보드 로드 함수
+async function loadReaderMoodboard(id, isEdit = true, isView = false) {
+  try {
+    const { db } = await import("/js/firebase_init.js");
+    const { doc, getDoc } = await import(
+      "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"
+    );
+
+    const moodboardRef = doc(db, "reader_moodboards", id);
+    const moodboardSnap = await getDoc(moodboardRef);
+
+    if (!moodboardSnap.exists()) {
+      logError(
+        "loadReaderMoodboard - 문서 없음",
+        new Error("존재하지 않는 무드보드"),
+        { id }
+      );
+      showInvalidLinkUI();
+      return;
+    }
+
+    const data = moodboardSnap.data();
+
+    // 권한 확인: 편집 모드인데 현재 사용자가 소유자가 아니면 보기 모드로 다운그레이드
+    if (isEdit && currentUserId && data.owner_id !== currentUserId) {
+      console.warn("[Editor] 권한 없음: 소유자가 아니므로 보기 모드로 전환");
+      isEdit = false;
+      isView = true;
+      // URL도 업데이트
+      window.history.replaceState({}, "", `?id=${id}&reader=1&view=true`);
+    }
+
+    // 편집/보기 모드에 따라 UI 조정
+    if (isView || !isEdit) {
+      // 보기 모드: 툴바/저장 버튼 숨김 또는 비활성화
+      const editorTools = document.getElementById("editorTools");
+      const saveBtns = document.querySelectorAll(
+        ".save-btn, .action-btn.primary"
+      );
+      const resetBtn = document.querySelector(".reset-btn");
+
+      if (editorTools) editorTools.style.display = "none";
+      saveBtns.forEach((btn) => (btn.style.display = "none"));
+      if (resetBtn) resetBtn.style.display = "none";
+
+      // 블록 편집 비활성화
+      document.body.classList.add("view-mode");
+    } else {
+      // 편집 모드: 모든 도구 활성화
+      const editorTools = document.getElementById("editorTools");
+      const saveBtns = document.querySelectorAll(
+        ".save-btn, .action-btn.primary"
+      );
+      const resetBtn = document.querySelector(".reset-btn");
+
+      if (editorTools) editorTools.style.display = "flex";
+      saveBtns.forEach((btn) => (btn.style.display = "block"));
+      if (resetBtn) resetBtn.style.display = "block";
+
+      document.body.classList.remove("view-mode");
+    }
+
+    // 무드보드 정보 설정
+    const titleEl = document.getElementById("editorTitle");
+    if (titleEl) {
+      titleEl.textContent = data.title || "무드보드 편집";
+    }
+
+    // blocks는 별도로 로드 (loadReaderBlocks에서 처리)
+    blocks = [];
+  } catch (error) {
+    console.error("[Editor] Reader 무드보드 로드 오류:", error);
+    alert(
+      "무드보드를 불러오는 중 오류가 발생했습니다: " +
+        (error.message || "알 수 없는 오류")
+    );
+  }
+}
+
+// Reader 모드 블록 로드 함수
+async function loadReaderBlocks(moodboardId) {
+  try {
+    const { db } = await import("/js/firebase_init.js");
+    const { collection, getDocs, query, orderBy } = await import(
+      "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"
+    );
+
+    const blocksRef = collection(
+      db,
+      "reader_moodboards",
+      moodboardId,
+      "blocks"
+    );
+    const q = query(blocksRef, orderBy("order_index", "asc"));
+    const snap = await getDocs(q);
+
+    if (!snap.empty) {
+      blocks = snap.docs.map((docSnap, index) => {
+        const blockData = docSnap.data();
+        return {
+          id: docSnap.id,
+          moodboard_id: moodboardId,
+          type: blockData.block_type || blockData.type,
+          cut_id: blockData.cut_id || null,
+          title: blockData.title || null,
+          content: blockData.content || blockData.title || "",
+          emoji: blockData.emoji || null,
+          span: blockData.span || 6,
+          order_index: blockData.order_index || index,
+          // 위치/크기 정보는 meta에 저장되어 있을 수 있음
+          x: blockData.meta?.x || blockData.x || 0.3,
+          y: blockData.meta?.y || blockData.y || 0.3,
+          w: blockData.meta?.w || blockData.w || 0.3,
+          h: blockData.meta?.h || blockData.h || 0.3,
+          z_index:
+            blockData.meta?.z_index || blockData.order_index || index + 1,
+          rotation: blockData.meta?.rotation || blockData.rotation || 0,
+          style: blockData.meta?.style || blockData.style || {},
+        };
+      });
+    } else {
+      blocks = [];
+    }
+
+    console.log(
+      `[Editor] Reader 모드: ${blocks.length}개의 블록을 로드했습니다`
+    );
+  } catch (error) {
+    logError("loadReaderBlocks", error, { moodboardId });
+    blocks = [];
+  }
+}
+
+// =========================
+// RENDERING
+// =========================
+
+function renderBlocks() {
+  try {
+    const canvas = document.getElementById("canvas");
+    if (!canvas) {
+      logError("renderBlocks", new Error("canvas 요소를 찾을 수 없습니다"));
+      return;
+    }
+
+    // 템플릿형이 아닌 경우에만 전체 초기화
+    if (editorMode !== "template") {
+      // 슬롯이 아닌 블록만 제거 (슬롯은 유지)
+      const existingBlocks = canvas.querySelectorAll(
+        ".canvas-block:not(.template-slot *)"
+      );
+      existingBlocks.forEach((el) => el.remove());
+    }
+
+    const canvasRect = canvas.getBoundingClientRect();
+    const canvasWidth = canvasRect.width - 40; // padding 제외
+    const canvasHeight = canvasRect.height; // 고정 높이 사용
+
+    blocks.forEach((block) => {
+      try {
+        // 템플릿형이고 슬롯에 속한 블록인 경우
+        if (editorMode === "template" && block.slotId) {
+          // 슬롯 내부에 블록 렌더링 (renderBlockInSlot 사용)
+          renderBlockInSlot(block.id, block.slotId);
+        } else {
+          // 자유형 또는 일반 블록
+          const blockElement = createBlockElement(
+            block,
+            canvasWidth,
+            canvasHeight
+          );
+          canvas.appendChild(blockElement);
+
+          // 길게 누르기 이벤트 추가
+          setupLongPressActionSheet(block.id);
+        }
+      } catch (error) {
+        logError("renderBlocks - 블록 렌더링", error, {
+          blockId: block.id,
+          blockType: block.type,
+        });
+      }
+    });
+
+    // Canvas 높이는 절대 변경하지 않음 (고정)
+  } catch (error) {
+    logError("renderBlocks", error, { blocksCount: blocks.length });
+  }
+}
+
+function createBlockElement(block, canvasWidth, canvasHeight) {
+  const div = document.createElement("div");
+  div.className = `canvas-block block-${block.type}`;
+  div.dataset.id = block.id;
+
+  // 위치 및 크기 계산 (0~1 비율을 픽셀로 변환)
+  const x = block.x * canvasWidth;
+  const y = block.y * canvasHeight;
+  const w = block.w * canvasWidth;
+  const h = block.h * canvasHeight;
+
+  div.style.left = `${x}px`;
+  div.style.top = `${y}px`;
+  div.style.width = `${w}px`;
+  div.style.height = `${h}px`;
+  div.style.zIndex = block.z_index || 1;
+  div.style.transform = `rotate(${block.rotation || 0}deg)`;
+
+  // Style JSON을 inline style로 변환 (block 객체 전달하여 자동 꾸밈 적용)
+  if (block.style && typeof block.style === "object") {
+    applyBlockStyle(div, block.style, block);
+  } else {
+    // style이 없어도 자동 꾸밈 적용
+    applyBlockStyle(div, {}, block);
+  }
+
+  // 타입별 콘텐츠 렌더링
+  renderBlockContent(div, block);
+
+  // 템플릿 고정 데코는 리사이즈/회전 핸들 제거
+  const isDecoration = block.id?.startsWith("decoration-");
+  const isTemplateFixed = editorMode === "template" && isDecoration;
+
+  // 템플릿 데코 요소 처리: 선택/드래그/삭제 불가
+  if (isDecoration) {
+    div.classList.add("template-decoration");
+    div.style.pointerEvents = "none"; // 선택/드래그 불가
+    div.style.opacity = "0.7"; // 시각적으로 구분
+    div.style.zIndex = "1"; // 항상 뒤 레이어
+    // 삭제 버튼 추가하지 않음
+  } else {
+    // 일반 블록: 삭제 버튼은 selectBlock에서 동적으로 추가됨
+    // 카메라 아이콘, 큰 X 버튼, 설정 버튼 모두 제거 (요구사항)
+  }
+
+  // 이벤트 리스너
+  attachBlockEventListeners(div, block);
+
+  return div;
+}
+
+function applyBlockStyle(element, style, block) {
+  if (!style || typeof style !== "object") style = {};
+
+  // 폰트 스타일
+  if (style.fontSize) element.style.fontSize = `${style.fontSize}px`;
+  if (style.fontWeight) element.style.fontWeight = style.fontWeight;
+  if (style.fontFamily) element.style.fontFamily = style.fontFamily;
+  if (style.color) element.style.color = style.color;
+  if (style.textAlign) element.style.textAlign = style.textAlign;
+  if (style.lineHeight) element.style.lineHeight = style.lineHeight;
+
+  // 배경
+  if (style.backgroundColor)
+    element.style.backgroundColor = style.backgroundColor;
+  if (style.backgroundImage)
+    element.style.backgroundImage = `url(${style.backgroundImage})`;
+  if (style.backgroundSize) element.style.backgroundSize = style.backgroundSize;
+
+  // 테두리
+  if (style.borderWidth) element.style.borderWidth = `${style.borderWidth}px`;
+  if (style.borderColor) element.style.borderColor = style.borderColor;
+  if (style.borderStyle) element.style.borderStyle = style.borderStyle;
+
+  // 꾸밈 자동화: border-radius 통일 (이미지/컷 블록에만)
+  if (block && (block.type === "image" || block.type === "cut")) {
+    const borderRadius = style.borderRadius || 12; // 기본값 12px
+    element.style.borderRadius = `${borderRadius}px`;
+  } else if (style.borderRadius) {
+    element.style.borderRadius = `${style.borderRadius}px`;
+  }
+
+  // 꾸밈 자동화: 자동 그림자 적용 (이미지/컷 블록에만)
+  if (block && (block.type === "image" || block.type === "cut")) {
+    if (!style.boxShadow) {
+      // 기본 그림자: 부드러운 그림자 효과
+      element.style.boxShadow =
+        "0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06)";
+    } else {
+      element.style.boxShadow = style.boxShadow;
+    }
+  } else if (style.boxShadow) {
+    element.style.boxShadow = style.boxShadow;
+  }
+
+  // 필터
+  if (style.filter) element.style.filter = style.filter;
+  if (style.opacity !== undefined) element.style.opacity = style.opacity;
+}
+
+function renderBlockContent(element, block) {
+  switch (block.type) {
+    case "image":
+    case "cut":
+      if (block.style?.imageUrl || block.url) {
+        const img = document.createElement("img");
+        img.src = block.style?.imageUrl || block.url;
+        img.alt = "이미지";
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.objectFit = block.style?.objectFit || "cover";
+        img.style.pointerEvents = "none";
+        element.appendChild(img);
+
+        // 그림자 효과
+        if (block.style?.shadow) {
+          element.classList.add("has-shadow");
+        }
+      } else {
+        const placeholder = document.createElement("div");
+        placeholder.style.width = "100%";
+        placeholder.style.height = "100%";
+        placeholder.style.display = "flex";
+        placeholder.style.alignItems = "center";
+        placeholder.style.justifyContent = "center";
+        placeholder.style.background = "#f0f0f0";
+        placeholder.style.color = "#999";
+        placeholder.textContent = "이미지 없음";
+        element.appendChild(placeholder);
+      }
+      break;
+
+    case "text":
+      // 텍스트 블록 컨테이너
+      const textContainer = document.createElement("div");
+      textContainer.className = "text-block-container";
+
+      const textDiv = document.createElement("div");
+      textDiv.className = "block-text";
+      const initialText = block.style?.text || block.content || "";
+      textDiv.textContent = initialText || "텍스트를 입력하세요";
+      textDiv.contentEditable = true;
+
+      // 폰트 크기 적용
+      if (block.style?.fontSize) {
+        textDiv.style.fontSize = `${block.style.fontSize}px`;
+      }
+      if (block.style?.fontFamily) {
+        textDiv.style.fontFamily = block.style.fontFamily;
+      }
+      if (block.style?.fontWeight) {
+        textDiv.style.fontWeight = block.style.fontWeight;
+      }
+      if (block.style?.textAlign) {
+        textDiv.style.textAlign = block.style.textAlign;
+      }
+
+      // 플레이스홀더 스타일 적용
+      if (!initialText) {
+        textDiv.classList.add("placeholder");
+      }
+
+      // 드래그 핸들 영역 (텍스트 영역 외부)
+      const dragHandle = document.createElement("div");
+      dragHandle.className = "text-drag-handle";
+      dragHandle.innerHTML = "⋮⋮";
+
+      // 포커스 시 플레이스홀더 제거
+      textDiv.addEventListener("focus", () => {
+        if (textDiv.textContent === "텍스트를 입력하세요") {
+          textDiv.textContent = "";
+          textDiv.classList.remove("placeholder");
+        }
+      });
+
+      // 블러 시 플레이스홀더 복원
+      textDiv.addEventListener("blur", () => {
+        const block = blocks.find((b) => b.id === element.dataset.id);
+        if (block) {
+          const text = textDiv.textContent.trim();
+          if (!text) {
+            textDiv.textContent = "텍스트를 입력하세요";
+            textDiv.classList.add("placeholder");
+            block.style = { ...block.style, text: "" };
+            block.content = "";
+          } else {
+            block.style = { ...block.style, text: text };
+            block.content = text;
+            updateBlockStyle(block.id, { text: text });
+          }
+        }
+      });
+
+      // 텍스트 변경 시 state 업데이트
+      textDiv.addEventListener("input", () => {
+        const block = blocks.find((b) => b.id === element.dataset.id);
+        if (block) {
+          const text = textDiv.textContent;
+          if (text !== "텍스트를 입력하세요") {
+            textDiv.classList.remove("placeholder");
+            block.style = { ...block.style, text: text };
+            block.content = text;
+          }
+        }
+      });
+
+      textContainer.appendChild(dragHandle);
+      textContainer.appendChild(textDiv);
+      element.appendChild(textContainer);
+      // 텍스트 블록 설정 버튼 제거 (요구사항)
+      break;
+
+    case "emoji":
+      // canvas-block 클래스 유지하면서 block-emoji 추가
+      element.classList.add("block-emoji");
+      element.textContent = block.style?.emoji || block.content || "😊";
+      element.style.fontSize = `${block.style?.fontSize || 48}px`;
+      break;
+
+    case "color":
+    case "shape":
+      element.className = "block-shape";
+      // 색상 블록은 배경색만 있으면 됨
+      if (block.style?.backgroundColor || block.style?.background) {
+        element.style.background =
+          block.style.backgroundColor || block.style.background;
+      }
+      break;
+  }
+}
+
+// =========================
+// EVENT LISTENERS
+// =========================
+
+function attachBlockEventListeners(element, block) {
+  // 클릭: 선택
+  let lastClickTime = 0;
+  element.addEventListener("click", (e) => {
+    // 삭제 버튼 클릭은 제외
+    if (
+      e.target.closest(".block-delete-btn") ||
+      e.target.closest(".layer-delete-btn")
+    ) {
+      return;
+    }
+    // 텍스트 입력 영역 클릭은 선택만 하고 드래그 방지
+    if (
+      e.target.isContentEditable ||
+      e.target.closest('[contenteditable="true"]')
+    ) {
+      e.stopPropagation();
+      selectBlock(block.id);
+      return;
+    }
+    e.stopPropagation();
+
+    // 더블탭: 이미지 레이어의 경우 꽉 채우기/맞추기 전환
+    const currentTime = Date.now();
+    if (
+      currentTime - lastClickTime < 300 &&
+      (block.type === "image" || block.type === "cut")
+    ) {
+      toggleImageFit(block.id);
+      lastClickTime = 0;
+    } else {
+      lastClickTime = currentTime;
+      selectBlock(block.id);
+    }
+  });
+
+  // 이미지 레이어 핀치 확대/축소
+  if (block.type === "image" || block.type === "cut") {
+    let touchStartDistance = 0;
+    let touchStartScale = 1.0;
+    let isPinching = false;
+
+    element.addEventListener("touchstart", (e) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        isPinching = true;
+        const touch1 = e.touches[0];
+        const touch2 = e.touches[1];
+        touchStartDistance = Math.hypot(
+          touch2.clientX - touch1.clientX,
+          touch2.clientY - touch1.clientY
+        );
+        touchStartScale = block.scale || 1.0;
+      }
+    });
+
+    element.addEventListener("touchmove", (e) => {
+      if (e.touches.length === 2 && isPinching) {
+        e.preventDefault();
+        const touch1 = e.touches[0];
+        const touch2 = e.touches[1];
+        const distance = Math.hypot(
+          touch2.clientX - touch1.clientX,
+          touch2.clientY - touch1.clientY
+        );
+        const scaleDelta = distance / touchStartDistance;
+        const newScale = Math.max(
+          0.5,
+          Math.min(2.0, touchStartScale * scaleDelta)
+        );
+
+        block.scale = newScale;
+        element.style.transform = `rotate(${
+          block.rotation || 0
+        }deg) scale(${newScale})`;
+      }
+    });
+
+    element.addEventListener("touchend", () => {
+      isPinching = false;
+    });
+  }
+
+  // 드래그 시작 (Pointer Events 통합)
+  element.addEventListener("pointerdown", (e) => {
+    // 텍스트 입력 영역은 제외
+    if (
+      e.target.isContentEditable ||
+      e.target.closest('[contenteditable="true"]')
+    ) {
+      return;
+    }
+    handleBlockPointerDown(e);
+  });
+
+  // 기존 마우스/터치 이벤트도 유지 (호환성)
+  element.addEventListener("mousedown", handleBlockMouseDown);
+  element.addEventListener("touchstart", handleBlockTouchStart, {
+    passive: false,
+  });
+
+  // 리사이즈 핸들 (4개 코너)
+  const resizeHandles = element.querySelectorAll(".resize-handle");
+  resizeHandles.forEach((handle, index) => {
+    const positions = ["nw", "ne", "sw", "se"];
+    handle.classList.add(positions[index]);
+
+    handle.addEventListener("pointerdown", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      startResize(block.id, e, positions[index]);
+    });
+    handle.addEventListener("mousedown", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      startResize(block.id, e, positions[index]);
+    });
+    handle.addEventListener("touchstart", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      startResize(block.id, e.touches[0], positions[index]);
+    });
+  });
+
+  // 회전 핸들
+  const rotateHandle = element.querySelector(".rotate-handle");
+  if (rotateHandle) {
+    rotateHandle.addEventListener("pointerdown", (e) => {
+      e.stopPropagation();
+      startRotate(block.id, e);
+    });
+    rotateHandle.addEventListener("mousedown", (e) => {
+      e.stopPropagation();
+      startRotate(block.id, e);
+    });
+    rotateHandle.addEventListener("touchstart", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      startRotate(block.id, e.touches[0]);
+    });
+  }
+}
+
+// Pointer Events 통합 핸들러
+function handleBlockPointerDown(e) {
+  const blockElement = e.target.closest(".canvas-block");
+  if (!blockElement) return;
+
+  // 설정 버튼 클릭은 제외
+  if (e.target.closest(".block-settings-btn")) {
+    return;
+  }
+
+  // 삭제 버튼 클릭은 제외
+  if (
+    e.target.closest(".block-delete-btn") ||
+    e.target.closest(".layer-delete-btn")
+  ) {
+    return;
+  }
+
+  // 텍스트 드래그 핸들 클릭 시 드래그 시작
+  if (e.target.closest(".text-drag-handle")) {
+    e.preventDefault();
+    const blockId = blockElement.dataset.id;
+    selectBlock(blockId);
+    isDragging = true;
+    const canvas = document.getElementById("canvas");
+    const canvasRect = canvas.getBoundingClientRect();
+    dragStart.x = e.clientX - canvasRect.left;
+    dragStart.y = e.clientY - canvasRect.top;
+    const block = blocks.find((b) => b.id === blockId);
+    if (block) {
+      const canvasWidth = canvasRect.width - 40;
+      const canvasHeight = canvasRect.height;
+      blockStartPos.x = block.x * canvasWidth;
+      blockStartPos.y = block.y * canvasHeight;
+    }
+    blockElement.classList.add("dragging");
+    blockElement.setPointerCapture(e.pointerId);
+    return;
+  }
+
+  // 텍스트 입력 영역 클릭은 드래그 방지
+  const textDiv = blockElement.querySelector('[contenteditable="true"]');
+  if (
+    textDiv &&
+    textDiv.contains(e.target) &&
+    !e.target.closest(".text-drag-handle")
+  ) {
+    return; // 텍스트 입력만 허용
+  }
+
+  e.preventDefault();
+  const blockId = blockElement.dataset.id;
+  selectBlock(blockId);
+
+  isDragging = true;
+  const canvas = document.getElementById("canvas");
+  const canvasRect = canvas.getBoundingClientRect();
+  dragStart.x = e.clientX - canvasRect.left;
+  dragStart.y = e.clientY - canvasRect.top;
+
+  const block = blocks.find((b) => b.id === blockId);
+  if (block) {
+    const canvasWidth = canvasRect.width - 40;
+    const canvasHeight = canvasRect.height;
+    blockStartPos.x = block.x * canvasWidth;
+    blockStartPos.y = block.y * canvasHeight;
+  }
+
+  blockElement.classList.add("dragging");
+  blockElement.setPointerCapture(e.pointerId);
+}
+
+function initializeEventListeners() {
+  // 캔버스 클릭: 선택 해제 또는 드래그앤드롭 배치
+  const canvas = document.getElementById("canvas");
+  if (canvas) {
+    canvas.addEventListener("click", (e) => {
+      if (e.target === canvas || e.target.id === "emptyState") {
+        // 드래그 모드일 때는 블록 배치
+        if (canvas.classList.contains("drag-mode") && pendingBlockForDrag) {
+          placeBlockAtPosition(e.clientX, e.clientY);
+          return;
+        }
+        selectBlock(null);
+      }
+    });
+
+    // 드래그 모드에서 마우스 이동 시 미리보기
+    canvas.addEventListener("mousemove", (e) => {
+      if (canvas.classList.contains("drag-mode") && pendingBlockForDrag) {
+        canvas.style.cursor = "crosshair";
+      }
+    });
+  }
+
+  // 전역 마우스/터치/Pointer 이벤트
+  document.addEventListener("mousemove", handleMouseMove);
+  document.addEventListener("mouseup", handleMouseUp);
+  document.addEventListener("touchmove", handleTouchMove, { passive: false });
+  document.addEventListener("touchend", handleTouchEnd);
+  // Pointer Events 통합
+  document.addEventListener("pointermove", handlePointerMove);
+  document.addEventListener("pointerup", handlePointerUp);
+}
+
+// 드래그앤드롭으로 블록 배치
+function placeBlockAtPosition(clientX, clientY) {
+  if (!pendingBlockForDrag) return;
+
+  const canvas = document.getElementById("canvas");
+  if (!canvas) return;
+
+  const canvasRect = canvas.getBoundingClientRect();
+  const canvasWidth = canvasRect.width - 40;
+  const canvasHeight = canvasRect.height;
+
+  // 클릭 위치를 비율로 변환
+  const x = (clientX - canvasRect.left - 20) / canvasWidth;
+  const y = (clientY - canvasRect.top - 20) / canvasHeight;
+
+  // 기본 크기
+  const defaultW = pendingBlockForDrag.type === "image" ? 0.3 : 0.2;
+  const defaultH = pendingBlockForDrag.type === "image" ? 0.4 : 0.2;
+
+  const newBlock = {
+    ...pendingBlockForDrag,
+    x: Math.max(0, Math.min(1 - defaultW, x - defaultW / 2)),
+    y: Math.max(0, Math.min(1 - defaultH, y - defaultH / 2)),
+    w: defaultW,
+    h: defaultH,
+    z_index: blocks.length + 1,
+    rotation: 0,
+    style: {
+      ...getDefaultStyle(pendingBlockForDrag.type),
+      ...pendingBlockForDrag.style,
+    },
+  };
+
+  createBlock(newBlock);
+
+  // 드래그 모드 해제
+  pendingBlockForDrag = null;
+  canvas.classList.remove("drag-mode");
+  canvas.style.cursor = "";
+}
+
+function handlePointerMove(e) {
+  if (isDragging && selectedBlockId) {
+    updateBlockPosition(e.clientX, e.clientY);
+  } else if (isResizing && selectedBlockId) {
+    updateBlockSize(e.clientX, e.clientY);
+  } else if (isRotating && selectedBlockId) {
+    updateBlockRotation(e.clientX, e.clientY);
+  }
+}
+
+function handlePointerUp(e) {
+  if (isDragging || isResizing || isRotating) {
+    const blockElement = document.querySelector(
+      `[data-id="${selectedBlockId}"]`
+    );
+    if (blockElement && selectedBlockId) {
+      commitBlockRect(selectedBlockId, blockElement);
+      blockElement.classList.remove("dragging", "resizing", "rotating");
+      if (blockElement.releasePointerCapture) {
+        blockElement.releasePointerCapture(e.pointerId);
+      }
+    }
+  }
+  isDragging = false;
+  isResizing = false;
+  isRotating = false;
+}
+
+// =========================
+// DRAG & DROP
+// =========================
+
+function handleBlockMouseDown(e) {
+  const blockElement = e.target.closest(".canvas-block");
+  if (!blockElement) return;
+
+  // 설정 버튼 클릭은 제외
+  if (e.target.closest(".block-settings-btn")) {
+    return;
+  }
+
+  // 텍스트 드래그 핸들 클릭 시 드래그 시작
+  if (e.target.closest(".text-drag-handle")) {
+    e.preventDefault();
+    startDragFromElement(blockElement, e);
+    return;
+  }
+
+  // 텍스트 입력 영역 클릭은 드래그 방지
+  const textDiv = blockElement.querySelector('[contenteditable="true"]');
+  if (
+    textDiv &&
+    textDiv.contains(e.target) &&
+    !e.target.closest(".text-drag-handle")
+  ) {
+    return; // 텍스트 입력만 허용
+  }
+
+  e.preventDefault();
+  startDragFromElement(blockElement, e);
+}
+
+function startDragFromElement(blockElement, e) {
+  const blockId = blockElement.dataset.id;
+
+  // 템플릿 고정 데코는 이동 불가
+  const block = blocks.find((b) => b.id === blockId);
+  if (block && block.id?.startsWith("decoration-")) {
+    return; // 데코는 이동 불가
+  }
+
+  selectBlock(blockId);
+
+  isDragging = true;
+  const canvas = document.getElementById("canvas");
+  const canvasRect = canvas.getBoundingClientRect();
+  dragStart.x = e.clientX - canvasRect.left;
+  dragStart.y = e.clientY - canvasRect.top;
+
+  if (block) {
+    const canvasWidth = canvasRect.width - 40;
+    const canvasHeight = canvasRect.height;
+    blockStartPos.x = block.x * canvasWidth;
+    blockStartPos.y = block.y * canvasHeight;
+  }
+
+  blockElement.classList.add("dragging");
+}
+
+function handleBlockTouchStart(e) {
+  const blockElement = e.target.closest(".canvas-block");
+  if (!blockElement) return;
+
+  // 설정 버튼 클릭은 제외
+  if (e.target.closest(".block-settings-btn")) {
+    return;
+  }
+
+  if (e.touches.length === 1) {
+    // 텍스트 편집 중에는 드래그 방지
+    const isContentEditable =
+      e.target.isContentEditable ||
+      e.target.closest('[contenteditable="true"]') ||
+      blockElement
+        .querySelector('[contenteditable="true"]')
+        ?.contains(e.target);
+
+    if (isContentEditable) {
+      // 텍스트 입력 모드: 드래그 방지, 포커스 허용
+      e.stopPropagation();
+      return;
+    }
+
+    e.preventDefault();
+    const blockId = blockElement.dataset.id;
+    selectBlock(blockId);
+
+    isDragging = true;
+    const canvas = document.getElementById("canvas");
+    const canvasRect = canvas.getBoundingClientRect();
+    const touch = e.touches[0];
+    dragStart.x = touch.clientX - canvasRect.left;
+    dragStart.y = touch.clientY - canvasRect.top;
+
+    const block = blocks.find((b) => b.id === blockId);
+    if (block) {
+      const canvasWidth = canvasRect.width - 40;
+      const canvasHeight = canvasRect.height;
+      blockStartPos.x = block.x * canvasWidth;
+      blockStartPos.y = block.y * canvasHeight;
+    }
+
+    blockElement.classList.add("dragging");
+  }
+}
+
+function handleMouseMove(e) {
+  if (isDragging && selectedBlockId) {
+    updateBlockPosition(e.clientX, e.clientY);
+  } else if (isResizing && selectedBlockId) {
+    updateBlockSize(e.clientX, e.clientY);
+  } else if (isRotating && selectedBlockId) {
+    updateBlockRotation(e.clientX, e.clientY);
+  }
+}
+
+function handleTouchMove(e) {
+  if (e.touches.length === 1) {
+    if (isDragging && selectedBlockId) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      updateBlockPosition(touch.clientX, touch.clientY);
+    } else if (isResizing && selectedBlockId) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      updateBlockSize(touch.clientX, touch.clientY);
+    } else if (isRotating && selectedBlockId) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      updateBlockRotation(touch.clientX, touch.clientY);
+    }
+  }
+}
+
+function handleMouseUp() {
+  if (isDragging || isResizing || isRotating) {
+    const blockElement = document.querySelector(
+      `[data-id="${selectedBlockId}"]`
+    );
+    if (blockElement && selectedBlockId) {
+      // DOM 변경사항을 state(blocks)에 반영
+      commitBlockRect(selectedBlockId, blockElement);
+      blockElement.classList.remove("dragging", "resizing", "rotating");
+    }
+  }
+  isDragging = false;
+  isResizing = false;
+  isRotating = false;
+}
+
+function handleTouchEnd() {
+  if (isDragging || isResizing || isRotating) {
+    const blockElement = document.querySelector(
+      `[data-id="${selectedBlockId}"]`
+    );
+    if (blockElement && selectedBlockId) {
+      // DOM 변경사항을 state(blocks)에 반영
+      commitBlockRect(selectedBlockId, blockElement);
+      blockElement.classList.remove("dragging", "resizing", "rotating");
+    }
+  }
+  isDragging = false;
+  isResizing = false;
+  isRotating = false;
+}
+
+function updateBlockPosition(clientX, clientY) {
+  const canvas = document.getElementById("canvas");
+  const canvasRect = canvas.getBoundingClientRect();
+  const canvasWidth = canvasRect.width - 40;
+  const canvasHeight = canvasRect.height;
+
+  const deltaX = clientX - canvasRect.left - dragStart.x;
+  const deltaY = clientY - canvasRect.top - dragStart.y;
+
+  const newX = Math.max(0, Math.min(blockStartPos.x + deltaX, canvasWidth));
+  const newY = Math.max(0, Math.min(blockStartPos.y + deltaY, canvasHeight));
+
+  const blockElement = document.querySelector(`[data-id="${selectedBlockId}"]`);
+  if (blockElement) {
+    blockElement.style.left = `${newX}px`;
+    blockElement.style.top = `${newY}px`;
+  }
+}
+
+function updateBlockSize(clientX, clientY) {
+  const canvas = document.getElementById("canvas");
+  const canvasRect = canvas.getBoundingClientRect();
+  const blockElement = document.querySelector(`[data-id="${selectedBlockId}"]`);
+  if (!blockElement) return;
+
+  const block = blocks.find((b) => b.id === selectedBlockId);
+  if (!block) return;
+
+  const canvasWidth = canvasRect.width - 40;
+  const canvasHeight = canvasRect.height;
+
+  const deltaX = clientX - canvasRect.left - dragStart.x;
+  const deltaY = clientY - canvasRect.top - dragStart.y;
+
+  let newW = blockStartSize.w;
+  let newH = blockStartSize.h;
+  let newX = blockStartPos.x;
+  let newY = blockStartPos.y;
+
+  // 코너에 따라 크기 조정 방향 결정
+  switch (resizeCorner) {
+    case "se": // 우하단
+      newW = blockStartSize.w + deltaX;
+      newH = blockStartSize.h + deltaY;
+      break;
+    case "sw": // 좌하단
+      newW = blockStartSize.w - deltaX;
+      newH = blockStartSize.h + deltaY;
+      newX = blockStartPos.x + deltaX;
+      break;
+    case "ne": // 우상단
+      newW = blockStartSize.w + deltaX;
+      newH = blockStartSize.h - deltaY;
+      newY = blockStartPos.y + deltaY;
+      break;
+    case "nw": // 좌상단
+      newW = blockStartSize.w - deltaX;
+      newH = blockStartSize.h - deltaY;
+      newX = blockStartPos.x + deltaX;
+      newY = blockStartPos.y + deltaY;
+      break;
+  }
+
+  // 모바일 환경을 고려한 최소/최대 크기 제한 (캔버스 크기의 10% ~ 90%)
+  const minSize = Math.min(canvasWidth, canvasHeight) * 0.1;
+  const maxW = canvasWidth * 0.9;
+  const maxH = canvasHeight * 0.9;
+
+  newW = Math.max(minSize, Math.min(newW, maxW));
+  newH = Math.max(minSize, Math.min(newH, maxH));
+
+  // 위치 제한
+  newX = Math.max(0, Math.min(newX, canvasWidth - newW));
+  newY = Math.max(0, Math.min(newY, canvasHeight - newH));
+
+  blockElement.style.width = `${newW}px`;
+  blockElement.style.height = `${newH}px`;
+  blockElement.style.left = `${newX}px`;
+  blockElement.style.top = `${newY}px`;
+}
+
+function updateBlockRotation(clientX, clientY) {
+  const canvas = document.getElementById("canvas");
+  const canvasRect = canvas.getBoundingClientRect();
+  const blockElement = document.querySelector(`[data-id="${selectedBlockId}"]`);
+  if (!blockElement) return;
+
+  const block = blocks.find((b) => b.id === selectedBlockId);
+  if (!block) return;
+
+  const blockRect = blockElement.getBoundingClientRect();
+  const centerX = blockRect.left + blockRect.width / 2;
+  const centerY = blockRect.top + blockRect.height / 2;
+
+  const angle =
+    Math.atan2(clientY - centerY, clientX - centerX) * (180 / Math.PI);
+  const rotation = angle + 90; // 0도가 위쪽을 가리키도록 조정
+
+  blockElement.style.transform = `rotate(${rotation}deg)`;
+  block.rotation = rotation;
+}
+
+// DOM 변경사항을 state(blocks)에 반영하는 함수
+function commitBlockRect(blockId, blockElement) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block || !blockElement) return;
+
+  const canvas = document.getElementById("canvas");
+  if (!canvas) return;
+
+  const canvasRect = canvas.getBoundingClientRect();
+  const canvasWidth = canvasRect.width - 40;
+  const canvasHeight = canvasRect.height;
+
+  // DOM에서 현재 위치/크기 가져오기
+  const rect = blockElement.getBoundingClientRect();
+  const x = (rect.left - canvasRect.left) / canvasWidth;
+  const y = (rect.top - canvasRect.top) / canvasHeight;
+  const w = rect.width / canvasWidth;
+  const h = rect.height / canvasHeight;
+
+  // state 업데이트
+  block.x = Math.max(0, Math.min(1, x));
+  block.y = Math.max(0, Math.min(1, y));
+  block.w = Math.max(0.05, Math.min(1, w));
+  block.h = Math.max(0.05, Math.min(1, h));
+
+  // 회전값도 업데이트 (transform에서 추출)
+  const transform = blockElement.style.transform;
+  if (transform) {
+    const match = transform.match(/rotate\(([^)]+)\)/);
+    if (match) {
+      const rotation = parseFloat(match[1]);
+      if (!isNaN(rotation)) {
+        block.rotation = rotation;
+      }
+    }
+  }
+}
+
+// =========================
+// RESIZE & ROTATE
+// =========================
+
+let resizeCorner = "se"; // 기본값: 우하단
+
+function startResize(blockId, e, corner = "se") {
+  isResizing = true;
+  resizeCorner = corner;
+  selectedBlockId = blockId;
+  selectBlock(blockId);
+
+  const canvas = document.getElementById("canvas");
+  const canvasRect = canvas.getBoundingClientRect();
+  dragStart.x = e.clientX - canvasRect.left;
+  dragStart.y = e.clientY - canvasRect.top;
+
+  const block = blocks.find((b) => b.id === blockId);
+  if (block) {
+    const canvasWidth = canvasRect.width - 40;
+    const canvasHeight = canvasRect.height;
+    blockStartSize.w = block.w * canvasWidth;
+    blockStartSize.h = block.h * canvasHeight;
+    blockStartPos.x = block.x * canvasWidth;
+    blockStartPos.y = block.y * canvasHeight;
+  }
+
+  const blockElement = document.querySelector(`[data-id="${blockId}"]`);
+  if (blockElement) {
+    blockElement.classList.add("resizing");
+  }
+}
+
+function startRotate(blockId, e) {
+  // 템플릿형에서는 회전 금지
+  if (editorMode === "template") {
+    return;
+  }
+
+  // 템플릿 고정 데코는 회전 불가
+  const block = blocks.find((b) => b.id === blockId);
+  if (block && block.id?.startsWith("decoration-")) {
+    return;
+  }
+
+  isRotating = true;
+  selectedBlockId = blockId;
+  selectBlock(blockId);
+
+  const canvas = document.getElementById("canvas");
+  const canvasRect = canvas.getBoundingClientRect();
+  dragStart.x = e.clientX - canvasRect.left;
+  dragStart.y = e.clientY - canvasRect.top;
+
+  const blockElement = document.querySelector(`[data-id="${blockId}"]`);
+  if (blockElement) {
+    blockElement.classList.add("rotating");
+  }
+}
+
+// =========================
+// SELECTION
+// =========================
+
+function selectBlock(blockId) {
+  // 템플릿 고정 데코는 선택 불가
+  if (blockId) {
+    const block = blocks.find((b) => b.id === blockId);
+    if (block && block.id?.startsWith("decoration-")) {
+      return; // 데코는 선택 불가
+    }
+  }
+
+  selectedBlockId = blockId;
+
+  // 모든 블록의 선택 상태 제거 및 컨트롤 숨김
+  document.querySelectorAll(".canvas-block").forEach((el) => {
+    el.classList.remove("selected");
+    el.style.outline = "none";
+    // 삭제 버튼 숨김
+    const deleteBtn = el.querySelector(".layer-delete-btn");
+    if (deleteBtn) {
+      deleteBtn.style.display = "none";
+    }
+  });
+
+  // 툴바 UI 업데이트 (레이어 선택 상태 변경 반영)
+  if (typeof updateToolbarUI === "function") {
+    updateToolbarUI();
+  }
+
+  if (blockId) {
+    const block = blocks.find((b) => b.id === blockId);
+    const blockElement = document.querySelector(`[data-id="${blockId}"]`);
+    if (blockElement && block) {
+      blockElement.classList.add("selected");
+      // 얇은 파란색 outline 표시
+      blockElement.style.outline = "2px solid #3b82f6";
+      blockElement.style.outlineOffset = "0";
+
+      // 이미지/컷 레이어인 경우 교체/삭제 버튼 표시
+      if (block.type === "image" || block.type === "cut") {
+        // 기존 컨트롤 제거
+        const existingControls = blockElement.querySelector(".cut-controls");
+        if (existingControls) existingControls.remove();
+
+        // 컷 컨트롤 생성
+        const controls = document.createElement("div");
+        controls.className = "cut-controls";
+        controls.innerHTML = `
+          <button class="cut-replace-btn" title="교체" onclick="event.stopPropagation(); replaceCutImage('${blockId}');">
+            <span>🔄</span>
+          </button>
+          <button class="cut-delete-btn" title="삭제" onclick="event.stopPropagation(); removeCutImage('${blockId}');">
+            <span>×</span>
+          </button>
+        `;
+        controls.style.cssText = `
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          display: flex;
+          gap: 4px;
+          z-index: 1000;
+          pointer-events: auto;
+        `;
+
+        // 버튼 스타일
+        const style = document.createElement("style");
+        style.textContent = `
+          .cut-controls button {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+          }
+          .cut-controls button:active {
+            background: rgba(0, 0, 0, 0.9);
+          }
+          .cut-controls button span {
+            display: block;
+            line-height: 1;
+          }
+        `;
+        if (!document.querySelector("style[data-cut-controls]")) {
+          style.setAttribute("data-cut-controls", "true");
+          document.head.appendChild(style);
+        }
+
+        blockElement.appendChild(controls);
+      } else {
+        // 다른 타입은 기존 삭제 버튼만 표시
+        let deleteBtn = blockElement.querySelector(".layer-delete-btn");
+        if (!deleteBtn) {
+          deleteBtn = document.createElement("div");
+          deleteBtn.className = "layer-delete-btn";
+          deleteBtn.innerHTML = "×";
+          deleteBtn.title = "삭제";
+          deleteBtn.style.pointerEvents = "auto";
+          deleteBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            deleteBlock(blockId);
+          });
+          blockElement.appendChild(deleteBtn);
+        }
+        deleteBtn.style.display = "flex";
+      }
+    }
+  } else {
+    // 선택 해제 시 바텀 시트 닫기
+    // 툴바 UI 업데이트 (레이어 선택 해제 반영)
+    if (typeof updateToolbarUI === "function") {
+      updateToolbarUI();
+    }
+    closeBottomSheet();
+  }
+
+  updateLayerPanel();
+}
+
+// =========================
+// DELETE BLOCK
+// =========================
+
+async function deleteBlock(blockId) {
+  try {
+    if (!blockId) {
+      console.warn("[Editor] 삭제할 블록 ID가 없습니다");
+      return;
+    }
+
+    const block = blocks.find((b) => b.id === blockId);
+    if (!block) {
+      console.warn("[Editor] 삭제할 블록을 찾을 수 없습니다:", blockId);
+      return;
+    }
+
+    // Reader 모드: Firestore에서 삭제
+    if (isReaderMode) {
+      try {
+        const { db } = await import("/js/firebase_init.js");
+        const { doc, collection, deleteDoc } = await import(
+          "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"
+        );
+
+        const blockRef = doc(
+          db,
+          "reader_moodboards",
+          currentMoodboardId,
+          "blocks",
+          blockId
+        );
+
+        await deleteDoc(blockRef);
+        console.log("[Editor] Reader 모드: 블록 삭제됨:", blockId);
+      } catch (error) {
+        logError("deleteBlock - Reader 모드", error, {
+          blockId,
+          moodboardId: currentMoodboardId,
+        });
+        alert(
+          "블록 삭제 중 오류가 발생했습니다: " +
+            (error.message || "알 수 없는 오류")
+        );
+        return;
+      }
+    } else {
+      // Creator 모드: Supabase에서 삭제
+      if (!supabaseClient) {
+        alert("서비스 연결에 실패했습니다.");
+        return;
+      }
+
+      if (!isValidUUID(blockId)) {
+        console.warn("[Editor] 잘못된 블록 ID:", blockId);
+        // 임시 블록인 경우 메모리에서만 삭제
+      } else {
+        const { error } = await supabaseClient
+          .from("moodboard_blocks")
+          .delete()
+          .eq("id", blockId);
+
+        if (error) {
+          logError("deleteBlock - Creator 모드", error, {
+            blockId,
+            moodboardId: currentMoodboardId,
+          });
+          alert(
+            "블록 삭제 중 오류가 발생했습니다: " +
+              (error.message || "알 수 없는 오류")
+          );
+          return;
+        }
+        console.log("[Editor] Creator 모드: 블록 삭제됨:", blockId);
+      }
+    }
+
+    // 메모리에서 블록 제거
+    blocks = blocks.filter((b) => b.id !== blockId);
+
+    // 선택 해제
+    if (selectedBlockId === blockId) {
+      selectedBlockId = null;
+    }
+
+    // DOM에서 블록 제거
+    const blockElement = document.querySelector(`[data-id="${blockId}"]`);
+    if (blockElement) {
+      blockElement.remove();
+    }
+
+    // 레이어 패널 업데이트
+    updateLayerPanel();
+
+    // 빈 상태 표시 업데이트
+    const canvas = document.getElementById("canvas");
+    const emptyState = document.getElementById("emptyState");
+    if (canvas && emptyState) {
+      if (blocks.length === 0) {
+        emptyState.style.display = "block";
+      } else {
+        emptyState.style.display = "none";
+      }
+    }
+
+    console.log("[Editor] 블록 삭제 완료:", blockId);
+  } catch (error) {
+    logError("deleteBlock", error, { blockId });
+    alert(
+      "블록 삭제 중 오류가 발생했습니다: " +
+        (error.message || "알 수 없는 오류")
+    );
+  }
+}
+
+// =========================
+// ADD BLOCKS
+// =========================
+
+let pendingBlockForDrag = null; // 드래그앤드롭 대기 중인 블록
+
+function addBlock(type) {
+  try {
+    if (!currentMoodboardId) {
+      logError("addBlock", new Error("무드보드 ID 없음"), { type });
+      alert("무드보드를 먼저 생성해주세요.");
+      return;
+    }
+
+    // 색상 블록은 제거
+    if (type === "color") {
+      return;
+    }
+
+    // 이모지는 편집 요소에서 완전히 제외 (템플릿 데코만 허용)
+    if (type === "emoji") {
+      return;
+    }
+
+    if (type === "image") {
+      // 이미지 선택 모달 표시
+      openImageSelectionModalForDrag();
+      return;
+    }
+
+    // 텍스트는 바로 생성
+    const canvas = document.getElementById("canvas");
+    if (!canvas) {
+      logError("addBlock", new Error("canvas 요소 없음"), { type });
+      return;
+    }
+
+    const canvasRect = canvas.getBoundingClientRect();
+    const canvasWidth = canvasRect.width - 40;
+    const canvasHeight = canvasRect.height;
+
+    const defaultW = 0.4;
+    const defaultH = 0.15;
+    const defaultX = 0.5 - defaultW / 2;
+    const defaultY = 0.7;
+
+    // 자유형 모드에서만 미세 자동 회전 (±3°)
+    const autoRotation =
+      editorMode === "free"
+        ? (Math.random() - 0.5) * 6 // -3° ~ +3°
+        : 0;
+
+    const newBlock = {
+      moodboard_id: currentMoodboardId,
+      type: type,
+      x: defaultX,
+      y: defaultY,
+      w: defaultW,
+      h: defaultH,
+      z_index: blocks.length + 1,
+      rotation: autoRotation,
+      style: getDefaultStyle(type),
+    };
+
+    createBlock(newBlock);
+  } catch (error) {
+    logError("addBlock", error, { type });
+  }
+}
+
+// 이모지 선택 후 드래그앤드롭 (제거됨 - 스티커 패널로 대체)
+function showEmojiSelectionForDrag() {
+  // 이모지 팝업 제거 (요구사항)
+  openToolPanel("sticker");
+}
+
+function selectEmojiForDrag(emoji) {
+  closeTopStylePopup();
+
+  // 임시 블록 생성 (아직 캔버스에 추가하지 않음)
+  pendingBlockForDrag = {
+    moodboard_id: currentMoodboardId,
+    type: "emoji",
+    emoji: emoji,
+    style: {
+      emoji: emoji,
+      fontSize: 48,
+    },
+  };
+
+  // 드래그 모드 활성화
+  const canvas = document.getElementById("canvas");
+  if (canvas) {
+    canvas.classList.add("drag-mode");
+    canvas.style.cursor = "crosshair";
+  }
+}
+
+// 이미지 선택 후 드래그앤드롭
+function openImageSelectionModalForDrag() {
+  const modal = document.getElementById("imageSelectionModal");
+  const imageGrid = document.getElementById("imageGrid");
+  if (!modal || !imageGrid) return;
+
+  modal.style.display = "flex";
+  imageGrid.innerHTML = "";
+
+  loadImages().then((images) => {
+    if (images.length === 0) {
+      imageGrid.innerHTML =
+        '<p style="text-align: center; padding: 20px; color: #999;">이미지가 없습니다</p>';
+      return;
+    }
+
+    images.forEach((image) => {
+      const item = document.createElement("div");
+      item.className = "image-item";
+      const img = document.createElement("img");
+      img.src = image.image_url || image.thumbnail_url || "";
+      img.alt = "이미지";
+      item.appendChild(img);
+      item.addEventListener("click", () => {
+        closeImageSelectionModal();
+
+        // 임시 블록 생성
+        pendingBlockForDrag = {
+          moodboard_id: currentMoodboardId,
+          type: "image",
+          style: {
+            imageUrl: image.image_url || image.thumbnail_url,
+          },
+        };
+
+        // 드래그 모드 활성화
+        const canvas = document.getElementById("canvas");
+        if (canvas) {
+          canvas.classList.add("drag-mode");
+          canvas.style.cursor = "crosshair";
+        }
+      });
+      imageGrid.appendChild(item);
+    });
+  });
+}
+
+// 그림자 프리셋 정의
+const SHADOW_PRESETS = {
+  "soft-shadow": "0 6px 18px rgba(0, 0, 0, 0.12)",
+  "paper-shadow": "0 4px 12px rgba(0, 0, 0, 0.08)",
+  "floating-shadow": "0 10px 24px rgba(0, 0, 0, 0.18)",
+};
+
+// 템플릿별 그림자 프리셋 매핑
+function getShadowPresetForTemplate(templateId) {
+  const shadowMap = {
+    clean_grid: "soft-shadow",
+    diary: "paper-shadow",
+    focus: "floating-shadow",
+    scrapbook: "paper-shadow",
+    vertical_story: "soft-shadow",
+  };
+  return shadowMap[templateId] || "soft-shadow";
+}
+
+function getDefaultStyle(type) {
+  // 기본 그림자 프리셋 (자유형은 soft-shadow, 템플릿형은 템플릿별)
+  const shadowPreset =
+    editorMode === "template" && currentTemplate
+      ? getShadowPresetForTemplate(currentTemplate.id)
+      : "soft-shadow";
+  const defaultShadow = SHADOW_PRESETS[shadowPreset];
+
+  const baseStyle = {
+    fontSize: 16,
+    fontWeight: "normal",
+    color: "#000",
+    backgroundColor: "#fff",
+    borderRadius: 16, // 둥근 모서리
+    boxShadow: defaultShadow, // 자동 그림자 적용
+  };
+
+  switch (type) {
+    case "text":
+      return {
+        ...baseStyle,
+        text: "텍스트를 입력하세요",
+        borderRadius: 16,
+        boxShadow: defaultShadow,
+      };
+    case "emoji":
+      return {
+        ...baseStyle,
+        emoji: "😊",
+        fontSize: 48,
+        backgroundColor: "transparent",
+        borderRadius: 16,
+        boxShadow: defaultShadow,
+      };
+    case "color":
+      return {
+        ...baseStyle,
+        backgroundColor: "#f0f0f0",
+        borderRadius: 16,
+        boxShadow: defaultShadow,
+      };
+    case "image":
+    case "cut":
+      return {
+        ...baseStyle,
+        imageUrl: null,
+        borderRadius: 16,
+        boxShadow: defaultShadow,
+      };
+    default:
+      return baseStyle;
+  }
+}
+
+async function createBlock(blockData) {
+  try {
+    // 사용자 재확인
+    if (!currentUserId) {
+      const user = await getCurrentUser();
+      if (!user || !user.uid) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
+      currentUserId = user.uid;
+    }
+
+    if (!currentMoodboardId) {
+      alert("무드보드를 먼저 생성해주세요.");
+      return;
+    }
+
+    // Reader 모드 분기
+    if (isReaderMode) {
+      try {
+        const { db } = await import("/js/firebase_init.js");
+        const { collection, addDoc } = await import(
+          "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"
+        );
+
+        const blocksRef = collection(
+          db,
+          "reader_moodboards",
+          currentMoodboardId,
+          "blocks"
+        );
+
+        const blockToSave = {
+          block_type: blockData.type,
+          order_index: blocks.length,
+          span: blockData.span || 6,
+          cut_id: blockData.cut_id || null,
+          title: blockData.type === "text" ? blockData.content || "" : null,
+          content: blockData.content || null,
+          emoji: blockData.emoji || null,
+          meta: {
+            x: blockData.x || 0.3,
+            y: blockData.y || 0.3,
+            w: blockData.w || 0.3,
+            h: blockData.h || 0.3,
+            z_index: blockData.z_index || blocks.length + 1,
+            rotation: blockData.rotation || 0,
+            style: blockData.style || getDefaultStyle(blockData.type),
+          },
+        };
+
+        const docRef = await addDoc(blocksRef, blockToSave);
+        const blockId = docRef.id;
+
+        // 메모리에 추가
+        // 그림자 프리셋 자동 적용 (getDefaultStyle에서 이미 적용됨)
+        const defaultStyle = blockData.style || getDefaultStyle(blockData.type);
+        // boxShadow가 없으면 기본 그림자 적용
+        if (!defaultStyle.boxShadow) {
+          const shadowPreset =
+            editorMode === "template" && currentTemplate
+              ? getShadowPresetForTemplate(currentTemplate.id)
+              : "soft-shadow";
+          defaultStyle.boxShadow = SHADOW_PRESETS[shadowPreset];
+        }
+
+        const newBlock = {
+          id: blockId,
+          moodboard_id: currentMoodboardId,
+          type: blockData.type,
+          x: blockData.x || 0.3,
+          y: blockData.y || 0.3,
+          w: blockData.w || 0.3,
+          h: blockData.h || 0.3,
+          z_index: blockData.z_index || blocks.length + 1,
+          rotation: blockData.rotation || 0,
+          style: defaultStyle,
+        };
+
+        blocks.push(newBlock);
+        renderBlocks();
+        selectBlock(newBlock.id);
+        updateLayerPanel();
+
+        // 길게 누르기 이벤트 추가
+        setupLongPressActionSheet(newBlock.id);
+
+        console.log("[Editor] Reader 모드: 블록 추가됨:", blockId);
+        return;
+      } catch (error) {
+        logError("createBlock - Reader 모드", error, {
+          blockData,
+          moodboardId: currentMoodboardId,
+        });
+        alert(
+          "블록을 추가하는 중 오류가 발생했습니다: " +
+            (error.message || "알 수 없는 오류")
+        );
+        return;
+      }
+    }
+
+    // Creator 모드: Supabase 사용
+    if (!supabaseClient) {
+      alert("서비스 연결에 실패했습니다.");
+      return;
+    }
+
+    // UUID 검증: currentMoodboardId가 UUID인지 확인
+    if (!isValidUUID(currentMoodboardId)) {
+      console.error("[Editor] 잘못된 무드보드 ID:", currentMoodboardId);
+      alert("잘못된 무드보드 ID입니다.");
+      return;
+    }
+
+    // 그림자 프리셋 자동 적용 (getDefaultStyle에서 이미 적용됨)
+    const defaultStyle = blockData.style || getDefaultStyle(blockData.type);
+    // boxShadow가 없으면 기본 그림자 적용
+    if (!defaultStyle.boxShadow) {
+      const shadowPreset =
+        editorMode === "template" && currentTemplate
+          ? getShadowPresetForTemplate(currentTemplate.id)
+          : "soft-shadow";
+      defaultStyle.boxShadow = SHADOW_PRESETS[shadowPreset];
+    }
+
+    // 🔥 블록을 메모리에 추가 (임시 ID 사용, 저장 시 Supabase가 UUID 생성)
+    const newBlock = {
+      id: `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`, // 임시 ID
+      moodboard_id: currentMoodboardId,
+      type: blockData.type,
+      x: blockData.x || 0.3,
+      y: blockData.y || 0.3,
+      w: blockData.w || 0.3,
+      h: blockData.h || 0.3,
+      z_index: blockData.z_index || blocks.length + 1,
+      rotation: blockData.rotation || 0,
+      style: defaultStyle,
+    };
+
+    blocks.push(newBlock);
+    renderBlocks();
+    selectBlock(newBlock.id);
+    updateLayerPanel();
+
+    // 길게 누르기 이벤트 추가
+    setupLongPressActionSheet(newBlock.id);
+
+    // 길게 누르기 이벤트 추가
+    setupLongPressActionSheet(newBlock.id);
+
+    console.log("[Editor] 블록 추가됨:", newBlock.id);
+  } catch (error) {
+    logError("createBlock - Creator 모드", error, {
+      blockData,
+      moodboardId: currentMoodboardId,
+    });
+    alert(
+      "블록을 추가하는 중 오류가 발생했습니다: " +
+        (error.message || "알 수 없는 오류")
+    );
+  }
+}
+
+// =========================
+// IMAGE SELECTION
+// =========================
+
+function openImageSelectionModal(blockData) {
+  const modal = document.getElementById("imageSelectionModal");
+  const imageGrid = document.getElementById("imageGrid");
+  if (!modal || !imageGrid) return;
+
+  modal.style.display = "flex";
+  imageGrid.innerHTML = "";
+
+  loadImages().then((images) => {
+    if (images.length === 0) {
+      imageGrid.innerHTML =
+        '<p style="text-align: center; padding: 20px; color: #999;">이미지가 없습니다</p>';
+      return;
+    }
+
+    images.forEach((image) => {
+      const item = document.createElement("div");
+      item.className = "image-item";
+      const img = document.createElement("img");
+      img.src = image.image_url || image.thumbnail_url || "";
+      img.alt = "이미지";
+      item.appendChild(img);
+      item.addEventListener("click", () => {
+        blockData.style = {
+          ...blockData.style,
+          imageUrl: image.image_url || image.thumbnail_url,
+        };
+        createBlock(blockData);
+        closeImageSelectionModal();
+      });
+      imageGrid.appendChild(item);
+    });
+  });
+}
+
+function closeImageSelectionModal() {
+  const modal = document.getElementById("imageSelectionModal");
+  if (modal) {
+    modal.style.display = "none";
+  }
+}
+
+function openImageSelectionModalForBlock(blockId) {
+  const modal = document.getElementById("imageSelectionModal");
+  const imageGrid = document.getElementById("imageGrid");
+  if (!modal || !imageGrid) return;
+
+  modal.style.display = "flex";
+  imageGrid.innerHTML = "";
+
+  loadImages().then((images) => {
+    if (images.length === 0) {
+      imageGrid.innerHTML =
+        '<p style="text-align: center; padding: 20px; color: #999;">이미지가 없습니다</p>';
+      return;
+    }
+
+    images.forEach((image) => {
+      const item = document.createElement("div");
+      item.className = "image-item";
+      const img = document.createElement("img");
+      img.src = image.image_url || image.thumbnail_url || "";
+      img.alt = "이미지";
+      item.appendChild(img);
+      item.addEventListener("click", () => {
+        const block = blocks.find((b) => b.id === blockId);
+        if (block) {
+          block.style = {
+            ...block.style,
+            imageUrl: image.image_url || image.thumbnail_url,
+          };
+          updateBlockStyle(blockId, {
+            imageUrl: image.image_url || image.thumbnail_url,
+          });
+        }
+        closeImageSelectionModal();
+        closeStylePanel();
+      });
+      imageGrid.appendChild(item);
+    });
+  });
+}
+
+async function loadImages() {
+  try {
+    // 사용자 재확인
+    if (!currentUserId) {
+      const user = await getCurrentUser();
+      if (!user || !user.uid) {
+        console.warn("[Editor] 로그인이 필요합니다");
+        return [];
+      }
+      currentUserId = user.uid;
+    }
+
+    if (!supabaseClient) {
+      console.warn("[Editor] Supabase 클라이언트가 없습니다");
+      return [];
+    }
+
+    // user_feed_events에서 저장된 컷 가져오기
+    const { data: events, error: eventsError } = await supabaseClient
+      .from("user_feed_events")
+      .select("id, feed_id, metadata, created_at")
+      .eq("user_id", currentUserId)
+      .eq("event_type", "cut_saved")
+      .order("created_at", { ascending: false })
+      .limit(100);
+
+    if (eventsError) {
+      console.error("[Editor] 이벤트 조회 오류:", eventsError);
+      return [];
+    }
+
+    if (!events || events.length === 0) {
+      return [];
+    }
+
+    // feed_id가 있으면 feeds 테이블에서 조회
+    const feedIds = events
+      .map((event) => event.feed_id)
+      .filter((id) => id !== null && id !== undefined);
+
+    let feedItems = [];
+    if (feedIds.length > 0) {
+      const { data: feedsData, error: feedsError } = await supabaseClient
+        .from("feeds")
+        .select("id, type, ref_id, thumbnail_url")
+        .in("id", feedIds)
+        .eq("type", "cut");
+
+      if (!feedsError && feedsData) {
+        feedItems = feedsData;
+      }
+    }
+
+    // feed_id가 없는 이벤트는 metadata에서 cut_id 사용
+    const eventsWithoutFeed = events.filter((event) => !event.feed_id);
+    const cutIdsFromMetadata = eventsWithoutFeed
+      .map((event) => event.metadata?.cut_id)
+      .filter((id) => id !== null && id !== undefined);
+
+    // cuts 테이블에서 직접 조회
+    let cutsFromMetadata = [];
+    if (cutIdsFromMetadata.length > 0) {
+      const { data: cutsData, error: cutsError } = await supabaseClient
+        .from("cuts")
+        .select("id, image_url")
+        .in("id", cutIdsFromMetadata);
+
+      if (!cutsError && cutsData) {
+        cutsFromMetadata = cutsData;
+      }
+    }
+
+    // 이미지 목록 구성
+    const images = [];
+
+    // feeds에서 가져온 이미지
+    feedItems.forEach((feed) => {
+      if (feed.thumbnail_url) {
+        images.push({
+          id: feed.ref_id || feed.id,
+          image_url: feed.thumbnail_url,
+          thumbnail_url: feed.thumbnail_url,
+        });
+      }
+    });
+
+    // metadata에서 가져온 이미지
+    eventsWithoutFeed.forEach((event) => {
+      const cutId = event.metadata?.cut_id;
+      const imageUrl = event.metadata?.image_url;
+
+      if (cutId && imageUrl) {
+        const existing = images.find((img) => img.id === cutId);
+        if (!existing) {
+          images.push({
+            id: cutId,
+            image_url: imageUrl,
+            thumbnail_url: imageUrl,
+          });
+        }
+      } else if (cutId) {
+        const cut = cutsFromMetadata.find((c) => c.id === cutId);
+        if (cut && cut.image_url) {
+          const existing = images.find((img) => img.id === cutId);
+          if (!existing) {
+            images.push({
+              id: cutId,
+              image_url: cut.image_url,
+              thumbnail_url: cut.image_url,
+            });
+          }
+        }
+      }
+    });
+
+    console.log(`[Editor] ${images.length}개의 컷 이미지를 불러왔습니다`);
+    return images;
+  } catch (error) {
+    console.error("[Editor] 이미지 로드 오류:", error);
+    return [];
+  }
+}
+
+// =========================
+// STYLE PANEL
+// =========================
+
+function showStylePanel(blockId) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block) {
+    console.warn("[Editor] 블록을 찾을 수 없음, blockId:", blockId);
+    return;
+  }
+
+  // 상단에 팝업 표시
+  const editorTools = document.getElementById("editorTools");
+  if (!editorTools) {
+    console.warn("[Editor] editorTools 요소를 찾을 수 없음");
+    return;
+  }
+
+  // 기존 팝업 제거
+  const existingPopup = document.querySelector(".top-style-popup");
+  if (existingPopup) {
+    existingPopup.remove();
+  }
+
+  // 새 팝업 생성
+  const popup = document.createElement("div");
+  popup.className = "top-style-popup";
+  popup.dataset.blockId = blockId;
+
+  switch (block.type) {
+    case "text":
+      renderTextStylePanel(popup, block);
+      break;
+    case "image":
+      renderImageStylePanel(popup, block);
+      break;
+    case "emoji":
+      renderEmojiStylePanel(popup, block);
+      break;
+  }
+
+  editorTools.appendChild(popup);
+
+  // 애니메이션
+  setTimeout(() => {
+    popup.classList.add("show");
+  }, 10);
+}
+
+function renderTextStylePanel(container, block) {
+  const style = block.style || {};
+  const popupId = `text-style-popup-${block.id}`;
+
+  // 슬라이드 형식으로 색상 선택 (더보기 버튼 없이)
+  container.innerHTML = `
+    <button class="close-popup-btn" onclick="closeTopStylePopup()">×</button>
+    <div class="top-popup-content">
+      <div class="top-popup-title">텍스트 스타일</div>
+      <div class="text-style-grid">
+        <div class="text-style-item">
+          <label>크기</label>
+          <div class="control-buttons">
+            <button class="control-btn" onclick="changeFontSize('${
+              block.id
+            }', -2)">-</button>
+            <span class="control-value" id="fontSizeDisplay">${
+              style.fontSize || 16
+            }</span>
+            <button class="control-btn" onclick="changeFontSize('${
+              block.id
+            }', 2)">+</button>
+          </div>
+        </div>
+        <div class="text-style-item">
+          <label>텍스트 색상</label>
+          <div class="text-color-scroll-container">
+            <div class="text-color-grid-compact">
+              ${getTextColorOptions()
+                .map(
+                  (color) => `
+                <div class="text-color-item-compact" 
+                     style="background: ${color};"
+                     onclick="selectTextColor('${block.id}', '${color}')">
+                </div>
+              `
+                )
+                .join("")}
+            </div>
+          </div>
+          <div class="text-custom-color">
+            <label>커스텀 색상</label>
+            <input type="color" class="color-picker-round" id="textColor" value="${
+              style.color || "#000000"
+            }" />
+          </div>
+        </div>
+        <div class="text-style-item">
+          <label>배경 색상</label>
+          <div class="background-color-scroll-container">
+            <div class="background-color-grid-top">
+              ${COLORS.map(
+                (color) => `
+                <div class="background-color-item-top" 
+                     style="background: ${color};"
+                     onclick="selectTextBackgroundColor('${block.id}', '${color}')">
+                </div>
+              `
+              ).join("")}
+            </div>
+          </div>
+          <div class="text-custom-color">
+            <label>커스텀 색상</label>
+            <input type="color" class="color-picker-round" id="backgroundColor" value="${
+              style.backgroundColor || "#ffffff"
+            }" />
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  container.dataset.popupId = popupId;
+
+  // 폰트 크기 변경
+  const fontSizeDisplay = container.querySelector("#fontSizeDisplay");
+  const updateFontSizeDisplay = () => {
+    if (fontSizeDisplay) {
+      fontSizeDisplay.textContent = style.fontSize || 16;
+    }
+  };
+
+  // 색상 변경
+  const colorInput = container.querySelector("#textColor");
+  if (colorInput) {
+    colorInput.addEventListener("change", () => {
+      selectTextColor(block.id, colorInput.value);
+    });
+  }
+
+  // 배경색 변경
+  const bgColorInput = container.querySelector("#backgroundColor");
+  if (bgColorInput) {
+    bgColorInput.addEventListener("change", () => {
+      selectTextBackgroundColor(block.id, bgColorInput.value);
+    });
+  }
+
+  updateFontSizeDisplay();
+}
+
+// 텍스트 스타일 팝업 확장
+function expandTextStylePanel(blockId) {
+  const popup = document.querySelector(
+    `.top-style-popup[data-popup-id="text-style-popup-${blockId}"]`
+  );
+  if (!popup) return;
+
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block) return;
+
+  const style = block.style || {};
+
+  // 확장된 버전으로 교체
+  popup.innerHTML = `
+    <button class="close-popup-btn" onclick="closeTopStylePopup()">×</button>
+    <div class="top-popup-content expanded-popup">
+      <div class="top-popup-title">텍스트 스타일</div>
+      <div class="text-style-grid">
+        <div class="text-style-item">
+          <label>크기</label>
+          <div class="control-buttons">
+            <button class="control-btn" onclick="changeFontSize('${
+              block.id
+            }', -2)">-</button>
+            <span class="control-value" id="fontSizeDisplay">${
+              style.fontSize || 16
+            }</span>
+            <button class="control-btn" onclick="changeFontSize('${
+              block.id
+            }', 2)">+</button>
+          </div>
+        </div>
+        <div class="text-style-item">
+          <label>텍스트 색상</label>
+          <div class="text-color-scroll-container">
+            <div class="text-color-grid">
+              ${getTextColorOptions()
+                .map(
+                  (color) => `
+                <div class="text-color-item" 
+                     style="background: ${color};"
+                     onclick="selectTextColor('${block.id}', '${color}')">
+                </div>
+              `
+                )
+                .join("")}
+            </div>
+          </div>
+          <div class="text-custom-color">
+            <label>커스텀 색상</label>
+            <input type="color" class="color-picker-round" id="textColor" value="${
+              style.color || "#000000"
+            }" />
+          </div>
+        </div>
+        <div class="text-style-item">
+          <label>배경 색상</label>
+          <div class="background-color-scroll-container">
+            <div class="background-color-grid-top">
+              ${COLORS.map(
+                (color) => `
+                <div class="background-color-item-top" 
+                     style="background: ${color};"
+                     onclick="selectTextBackgroundColor('${block.id}', '${color}')">
+                </div>
+              `
+              ).join("")}
+            </div>
+          </div>
+          <div class="text-custom-color">
+            <label>커스텀 색상</label>
+            <input type="color" class="color-picker-round" id="backgroundColor" value="${
+              style.backgroundColor || "#ffffff"
+            }" />
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  popup.dataset.isExpanded = "true";
+
+  // 색상 변경 이벤트 리스너 다시 연결
+  const colorInput = popup.querySelector("#textColor");
+  if (colorInput) {
+    colorInput.addEventListener("change", () => {
+      selectTextColor(block.id, colorInput.value);
+    });
+  }
+
+  const bgColorInput = popup.querySelector("#backgroundColor");
+  if (bgColorInput) {
+    bgColorInput.addEventListener("change", () => {
+      selectTextBackgroundColor(block.id, bgColorInput.value);
+    });
+  }
+}
+
+// 텍스트 색상 옵션
+function getTextColorOptions() {
+  return [
+    "#000000",
+    "#ffffff",
+    "#ff5e00",
+    "#333333",
+    "#666666",
+    "#999999",
+    "#ff0000",
+    "#00ff00",
+    "#0000ff",
+    "#ffff00",
+    "#ff00ff",
+    "#00ffff",
+    "#8b4513",
+    "#ff69b4",
+    "#4169e1",
+    "#32cd32",
+  ];
+}
+
+function selectTextColor(blockId, color) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block) return;
+
+  updateBlockStyle(blockId, { color: color });
+}
+
+function selectTextBackgroundColor(blockId, color) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block) return;
+
+  updateBlockStyle(blockId, { backgroundColor: color });
+}
+
+// 폰트 크기 변경 함수
+function changeFontSize(blockId, delta) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block) return;
+
+  const currentSize = parseInt(block.style?.fontSize || 16);
+  const newSize = Math.max(8, Math.min(72, currentSize + delta));
+
+  updateBlockStyle(blockId, { fontSize: newSize });
+
+  // 표시 업데이트
+  const fontSizeDisplay = document.querySelector(
+    `[data-block-id="${blockId}"] #fontSizeDisplay`
+  );
+  if (fontSizeDisplay) {
+    fontSizeDisplay.textContent = newSize;
+  }
+}
+
+function renderImageStylePanel(container, block) {
+  const style = block.style || {};
+
+  const filters = [
+    { value: "none", label: "없음" },
+    { value: "grayscale(100%)", label: "흑백" },
+    { value: "sepia(100%)", label: "세피아" },
+    { value: "brightness(1.2)", label: "밝게" },
+    { value: "brightness(0.8)", label: "어둡게" },
+    { value: "contrast(1.3)", label: "대비" },
+    { value: "saturate(1.5)", label: "채도+" },
+    { value: "saturate(0.5)", label: "채도-" },
+    { value: "blur(2px)", label: "블러" },
+    { value: "hue-rotate(90deg)", label: "색조" },
+  ];
+
+  container.innerHTML = `
+    <button class="close-popup-btn" onclick="closeTopStylePopup()">×</button>
+    <div class="top-popup-content">
+      <div class="top-popup-title">이미지 설정</div>
+      <div class="top-popup-controls">
+        <div class="control-item">
+          <label>필터</label>
+          <select class="filter-select" id="imageFilterSelect" onchange="changeImageFilter('${
+            block.id
+          }', this.value)">
+            ${filters
+              .map(
+                (filter) => `
+              <option value="${filter.value}" ${
+                  (style.filter || "none") === filter.value ? "selected" : ""
+                }>${filter.label}</option>
+            `
+              )
+              .join("")}
+          </select>
+        </div>
+        <div class="control-item">
+          <label>테두리</label>
+          <div class="control-buttons">
+            <button class="control-btn" onclick="changeImageBorderRadius('${
+              block.id
+            }', -2)">-</button>
+            <span class="control-value" id="borderRadiusDisplay">${
+              style.borderRadius || 0
+            }</span>
+            <button class="control-btn" onclick="changeImageBorderRadius('${
+              block.id
+            }', 2)">+</button>
+          </div>
+        </div>
+        <div class="control-item">
+          <label>불투명도</label>
+          <div class="control-buttons">
+            <button class="control-btn" onclick="changeImageOpacity('${
+              block.id
+            }', -0.1)">-</button>
+            <span class="control-value" id="opacityDisplay">${Math.round(
+              (style.opacity !== undefined ? style.opacity : 1) * 100
+            )}%</span>
+            <button class="control-btn" onclick="changeImageOpacity('${
+              block.id
+            }', 0.1)">+</button>
+          </div>
+        </div>
+        <div class="control-item">
+          <button class="change-image-btn-round" onclick="openImageSelectionModalForBlock('${
+            block.id
+          }')">이미지 변경</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function changeImageFilter(blockId, filterValue) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block) return;
+
+  updateBlockStyle(blockId, {
+    filter: filterValue === "none" ? null : filterValue,
+  });
+}
+
+function changeImageBorderRadius(blockId, delta) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block) return;
+
+  const currentRadius = parseInt(block.style?.borderRadius || 0);
+  const newRadius = Math.max(0, Math.min(50, currentRadius + delta));
+
+  updateBlockStyle(blockId, { borderRadius: newRadius });
+
+  const display = document.querySelector(
+    `[data-block-id="${blockId}"] #borderRadiusDisplay`
+  );
+  if (display) {
+    display.textContent = newRadius;
+  }
+}
+
+function changeImageOpacity(blockId, delta) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block) return;
+
+  const currentOpacity =
+    block.style?.opacity !== undefined ? block.style.opacity : 1;
+  const newOpacity = Math.max(0, Math.min(1, currentOpacity + delta));
+
+  updateBlockStyle(blockId, { opacity: newOpacity });
+
+  const display = document.querySelector(
+    `[data-block-id="${blockId}"] #opacityDisplay`
+  );
+  if (display) {
+    display.textContent = Math.round(newOpacity * 100) + "%";
+  }
+}
+
+function renderEmojiStylePanel(container, block) {
+  // 이모지 선택 팝업만 표시
+  container.innerHTML = `
+    <button class="close-popup-btn" onclick="closeTopStylePopup()">×</button>
+    <div class="top-popup-content">
+      <div class="top-popup-title">이모지 선택</div>
+      <div class="emoji-grid-top-popup">
+        ${EMOJIS.map(
+          (emoji) => `
+          <div class="emoji-item-top-popup ${
+            (block.style?.emoji || block.content || "😊") === emoji
+              ? "selected"
+              : ""
+          }" 
+               onclick="selectEmojiForBlock('${block.id}', '${emoji}')">
+            ${emoji}
+          </div>
+        `
+        ).join("")}
+      </div>
+    </div>
+  `;
+}
+
+// 이모지 선택 함수
+function selectEmojiForBlock(blockId, emoji) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block) return;
+
+  updateBlockStyle(blockId, { emoji: emoji });
+  block.content = emoji;
+
+  // 팝업 닫기
+  closeTopStylePopup();
+}
+
+// 색상 블록 스타일 패널 제거 (색상 블록 자체가 제거됨)
+
+function updateBlockStyleFromPanel(blockId) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block) return;
+
+  const popup = document.querySelector(
+    `.top-style-popup[data-block-id="${blockId}"]`
+  );
+  const newStyle = { ...block.style };
+
+  switch (block.type) {
+    case "text":
+      // 폰트 크기, 색상, 배경색 업데이트
+      const fontSizeDisplay = popup?.querySelector("#fontSizeDisplay");
+      if (fontSizeDisplay) {
+        newStyle.fontSize = parseInt(fontSizeDisplay.textContent || 16);
+      }
+      newStyle.color = popup?.querySelector("#textColor")?.value || "#000000";
+      newStyle.backgroundColor =
+        popup?.querySelector("#backgroundColor")?.value || "#ffffff";
+      break;
+    case "image":
+      newStyle.borderRadius = parseInt(
+        document.getElementById("borderRadius")?.value || 0
+      );
+      newStyle.opacity = parseFloat(
+        document.getElementById("opacity")?.value || 1
+      );
+      break;
+    case "emoji":
+      newStyle.emoji = document.getElementById("emoji")?.value || "😊";
+      newStyle.fontSize = parseInt(
+        document.getElementById("emojiSize")?.value || 48
+      );
+      break;
+    case "color":
+      newStyle.backgroundColor =
+        document.getElementById("backgroundColor")?.value || "#f0f0f0";
+      newStyle.borderRadius = parseInt(
+        document.getElementById("borderRadius")?.value || 0
+      );
+      break;
+  }
+
+  updateBlockStyle(blockId, newStyle);
+}
+
+function updateBlockStyle(blockId, newStyle) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block) return;
+
+  block.style = { ...block.style, ...newStyle };
+  renderBlocks();
+  selectBlock(blockId);
+}
+
+// =========================
+// LAYER PANEL
+// =========================
+
+function updateLayerPanel() {
+  const layerPanel = document.getElementById("layerPanel");
+  if (!layerPanel) return;
+
+  if (blocks.length === 0) {
+    layerPanel.innerHTML = '<p class="layer-hint">레이어가 없습니다</p>';
+    return;
+  }
+
+  layerPanel.innerHTML = blocks
+    .slice()
+    .reverse() // 최신이 위로
+    .map((block) => {
+      const isSelected = block.id === selectedBlockId;
+      return `
+        <div class="layer-item ${
+          isSelected ? "active" : ""
+        }" onclick="selectBlock('${block.id}')">
+          <div class="layer-item-preview">
+            ${getBlockPreviewIcon(block.type)}
+          </div>
+          <div class="layer-item-info">
+            <div class="layer-item-name">${getBlockTypeName(block.type)}</div>
+            <div class="layer-item-type">레이어 ${
+              blocks.length - blocks.indexOf(block)
+            }</div>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+}
+
+function getBlockPreviewIcon(type) {
+  switch (type) {
+    case "image":
+      return "🖼️";
+    case "text":
+      return "📝";
+    case "emoji":
+      return "😊";
+    case "color":
+      return "🎨";
+    default:
+      return "📦";
+  }
+}
+
+function getBlockTypeName(type) {
+  switch (type) {
+    case "image":
+      return "이미지";
+    case "text":
+      return "텍스트";
+    case "emoji":
+      return "이모지";
+    case "color":
+      return "색상";
+    default:
+      return "블록";
+  }
+}
+
+// =========================
+// SAVE
+// =========================
+
+/**
+ * 현재 사용자의 닉네임 가져오기 (Firebase Firestore user 문서의 nickname 사용)
+ */
+async function getCurrentUserNickname() {
+  try {
+    if (!currentUserId) {
+      const user = await getCurrentUser();
+      if (!user || !user.uid) return null;
+      currentUserId = user.uid;
+    }
+
+    // Firebase Firestore user 문서에서 nickname 가져오기
+    try {
+      if (typeof firebase !== "undefined" && firebase.firestore) {
+        const userDoc = await firebase
+          .firestore()
+          .collection("users")
+          .doc(currentUserId)
+          .get();
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const nickname = userData.nickname || null;
+          if (nickname) return nickname;
+        }
+      }
+    } catch (e) {
+      // Firestore 조회 실패 시 다음 방법 시도
+    }
+
+    // Fallback: Firebase Auth displayName 사용
+    try {
+      const user = await getCurrentUser();
+      if (user && user.displayName) {
+        return user.displayName;
+      }
+    } catch (e) {
+      // 다음 방법 시도
+    }
+
+    return null;
+  } catch (error) {
+    console.error("[Editor] 닉네임 가져오기 오류:", error);
+    return null;
+  }
+}
+
+async function saveMoodboard() {
+  if (!currentMoodboardId) {
+    alert("저장할 무드보드가 없습니다.");
+    return;
+  }
+
+  try {
+    // 사용자 재확인
+    if (!currentUserId) {
+      const user = await getCurrentUser();
+      if (!user || !user.uid) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
+      currentUserId = user.uid;
+    }
+
+    // Reader 모드 확인 (전역 변수 사용)
+    if (isReaderMode) {
+      try {
+        const { db } = await import("/js/firebase_init.js");
+        const {
+          doc,
+          updateDoc,
+          serverTimestamp,
+          collection,
+          getDocs,
+          deleteDoc,
+          addDoc,
+        } = await import(
+          "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"
+        );
+
+        const moodboardRef = doc(db, "reader_moodboards", currentMoodboardId);
+
+        // 모든 블록의 위치/크기 업데이트 (DOM에서 최신 상태 가져오기)
+        const canvas = document.getElementById("canvas");
+        if (canvas) {
+          const canvasRect = canvas.getBoundingClientRect();
+          const canvasWidth = canvasRect.width - 40;
+          const canvasHeight = canvasRect.height;
+
+          blocks.forEach((block) => {
+            const blockElement = document.querySelector(
+              `[data-id="${block.id}"]`
+            );
+            if (blockElement) {
+              // DOM에서 최신 위치/크기 가져오기
+              commitBlockRect(block.id, blockElement);
+
+              // 텍스트 블록의 경우 contentEditable 내용도 반영
+              if (block.type === "text") {
+                const textDiv = blockElement.querySelector(
+                  '[contenteditable="true"]'
+                );
+                if (textDiv) {
+                  block.style = { ...block.style, text: textDiv.textContent };
+                  block.content = textDiv.textContent;
+                }
+              }
+            }
+          });
+        }
+
+        // 블록 데이터를 Firestore 형식으로 변환 및 저장
+        const blocksRef = collection(
+          db,
+          "reader_moodboards",
+          currentMoodboardId,
+          "blocks"
+        );
+
+        // 기존 블록 삭제
+        const existingBlocks = await getDocs(blocksRef);
+        const deletePromises = existingBlocks.docs.map((docSnap) =>
+          deleteDoc(docSnap.ref)
+        );
+        await Promise.all(deletePromises);
+
+        // 새 블록 저장
+        const savePromises = blocks.map((block, index) => {
+          const blockData = {
+            block_type: block.type,
+            order_index: index,
+            span: block.span || 6,
+            cut_id: block.cut_id || null,
+            title: block.type === "text" ? block.content || "" : null,
+            content: block.content || null,
+            emoji: block.emoji || null,
+            meta: {
+              x: block.x || 0.3,
+              y: block.y || 0.3,
+              w: block.w || 0.3,
+              h: block.h || 0.3,
+              z_index: block.z_index || index + 1,
+              rotation: block.rotation || 0,
+              style: block.style || {},
+              // 슬롯 내부 조절 속성
+              slotId: block.slotId || null,
+              slotOffsetX: block.slotOffsetX || 0,
+              slotOffsetY: block.slotOffsetY || 0,
+              slotScale: block.slotScale || 1.0,
+            },
+          };
+          return addDoc(blocksRef, blockData);
+        });
+        await Promise.all(savePromises);
+
+        // 무드보드 업데이트
+        await updateDoc(moodboardRef, {
+          updated_at: serverTimestamp(),
+        });
+
+        // 저장 완료 알림 (대표 무드보드 팝업 스타일로)
+        isSaved = true;
+        showSaveSuccessPopup();
+        console.log(
+          "[Editor] Reader 모드: Firestore 무드보드 저장 완료:",
+          currentMoodboardId
+        );
+        return;
+      } catch (error) {
+        logError("saveMoodboard - Reader 모드", error, {
+          moodboardId: currentMoodboardId,
+          blocksCount: blocks.length,
+        });
+        alert(
+          "저장 중 오류가 발생했습니다: " + (error.message || "알 수 없는 오류")
+        );
+        return;
+      }
+    }
+
+    // Creator 모드: Supabase로 저장
+    if (!supabaseClient) {
+      alert("서비스 연결에 실패했습니다.");
+      return;
+    }
+
+    // UUID 검증
+    if (!isValidUUID(currentMoodboardId)) {
+      alert("잘못된 무드보드 ID입니다.");
+      return;
+    }
+
+    // Supabase Auth 세션 확인 (쓰기 가드)
+    try {
+      const { data: sessionData, error: sessionError } =
+        await supabaseClient.auth.getSession();
+      if (sessionError || !sessionData?.session) {
+        console.warn(
+          "[Editor] Supabase Auth 세션이 없습니다. Firebase Auth만 사용 중입니다."
+        );
+        // Firebase Auth만 있어도 계속 진행 (RLS 정책에 따라 실패할 수 있음)
+      }
+    } catch (e) {
+      console.warn("[Editor] 세션 확인 실패:", e);
+    }
+
+    // 모든 블록의 위치/크기 업데이트 (DOM에서 최신 상태 가져오기)
+    const canvas = document.getElementById("canvas");
+    if (canvas) {
+      const canvasRect = canvas.getBoundingClientRect();
+      const canvasWidth = canvasRect.width - 40;
+      const canvasHeight = canvasRect.height;
+
+      blocks.forEach((block) => {
+        const blockElement = document.querySelector(`[data-id="${block.id}"]`);
+        if (blockElement) {
+          // DOM에서 최신 위치/크기 가져오기
+          commitBlockRect(block.id, blockElement);
+
+          // 텍스트 블록의 경우 contentEditable 내용도 반영
+          if (block.type === "text") {
+            const textDiv = blockElement.querySelector(
+              '[contenteditable="true"]'
+            );
+            if (textDiv) {
+              block.style = { ...block.style, text: textDiv.textContent };
+              block.content = textDiv.textContent;
+            }
+          }
+        }
+      });
+    }
+
+    // 기존 무드보드 데이터 가져오기
+    const { data: existingMoodboard, error: fetchError } = await supabaseClient
+      .from("moodboards")
+      .select("*")
+      .eq("id", currentMoodboardId)
+      .single();
+
+    if (fetchError) {
+      throw new Error("무드보드를 찾을 수 없습니다: " + fetchError.message);
+    }
+
+    // moodboards 테이블 업데이트 (title만 업데이트)
+    const { error: updateError } = await supabaseClient
+      .from("moodboards")
+      .update({
+        updated_at: new Date().toISOString(),
+        // is_public은 대표 설정 시 별도로 업데이트됨
+      })
+      .eq("id", currentMoodboardId);
+
+    if (updateError) throw updateError;
+
+    // moodboard_blocks 테이블에 블록 저장
+    // 기존 블록 삭제 후 새로 삽입
+    const { error: deleteError } = await supabaseClient
+      .from("moodboard_blocks")
+      .delete()
+      .eq("moodboard_id", currentMoodboardId);
+
+    if (deleteError) {
+      console.warn("[Editor] 기존 블록 삭제 실패:", deleteError);
+      // 계속 진행
+    }
+
+    // 새 블록 삽입
+    if (blocks.length > 0) {
+      const blocksToInsert = blocks.map((block, index) => {
+        const blockData = {
+          moodboard_id: currentMoodboardId,
+          block_type: block.type, // type → block_type
+          order_index: index,
+          span: block.span || 6,
+        };
+
+        // 타입별 필드 추가
+        if (block.type === "cut" && block.cut_id) {
+          blockData.cut_id = block.cut_id;
+        }
+        if (block.type === "text" && block.content) {
+          blockData.title = block.content;
+          blockData.content = block.content;
+        }
+        if (block.type === "quote" && block.content) {
+          blockData.content = block.content;
+        }
+        if (block.emoji) {
+          blockData.emoji = block.emoji;
+        }
+
+        // 위치/크기/스타일 정보는 meta JSONB에 저장
+        blockData.meta = {
+          x: block.x || 0.3,
+          y: block.y || 0.3,
+          w: block.w || 0.3,
+          h: block.h || 0.3,
+          z_index: block.z_index || index + 1,
+          rotation: block.rotation || 0,
+          style: block.style || {},
+          // 슬롯 내부 조절 속성
+          slotId: block.slotId || null,
+          slotOffsetX: block.slotOffsetX || 0,
+          slotOffsetY: block.slotOffsetY || 0,
+          slotScale: block.slotScale || 1.0,
+        };
+
+        return blockData;
+      });
+
+      const { error: insertError } = await supabaseClient
+        .from("moodboard_blocks")
+        .insert(blocksToInsert);
+
+      if (insertError) {
+        // AuthSessionMissingError 또는 401/42501 에러 처리
+        if (
+          insertError.code === "42501" ||
+          insertError.message?.includes("AuthSessionMissingError") ||
+          insertError.message?.includes("401")
+        ) {
+          alert("로그인이 필요합니다. 로그인 후 다시 시도해주세요.");
+          console.error("[Editor] 인증 오류:", insertError);
+          return;
+        }
+        throw insertError;
+      }
+    }
+
+    // 저장 완료 알림 (대표 무드보드 팝업 스타일로)
+    showSaveSuccessPopup();
+  } catch (error) {
+    logError("saveMoodboard - Creator 모드", error, {
+      moodboardId: currentMoodboardId,
+      blocksCount: blocks.length,
+      errorCode: error.code,
+    });
+    if (
+      error.code === "42501" ||
+      error.message?.includes("AuthSessionMissingError") ||
+      error.message?.includes("401")
+    ) {
+      alert("로그인이 필요합니다.");
+    } else {
+      alert(
+        "저장 중 오류가 발생했습니다: " + (error.message || "알 수 없는 오류")
+      );
+    }
+  }
+}
+
+// =========================
+// UTILITIES
+// =========================
+
+function switchEditorTab(tabName) {
+  document.querySelectorAll(".editor-tab").forEach((tab) => {
+    tab.classList.remove("active");
+    if (tab.dataset.tab === tabName) {
+      tab.classList.add("active");
+    }
+  });
+
+  document.querySelectorAll(".editor-tab-content").forEach((content) => {
+    content.classList.remove("active");
+    if (
+      content.id ===
+      `editorTab${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`
+    ) {
+      content.classList.add("active");
+    }
+  });
+}
+
+function toggleEditorPanel() {
+  const panel = document.getElementById("editorPanel");
+  if (panel) {
+    panel.classList.toggle("open");
+  }
+}
+
+let isSaved = false; // 저장 여부 추적
+
+function handleBack() {
+  // 저장 전: confirm
+  if (!isSaved) {
+    if (!confirm("저장하지 않고 나갈까요?")) {
+      return;
+    }
+  }
+
+  // 모드 선택 화면으로 돌아가기
+  if (editorMode) {
+    const editorScreen = document.getElementById("editorScreen");
+    const modeSelector = document.getElementById("modeSelectorScreen");
+
+    if (editorScreen) {
+      // 페이드 + 축소 애니메이션
+      editorScreen.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+      editorScreen.style.opacity = "0";
+      editorScreen.style.transform = "scale(0.95)";
+
+      setTimeout(() => {
+        editorScreen.classList.remove("active");
+        if (modeSelector) modeSelector.classList.remove("hidden");
+
+        editorMode = null;
+        currentTemplate = null;
+        blocks = [];
+        renderBlocks();
+        isSaved = false;
+
+        // 마이페이지로 이동
+        window.location.href = "mypage_reader.html";
+      }, 300);
+    }
+  } else {
+    history.back();
+  }
+}
+
+// =========================
+// TEMPLATE FUNCTIONS
+// =========================
+
+// 템플릿 적용
+function applyTemplate(template) {
+  if (!template || template.type !== "template") {
+    console.warn("[Editor] 유효하지 않은 템플릿:", template);
+    return;
+  }
+
+  currentTemplate = template;
+  console.log("[Editor] 템플릿 적용:", template.id);
+
+  // 캔버스 설정
+  const canvas = document.getElementById("canvas");
+  if (!canvas) {
+    console.warn(
+      "[Editor] canvas 요소를 찾을 수 없습니다. 잠시 후 재시도합니다."
+    );
+    setTimeout(() => {
+      if (template) applyTemplate(template);
+    }, 100);
+    return;
+  }
+
+  const canvasContainer = document.getElementById("canvasContainer");
+  if (canvasContainer && template.canvas) {
+    // 비율 설정
+    if (template.canvas.ratio) {
+      const ratio = template.canvas.ratio.split(":");
+      const aspectRatio = parseFloat(ratio[1]) / parseFloat(ratio[0]);
+      canvasContainer.style.aspectRatio = `${ratio[0]} / ${ratio[1]}`;
+    }
+
+    // 배경색 설정
+    if (template.canvas.backgroundColor) {
+      canvas.style.backgroundColor = template.canvas.backgroundColor;
+    } else if (template.defaultBackground) {
+      canvas.style.backgroundColor = template.defaultBackground;
+    }
+  }
+
+  // 슬롯 렌더링 (즉시 실행)
+  renderTemplateSlots(template);
+
+  // DOM이 완전히 준비될 때까지 대기 후 재렌더링
+  setTimeout(() => {
+    renderTemplateSlots(template);
+  }, 200);
+
+  // 장식 요소 렌더링
+  renderTemplateDecorations(template);
+
+  // main 슬롯 자동 선택
+  setTimeout(() => {
+    selectMainSlot();
+  }, 300);
+}
+
+// 템플릿 슬롯 렌더링
+function renderTemplateSlots(template) {
+  const canvas = document.getElementById("canvas");
+  if (!canvas) {
+    console.warn("[Editor] canvas 요소를 찾을 수 없습니다");
+    // canvas가 없으면 잠시 후 재시도
+    setTimeout(() => {
+      if (template) renderTemplateSlots(template);
+    }, 100);
+    return;
+  }
+
+  if (!template || !template.slots) {
+    console.warn("[Editor] 템플릿 또는 슬롯이 없습니다");
+    return;
+  }
+
+  // 기존 슬롯 제거
+  const existingSlots = canvas.querySelectorAll(".template-slot");
+  existingSlots.forEach((slot) => slot.remove());
+
+  // 캔버스 크기 계산 (DOM이 준비될 때까지 대기)
+  const canvasRect = canvas.getBoundingClientRect();
+  let canvasWidth = canvasRect.width - 40; // padding 제외
+  let canvasHeight = canvasRect.height - 40;
+
+  // 캔버스 크기가 0이면 기본값 사용
+  if (canvasWidth <= 0 || canvasHeight <= 0) {
+    canvasWidth = 300;
+    canvasHeight = 300;
+  }
+
+  // 슬롯 생성
+  template.slots.forEach((slot) => {
+    const slotEl = document.createElement("div");
+    slotEl.className = "template-slot";
+    slotEl.dataset.slotId = slot.id;
+    slotEl.dataset.role = slot.role || "sub";
+
+    // size 속성 사용 (1:1 비율 슬롯)
+    const size =
+      slot.size || (slot.w && slot.h ? Math.min(slot.w, slot.h) : 0.3);
+    const slotSize = size * Math.min(canvasWidth, canvasHeight);
+
+    // 퍼센트 좌표를 픽셀 좌표로 변환
+    const x = slot.x * canvasWidth;
+    const y = slot.y * canvasHeight;
+
+    slotEl.style.position = "absolute";
+    slotEl.style.left = `${x}px`;
+    slotEl.style.top = `${y}px`;
+    slotEl.style.width = `${slotSize}px`;
+    slotEl.style.height = `${slotSize}px`;
+    slotEl.style.border = "2px dashed #ddd";
+    slotEl.style.borderRadius = "8px";
+    slotEl.style.display = "flex";
+    slotEl.style.alignItems = "center";
+    slotEl.style.justifyContent = "center";
+    slotEl.style.background = "rgba(0, 0, 0, 0.02)";
+    slotEl.style.cursor = "pointer";
+    slotEl.style.transition = "all 0.2s";
+
+    // 플레이스홀더
+    const placeholder = document.createElement("div");
+    placeholder.className = "template-slot-placeholder";
+    placeholder.textContent = "+";
+    placeholder.style.fontSize = "32px";
+    placeholder.style.color = "#999";
+    placeholder.style.fontWeight = "300";
+    slotEl.appendChild(placeholder);
+
+    // 호버 효과
+    slotEl.addEventListener("mouseenter", () => {
+      slotEl.style.borderColor = "#3b82f6";
+      slotEl.style.background = "rgba(59, 130, 246, 0.05)";
+    });
+    slotEl.addEventListener("mouseleave", () => {
+      slotEl.style.borderColor = "#ddd";
+      slotEl.style.background = "rgba(0, 0, 0, 0.02)";
+    });
+
+    // 클릭 이벤트 - 컷 선택 모달 열기
+    slotEl.addEventListener("click", (e) => {
+      e.stopPropagation();
+      // 슬롯 내부 컷 블록이 아닌 경우에만 모달 열기
+      if (!e.target.closest(".slot-cut-block")) {
+        currentSlotId = slot.id;
+        selectSlot(slot.id);
+        openImageSelectionModalForSlot(slot.id);
+      }
+    });
+
+    canvas.appendChild(slotEl);
+  });
+
+  // 기존 블록이 슬롯에 맞는지 확인하고 표시
+  blocks.forEach((block) => {
+    if (block.slotId) {
+      const slotEl = canvas.querySelector(`[data-slot-id="${block.slotId}"]`);
+      if (slotEl) {
+        slotEl.classList.add("has-content");
+        // placeholder 숨기기 (이미지가 있는 슬롯)
+        const placeholder = slotEl.querySelector(".template-slot-placeholder");
+        if (placeholder) {
+          placeholder.style.display = "none";
+        }
+        // 블록을 슬롯 위치에 맞춤
+        if (typeof renderBlockInSlot === "function") {
+          renderBlockInSlot(block.id, block.slotId);
+        }
+      }
+    }
+  });
+
+  console.log("[Editor] 템플릿 슬롯 렌더링 완료:", template.slots.length, "개");
+}
+
+// 슬롯 선택 함수
+function selectSlot(slotId) {
+  currentSlotId = slotId;
+
+  // 모든 슬롯의 선택 상태 제거
+  document.querySelectorAll(".template-slot").forEach((slot) => {
+    slot.classList.remove("selected");
+    slot.style.borderColor = "#ddd";
+  });
+
+  // 선택된 슬롯 강조
+  const selectedSlot = document.querySelector(`[data-slot-id="${slotId}"]`);
+  if (selectedSlot) {
+    selectedSlot.classList.add("selected");
+    selectedSlot.style.borderColor = "#3b82f6";
+    selectedSlot.style.borderWidth = "3px";
+  }
+}
+
+// main 슬롯 자동 선택
+function selectMainSlot() {
+  if (!currentTemplate || !currentTemplate.slots) return null;
+
+  const mainSlot = currentTemplate.slots.find((slot) => slot.role === "main");
+  if (mainSlot) {
+    selectSlot(mainSlot.id);
+    return mainSlot.id;
+  }
+
+  // main 슬롯이 없으면 첫 번째 슬롯 선택
+  if (currentTemplate.slots.length > 0) {
+    selectSlot(currentTemplate.slots[0].id);
+    return currentTemplate.slots[0].id;
+  }
+
+  return null;
+}
+
+// 템플릿 장식 요소 렌더링 (이모지 제거)
+function renderTemplateDecorations(template) {
+  if (!template.decorations) return;
+
+  const canvas = document.getElementById("canvas");
+  if (!canvas) return;
+
+  // 텍스트만 추가 (이모지는 제거)
+  if (template.decorations.text) {
+    const text = template.decorations.text;
+    const textBlock = {
+      id: "decoration-text",
+      type: "text",
+      content: text.content,
+      x: text.x || 0.5,
+      y: text.y || 0.9,
+      w: 0.4,
+      h: 0.1,
+      rotation: 0,
+      z_index: 1, // 항상 뒤 레이어
+      style: {
+        fontFamily: text.font || "Pretendard, sans-serif",
+        fontSize: text.fontSize || 20,
+        color: text.color || "#333",
+        textAlign: "center",
+      },
+    };
+
+    blocks.push(textBlock);
+  }
+
+  renderBlocks();
+}
+
+// =========================
+// LONG PRESS ACTION SHEET
+// =========================
+
+let longPressTimer = null;
+let longPressBlockId = null;
+
+function setupLongPressActionSheet(blockId) {
+  const blockElement = document.querySelector(`[data-id="${blockId}"]`);
+  if (!blockElement) return;
+
+  // 템플릿 고정 데코는 길게 누르기 불가
+  const block = blocks.find((b) => b.id === blockId);
+  if (block && block.id?.startsWith("decoration-")) {
+    return;
+  }
+
+  // 길게 누르기 시작
+  blockElement.addEventListener(
+    "touchstart",
+    (e) => {
+      if (e.touches.length === 1) {
+        longPressTimer = setTimeout(() => {
+          longPressBlockId = blockId;
+          showActionSheet(blockId);
+        }, 500); // 500ms 길게 누르기
+      }
+    },
+    { passive: true }
+  );
+
+  // 길게 누르기 취소
+  blockElement.addEventListener(
+    "touchend",
+    () => {
+      if (longPressTimer) {
+        clearTimeout(longPressTimer);
+        longPressTimer = null;
+      }
+    },
+    { passive: true }
+  );
+
+  blockElement.addEventListener(
+    "touchmove",
+    () => {
+      if (longPressTimer) {
+        clearTimeout(longPressTimer);
+        longPressTimer = null;
+      }
+    },
+    { passive: true }
+  );
+}
+
+function showActionSheet(blockId) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block) return;
+
+  // 기존 액션 시트 제거
+  const existingSheet = document.querySelector(".action-sheet");
+  if (existingSheet) {
+    existingSheet.remove();
+  }
+
+  // 액션 시트 생성
+  const sheet = document.createElement("div");
+  sheet.className = "action-sheet";
+  sheet.style.cssText = `
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 20px 20px 0 0;
+    padding: 20px;
+    z-index: 10001;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    animation: slideUp 0.3s ease;
+  `;
+
+  sheet.innerHTML = `
+    <div style="width: 40px; height: 4px; background: #ddd; border-radius: 2px; margin: 0 auto 20px;"></div>
+    <button class="action-sheet-item" onclick="bringToFront('${blockId}'); closeActionSheet();" style="
+      width: 100%;
+      padding: 16px;
+      text-align: left;
+      border: none;
+      background: transparent;
+      font-size: 16px;
+      color: #333;
+      cursor: pointer;
+    ">앞으로 가져오기</button>
+    <button class="action-sheet-item" onclick="sendToBack('${blockId}'); closeActionSheet();" style="
+      width: 100%;
+      padding: 16px;
+      text-align: left;
+      border: none;
+      background: transparent;
+      font-size: 16px;
+      color: #333;
+      cursor: pointer;
+    ">뒤로 보내기</button>
+    <button class="action-sheet-item" onclick="deleteBlock('${blockId}'); closeActionSheet();" style="
+      width: 100%;
+      padding: 16px;
+      text-align: left;
+      border: none;
+      background: transparent;
+      font-size: 16px;
+      color: #ff4444;
+      cursor: pointer;
+    ">삭제</button>
+    <button class="action-sheet-item" onclick="closeActionSheet();" style="
+      width: 100%;
+      padding: 16px;
+      text-align: center;
+      border: none;
+      background: #f5f5f5;
+      font-size: 16px;
+      color: #666;
+      cursor: pointer;
+      border-radius: 12px;
+      margin-top: 8px;
+    ">취소</button>
+  `;
+
+  // 배경 오버레이
+  const overlay = document.createElement("div");
+  overlay.className = "action-sheet-overlay";
+  overlay.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    animation: fadeIn 0.2s ease;
+  `;
+  overlay.addEventListener("click", closeActionSheet);
+
+  document.body.appendChild(overlay);
+  document.body.appendChild(sheet);
+}
+
+function closeActionSheet() {
+  const sheet = document.querySelector(".action-sheet");
+  const overlay = document.querySelector(".action-sheet-overlay");
+  if (sheet) sheet.remove();
+  if (overlay) overlay.remove();
+  longPressBlockId = null;
+}
+
+function bringToFront(blockId) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block) return;
+
+  const maxZ = Math.max(...blocks.map((b) => b.z_index || 1));
+  block.z_index = maxZ + 1;
+  renderBlocks();
+}
+
+function sendToBack(blockId) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block) return;
+
+  const minZ = Math.min(...blocks.map((b) => b.z_index || 1));
+  block.z_index = Math.max(1, minZ - 1);
+  renderBlocks();
+}
+
+// 슬롯용 컷 선택 모달 열기
+function openImageSelectionModalForSlot(slotId) {
+  const modal = document.getElementById("imageSelectionModal");
+  const imageGrid = document.getElementById("imageGrid");
+  if (!modal || !imageGrid) return;
+
+  modal.style.display = "flex";
+  imageGrid.innerHTML = "";
+
+  loadImages().then((images) => {
+    if (images.length === 0) {
+      imageGrid.innerHTML =
+        '<p style="text-align: center; padding: 20px; color: #999;">저장된 컷이 없습니다</p>';
+      return;
+    }
+
+    images.forEach((image) => {
+      const item = document.createElement("div");
+      item.className = "image-item";
+      const img = document.createElement("img");
+      img.src = image.image_url || image.thumbnail_url || "";
+      img.alt = "이미지";
+      item.appendChild(img);
+      item.addEventListener("click", () => {
+        addCutToSlot(slotId, image);
+        closeImageSelectionModal();
+      });
+      imageGrid.appendChild(item);
+    });
+  });
+}
+
+// 슬롯에 컷 추가
+function addCutToSlot(slotId, imageData) {
+  if (!currentTemplate || !currentTemplate.slots) return;
+
+  const slot = currentTemplate.slots.find((s) => s.id === slotId);
+  if (!slot) return;
+
+  // 기존 블록 제거 (같은 슬롯에 있는 경우)
+  blocks = blocks.filter((b) => b.slotId !== slotId);
+
+  // 새 블록 생성 (슬롯 내부 조절 속성 포함)
+  const block = {
+    id: `block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    moodboard_id: currentMoodboardId,
+    type: "cut",
+    cut_id: imageData.id,
+    slotId: slotId,
+    x: slot.x,
+    y: slot.y,
+    w: slot.size || 0.3,
+    h: slot.size || 0.3,
+    rotation: 0, // 회전 금지
+    z_index: blocks.length + 1,
+    // 슬롯 내부 조절 속성
+    slotOffsetX: 0, // 슬롯 내부 X 오프셋 (-0.1 ~ 0.1)
+    slotOffsetY: 0, // 슬롯 내부 Y 오프셋 (-0.1 ~ 0.1)
+    slotScale: 1.0, // 슬롯 내부 확대 (1.0 ~ 1.2)
+    style: {
+      imageUrl: imageData.image_url || imageData.thumbnail_url,
+    },
+  };
+
+  blocks.push(block);
+
+  // 슬롯 UI 업데이트
+  renderBlockInSlot(block.id, slotId);
+}
+
+// 슬롯 내부에 블록 렌더링 (조절 가능)
+function renderBlockInSlot(blockId, slotId) {
+  if (!currentTemplate || !currentTemplate.slots) return;
+
+  const slot = currentTemplate.slots.find((s) => s.id === slotId);
+  if (!slot) return;
+
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block || !block.slotId) return;
+
+  const slotEl = document.querySelector(`[data-slot-id="${slotId}"]`);
+  if (!slotEl) return;
+
+  slotEl.classList.add("has-content");
+
+  // placeholder 숨기기 (이미지가 있는 슬롯)
+  const placeholder = slotEl.querySelector(".template-slot-placeholder");
+  if (placeholder) {
+    placeholder.style.display = "none";
+  }
+
+  // 기존 컷 블록 제거
+  const existingCut = slotEl.querySelector(".slot-cut-block");
+  if (existingCut) existingCut.remove();
+
+  // 슬롯 크기 계산
+  const canvas = document.getElementById("canvas");
+  if (!canvas) return;
+  const canvasRect = canvas.getBoundingClientRect();
+  const canvasWidth = canvasRect.width - 40;
+  const canvasHeight = canvasRect.height - 40;
+  const slotSize = (slot.size || 0.3) * Math.min(canvasWidth, canvasHeight);
+
+  // 컷 블록 생성
+  const cutBlock = document.createElement("div");
+  cutBlock.className = "slot-cut-block";
+  cutBlock.dataset.blockId = blockId;
+
+  // 조절 값 적용
+  const offsetX = (block.slotOffsetX || 0) * slotSize;
+  const offsetY = (block.slotOffsetY || 0) * slotSize;
+  const scale = Math.max(1.0, Math.min(1.2, block.slotScale || 1.0));
+
+  cutBlock.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+  cutBlock.style.transformOrigin = "center center";
+
+  // 이미지 추가
+  const img = document.createElement("img");
+  img.src = block.style?.imageUrl || "";
+  img.style.width = "100%";
+  img.style.height = "100%";
+  img.style.objectFit = "cover";
+  cutBlock.appendChild(img);
+
+  // 드래그 이벤트 (슬롯 내부에서만 이동) - 마우스
+  let isDragging = false;
+  let dragStart = { x: 0, y: 0 };
+  let startOffset = { x: 0, y: 0 };
+
+  cutBlock.addEventListener("mousedown", (e) => {
+    e.stopPropagation();
+    isDragging = true;
+    dragStart = { x: e.clientX, y: e.clientY };
+    startOffset = { x: block.slotOffsetX || 0, y: block.slotOffsetY || 0 };
+    cutBlock.style.cursor = "grabbing";
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+
+    const deltaX = (e.clientX - dragStart.x) / slotSize;
+    const deltaY = (e.clientY - dragStart.y) / slotSize;
+
+    // 슬롯 내부 범위 제한 (-0.1 ~ 0.1)
+    block.slotOffsetX = Math.max(-0.1, Math.min(0.1, startOffset.x + deltaX));
+    block.slotOffsetY = Math.max(-0.1, Math.min(0.1, startOffset.y + deltaY));
+
+    renderBlockInSlot(blockId, slotId);
+  });
+
+  document.addEventListener("mouseup", () => {
+    if (isDragging) {
+      isDragging = false;
+      cutBlock.style.cursor = "move";
+    }
+  });
+
+  // 터치 이벤트 (이동 및 핀치 줌)
+  let touchStartDistance = 0;
+  let touchStartScale = 1.0;
+  let touchStartPos = { x: 0, y: 0 };
+  let touchStartOffset = { x: 0, y: 0 };
+  let isTouchDragging = false;
+  let isPinching = false;
+
+  cutBlock.addEventListener("touchstart", (e) => {
+    e.stopPropagation();
+    if (e.touches.length === 1) {
+      // 단일 터치: 이동
+      isTouchDragging = true;
+      touchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      touchStartOffset = {
+        x: block.slotOffsetX || 0,
+        y: block.slotOffsetY || 0,
+      };
+    } else if (e.touches.length === 2) {
+      // 두 손가락: 핀치 줌
+      e.preventDefault();
+      isPinching = true;
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      touchStartDistance = Math.hypot(
+        touch2.clientX - touch1.clientX,
+        touch2.clientY - touch1.clientY
+      );
+      touchStartScale = block.slotScale || 1.0;
+    }
+  });
+
+  cutBlock.addEventListener("touchmove", (e) => {
+    e.stopPropagation();
+    if (e.touches.length === 1 && isTouchDragging && !isPinching) {
+      // 단일 터치 이동
+      e.preventDefault();
+      const deltaX = (e.touches[0].clientX - touchStartPos.x) / slotSize;
+      const deltaY = (e.touches[0].clientY - touchStartPos.y) / slotSize;
+
+      // 슬롯 내부 범위 제한 (-0.1 ~ 0.1)
+      block.slotOffsetX = Math.max(
+        -0.1,
+        Math.min(0.1, touchStartOffset.x + deltaX)
+      );
+      block.slotOffsetY = Math.max(
+        -0.1,
+        Math.min(0.1, touchStartOffset.y + deltaY)
+      );
+
+      renderBlockInSlot(blockId, slotId);
+    } else if (e.touches.length === 2 && isPinching) {
+      // 핀치 줌
+      e.preventDefault();
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      const distance = Math.hypot(
+        touch2.clientX - touch1.clientX,
+        touch2.clientY - touch1.clientY
+      );
+      const scaleDelta = distance / touchStartDistance;
+      const newScale = touchStartScale * scaleDelta;
+
+      // 확대 범위 제한 (1.0 ~ 1.2)
+      block.slotScale = Math.max(1.0, Math.min(1.2, newScale));
+      renderBlockInSlot(blockId, slotId);
+    }
+  });
+
+  cutBlock.addEventListener("touchend", (e) => {
+    if (e.touches.length === 0) {
+      isTouchDragging = false;
+      isPinching = false;
+    } else if (e.touches.length === 1 && isPinching) {
+      // 핀치에서 단일 터치로 전환
+      isPinching = false;
+      isTouchDragging = true;
+      touchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      touchStartOffset = {
+        x: block.slotOffsetX || 0,
+        y: block.slotOffsetY || 0,
+      };
+    }
+  });
+
+  slotEl.appendChild(cutBlock);
+}
+
+// 슬롯 위치에 맞춰 블록 위치 업데이트 (레거시 호환)
+function updateBlockPositionForSlot(blockId, slotId) {
+  renderBlockInSlot(blockId, slotId);
+}
+
+// =========================
+// PROVIDED CODE INTEGRATION
+// =========================
+
+// 이모지 목록 (제공된 코드에서)
+const EMOJIS = [
+  "💖",
+  "✨",
+  "🌙",
+  "⭐",
+  "💫",
+  "🌸",
+  "🌺",
+  "🌼",
+  "🦋",
+  "🎀",
+  "💝",
+  "🌈",
+  "☁️",
+  "💭",
+  "🎵",
+  "🎨",
+  "📷",
+  "🎬",
+  "💌",
+  "🔮",
+];
+
+// 색상 목록 (제공된 코드에서)
+const COLORS = [
+  "#FFE5E5",
+  "#FFF4E5",
+  "#FFFBE5",
+  "#E5FFE5",
+  "#E5F4FF",
+  "#F0E5FF",
+  "#FFE5F0",
+  "#E5E5E5",
+  "#FFC1CC",
+  "#FFD4A3",
+  "#FFFACD",
+  "#C1FFC1",
+  "#C1E7FF",
+  "#E0C1FF",
+  "#FFC1E0",
+  "#D0D0D0",
+];
+
+// 제공된 코드의 editor 객체 통합
+const editor = {
+  init() {
+    try {
+      this.renderSources();
+      this.setupCanvasEvents();
+      this.render();
+    } catch (error) {
+      logError("editor.init", error);
+    }
+  },
+
+  async renderSources() {
+    try {
+      // 컷 이미지 로드 (실제 DB에서)
+      const cutsGrid = document.getElementById("cutsGrid");
+      if (cutsGrid) {
+        const images = await loadImages();
+        if (images.length === 0) {
+          cutsGrid.innerHTML =
+            '<p style="text-align: center; padding: 20px; color: #999; font-size: 12px;">저장된 컷이 없습니다</p>';
+        } else {
+          cutsGrid.innerHTML = images
+            .map(
+              (image, i) => `
+                    <div class="cut-item" draggable="true" data-type="image" data-url="${
+                      image.image_url || image.thumbnail_url
+                    }">
+                        <img src="${
+                          image.image_url || image.thumbnail_url
+                        }" alt="Cut ${i + 1}" loading="lazy">
+                    </div>
+                `
+            )
+            .join("");
+
+          // 드래그 이벤트 설정
+          document
+            .querySelectorAll('#cutsGrid [draggable="true"]')
+            .forEach((el) => {
+              el.addEventListener("dragstart", (e) => {
+                e.dataTransfer.setData("type", el.dataset.type);
+                e.dataTransfer.setData("url", el.dataset.url || "");
+              });
+            });
+        }
+      }
+
+      // 이모지 그리드
+      const emojiGrid = document.getElementById("emojiGrid");
+      if (emojiGrid) {
+        emojiGrid.innerHTML = EMOJIS.map(
+          (emoji) => `
+                <div class="emoji-item" data-type="emoji" data-content="${emoji}">${emoji}</div>
+            `
+        ).join("");
+
+        // 이모지 클릭 이벤트
+        document.querySelectorAll(".emoji-item").forEach((el) => {
+          el.addEventListener("click", () => {
+            this.addBlock({
+              type: "emoji",
+              content: el.dataset.content,
+              x: 0.3 + Math.random() * 0.2,
+              y: 0.3 + Math.random() * 0.2,
+              w: 0.15,
+              h: 0.15,
+              style: {
+                fontSize: 48,
+                rotate: (Math.random() - 0.5) * 20,
+                emoji: el.dataset.content,
+              },
+            });
+          });
+        });
+      }
+
+      // 색상 그리드
+      const colorGrid = document.getElementById("colorGrid");
+      if (colorGrid) {
+        colorGrid.innerHTML = COLORS.map(
+          (color) => `
+                <div class="color-item" data-type="shape" data-color="${color}" 
+                     style="background: ${color};"></div>
+            `
+        ).join("");
+
+        // 색상 클릭 이벤트
+        document.querySelectorAll(".color-item").forEach((el) => {
+          el.addEventListener("click", () => {
+            this.addBlock({
+              type: "color",
+              x: 0.1 + Math.random() * 0.2,
+              y: 0.1 + Math.random() * 0.2,
+              w: 0.4,
+              h: 0.3,
+              style: {
+                background: el.dataset.color,
+                opacity: 0.7,
+                borderRadius: 12,
+                backgroundColor: el.dataset.color,
+              },
+            });
+          });
+        });
+      }
+    } catch (error) {
+      logError("editor.renderSources", error);
+    }
+  },
+
+  setupCanvasEvents() {
+    try {
+      const canvas = document.getElementById("canvas");
+      if (!canvas) return;
+
+      // Drop event
+      canvas.addEventListener("dragover", (e) => e.preventDefault());
+      canvas.addEventListener("drop", (e) => {
+        e.preventDefault();
+        const type = e.dataTransfer.getData("type");
+        const url = e.dataTransfer.getData("url");
+
+        if (type === "image") {
+          const rect = canvas.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.15;
+          const y = (e.clientY - rect.top) / rect.height - 0.2;
+
+          this.addBlock({
+            type: "image",
+            url: url,
+            x: Math.max(0, Math.min(0.7, x)),
+            y: Math.max(0, Math.min(0.7, y)),
+            w: 0.3,
+            h: 0.4,
+            style: {
+              borderRadius: 12,
+              shadow: true,
+              rotate: (Math.random() - 0.5) * 10,
+              imageUrl: url,
+            },
+          });
+        }
+      });
+
+      // Click to deselect
+      canvas.addEventListener("click", (e) => {
+        if (e.target === canvas || e.target.id === "emptyState") {
+          selectBlock(null);
+        }
+      });
+    } catch (error) {
+      logError("editor.setupCanvasEvents", error);
+    }
+  },
+
+  addBlock(blockData) {
+    try {
+      if (!currentMoodboardId) {
+        logError("editor.addBlock", new Error("무드보드 ID 없음"), {
+          blockData,
+        });
+        alert("무드보드를 먼저 생성해주세요.");
+        return;
+      }
+
+      const newBlock = {
+        moodboard_id: currentMoodboardId,
+        type: blockData.type,
+        x: blockData.x || 0.3,
+        y: blockData.y || 0.3,
+        w: blockData.w || 0.3,
+        h: blockData.h || 0.3,
+        z_index: blocks.length + 1,
+        rotation: blockData.style?.rotate || 0,
+        style: {
+          ...getDefaultStyle(blockData.type),
+          ...blockData.style,
+        },
+      };
+
+      if (blockData.type === "image" && !blockData.url) {
+        openImageSelectionModal(newBlock);
+      } else {
+        createBlock(newBlock);
+      }
+    } catch (error) {
+      logError("editor.addBlock", error, { blockData });
+    }
+  },
+
+  addTextBlock() {
+    const text = prompt("텍스트를 입력하세요:", "감정을 남겨보세요");
+    if (!text) return;
+
+    this.addBlock({
+      type: "text",
+      content: text,
+      x: 0.25 + Math.random() * 0.2,
+      y: 0.3 + Math.random() * 0.2,
+      w: 0.35,
+      h: 0.15,
+      style: {
+        fontSize: 18,
+        color: "#1f2937",
+        background: "#fff",
+        textAlign: "center",
+        borderRadius: 12,
+        rotate: (Math.random() - 0.5) * 5,
+        text: text,
+      },
+    });
+  },
+
+  render() {
+    renderBlocks();
+  },
+
+  async save() {
+    try {
+      await saveMoodboard();
+    } catch (error) {
+      logError("editor.save", error);
+    }
+  },
+
+  reset() {
+    try {
+      if (!confirm("정말 새로 시작하시겠어요?")) return;
+      blocks = [];
+      selectedBlockId = null;
+      renderBlocks();
+      updateLayerPanel();
+      const toolPanel = document.getElementById("toolPanel");
+      if (toolPanel) {
+        toolPanel.innerHTML = "";
+        toolPanel.style.display = "none";
+      }
+    } catch (error) {
+      logError("editor.reset", error);
+    }
+  },
+};
+
+// 툴바 버튼 함수들
+function openBackgroundPicker() {
+  try {
+    // 상단에 배경색 선택 팝업 표시
+    const editorTools = document.getElementById("editorTools");
+    if (!editorTools) return;
+
+    // 기존 팝업 제거
+    const existingPopup = document.querySelector(".top-style-popup");
+    if (existingPopup) {
+      existingPopup.remove();
+    }
+
+    // 새 팝업 생성
+    const popup = document.createElement("div");
+    popup.className = "top-style-popup";
+
+    popup.innerHTML = `
+      <button class="close-popup-btn" onclick="closeTopStylePopup()">×</button>
+      <div class="top-popup-content">
+        <div class="top-popup-title">배경색 선택</div>
+        <div class="background-color-grid-top">
+          ${COLORS.map(
+            (color) => `
+            <div class="background-color-item-top" 
+                 style="background: ${color};"
+                 onclick="selectBackgroundColor('${color}')">
+            </div>
+          `
+          ).join("")}
+        </div>
+        <div class="background-custom-color-top">
+          <label>커스텀 색상</label>
+          <input type="color" class="color-picker-round" id="customBackgroundColor" value="#ffffff" />
+        </div>
+      </div>
+    `;
+
+    editorTools.appendChild(popup);
+
+    // 애니메이션
+    setTimeout(() => {
+      popup.classList.add("show");
+    }, 10);
+
+    const customColorInput = popup.querySelector("#customBackgroundColor");
+    if (customColorInput) {
+      customColorInput.addEventListener("change", (e) => {
+        selectBackgroundColor(e.target.value);
+      });
+    }
+  } catch (error) {
+    logError("openBackgroundPicker", error);
+  }
+}
+
+function selectBackgroundColor(color) {
+  const canvas = document.getElementById("canvas");
+  if (canvas) {
+    canvas.style.backgroundColor = color;
+  }
+  closeTopStylePopup();
+}
+
+// 폰트 설정 및 비율 설정 함수 제거 (더 이상 필요 없음)
+
+function openFeaturedSettings() {
+  try {
+    // 상단에 대표 무드보드 설정 팝업 표시
+    const editorTools = document.getElementById("editorTools");
+    if (!editorTools) return;
+
+    const existingPopup = document.querySelector(".top-style-popup");
+    if (existingPopup) {
+      existingPopup.remove();
+    }
+
+    const popup = document.createElement("div");
+    popup.className = "top-style-popup featured-popup";
+
+    popup.innerHTML = `
+      <button class="close-popup-btn" onclick="closeTopStylePopup()">×</button>
+      <div class="top-popup-content">
+        <div class="top-popup-title">대표 무드보드 설정</div>
+        <div class="featured-setting-content">
+          <p style="font-size: 13px; color: #666; text-align: center; margin-bottom: 16px;">
+            대표 무드보드는 커뮤니티에 노출됩니다
+          </p>
+          <button class="featured-confirm-btn" onclick="setAsFeaturedMoodboard()">
+            대표 무드보드로 설정
+          </button>
+        </div>
+      </div>
+    `;
+
+    editorTools.appendChild(popup);
+    setTimeout(() => {
+      popup.classList.add("show");
+    }, 10);
+  } catch (error) {
+    logError("openFeaturedSettings", error);
+  }
+}
+
+// 저장 완료 팝업 표시 (필수 선택)
+function showSaveSuccessPopup() {
+  const editorScreen = document.getElementById("editorScreen");
+  if (!editorScreen) return;
+
+  // 기존 팝업 제거
+  const existingPopup = document.querySelector(".save-success-modal");
+  if (existingPopup) {
+    existingPopup.remove();
+  }
+
+  // 모달 오버레이 생성
+  const modal = document.createElement("div");
+  modal.className = "save-success-modal";
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+  `;
+
+  const popup = document.createElement("div");
+  popup.className = "save-success-popup-content";
+  popup.style.cssText = `
+    background: white;
+    border-radius: 20px;
+    padding: 32px 24px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    animation: slideUp 0.3s ease;
+  `;
+
+  popup.innerHTML = `
+    <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>
+    <h2 style="font-size: 20px; font-weight: 700; color: #333; margin-bottom: 8px;">
+      저장되었습니다
+    </h2>
+    <p style="font-size: 14px; color: #666; margin-bottom: 24px;">
+      이 무드보드를 어떻게 할까요?
+    </p>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <button 
+        class="save-success-btn-primary" 
+        onclick="handleSetAsFeatured()"
+        style="
+          width: 100%;
+          padding: 16px;
+          background: #667eea;
+          color: white;
+          border: none;
+          border-radius: 12px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+        ">
+        대표 무드보드로 설정하기
+      </button>
+      <button 
+        class="save-success-btn-secondary" 
+        onclick="handleGoToMyPage()"
+        style="
+          width: 100%;
+          padding: 16px;
+          background: #f5f5f5;
+          color: #333;
+          border: none;
+          border-radius: 12px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+        ">
+        나가기
+      </button>
+    </div>
+  `;
+
+  modal.appendChild(popup);
+  document.body.appendChild(modal);
+
+  // 애니메이션 스타일 추가
+  if (!document.getElementById("save-success-animations")) {
+    const style = document.createElement("style");
+    style.id = "save-success-animations";
+    style.textContent = `
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      @keyframes slideUp {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+}
+
+// 대표 무드보드로 설정하고 마이페이지로 이동
+async function handleSetAsFeatured() {
+  try {
+    await setAsFeaturedMoodboard();
+    // 모달 제거
+    const modal = document.querySelector(".save-success-modal");
+    if (modal) modal.remove();
+    // 마이페이지로 이동
+    handleGoToMyPage();
+  } catch (error) {
+    logError("handleSetAsFeatured", error);
+    alert("대표 무드보드 설정 중 오류가 발생했습니다.");
+  }
+}
+
+// 마이페이지로 이동
+function handleGoToMyPage() {
+  // 모달 제거
+  const modal = document.querySelector(".save-success-modal");
+  if (modal) modal.remove();
+
+  // 페이드 + 축소 애니메이션 후 이동
+  const editorScreen = document.getElementById("editorScreen");
+  if (editorScreen) {
+    editorScreen.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+    editorScreen.style.opacity = "0";
+    editorScreen.style.transform = "scale(0.95)";
+
+    setTimeout(() => {
+      window.location.href = "mypage_reader.html";
+    }, 300);
+  } else {
+    window.location.href = "mypage_reader.html";
+  }
+}
+
+// 대표 무드보드 설정 확인 팝업
+function showFeaturedConfirmPopup() {
+  const editorTools = document.getElementById("editorTools");
+  if (!editorTools) return;
+
+  const existingPopup = document.querySelector(".top-style-popup");
+  if (existingPopup) {
+    existingPopup.remove();
+  }
+
+  const popup = document.createElement("div");
+  popup.className = "top-style-popup featured-popup";
+
+  popup.innerHTML = `
+    <button class="close-popup-btn" onclick="closeTopStylePopup()">×</button>
+    <div class="top-popup-content">
+      <div class="top-popup-title">대표 무드보드 설정</div>
+      <div class="featured-setting-content">
+        <p style="font-size: 13px; color: #666; text-align: center; margin-bottom: 16px;">
+          대표 무드보드는 커뮤니티에 노출됩니다
+        </p>
+        <button class="featured-confirm-btn" onclick="setAsFeaturedMoodboard()">
+          대표 무드보드로 설정
+        </button>
+        <button class="featured-cancel-btn" onclick="closeTopStylePopup()">
+          취소
+        </button>
+      </div>
+    </div>
+  `;
+
+  editorTools.appendChild(popup);
+  setTimeout(() => {
+    popup.classList.add("show");
+  }, 10);
+}
+
+// 대표 무드보드로 설정
+async function setAsFeaturedMoodboard() {
+  try {
+    if (!currentMoodboardId) {
+      alert("무드보드가 없습니다.");
+      return;
+    }
+
+    // 사용자 확인
+    const user = await getCurrentUser();
+    if (!user || !user.uid) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
+    if (!supabaseClient) {
+      alert("서비스 연결에 실패했습니다.");
+      return;
+    }
+
+    // 1. 기존 대표 무드보드 찾아서 is_featured = false 처리
+    const { data: existingEvents } = await supabaseClient
+      .from("user_feed_events")
+      .select("id, metadata")
+      .eq("user_id", user.uid)
+      .eq("event_type", "moodboard_created");
+
+    if (existingEvents && existingEvents.length > 0) {
+      // 기존 대표 무드보드 찾기
+      const featuredEvents = existingEvents.filter(
+        (e) =>
+          e.metadata?.is_featured === true ||
+          e.metadata?.moodboard_data?.is_featured === true
+      );
+
+      // 기존 대표 무드보드들 is_featured = false 처리
+      for (const event of featuredEvents) {
+        const updatedMetadata = {
+          ...event.metadata,
+          is_featured: false,
+        };
+        if (updatedMetadata.moodboard_data) {
+          updatedMetadata.moodboard_data.is_featured = false;
+        }
+
+        await supabaseClient
+          .from("user_feed_events")
+          .update({ metadata: updatedMetadata })
+          .eq("id", event.id);
+      }
+    }
+
+    // 2. 현재 무드보드의 user_feed_events 찾아서 is_featured = true 설정
+    const { data: currentEvents } = await supabaseClient
+      .from("user_feed_events")
+      .select("id, metadata")
+      .eq("user_id", user.uid)
+      .eq("event_type", "moodboard_created");
+
+    if (currentEvents && currentEvents.length > 0) {
+      const currentEvent = currentEvents.find(
+        (e) => e.metadata?.moodboard_id === currentMoodboardId
+      );
+
+      if (currentEvent) {
+        const updatedMetadata = {
+          ...currentEvent.metadata,
+          is_featured: true,
+        };
+        if (updatedMetadata.moodboard_data) {
+          updatedMetadata.moodboard_data.is_featured = true;
+        }
+
+        const { error: updateError } = await supabaseClient
+          .from("user_feed_events")
+          .update({ metadata: updatedMetadata })
+          .eq("id", currentEvent.id);
+
+        if (updateError) {
+          throw updateError;
+        }
+      }
+    }
+
+    console.log("[대표 무드보드] 설정 완료:", currentMoodboardId);
+  } catch (error) {
+    logError("setAsFeaturedMoodboard", error);
+    alert(
+      "설정 중 오류가 발생했습니다: " + (error.message || "알 수 없는 오류")
+    );
+    throw error;
+  }
+}
+
+// 대표 무드보드 설정 완료 팝업
+function showFeaturedSuccessPopup() {
+  const editorTools = document.getElementById("editorTools");
+  if (!editorTools) return;
+
+  const existingPopup = document.querySelector(".top-style-popup");
+  if (existingPopup) {
+    existingPopup.remove();
+  }
+
+  const popup = document.createElement("div");
+  popup.className = "top-style-popup featured-success-popup";
+
+  popup.innerHTML = `
+    <button class="close-popup-btn" onclick="closeTopStylePopup()">×</button>
+    <div class="top-popup-content">
+      <div class="top-popup-title">설정되었습니다!</div>
+      <div class="featured-success-content" style="padding: 16px;">
+        <p style="font-size: 14px; color: #666; text-align: center; margin-bottom: 20px;">
+          대표 무드보드로 설정되었습니다
+        </p>
+        <button class="featured-confirm-btn" onclick="goToMyPage()" style="width: 100%;">
+          마이페이지로 이동
+        </button>
+        <button class="featured-cancel-btn" onclick="closeTopStylePopup()" style="width: 100%; margin-top: 8px;">
+          닫기
+        </button>
+      </div>
+    </div>
+  `;
+
+  editorTools.appendChild(popup);
+  setTimeout(() => {
+    popup.classList.add("show");
+  }, 10);
+}
+
+function goToMyPage() {
+  window.location.href = "mypage_reader.html";
+}
+
+// 전역 함수로 export
+window.toggleEditMode = () => {};
+window.saveMoodboard = saveMoodboard;
+window.addBlock = addBlock;
+window.switchEditorTab = switchEditorTab;
+window.selectBlock = selectBlock;
+window.deleteBlock = deleteBlock;
+window.handleBack = handleBack;
+window.closeImageSelectionModal = closeImageSelectionModal;
+window.toggleEditorPanel = toggleEditorPanel;
+window.toggleMobilePanel = toggleMobilePanel;
+window.openBackgroundPicker = openBackgroundPicker;
+window.selectBackgroundColor = selectBackgroundColor;
+window.openFeaturedSettings = openFeaturedSettings;
+window.editor = editor;
+window.closeStylePanel = closeStylePanel;
+window.changeFontSize = changeFontSize;
+window.selectEmojiForBlock = selectEmojiForBlock;
+window.openImageSelectionModalForBlock = openImageSelectionModalForBlock;
+window.closeTopStylePopup = closeTopStylePopup;
+window.changeImageBorderRadius = changeImageBorderRadius;
+window.changeImageOpacity = changeImageOpacity;
+window.changeImageFilter = changeImageFilter;
+window.selectEmojiForDrag = selectEmojiForDrag;
+window.setAsFeaturedMoodboard = setAsFeaturedMoodboard;
+window.selectTextColor = selectTextColor;
+window.selectTextBackgroundColor = selectTextBackgroundColor;
+window.showFeaturedConfirmPopup = showFeaturedConfirmPopup;
+window.goToMyPage = goToMyPage;
+window.expandTextStylePanel = expandTextStylePanel;
+
+// 모드 선택 관련 함수 export
+window.selectMode = selectMode;
+window.selectTemplate = selectTemplate;
+window.backToModeSelector = backToModeSelector;
+window.openImageSelectionModalForSlot = openImageSelectionModalForSlot;
+window.bringToFront = bringToFront;
+window.sendToBack = sendToBack;
+window.closeActionSheet = closeActionSheet;
+
+// 모바일 패널 토글
+function toggleMobilePanel() {
+  const panel = document.getElementById("mobilePanel");
+  if (panel) {
+    panel.classList.toggle("open");
+  }
+}
+
+// 상단 스타일 팝업 닫기
+function closeTopStylePopup() {
+  const popup = document.querySelector(".top-style-popup");
+  if (popup) {
+    popup.classList.remove("show");
+    setTimeout(() => {
+      popup.remove();
+    }, 300);
+  }
+}
+
+// 스타일 패널 닫기 (하위 호환성)
+function closeStylePanel() {
+  closeTopStylePopup();
+}
+
+// =========================
+// BOTTOM SHEET MANAGER
+// =========================
+
+const BottomSheetManager = {
+  currentPanel: null,
+  swipeStartY: null,
+  swipeThreshold: 50,
+
+  init() {
+    this.createBottomSheetHTML();
+    this.setupEventListeners();
+  },
+
+  createBottomSheetHTML() {
+    // 기존 바텀시트가 없으면 생성
+    let bottomSheet = document.getElementById("bottomSheet");
+    if (!bottomSheet) {
+      bottomSheet = document.createElement("div");
+      bottomSheet.id = "bottomSheet";
+      bottomSheet.className = "bottom-sheet";
+      bottomSheet.innerHTML = `
+        <div class="bottom-sheet-header">
+          <div class="bottom-sheet-handle"></div>
+        </div>
+        <div class="bottom-sheet-content" id="bottomSheetContent"></div>
+        <div class="bottom-sheet-actions" id="bottomSheetActions"></div>
+      `;
+      document.body.appendChild(bottomSheet);
+    }
+
+    // 오버레이 생성
+    let overlay = document.getElementById("bottomSheetOverlay");
+    if (!overlay) {
+      overlay = document.createElement("div");
+      overlay.id = "bottomSheetOverlay";
+      overlay.className = "bottom-sheet-overlay";
+      overlay.addEventListener("click", () => this.close());
+      document.body.appendChild(overlay);
+    }
+  },
+
+  setupEventListeners() {
+    const bottomSheet = document.getElementById("bottomSheet");
+    if (!bottomSheet) return;
+
+    // ESC 키로 닫기
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && this.isOpen()) {
+        this.close();
+      }
+    });
+
+    // Swipe down 제스처
+    let touchStartY = 0;
+    let touchStartTime = 0;
+
+    bottomSheet.addEventListener(
+      "touchstart",
+      (e) => {
+        touchStartY = e.touches[0].clientY;
+        touchStartTime = Date.now();
+      },
+      { passive: true }
+    );
+
+    bottomSheet.addEventListener(
+      "touchmove",
+      (e) => {
+        if (!this.isOpen()) return;
+
+        const touchY = e.touches[0].clientY;
+        const deltaY = touchY - touchStartY;
+
+        // 아래로 스와이프 중
+        if (deltaY > 0) {
+          const header = bottomSheet.querySelector(".bottom-sheet-header");
+          if (header && e.target.closest(".bottom-sheet-header")) {
+            bottomSheet.style.transform = `translateY(${deltaY}px)`;
+          }
+        }
+      },
+      { passive: true }
+    );
+
+    bottomSheet.addEventListener(
+      "touchend",
+      (e) => {
+        if (!this.isOpen()) return;
+
+        const touchY = e.changedTouches[0].clientY;
+        const deltaY = touchY - touchStartY;
+        const deltaTime = Date.now() - touchStartTime;
+
+        // 빠르게 아래로 스와이프하거나 충분히 아래로 드래그한 경우 닫기
+        if (deltaY > this.swipeThreshold || (deltaY > 20 && deltaTime < 300)) {
+          this.close();
+        } else {
+          // 원래 위치로 복귀
+          bottomSheet.style.transform = "";
+        }
+      },
+      { passive: true }
+    );
+  },
+
+  open(content, actions = null) {
+    const bottomSheet = document.getElementById("bottomSheet");
+    const overlay = document.getElementById("bottomSheetOverlay");
+    const contentEl = document.getElementById("bottomSheetContent");
+    const actionsEl = document.getElementById("bottomSheetActions");
+
+    if (!bottomSheet || !contentEl) return;
+
+    // 내용 설정
+    contentEl.innerHTML = content;
+
+    // 액션 버튼 설정
+    if (actionsEl) {
+      if (actions) {
+        actionsEl.innerHTML = actions;
+        actionsEl.style.display = "block";
+      } else {
+        actionsEl.style.display = "none";
+      }
+    }
+
+    // 열기 애니메이션
+    overlay?.classList.add("show");
+    bottomSheet.classList.add("open");
+
+    // Safe Area 고려한 위치 조정
+    bottomSheet.style.bottom = `env(safe-area-inset-bottom)`;
+    bottomSheet.style.paddingBottom = `calc(16px + env(safe-area-inset-bottom))`;
+  },
+
+  close() {
+    const bottomSheet = document.getElementById("bottomSheet");
+    const overlay = document.getElementById("bottomSheetOverlay");
+
+    if (bottomSheet) {
+      bottomSheet.classList.remove("open");
+      bottomSheet.style.transform = "";
+    }
+    if (overlay) overlay.classList.remove("show");
+
+    this.currentPanel = null;
+  },
+
+  isOpen() {
+    const bottomSheet = document.getElementById("bottomSheet");
+    return bottomSheet?.classList.contains("open") || false;
+  },
+
+  setCurrentPanel(panel) {
+    this.currentPanel = panel;
+  },
+
+  getCurrentPanel() {
+    return this.currentPanel;
+  },
+};
+
+// =========================
+// EFFECT PRESET MANAGER
+// =========================
+
+const EffectPresetManager = {
+  presets: {
+    clean: {
+      name: "클린",
+      shadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
+      borderRadius: 8,
+      border: "none",
+      backgroundTone: "#FFFFFF",
+      texture: null,
+      opacity: 1,
+    },
+    soft_day: {
+      name: "부드러운 하루",
+      shadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
+      borderRadius: 16,
+      border: "none",
+      backgroundTone: "#F8FAFC",
+      texture: null,
+      opacity: 1,
+    },
+    memory: {
+      name: "추억",
+      shadow: "0 6px 20px rgba(0, 0, 0, 0.12)",
+      borderRadius: 20,
+      border: "1px solid rgba(0, 0, 0, 0.05)",
+      backgroundTone: "#FFFBF0",
+      texture: "paper",
+      opacity: 0.98,
+    },
+    focus: {
+      name: "집중",
+      shadow: "0 8px 24px rgba(0, 0, 0, 0.15)",
+      borderRadius: 12,
+      border: "none",
+      backgroundTone: "#FFFFFF",
+      texture: null,
+      opacity: 1,
+    },
+    paper: {
+      name: "종이",
+      shadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
+      borderRadius: 4,
+      border: "1px solid rgba(0, 0, 0, 0.08)",
+      backgroundTone: "#FAFAFA",
+      texture: "paper",
+      opacity: 0.95,
+    },
+    contrast: {
+      name: "대비",
+      shadow: "0 10px 30px rgba(0, 0, 0, 0.2)",
+      borderRadius: 0,
+      border: "2px solid rgba(0, 0, 0, 0.1)",
+      backgroundTone: "#FFFFFF",
+      texture: null,
+      opacity: 1,
+    },
+  },
+
+  applyPreset(blockId, presetId) {
+    const block = blocks.find((b) => b.id === blockId);
+    if (!block) return;
+
+    const preset = this.presets[presetId];
+    if (!preset) return;
+
+    block.style = block.style || {};
+    block.style.boxShadow = preset.shadow;
+    block.style.borderRadius = `${preset.borderRadius}px`;
+    block.style.border = preset.border;
+    block.style.opacity = preset.opacity;
+
+    // 텍스처는 CSS 클래스로 적용
+    const blockElement = document.querySelector(`[data-id="${blockId}"]`);
+    if (blockElement) {
+      blockElement.classList.remove("texture-paper");
+      if (preset.texture === "paper") {
+        blockElement.classList.add("texture-paper");
+      }
+    }
+
+    // 효과 프리셋 ID 저장
+    block.style.effectPreset = presetId;
+
+    renderBlocks();
+    selectBlock(blockId);
+  },
+
+  getPresetList() {
+    return Object.keys(this.presets).map((id) => ({
+      id,
+      ...this.presets[id],
+    }));
+  },
+};
+
+// =========================
+// 하단 툴바 및 바텀 시트 (기존 호환성 유지)
+// =========================
+
+let currentToolPanel = null;
+
+function openToolPanel(tool) {
+  BottomSheetManager.setCurrentPanel(tool);
+
+  const selectedBlock = selectedBlockId
+    ? blocks.find((b) => b.id === selectedBlockId)
+    : null;
+
+  // 선택된 블록이 있으면 해당 타입의 패널 표시
+  if (
+    selectedBlock &&
+    tool !== "background" &&
+    tool !== "effect" &&
+    tool !== "adjust" &&
+    tool !== "align" &&
+    tool !== "layout"
+  ) {
+    if (selectedBlock.type === "image" || selectedBlock.type === "cut") {
+      tool = "image";
+    } else if (selectedBlock.type === "text") {
+      tool = "text";
+    } else if (selectedBlock.type === "emoji") {
+      tool = "sticker";
+    }
+  }
+
+  // 같은 툴이면 닫기
+  if (currentToolPanel === tool && BottomSheetManager.isOpen()) {
+    BottomSheetManager.close();
+    currentToolPanel = null;
+    updateToolbarUI(); // 툴바 UI 업데이트
+    return;
+  }
+
+  currentToolPanel = tool;
+
+  // 툴바 UI 업데이트 (탭 클릭 시 상태 전환)
+  updateToolbarUI();
+
+  let content = "";
+  let actions = null;
+
+  switch (tool) {
+    case "image":
+      content = createImagePanel();
+      break;
+    case "text":
+      content = createTextPanel();
+      break;
+    case "sticker":
+      content = createStickerPanel();
+      break;
+    case "adjust":
+      content = createAdjustPanel();
+      break;
+    case "align":
+      content = createAlignPanel();
+      break;
+    case "layout":
+      content = createLayoutPanel();
+      break;
+    case "background":
+      content = createBackgroundPanel();
+      break;
+    case "effect":
+      content = createEffectPanel();
+      break;
+  }
+
+  BottomSheetManager.open(content, actions);
+}
+
+function closeBottomSheet() {
+  BottomSheetManager.close();
+  currentToolPanel = null;
+
+  // 툴바 UI 업데이트
+  updateToolbarUI();
+}
+
+// 툴바 UI 업데이트 함수 (탭 상태 및 레이어 선택 상태 반영)
+function updateToolbarUI() {
+  const toolbarBtns = document.querySelectorAll(".toolbar-btn");
+  const selectedBlock = selectedBlockId
+    ? blocks.find((b) => b.id === selectedBlockId)
+    : null;
+
+  toolbarBtns.forEach((btn) => {
+    const tool = btn.dataset.tool;
+
+    // 현재 활성화된 툴 표시
+    if (currentToolPanel === tool && BottomSheetManager.isOpen()) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
+
+    // 편집 관련 툴은 레이어 선택 시에만 활성화
+    // (이미지/텍스트/스티커는 항상 활성, 배경은 항상 활성)
+    if (
+      tool === "adjust" ||
+      tool === "align" ||
+      tool === "layout" ||
+      tool === "effect"
+    ) {
+      if (!selectedBlock) {
+        btn.disabled = true;
+        btn.style.opacity = "0.3";
+        btn.style.pointerEvents = "none";
+      } else {
+        btn.disabled = false;
+        btn.style.opacity = "1";
+        btn.style.pointerEvents = "auto";
+      }
+    } else {
+      // 이미지/텍스트/스티커/배경은 항상 활성
+      btn.disabled = false;
+      btn.style.opacity = "1";
+      btn.style.pointerEvents = "auto";
+    }
+  });
+}
+
+function createBottomSheetOverlay() {
+  return document.getElementById("bottomSheetOverlay");
+}
+
+// 이미지 패널
+function createImagePanel() {
+  return `
+    <div class="panel-section">
+      <h3 class="panel-title">이미지 추가</h3>
+      <button class="panel-btn primary" onclick="addImageLayer()">이미지 선택</button>
+    </div>
+  `;
+}
+
+// 텍스트 패널
+function createTextPanel() {
+  const fontPresets = [
+    { name: "기본", family: "Pretendard, sans-serif", size: 16 },
+    {
+      name: "제목",
+      family: "Pretendard, sans-serif",
+      size: 24,
+      weight: "bold",
+    },
+    { name: "손글씨", family: "Nanum Pen Script, cursive", size: 20 },
+    { name: "모노", family: "Courier New, monospace", size: 14 },
+  ];
+
+  const sizePresets = [
+    { label: "작게", size: 12 },
+    { label: "보통", size: 16 },
+    { label: "크게", size: 24 },
+    { label: "아주 크게", size: 32 },
+  ];
+
+  const selectedBlock = selectedBlockId
+    ? blocks.find((b) => b.id === selectedBlockId)
+    : null;
+  const isTextBlock = selectedBlock && selectedBlock.type === "text";
+
+  return `
+    <div class="panel-section">
+      <h3 class="panel-title">텍스트 추가</h3>
+      <button class="panel-btn primary" onclick="addTextLayer()">텍스트 추가</button>
+      ${
+        isTextBlock
+          ? `
+        <div class="panel-section">
+          <h4 class="panel-subtitle">폰트 프리셋</h4>
+          <div class="preset-grid">
+            ${fontPresets
+              .map(
+                (preset, i) => `
+              <button class="preset-btn" onclick="applyTextPreset(${i})">
+                <span style="font-family: ${preset.family}; font-size: ${
+                  preset.size
+                }px; font-weight: ${preset.weight || "normal"}">Aa</span>
+                <span>${preset.name}</span>
+              </button>
+            `
+              )
+              .join("")}
+          </div>
+        </div>
+        <div class="panel-section">
+          <h4 class="panel-subtitle">크기</h4>
+          <div class="preset-grid">
+            ${sizePresets
+              .map(
+                (preset, i) => `
+              <button class="preset-btn" onclick="applyTextSize(${preset.size})">
+                <span style="font-size: ${preset.size}px">Aa</span>
+                <span>${preset.label}</span>
+              </button>
+            `
+              )
+              .join("")}
+          </div>
+        </div>
+        <div class="panel-section">
+          <h4 class="panel-subtitle">정렬</h4>
+          <div class="align-buttons">
+            <button class="align-btn" onclick="applyTextAlign('left')">좌</button>
+            <button class="align-btn" onclick="applyTextAlign('center')">중앙</button>
+          </div>
+        </div>
+      `
+          : ""
+      }
+    </div>
+  `;
+}
+
+// 스티커 패널
+function createStickerPanel() {
+  const stickers = EMOJIS || ["💖", "✨", "🌙", "⭐", "🌸", "🎀", "💕", "💝"];
+
+  const selectedBlock = selectedBlockId
+    ? blocks.find((b) => b.id === selectedBlockId)
+    : null;
+  const isStickerBlock = selectedBlock && selectedBlock.type === "emoji";
+
+  return `
+    <div class="panel-section">
+      <h3 class="panel-title">스티커 추가</h3>
+      <div class="sticker-grid">
+        ${stickers
+          .map(
+            (emoji) => `
+          <button class="sticker-btn" onclick="addStickerLayer('${emoji}')">${emoji}</button>
+        `
+          )
+          .join("")}
+      </div>
+      ${
+        isStickerBlock
+          ? `
+        <div class="panel-section">
+          <h4 class="panel-subtitle">회전</h4>
+          <div class="align-buttons">
+            <button class="align-btn" onclick="rotateSticker(-15)">↺ -15°</button>
+            <button class="align-btn" onclick="rotateSticker(15)">↻ +15°</button>
+            <button class="align-btn" onclick="rotateSticker(-90)">↺ -90°</button>
+            <button class="align-btn" onclick="rotateSticker(90)">↻ +90°</button>
+          </div>
+        </div>
+      `
+          : ""
+      }
+    </div>
+  `;
+}
+
+// 배경 패널
+function createBackgroundPanel() {
+  const colors = [
+    "#FFFFFF",
+    "#F8FAFC",
+    "#F1F5F9",
+    "#E2E8F0",
+    "#FEF3C7",
+    "#FDE68A",
+    "#FCD34D",
+    "#FBBF24",
+    "#DBEAFE",
+    "#BFDBFE",
+    "#93C5FD",
+    "#60A5FA",
+    "#E9D5FF",
+    "#DDD6FE",
+    "#C4B5FD",
+    "#A78BFA",
+  ];
+
+  return `
+    <div class="panel-section">
+      <h3 class="panel-title">배경 색상</h3>
+      <div class="color-grid">
+        ${colors
+          .map(
+            (color) => `
+          <button class="color-btn" style="background: ${color}" onclick="setBackgroundColor('${color}')"></button>
+        `
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
+}
+
+// 효과 패널 (무드 프리셋 방식)
+function createEffectPanel() {
+  const presets = EffectPresetManager.getPresetList();
+  const selectedBlock = selectedBlockId
+    ? blocks.find((b) => b.id === selectedBlockId)
+    : null;
+  const currentPreset = selectedBlock?.style?.effectPreset || null;
+
+  return `
+    <div class="panel-section">
+      <h3 class="panel-title">무드 프리셋</h3>
+      <div class="mood-preset-grid">
+        ${presets
+          .map(
+            (preset) => `
+          <button 
+            class="mood-preset-btn ${
+              currentPreset === preset.id ? "active" : ""
+            }"
+            onclick="EffectPresetManager.applyPreset('${
+              selectedBlockId || ""
+            }', '${preset.id}'); closeBottomSheet();"
+            ${!selectedBlockId ? "disabled" : ""}
+          >
+            <div class="mood-preset-preview" style="
+              background: ${preset.backgroundTone};
+              border-radius: ${preset.borderRadius}px;
+              box-shadow: ${preset.shadow};
+              border: ${preset.border};
+              opacity: ${preset.opacity};
+              width: 60px;
+              height: 60px;
+              margin: 0 auto 8px;
+            "></div>
+            <span class="mood-preset-name">${preset.name}</span>
+          </button>
+        `
+          )
+          .join("")}
+      </div>
+      ${
+        !selectedBlockId
+          ? '<p class="panel-hint">요소를 선택하면 무드를 적용할 수 있습니다</p>'
+          : ""
+      }
+    </div>
+  `;
+}
+
+// 편집(Adjust) 패널
+function createAdjustPanel() {
+  const selectedBlock = selectedBlockId
+    ? blocks.find((b) => b.id === selectedBlockId)
+    : null;
+
+  if (!selectedBlock) {
+    return `
+      <div class="panel-section">
+        <h3 class="panel-title">조정</h3>
+        <p class="panel-hint">요소를 선택하면 조정할 수 있습니다</p>
+      </div>
+    `;
+  }
+
+  const isImage =
+    selectedBlock.type === "image" || selectedBlock.type === "cut";
+  const currentFit = selectedBlock.style?.objectFit || "cover";
+
+  return `
+    <div class="panel-section">
+      <h3 class="panel-title">조정</h3>
+      ${
+        isImage
+          ? `
+        <div class="adjust-group">
+          <label>맞추기</label>
+          <div class="adjust-buttons">
+            <button 
+              class="adjust-btn ${currentFit === "cover" ? "active" : ""}"
+              onclick="adjustImageFit('${selectedBlock.id}', 'cover')"
+            >
+              꽉 채우기
+            </button>
+            <button 
+              class="adjust-btn ${currentFit === "contain" ? "active" : ""}"
+              onclick="adjustImageFit('${selectedBlock.id}', 'contain')"
+            >
+              맞추기
+            </button>
+          </div>
+        </div>
+        <div class="adjust-group">
+          <label>위치</label>
+          <div class="adjust-buttons">
+            <button class="adjust-btn" onclick="centerSelectedBlock('${
+              selectedBlock.id
+            }')">
+              중앙 정렬
+            </button>
+          </div>
+        </div>
+      `
+          : `
+        <div class="adjust-group">
+          <label>위치</label>
+          <div class="adjust-buttons">
+            <button class="adjust-btn" onclick="centerSelectedBlock('${selectedBlock.id}')">
+              중앙 정렬
+            </button>
+          </div>
+        </div>
+      `
+      }
+      <div class="panel-hint">
+        드래그로 위치 이동, 핀치로 크기 조절이 가능합니다
+      </div>
+    </div>
+  `;
+}
+
+// 정렬(Align) 패널
+function createAlignPanel() {
+  const selectedBlock = selectedBlockId
+    ? blocks.find((b) => b.id === selectedBlockId)
+    : null;
+
+  if (!selectedBlock) {
+    return `
+      <div class="panel-section">
+        <h3 class="panel-title">정렬</h3>
+        <p class="panel-hint">요소를 선택하면 정렬할 수 있습니다</p>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="panel-section">
+      <h3 class="panel-title">정렬</h3>
+      <div class="align-preset-grid">
+        <button class="align-preset-btn" onclick="alignBlock('${selectedBlock.id}', 'left-top')">
+          <span>↖</span>
+          <span>좌상</span>
+        </button>
+        <button class="align-preset-btn" onclick="alignBlock('${selectedBlock.id}', 'center-top')">
+          <span>↑</span>
+          <span>상단</span>
+        </button>
+        <button class="align-preset-btn" onclick="alignBlock('${selectedBlock.id}', 'right-top')">
+          <span>↗</span>
+          <span>우상</span>
+        </button>
+        <button class="align-preset-btn" onclick="alignBlock('${selectedBlock.id}', 'left-center')">
+          <span>←</span>
+          <span>좌측</span>
+        </button>
+        <button class="align-preset-btn active" onclick="alignBlock('${selectedBlock.id}', 'center-center')">
+          <span>⊙</span>
+          <span>중앙</span>
+        </button>
+        <button class="align-preset-btn" onclick="alignBlock('${selectedBlock.id}', 'right-center')">
+          <span>→</span>
+          <span>우측</span>
+        </button>
+        <button class="align-preset-btn" onclick="alignBlock('${selectedBlock.id}', 'left-bottom')">
+          <span>↙</span>
+          <span>좌하</span>
+        </button>
+        <button class="align-preset-btn" onclick="alignBlock('${selectedBlock.id}', 'center-bottom')">
+          <span>↓</span>
+          <span>하단</span>
+        </button>
+        <button class="align-preset-btn" onclick="alignBlock('${selectedBlock.id}', 'right-bottom')">
+          <span>↘</span>
+          <span>우하</span>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+// 레이아웃 패널
+function createLayoutPanel() {
+  return `
+    <div class="panel-section">
+      <h3 class="panel-title">레이아웃</h3>
+      <p class="panel-hint">템플릿을 변경하려면 상단 메뉴를 사용하세요</p>
+    </div>
+  `;
+}
+
+// 레이어 추가 함수들
+function addImageLayer() {
+  closeBottomSheet();
+
+  // 템플릿 모드이고 슬롯이 선택되지 않았으면 main 슬롯 자동 선택
+  if (editorMode === "template" && !currentSlotId) {
+    const mainSlotId = selectMainSlot();
+    if (mainSlotId) {
+      openImageSelectionModalForSlot(mainSlotId);
+      return;
+    }
+  }
+
+  // 슬롯이 선택된 경우 해당 슬롯에 이미지 추가
+  if (currentSlotId) {
+    openImageSelectionModalForSlot(currentSlotId);
+  } else {
+    // 자유형 모드 또는 슬롯이 없는 경우
+    openImageSelectionModalForDrag();
+  }
+}
+
+function addTextLayer() {
+  closeBottomSheet();
+
+  // 템플릿 모드에서는 텍스트를 자유형으로 추가
+  if (editorMode === "template") {
+    // 템플릿 모드에서는 텍스트를 중앙에 추가
+    const canvas = document.getElementById("canvas");
+    if (canvas) {
+      const canvasRect = canvas.getBoundingClientRect();
+      const canvasWidth = canvasRect.width - 40;
+      const canvasHeight = canvasRect.height - 40;
+
+      const newBlock = {
+        moodboard_id: currentMoodboardId,
+        type: "text",
+        x: 0.3,
+        y: 0.45,
+        w: 0.4,
+        h: 0.1,
+        z_index: blocks.length + 1,
+        rotation: 0,
+        style: {
+          text: "텍스트를 입력하세요",
+          fontSize: 16,
+        },
+      };
+
+      createBlock(newBlock);
+    }
+  } else {
+    addBlock("text");
+  }
+}
+
+function addStickerLayer(emoji) {
+  closeBottomSheet();
+
+  const canvas = document.getElementById("canvas");
+  if (!canvas) return;
+
+  const canvasRect = canvas.getBoundingClientRect();
+  const canvasWidth = canvasRect.width - 40;
+  const canvasHeight = canvasRect.height - 40;
+
+  // 템플릿 모드에서는 중앙에 추가
+  let x = 0.4;
+  let y = 0.4;
+
+  if (editorMode === "template" && currentSlotId) {
+    // 선택된 슬롯 위치에 추가
+    const slot = currentTemplate?.slots?.find((s) => s.id === currentSlotId);
+    if (slot) {
+      x = slot.x + slot.size / 2 - 0.075;
+      y = slot.y + slot.size / 2 - 0.075;
+    }
+  }
+
+  const newBlock = {
+    moodboard_id: currentMoodboardId,
+    type: "emoji",
+    emoji: emoji,
+    x: x,
+    y: y,
+    w: 0.15,
+    h: 0.15,
+    z_index: blocks.length + 1,
+    rotation: 0,
+    style: {
+      emoji: emoji,
+      fontSize: 48,
+    },
+  };
+
+  createBlock(newBlock);
+}
+
+function setBackgroundColor(color) {
+  const canvas = document.getElementById("canvas");
+  if (canvas) {
+    canvas.style.backgroundColor = color;
+  }
+  closeBottomSheet();
+}
+
+function applyPreset(type, value) {
+  if (!selectedBlockId) return;
+
+  const block = blocks.find((b) => b.id === selectedBlockId);
+  if (!block) return;
+
+  switch (type) {
+    case "shadow":
+      if (value === "none") {
+        block.style.boxShadow = "none";
+      } else if (value === "soft") {
+        block.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.1)";
+      }
+      break;
+    case "border":
+      if (value === "on") {
+        block.style.borderWidth = "2px";
+        block.style.borderColor = "#e5e7eb";
+        block.style.borderStyle = "solid";
+      } else {
+        block.style.borderWidth = "0";
+      }
+      break;
+    case "round":
+      if (value === "small") {
+        block.style.borderRadius = "8px";
+      } else if (value === "medium") {
+        block.style.borderRadius = "16px";
+      }
+      break;
+    case "effect":
+      if (value === "sparkle") {
+        block.style.filter = "drop-shadow(0 0 4px rgba(255, 255, 255, 0.8))";
+      } else if (value === "paper") {
+        block.style.opacity = "0.95";
+        block.style.filter = "contrast(1.1)";
+      }
+      break;
+  }
+
+  renderBlocks();
+}
+
+function applyTextPreset(index) {
+  if (!selectedBlockId) return;
+  const block = blocks.find((b) => b.id === selectedBlockId);
+  if (!block || block.type !== "text") return;
+
+  const fontPresets = [
+    { family: "Pretendard, sans-serif", size: 16 },
+    { family: "Pretendard, sans-serif", size: 24, weight: "bold" },
+    { family: "Nanum Pen Script, cursive", size: 20 },
+    { family: "Courier New, monospace", size: 14 },
+  ];
+
+  const preset = fontPresets[index];
+  if (preset) {
+    block.style = block.style || {};
+    block.style.fontFamily = preset.family;
+    block.style.fontSize = preset.size;
+    if (preset.weight) block.style.fontWeight = preset.weight;
+    renderBlocks();
+  }
+}
+
+function applyTextSize(size) {
+  if (!selectedBlockId) return;
+  const block = blocks.find((b) => b.id === selectedBlockId);
+  if (block && block.type === "text") {
+    block.style = block.style || {};
+    block.style.fontSize = size;
+    renderBlocks();
+  }
+}
+
+function rotateSticker(angle) {
+  if (!selectedBlockId) return;
+  const block = blocks.find((b) => b.id === selectedBlockId);
+  if (block && block.type === "emoji") {
+    block.rotation = (block.rotation || 0) + angle;
+    renderBlocks();
+  }
+}
+
+function applyTextAlign(align) {
+  if (!selectedBlockId) return;
+  const block = blocks.find((b) => b.id === selectedBlockId);
+  if (block && block.type === "text") {
+    block.style.textAlign = align;
+    renderBlocks();
+  }
+}
+
+// 전역 함수로 export
+window.openToolPanel = openToolPanel;
+window.closeBottomSheet = closeBottomSheet;
+window.updateToolbarUI = updateToolbarUI;
+window.addImageLayer = addImageLayer;
+window.addTextLayer = addTextLayer;
+window.addStickerLayer = addStickerLayer;
+window.setBackgroundColor = setBackgroundColor;
+window.applyPreset = applyPreset;
+window.applyTextPreset = applyTextPreset;
+window.applyTextAlign = applyTextAlign;
+window.applyTextSize = applyTextSize;
+window.rotateSticker = rotateSticker;
+window.adjustImageFit = adjustImageFit;
+window.centerSelectedBlock = centerSelectedBlock;
+window.alignBlock = alignBlock;
+window.replaceCutImage = replaceCutImage;
+window.removeCutImage = removeCutImage;
+window.EffectPresetManager = EffectPresetManager;
+window.BottomSheetManager = BottomSheetManager;
+window.selectSlot = selectSlot;
+window.selectMainSlot = selectMainSlot;
+
+// 이미지 fit 조정
+function adjustImageFit(blockId, fit) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block || (block.type !== "image" && block.type !== "cut")) return;
+
+  const blockElement = document.querySelector(`[data-id="${blockId}"]`);
+  if (!blockElement) return;
+
+  const img = blockElement.querySelector("img");
+  if (!img) return;
+
+  img.style.objectFit = fit;
+  block.style = block.style || {};
+  block.style.objectFit = fit;
+
+  renderBlocks();
+}
+
+// 이미지 fit 토글 (꽉 채우기/맞추기) - 하위 호환성
+function toggleImageFit(blockId) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block || (block.type !== "image" && block.type !== "cut")) return;
+
+  const currentFit = block.style?.objectFit || "cover";
+  const newFit = currentFit === "cover" ? "contain" : "cover";
+  adjustImageFit(blockId, newFit);
+}
+
+// 선택된 블록 중앙 정렬
+function centerSelectedBlock(blockId) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block) return;
+
+  const canvas = document.getElementById("canvas");
+  if (!canvas) return;
+
+  const canvasRect = canvas.getBoundingClientRect();
+  const canvasWidth = canvasRect.width - 40;
+  const canvasHeight = canvasRect.height - 40;
+
+  // 중앙 위치 계산
+  block.x = (1 - block.w) / 2;
+  block.y = (1 - block.h) / 2;
+
+  renderBlocks();
+  selectBlock(blockId);
+}
+
+// 블록 정렬
+function alignBlock(blockId, position) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block) return;
+
+  const canvas = document.getElementById("canvas");
+  if (!canvas) return;
+
+  const canvasRect = canvas.getBoundingClientRect();
+  const canvasWidth = canvasRect.width - 40;
+  const canvasHeight = canvasRect.height - 40;
+
+  const [hAlign, vAlign] = position.split("-");
+
+  // 수평 정렬
+  if (hAlign === "left") {
+    block.x = 0.05;
+  } else if (hAlign === "center") {
+    block.x = (1 - block.w) / 2;
+  } else if (hAlign === "right") {
+    block.x = 0.95 - block.w;
+  }
+
+  // 수직 정렬
+  if (vAlign === "top") {
+    block.y = 0.05;
+  } else if (vAlign === "center") {
+    block.y = (1 - block.h) / 2;
+  } else if (vAlign === "bottom") {
+    block.y = 0.95 - block.h;
+  }
+
+  renderBlocks();
+  selectBlock(blockId);
+}
+
+// 컷 교체
+function replaceCutImage(blockId) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block || (block.type !== "image" && block.type !== "cut")) return;
+
+  closeBottomSheet();
+
+  // 슬롯에 속한 경우
+  if (block.slotId) {
+    openImageSelectionModalForSlot(block.slotId);
+  } else {
+    openImageSelectionModalForBlock(blockId);
+  }
+}
+
+// 컷 삭제
+function removeCutImage(blockId) {
+  const block = blocks.find((b) => b.id === blockId);
+  if (!block || (block.type !== "image" && block.type !== "cut")) return;
+
+  if (!confirm("이 컷을 삭제하시겠습니까?")) return;
+
+  // 이미지 소스만 제거 (레이어는 유지)
+  block.style = block.style || {};
+  block.style.imageUrl = null;
+  block.url = null;
+
+  renderBlocks();
+  selectBlock(null);
+}

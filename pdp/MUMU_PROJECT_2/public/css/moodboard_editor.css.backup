@@ -1,0 +1,673 @@
+/* =========================
+   MOODBOARD EDITOR STYLES
+   바텀시트 및 툴바 스타일
+   ========================= */
+
+/* =========================
+   레이아웃 복구: 기본 구조 강제
+   ========================= */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.moodboard-editor-page {
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* =========================
+   모바일 프레임 강제 고정 (핵심)
+   ========================= */
+#mobile-root {
+  width: 100%;
+  max-width: 430px; /* iPhone 14 Pro 기준 */
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #fff;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.app-frame {
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#editor-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #fff;
+  position: relative;
+}
+
+/* =========================
+   상단 헤더 복구
+   ========================= */
+#editor-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+#editor-header .header-btn {
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+}
+
+#editor-header .header-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+#editor-header .header-actions {
+  display: flex;
+  align-items: center;
+}
+
+#editor-header .save-btn {
+  font-size: 14px;
+  font-weight: 500;
+  color: #3b82f6;
+  padding: 8px 16px;
+}
+
+/* =========================
+   캔버스 영역 중앙 정렬 강제 (모바일 폭 고정)
+   ========================= */
+#editor-canvas-area {
+  flex: 1;
+  min-height: calc(100vh - 120px); /* 상단 헤더 + 하단 탭 제외 */
+  display: flex;
+  justify-content: center;
+  align-items: center; /* 시각적 중심 고정 */
+  padding: 24px 16px;
+  padding-bottom: calc(80px + env(safe-area-inset-bottom)); /* 하단 네비 충돌 방지 */
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.canvas-container {
+  width: 100%;
+  max-width: 430px; /* 모바일 폭 강제 고정 */
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* 시각적 중심 고정 */
+}
+
+.moodboard-canvas,
+#canvas {
+  width: 100%;
+  max-width: 360px;
+  min-height: 360px;
+  background: #fafafa;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  position: relative;
+  aspect-ratio: 1;
+}
+
+/* ❌ 절대 사용 금지: 데스크탑 폭으로 늘어남 */
+.editor-canvas {
+  width: 100%;
+  max-width: 360px; /* 모바일 기준 */
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+}
+
+/* =========================
+   슬롯 placeholder 아이콘 제거 (이미지가 있는 슬롯)
+   ========================= */
+.template-slot.has-content .template-slot-placeholder {
+  display: none !important; /* 이미지가 있는 슬롯의 placeholder 즉시 제거 */
+}
+
+.slot-placeholder-icon {
+  display: none !important; /* 응급 제거 */
+}
+
+/* 캔버스 내부 요소 위치 조정 */
+.moodboard-canvas > *,
+#canvas > * {
+  position: relative;
+}
+
+.moodboard-canvas .empty-guide {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #999;
+  font-size: 14px;
+  text-align: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.moodboard-canvas .empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+.moodboard-canvas .empty-state-text {
+  font-size: 14px;
+  color: #999;
+}
+
+/* =========================
+   하단 툴바 복구 (가림 방지)
+   ========================= */
+#editor-toolbar {
+  position: sticky;
+  bottom: 0;
+  height: 72px;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: #fff;
+  border-top: 1px solid #eee;
+  display: flex !important; /* 항상 표시 강제 */
+  justify-content: space-around;
+  align-items: center;
+  z-index: 100;
+  flex-shrink: 0;
+  visibility: visible !important; /* 항상 보이도록 강제 */
+  opacity: 1 !important; /* 항상 보이도록 강제 */
+}
+
+#editor-toolbar .toolbar-btn {
+  flex: 1;
+  display: flex !important; /* 항상 표시 강제 */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 0;
+  visibility: visible !important; /* 항상 보이도록 강제 */
+  opacity: 1 !important; /* 항상 보이도록 강제 */
+}
+
+#editor-toolbar .toolbar-btn:active {
+  transform: scale(0.95);
+}
+
+#editor-toolbar .toolbar-btn.active {
+  color: #3b82f6;
+}
+
+#editor-toolbar .toolbar-icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+#editor-toolbar .toolbar-label {
+  font-size: 11px;
+  color: #666;
+}
+
+#editor-toolbar .toolbar-btn.active .toolbar-label {
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+/* =========================
+   임시 제거: position fixed 요소들
+   ========================= */
+/* ❌ 임시 제거 대상 - position: fixed로 떠 있는 요소들 */
+/*
+.bottom-sheet-overlay {
+  position: fixed;
+  ...
+}
+*/
+
+/* ❌ 임시 제거 대상 - draggable helper */
+/* .draggable-helper { ... } */
+
+/* ❌ 임시 제거 대상 - 미완성 bottom-sheet */
+/*
+.bottom-sheet {
+  position: fixed;
+  ...
+}
+*/
+
+/* ❌ 임시 제거: 바텀시트 오버레이 (position: fixed) */
+/*
+.bottom-sheet-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.bottom-sheet-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+*/
+
+/* ❌ 임시 제거: 바텀시트 (position: fixed) */
+/*
+.bottom-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: env(safe-area-inset-bottom);
+  max-height: 80vh;
+  background: #ffffff;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+}
+
+.bottom-sheet.open {
+  transform: translateY(0);
+}
+*/
+
+/* 바텀시트 헤더 */
+.bottom-sheet-header {
+  padding: 12px 20px 8px;
+  border-bottom: 1px solid #e5e5e5;
+  flex-shrink: 0;
+}
+
+.bottom-sheet-handle {
+  width: 40px;
+  height: 4px;
+  background: #ddd;
+  border-radius: 2px;
+  margin: 0 auto;
+}
+
+/* 바텀시트 콘텐츠 */
+.bottom-sheet-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 바텀시트 액션 버튼 영역 */
+.bottom-sheet-actions {
+  padding: 16px 20px;
+  border-top: 1px solid #e5e5e5;
+  flex-shrink: 0;
+}
+
+/* 패널 섹션 */
+.panel-section {
+  margin-bottom: 24px;
+}
+
+.panel-section:last-child {
+  margin-bottom: 0;
+}
+
+.panel-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+}
+
+.panel-subtitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.panel-hint {
+  font-size: 13px;
+  color: #999;
+  text-align: center;
+  margin-top: 16px;
+}
+
+/* 무드 프리셋 그리드 */
+.mood-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.mood-preset-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  border: 2px solid #e5e5e5;
+  border-radius: 12px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mood-preset-btn:active {
+  transform: scale(0.95);
+}
+
+.mood-preset-btn.active {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.mood-preset-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mood-preset-preview {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.mood-preset-name {
+  font-size: 13px;
+  color: #333;
+  font-weight: 500;
+}
+
+.mood-preset-btn.active .mood-preset-name {
+  color: #3b82f6;
+}
+
+/* 조정 패널 */
+.adjust-group {
+  margin-bottom: 20px;
+}
+
+.adjust-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.adjust-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.adjust-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.adjust-btn:active {
+  transform: scale(0.98);
+}
+
+.adjust-btn.active {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  color: #3b82f6;
+}
+
+/* 정렬 프리셋 그리드 */
+.align-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.align-preset-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.align-preset-btn:active {
+  transform: scale(0.95);
+}
+
+.align-preset-btn.active {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.align-preset-btn span:first-child {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.align-preset-btn span:last-child {
+  font-size: 12px;
+  color: #666;
+}
+
+/* 텍스처 효과 */
+.texture-paper {
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.03) 0px,
+      transparent 1px,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 3px
+    );
+}
+
+/* 컷 컨트롤 버튼 */
+.cut-controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+  z-index: 1000;
+  pointer-events: auto;
+}
+
+.cut-controls button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.cut-controls button:active {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.cut-controls button span {
+  display: block;
+  line-height: 1;
+}
+
+/* ❌ 임시 제거: 기존 툴바 (position: fixed) - #editor-toolbar로 대체됨 */
+/*
+.editor-toolbar {
+  position: fixed;
+  bottom: env(safe-area-inset-bottom);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-top: 1px solid #e5e5e5;
+  padding: 8px 16px calc(8px + env(safe-area-inset-bottom));
+  z-index: 9997;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+*/
+
+.toolbar-row {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.toolbar-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 0;
+}
+
+.toolbar-btn:active {
+  transform: scale(0.95);
+}
+
+.toolbar-btn.active {
+  color: #3b82f6;
+}
+
+.toolbar-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.toolbar-btn-icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.toolbar-btn-label {
+  font-size: 11px;
+  color: #666;
+}
+
+.toolbar-btn.active .toolbar-btn-label {
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+/* 템플릿 슬롯 스타일 */
+.template-slot {
+  position: absolute;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.02);
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.template-slot:hover {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.template-slot.selected {
+  border-color: #3b82f6;
+  border-width: 3px;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.template-slot.has-content {
+  border-style: solid;
+  border-color: #3b82f6;
+  background: transparent;
+}
+
+.template-slot-placeholder {
+  font-size: 32px;
+  color: #999;
+  font-weight: 300;
+  pointer-events: none;
+}
+
+.template-slot.has-content .template-slot-placeholder {
+  display: none;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 480px) {
+  .mood-preset-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  
+  .mood-preset-preview {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .align-preset-grid {
+    gap: 8px;
+  }
+  
+  .align-preset-btn {
+    padding: 12px;
+  }
+  
+  .template-slot-placeholder {
+    font-size: 24px;
+  }
+}

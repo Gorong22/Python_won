@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title>MUMU – 무드보드 에디터</title>
+    <link rel="stylesheet" href="css/tabbar.css" />
+    <link rel="stylesheet" href="css/moodboard_editor.css" />
+  </head>
+  <body class="moodboard-editor-page">
+    <div id="mobile-root">
+      <div class="app-frame">
+        <!-- STEP 1: 진입 화면 (모드 선택) -->
+        <div class="mode-selector-screen" id="modeSelectorScreen">
+          <button
+            class="mode-selector-back-btn"
+            onclick="window.location.href = EditorCore.state.returnUrl || 'mypage_reader.html'"
+            aria-label="뒤로가기"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15 18L9 12L15 6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <h1 class="mode-selector-title">무드보드 만들기</h1>
+          <p class="mode-selector-subtitle">원하는 방식을 선택해주세요</p>
+          <div class="mode-options">
+            <div class="mode-option" onclick="EditorCore.selectMode('free')">
+              <div class="mode-option-title">자유롭게 만들기</div>
+              <div class="mode-option-desc">컷을 자유롭게 배치하고 꾸미기</div>
+            </div>
+            <div
+              class="mode-option"
+              onclick="EditorCore.selectMode('template')"
+            >
+              <div class="mode-option-title">템플릿 고르기</div>
+              <div class="mode-option-desc">템플릿을 선택하고 컷만 채우기</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: 템플릿 선택 화면 -->
+        <div class="template-selector-screen" id="templateSelectorScreen">
+          <div class="template-selector-header">
+            <button
+              class="template-selector-back"
+              onclick="window.location.href = EditorCore.state.returnUrl || 'mypage_reader.html'"
+            >
+              ←
+            </button>
+            <h2 class="template-selector-title">템플릿 선택</h2>
+          </div>
+          <div class="template-grid" id="templateGrid">
+            <!-- 템플릿 카드들이 동적으로 추가됨 -->
+          </div>
+        </div>
+
+        <!-- STEP 3: 에디터 메인 화면 -->
+        <div class="editor-screen" id="editorScreen">
+          <!-- Top Bar -->
+          <header class="editor-header" id="editorHeader">
+            <button
+              class="header-btn back-btn"
+              onclick="EditorCore.handleBack()"
+              aria-label="뒤로가기"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15 18L9 12L15 6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <h1 class="header-title" id="editorTitle">새 무드보드</h1>
+            <div style="display: flex; gap: 8px; align-items: center">
+              <button
+                class="header-btn"
+                id="undoBtn"
+                onclick="EditorCore.LayerManager.undo()"
+                aria-label="실행 취소"
+                style="padding: 4px; min-width: 32px; min-height: 32px"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 7V5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V17"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M7 12L3 16L7 20"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+              <button
+                class="header-btn"
+                id="redoBtn"
+                onclick="EditorCore.LayerManager.redo()"
+                aria-label="다시 실행"
+                style="padding: 4px; min-width: 32px; min-height: 32px"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M21 7V5C21 3.89543 20.1046 3 19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V17"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M17 12L21 16L17 20"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+              <button
+                class="header-btn save-btn"
+                id="saveBtn"
+                onclick="EditorCore.save()"
+              >
+                저장하기
+              </button>
+            </div>
+          </header>
+
+          <!-- Canvas (정중앙, 모바일 비율) -->
+          <main class="editor-canvas-wrapper" id="editorCanvasWrapper">
+            <div class="editor-canvas" id="editorCanvas">
+              <!-- 템플릿 슬롯들이 여기에 렌더링됨 -->
+            </div>
+          </main>
+
+          <!-- Bottom Toolbar (2줄 구조, 항상 표시) -->
+          <nav class="editor-toolbar" id="editorToolbar">
+            <!-- 1줄: Create -->
+            <div class="toolbar-row toolbar-row-create">
+              <button
+                class="toolbar-btn"
+                data-tool="image"
+                onclick="EditorCore.openToolPanel('image')"
+              >
+                <span class="toolbar-icon">📷</span>
+                <span class="toolbar-label">이미지</span>
+              </button>
+              <button
+                class="toolbar-btn"
+                data-tool="text"
+                onclick="EditorCore.openToolPanel('text')"
+              >
+                <span class="toolbar-icon">✏️</span>
+                <span class="toolbar-label">텍스트</span>
+              </button>
+              <button
+                class="toolbar-btn"
+                data-tool="sticker"
+                onclick="EditorCore.openToolPanel('sticker')"
+              >
+                <span class="toolbar-icon">🎨</span>
+                <span class="toolbar-label">스티커</span>
+              </button>
+            </div>
+            <!-- 2줄: Edit / Style -->
+            <div class="toolbar-row toolbar-row-edit">
+              <button
+                class="toolbar-btn"
+                data-tool="adjust"
+                onclick="EditorCore.openToolPanel('adjust')"
+              >
+                <span class="toolbar-icon">⚙️</span>
+                <span class="toolbar-label">조정</span>
+              </button>
+              <button
+                class="toolbar-btn"
+                data-tool="align"
+                onclick="EditorCore.openToolPanel('align')"
+              >
+                <span class="toolbar-icon">↔️</span>
+                <span class="toolbar-label">정렬</span>
+              </button>
+              <button
+                class="toolbar-btn"
+                data-tool="layout"
+                onclick="EditorCore.openToolPanel('layout')"
+              >
+                <span class="toolbar-icon">⊞</span>
+                <span class="toolbar-label">레이아웃</span>
+              </button>
+              <button
+                class="toolbar-btn"
+                data-tool="mood"
+                onclick="EditorCore.openToolPanel('mood')"
+              >
+                <span class="toolbar-icon">🎭</span>
+                <span class="toolbar-label">무드</span>
+              </button>
+              <button
+                class="toolbar-btn"
+                data-tool="background"
+                onclick="EditorCore.openToolPanel('background')"
+              >
+                <span class="toolbar-icon">🎨</span>
+                <span class="toolbar-label">배경</span>
+              </button>
+              <button
+                class="toolbar-btn"
+                data-tool="effect"
+                onclick="EditorCore.openToolPanel('effect')"
+              >
+                <span class="toolbar-icon">✨</span>
+                <span class="toolbar-label">효과</span>
+              </button>
+            </div>
+          </nav>
+        </div>
+
+        <!-- 하단 탭바 -->
+        <div id="tabbar"></div>
+      </div>
+    </div>
+
+    <!-- Bottom Sheet (모달) -->
+    <div class="bottom-sheet-overlay" id="bottomSheetOverlay"></div>
+    <div class="bottom-sheet" id="bottomSheet">
+      <div class="bottom-sheet-handle"></div>
+      <div class="bottom-sheet-content" id="bottomSheetContent">
+        <!-- 동적 콘텐츠 -->
+      </div>
+    </div>
+
+    <!-- 컷 선택 모달 -->
+    <div class="modal-overlay" id="imageSelectionModal" style="display: none">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>컷 선택</h2>
+          <button
+            class="modal-close"
+            onclick="EditorCore.closeImageSelectionModal()"
+          >
+            ×
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="image-grid" id="imageGrid">
+            <!-- 이미지들이 동적으로 로드됨 -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/templates.js"></script>
+    <script type="module" src="js/reader_auth.js"></script>
+    <script type="module">
+      import {
+        initializeSupabaseAuth,
+        getSupabase,
+      } from "./js/supabase-auth.js";
+      window.initializeSupabaseAuth = initializeSupabaseAuth;
+      window.getSupabase = getSupabase;
+    </script>
+    <script src="js/tabbar-init.js"></script>
+    <script type="module" src="js/moodboard_editor.js"></script>
+  </body>
+</html>
