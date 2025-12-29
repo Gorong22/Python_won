@@ -1,0 +1,130 @@
+/* MUMU Onboarding Styles */
+
+.mumu-onboarding-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: auto;
+}
+
+.mumu-onboarding-overlay.active {
+  opacity: 1;
+}
+
+/* Spotlight Effect */
+.mumu-spotlight {
+  position: absolute;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.75),
+    0 0 40px rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  pointer-events: none;
+  z-index: 100001;
+}
+
+/* Skip Button */
+.mumu-onboarding-skip {
+  position: fixed;
+  top: calc(var(--safe-top) + 20px);
+  right: 20px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 100005;
+  cursor: pointer;
+}
+
+/* Content Box */
+.mumu-onboarding-content {
+  position: fixed;
+  width: calc(100% - 40px);
+  max-width: 360px;
+  color: #ffffff;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: 100002;
+}
+
+.mumu-onboarding-message {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 24px;
+  word-break: keep-all;
+  white-space: pre-line;
+}
+
+.mumu-onboarding-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.mumu-onboarding-btn {
+  padding: 12px 32px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.mumu-onboarding-btn-next {
+  background: #ff5e00;
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(255, 94, 0, 0.3);
+}
+
+.mumu-onboarding-btn-next:active {
+  transform: scale(0.95);
+  background: #e55500;
+}
+
+/* Pulse / Ripple Effect for Long Press Hint */
+.mumu-pulse-hint {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: mumu-pulse 1.5s infinite;
+  z-index: 100003;
+}
+
+@keyframes mumu-pulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Layout Helper */
+body.onboarding-locked {
+  overflow: hidden !important;
+  touch-action: none !important;
+}
