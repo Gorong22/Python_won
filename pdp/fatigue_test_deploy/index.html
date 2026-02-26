@@ -1,0 +1,1783 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>피로 유형 진단 | 나의 컨디션 루틴 체크</title>
+    <meta
+      name="description"
+      content="커피를 줄이라는 말 대신, 당신의 루틴을 먼저 진단합니다. 8문항으로 알아보는 나의 피로 유형과 2주 루틴 플랜."
+    />
+    <style>
+      /* ================================
+   RESET & BASE
+================================ */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --primary: #007e70;
+        --primary-light: #e6f4f2;
+        --primary-dark: #005a50;
+        --accent: #5c3d2e;
+        --bg: #fdf6f0;
+        --bg2: #fff9f5;
+        --card: #ffffff;
+        --text: #2d2013;
+        --text2: #5e4a38;
+        --text3: #8a7060;
+        --border: #e8d9cc;
+        --warn: #7a2d2d;
+        --warn-bg: #fff5f5;
+        --shadow: 0 4px 24px rgba(100, 60, 20, 0.1);
+        --shadow-sm: 0 2px 8px rgba(100, 60, 20, 0.07);
+        --radius: 20px;
+        --radius-sm: 12px;
+        --font:
+          "Pretendard", -apple-system, BlinkMacSystemFont,
+          "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+        --mobile-w: 420px;
+      }
+      html,
+      body {
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          #fce8e0 0%,
+          #f5e6d0 50%,
+          #e8f4f2 100%
+        );
+        font-family: var(--font);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        padding: 20px 0;
+      }
+
+      /* ================================
+   MOBILE CONTAINER
+================================ */
+      #app {
+        width: 100%;
+        max-width: var(--mobile-w);
+        min-height: calc(100vh - 40px);
+        background: var(--bg);
+        border-radius: 32px;
+        box-shadow: 0 20px 60px rgba(80, 40, 10, 0.18);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      @media (max-width: 480px) {
+        body {
+          padding: 0;
+        }
+        #app {
+          border-radius: 0;
+          min-height: 100vh;
+        }
+      }
+
+      /* ================================
+   SCREENS
+================================ */
+      .screen {
+        display: none;
+        flex-direction: column;
+        flex: 1;
+        padding: 28px 24px 40px;
+        animation: fadeIn 0.35s ease;
+      }
+      .screen.active {
+        display: flex;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ================================
+   INTRO SCREEN
+================================ */
+      .intro-badge {
+        display: inline-block;
+        background: var(--primary-light);
+        color: var(--primary);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        padding: 5px 14px;
+        border-radius: 100px;
+        margin-bottom: 18px;
+      }
+      .intro-emoji {
+        font-size: 52px;
+        margin-bottom: 12px;
+        text-align: center;
+      }
+      .intro-title {
+        font-size: 26px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -0.03em;
+        line-height: 1.2;
+        margin-bottom: 8px;
+      }
+      .intro-title span {
+        color: var(--primary);
+      }
+      .intro-sub {
+        font-size: 15px;
+        color: var(--text2);
+        line-height: 1.65;
+        margin-bottom: 24px;
+      }
+      .notice-card {
+        background: var(--warn-bg);
+        border: 1.5px solid #e8c4c4;
+        border-radius: var(--radius-sm);
+        padding: 18px;
+        margin-bottom: 20px;
+      }
+      .notice-card .notice-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--warn);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .notice-card ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .notice-card ul li {
+        font-size: 13px;
+        color: #5a3030;
+        line-height: 1.55;
+        padding-left: 16px;
+        position: relative;
+      }
+      .notice-card ul li::before {
+        content: "·";
+        position: absolute;
+        left: 4px;
+        color: var(--warn);
+        font-weight: 700;
+      }
+      .agree-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 24px;
+        padding: 14px 16px;
+        background: #fff;
+        border-radius: var(--radius-sm);
+        border: 1.5px solid var(--border);
+        cursor: pointer;
+      }
+      .agree-row input[type="checkbox"] {
+        width: 22px;
+        height: 22px;
+        accent-color: var(--primary);
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .agree-row label {
+        font-size: 14px;
+        color: var(--text2);
+        font-weight: 600;
+        cursor: pointer;
+        flex: 1;
+      }
+
+      /* ================================
+   BUTTONS
+================================ */
+      .btn-primary {
+        display: block;
+        width: 100%;
+        padding: 17px 24px;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-size: 17px;
+        font-weight: 800;
+        font-family: var(--font);
+        cursor: pointer;
+        letter-spacing: -0.02em;
+        transition: all 0.2s;
+        box-shadow: 0 4px 16px rgba(0, 126, 112, 0.3);
+        min-height: 54px;
+      }
+      .btn-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 126, 112, 0.4);
+      }
+      .btn-primary:disabled {
+        background: #c5d5d3;
+        box-shadow: none;
+        cursor: not-allowed;
+        color: #8aa8a5;
+      }
+      .btn-secondary {
+        display: block;
+        width: 100%;
+        padding: 15px 24px;
+        background: #fff;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+        border-radius: var(--radius-sm);
+        font-size: 15px;
+        font-weight: 700;
+        font-family: var(--font);
+        cursor: pointer;
+        transition: all 0.2s;
+        min-height: 50px;
+      }
+      .btn-secondary:hover {
+        background: var(--primary-light);
+      }
+      .btn-row {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 10px;
+        margin-top: auto;
+        padding-top: 20px;
+      }
+
+      /* ================================
+   QUESTION SCREEN
+================================ */
+      .progress-wrap {
+        margin-bottom: 24px;
+      }
+      .progress-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      .progress-label span:first-child {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text3);
+      }
+      .progress-label span:last-child {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--primary);
+      }
+      .progress-bar {
+        height: 6px;
+        background: var(--border);
+        border-radius: 100px;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary), #00c4b0);
+        border-radius: 100px;
+        transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .q-card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 24px 20px;
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 20px;
+        border: 1px solid var(--border);
+      }
+      .q-num {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--primary);
+        letter-spacing: 0.08em;
+        margin-bottom: 10px;
+      }
+      .q-text {
+        font-size: 17px;
+        font-weight: 800;
+        color: var(--text);
+        line-height: 1.45;
+        letter-spacing: -0.02em;
+      }
+      .options-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .option-item {
+        position: relative;
+      }
+      .option-item input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .option-label {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        background: #fff;
+        border: 2px solid var(--border);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-size: 15px;
+        color: var(--text2);
+        font-weight: 500;
+        line-height: 1.45;
+        transition: all 0.18s;
+        min-height: 52px;
+      }
+      .option-label:hover {
+        border-color: var(--primary);
+        background: var(--primary-light);
+        color: var(--primary-dark);
+      }
+      .option-item input:checked + .option-label {
+        border-color: var(--primary);
+        background: var(--primary-light);
+        color: var(--primary-dark);
+        font-weight: 700;
+      }
+      .option-circle {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 2px solid var(--border);
+        flex-shrink: 0;
+        transition: all 0.18s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+      }
+      .option-item input:checked + .option-label .option-circle {
+        border-color: var(--primary);
+        background: var(--primary);
+      }
+      .option-item input:checked + .option-label .option-circle::after {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #fff;
+        display: block;
+      }
+
+      /* ================================
+   LOADING SCREEN
+================================ */
+      #loading-screen {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        gap: 20px;
+      }
+      .loading-spinner {
+        width: 64px;
+        height: 64px;
+        border: 4px solid var(--primary-light);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .loading-title {
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -0.02em;
+      }
+      .loading-copy {
+        font-size: 15px;
+        color: var(--text2);
+        line-height: 1.6;
+      }
+
+      /* ================================
+   RESULT SCREEN
+================================ */
+      .result-scroll {
+        overflow-y: auto;
+        flex: 1;
+        padding-bottom: 20px;
+      }
+      .result-header {
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-dark)
+        );
+        border-radius: var(--radius);
+        padding: 28px 22px;
+        margin-bottom: 18px;
+        text-align: center;
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+      }
+      .result-header::before {
+        content: "";
+        position: absolute;
+        top: -30px;
+        right: -30px;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .result-type-emoji {
+        font-size: 48px;
+        margin-bottom: 10px;
+        display: block;
+      }
+      .result-type-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 4px 14px;
+        border-radius: 100px;
+        margin-bottom: 12px;
+        letter-spacing: 0.06em;
+      }
+      .result-type-name {
+        font-size: 24px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        margin-bottom: 10px;
+      }
+      .result-diag {
+        font-size: 14px;
+        line-height: 1.65;
+        opacity: 0.9;
+        font-weight: 400;
+      }
+      .section-card {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 22px 18px;
+        margin-bottom: 14px;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-sm);
+      }
+      .section-card h3 {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--primary);
+        letter-spacing: 0.04em;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .a-action {
+        background: var(--primary-light);
+        border-left: 4px solid var(--primary);
+        border-radius: 8px;
+        padding: 14px 16px;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--primary-dark);
+        line-height: 1.5;
+      }
+      .week-tabs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        margin-bottom: 14px;
+      }
+      .week-tab {
+        padding: 10px;
+        border: 2px solid var(--border);
+        border-radius: 10px;
+        background: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text3);
+        cursor: pointer;
+        transition: all 0.18s;
+        font-family: var(--font);
+        text-align: center;
+      }
+      .week-tab.active {
+        border-color: var(--primary);
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+      .week-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .week-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 14px;
+        background: var(--bg);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      .week-item:hover {
+        background: var(--primary-light);
+      }
+      .week-check {
+        width: 22px;
+        height: 22px;
+        border: 2px solid var(--border);
+        border-radius: 6px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.18s;
+        margin-top: 1px;
+      }
+      .week-item.checked .week-check {
+        background: var(--primary);
+        border-color: var(--primary);
+      }
+      .week-item.checked .week-check::after {
+        content: "✓";
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .week-item-text {
+        font-size: 14px;
+        color: var(--text2);
+        line-height: 1.5;
+        font-weight: 500;
+      }
+      .week-item.checked .week-item-text {
+        text-decoration: line-through;
+        color: var(--text3);
+      }
+      .caution-box {
+        background: var(--warn-bg);
+        border: 1.5px solid #e8c4c4;
+        border-radius: 10px;
+        padding: 14px;
+        margin-top: 14px;
+      }
+      .caution-box p {
+        font-size: 12.5px;
+        color: #5a3030;
+        line-height: 1.6;
+      }
+      .share-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .btn-share {
+        padding: 14px;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        font-weight: 700;
+        font-family: var(--font);
+        cursor: pointer;
+        transition: all 0.2s;
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+      .btn-share-k {
+        background: #fee500;
+        color: #3a1d1d;
+        border: none;
+      }
+      .btn-share-link {
+        background: #fff;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+      }
+      .btn-share:hover {
+        transform: translateY(-1px);
+      }
+
+      /* ================================
+   ACCORDION (근거/출처)
+================================ */
+      .accordion {
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+        margin-bottom: 14px;
+      }
+      .accordion-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 18px;
+        background: #fff;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text);
+        user-select: none;
+      }
+      .accordion-arrow {
+        font-size: 16px;
+        color: var(--text3);
+        transition: transform 0.25s;
+      }
+      .accordion.open .accordion-arrow {
+        transform: rotate(180deg);
+      }
+      .accordion-body {
+        display: none;
+        padding: 18px;
+        background: var(--bg2);
+        border-top: 1px solid var(--border);
+      }
+      .accordion.open .accordion-body {
+        display: block;
+      }
+      .accordion-body ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .accordion-body ul li {
+        font-size: 12.5px;
+        color: var(--text2);
+        line-height: 1.65;
+        padding-left: 14px;
+        position: relative;
+      }
+      .accordion-body ul li::before {
+        content: "·";
+        position: absolute;
+        left: 2px;
+        color: var(--primary);
+        font-weight: 700;
+      }
+      .source-label {
+        font-size: 11.5px;
+        color: var(--text3);
+        font-family: "Courier New", monospace;
+        display: block;
+        margin-top: 2px;
+      }
+
+      /* ================================
+   USER INFO SCREEN
+================================ */
+      #user-info-screen {
+        overflow-y: auto;
+      }
+      .info-title {
+        font-size: 22px;
+        font-weight: 900;
+        color: var(--text);
+        letter-spacing: -0.03em;
+        line-height: 1.3;
+        margin-bottom: 6px;
+      }
+      .info-title span {
+        color: var(--primary);
+      }
+      .info-sub {
+        font-size: 14px;
+        color: var(--text3);
+        line-height: 1.6;
+        margin-bottom: 24px;
+      }
+      .form-group {
+        margin-bottom: 16px;
+      }
+      .form-label {
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text2);
+        margin-bottom: 7px;
+        letter-spacing: -0.01em;
+      }
+      .form-label .required {
+        color: var(--primary);
+        margin-left: 2px;
+      }
+      .form-input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-size: 15px;
+        font-family: var(--font);
+        color: var(--text);
+        background: #fff;
+        transition: border-color 0.18s;
+        min-height: 50px;
+        outline: none;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+      .form-input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(0, 126, 112, 0.1);
+      }
+      .form-input.error {
+        border-color: #c0392b;
+      }
+      .gender-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+      }
+      .gender-btn {
+        padding: 12px 8px;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        background: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        font-family: var(--font);
+        color: var(--text2);
+        cursor: pointer;
+        transition: all 0.18s;
+        min-height: 48px;
+      }
+      .gender-btn.selected {
+        border-color: var(--primary);
+        background: var(--primary-light);
+        color: var(--primary);
+        font-weight: 800;
+      }
+      .consent-box {
+        background: var(--bg2);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 16px;
+        margin-bottom: 14px;
+      }
+      .consent-title {
+        font-size: 13px;
+        font-weight: 800;
+        color: var(--text);
+        margin-bottom: 10px;
+      }
+      .consent-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+      }
+      .consent-row:last-child {
+        border-bottom: none;
+      }
+      .consent-row input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        accent-color: var(--primary);
+        cursor: pointer;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      .consent-row label {
+        font-size: 13px;
+        color: var(--text2);
+        line-height: 1.55;
+        cursor: pointer;
+        flex: 1;
+      }
+      .consent-row label b {
+        color: var(--text);
+        font-weight: 700;
+      }
+      .consent-row label span {
+        color: var(--text3);
+        font-size: 11.5px;
+        display: block;
+        margin-top: 3px;
+      }
+      .form-error-msg {
+        font-size: 12px;
+        color: #c0392b;
+        margin-top: 5px;
+        display: none;
+      }
+      .form-error-msg.show {
+        display: block;
+      }
+
+      /* ================================
+   NUKHAN CTA BUTTON
+================================ */
+      .nukhan-cta {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 17px 20px;
+        background: linear-gradient(135deg, #5c3d2e, #3d2218);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-size: 15px;
+        font-weight: 800;
+        font-family: var(--font);
+        cursor: pointer;
+        letter-spacing: -0.02em;
+        transition: all 0.2s;
+        text-decoration: none;
+        box-shadow: 0 4px 16px rgba(92, 61, 46, 0.28);
+        min-height: 54px;
+        margin-bottom: 10px;
+      }
+      .nukhan-cta:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(92, 61, 46, 0.38);
+      }
+      .nukhan-cta-sub {
+        font-size: 11.5px;
+        opacity: 0.75;
+        font-weight: 500;
+        display: block;
+        margin-top: 2px;
+        letter-spacing: 0;
+      }
+
+      /* ================================
+   TOAST
+================================ */
+      .toast {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: #2d2013;
+        color: #fff;
+        padding: 12px 22px;
+        border-radius: 100px;
+        font-size: 14px;
+        font-weight: 600;
+        opacity: 0;
+        transition: all 0.3s;
+        z-index: 9999;
+        white-space: nowrap;
+        pointer-events: none;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- INTRO SCREEN -->
+      <div id="intro-screen" class="screen active">
+        <div class="intro-emoji">☕</div>
+        <div class="intro-badge">30초 · 8문항</div>
+        <h1 class="intro-title">피로 유형<br /><span>진단 테스트</span></h1>
+        <p class="intro-sub">
+          커피를 줄이라는 말 대신,<br />당신의 루틴을 먼저 진단합니다.
+        </p>
+
+        <div class="notice-card">
+          <div class="notice-title">⚠️ 이용 전 꼭 확인하세요</div>
+          <ul>
+            <li>
+              이 테스트는 치료·진단 목적이 아닌, 생활 루틴 점검을 위한 자가
+              체크입니다.
+            </li>
+            <li>특정 질환을 진단하지 않으며, 개인차가 있습니다.</li>
+            <li>결과는 참고용이며, 불편이 지속되면 전문가와 상담하세요.</li>
+          </ul>
+        </div>
+
+        <label class="agree-row" for="agree-check">
+          <input type="checkbox" id="agree-check" />
+          <span>안내 사항을 읽고 이해했습니다 (필수)</span>
+        </label>
+
+        <button
+          class="btn-primary"
+          id="start-btn"
+          disabled
+          onclick="startTest()"
+        >
+          테스트 시작 →
+        </button>
+      </div>
+
+      <!-- QUESTION SCREEN -->
+      <div id="question-screen" class="screen">
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span id="q-step-label">질문 1/8</span>
+            <span id="q-step-pct">12%</span>
+          </div>
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              id="progress-fill"
+              style="width: 12%"
+            ></div>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num" id="q-num">Q 1</div>
+          <div class="q-text" id="q-text"></div>
+        </div>
+
+        <div class="options-list" id="options-list"></div>
+
+        <div class="btn-row" style="margin-top: 24px">
+          <button class="btn-secondary" id="prev-btn" onclick="prevQuestion()">
+            ← 이전
+          </button>
+          <button
+            class="btn-primary"
+            id="next-btn"
+            onclick="nextQuestion()"
+            disabled
+          >
+            다음 →
+          </button>
+        </div>
+      </div>
+
+      <!-- USER INFO SCREEN -->
+      <div id="user-info-screen" class="screen">
+        <div class="info-title">
+          거의 다 왔어요! 🎉<br /><span>결과 받기 전 마지막 단계</span>
+        </div>
+        <p class="info-sub">
+          정확한 유형 분석 결과를 받으려면<br />아래 정보를 입력해주세요.
+        </p>
+        <p
+          style="
+            font-size: 12px;
+            color: var(--primary);
+            background: var(--primary-light);
+            border-radius: 8px;
+            padding: 9px 13px;
+            margin-bottom: 18px;
+            font-weight: 600;
+          "
+        >
+          🔒 입력하신 정보는 따로 저장되지 않습니다.<br />테스트 목적으로만
+          기입해주세요.
+        </p>
+
+        <!-- 이름 -->
+        <div class="form-group">
+          <label class="form-label" for="field-name"
+            >이름 <span class="required">*</span></label
+          >
+          <input
+            type="text"
+            id="field-name"
+            class="form-input"
+            placeholder="홍길동"
+            maxlength="20"
+            autocomplete="name"
+          />
+          <div class="form-error-msg" id="err-name">이름을 입력해주세요.</div>
+        </div>
+
+        <!-- 성별 -->
+        <div class="form-group">
+          <label class="form-label">성별 <span class="required">*</span></label>
+          <div class="gender-row">
+            <button
+              class="gender-btn"
+              id="g-male"
+              onclick="selectGender('male')"
+            >
+              남성
+            </button>
+            <button
+              class="gender-btn"
+              id="g-female"
+              onclick="selectGender('female')"
+            >
+              여성
+            </button>
+            <button
+              class="gender-btn"
+              id="g-other"
+              onclick="selectGender('other')"
+            >
+              선택 안함
+            </button>
+          </div>
+          <div class="form-error-msg" id="err-gender">성별을 선택해주세요.</div>
+        </div>
+
+        <!-- 연령대 -->
+        <div class="form-group">
+          <label class="form-label" for="field-age"
+            >연령대 <span class="required">*</span></label
+          >
+          <select id="field-age" class="form-input">
+            <option value="">연령대를 선택하세요</option>
+            <option value="10s">10대</option>
+            <option value="20s">20대</option>
+            <option value="30s">30대</option>
+            <option value="40s">40대</option>
+            <option value="50s">50대</option>
+            <option value="60+">60대 이상</option>
+          </select>
+          <div class="form-error-msg" id="err-age">연령대를 선택해주세요.</div>
+        </div>
+
+        <!-- 이메일 -->
+        <div class="form-group">
+          <label class="form-label" for="field-email"
+            >이메일 주소 <span class="required">*</span></label
+          >
+          <input
+            type="email"
+            id="field-email"
+            class="form-input"
+            placeholder="example@email.com"
+            autocomplete="email"
+          />
+          <div class="form-error-msg" id="err-email">
+            올바른 이메일 주소를 입력해주세요.
+          </div>
+        </div>
+
+        <!-- 동의 -->
+        <div class="consent-box">
+          <div class="consent-title">📋 동의 사항</div>
+
+          <label class="consent-row" for="consent-privacy">
+            <input type="checkbox" id="consent-privacy" />
+            <label for="consent-privacy">
+              <b>[필수] 개인정보 수집 및 이용 동의</b>
+              <span
+                >수집 항목: 이름, 성별, 연령대, 이메일 / 목적: 진단 결과 제공 /
+                보유: 1년</span
+              >
+            </label>
+          </label>
+
+          <label class="consent-row" for="consent-marketing">
+            <input type="checkbox" id="consent-marketing" />
+            <label for="consent-marketing">
+              <b>[선택] 마케팅 정보 수신 동의</b>
+              <span
+                >루틴 팁, 컨디션 관리 정보 등을 이메일로 받을 수 있습니다.
+                언제든 철회 가능.</span
+              >
+            </label>
+          </label>
+        </div>
+        <div class="form-error-msg" id="err-consent">
+          개인정보 수집 및 이용에 동의해주세요.
+        </div>
+
+        <button
+          class="btn-primary"
+          id="info-submit-btn"
+          onclick="submitUserInfo()"
+          style="margin-top: 8px"
+        >
+          결과 보러가기 🎯
+        </button>
+        <button
+          class="btn-secondary"
+          onclick="goBackToQuestion()"
+          style="margin-top: 10px"
+        >
+          ← 문항으로 돌아가기
+        </button>
+      </div>
+
+      <!-- LOADING SCREEN -->
+      <div id="loading-screen" class="screen">
+        <div class="loading-spinner"></div>
+        <div class="loading-title">유형 분석 중…</div>
+        <div class="loading-copy" id="loading-copy"></div>
+      </div>
+
+      <!-- RESULT SCREEN -->
+      <div id="result-screen" class="screen">
+        <div class="result-scroll" id="result-scroll">
+          <div class="result-header">
+            <span class="result-type-emoji" id="res-emoji"></span>
+            <div class="result-type-badge" id="res-badge"></div>
+            <div class="result-type-name" id="res-name"></div>
+            <div class="result-diag" id="res-diag"></div>
+          </div>
+
+          <div class="section-card">
+            <h3>🅐 A로 시작하는 2주 루틴</h3>
+            <div class="a-action" id="res-a-action"></div>
+          </div>
+
+          <div class="section-card">
+            <h3>📅 2주 플랜 체크리스트</h3>
+            <div class="week-tabs">
+              <button
+                class="week-tab active"
+                id="tab-w1"
+                onclick="switchWeek(1)"
+              >
+                Week 1
+              </button>
+              <button class="week-tab" id="tab-w2" onclick="switchWeek(2)">
+                Week 2
+              </button>
+            </div>
+            <div class="week-list" id="week-list"></div>
+            <div class="caution-box">
+              <p>
+                ⚠️ 개인차가 있으며, 결과는 참고용입니다. 불편이 지속되면 전문가
+                상담을 권장합니다.
+              </p>
+            </div>
+          </div>
+
+          <!-- 더 알아보기 -->
+          <div class="section-card">
+            <h3>� 더 알고 싶다면?</h3>
+            <p
+              style="
+                font-size: 14px;
+                color: var(--text2);
+                line-height: 1.65;
+                margin-bottom: 14px;
+              "
+            >
+              건강한 피로회복 방법이 궁금하다면?
+            </p>
+            <a
+              class="nukhan-cta"
+              href="https://nukhan.co.kr/?utm_source=youtube&utm_medium=sa&utm_campaign=sa&utm_content=google_yt_sa_main_241210&gad_source=1&gad_campaignid=22010141228&gbraid=0AAAAAo7tK-O21lxIH12CGbgC-KQpq00QT&gclid=CjwKCAiA-__MBhAKEiwASBmsBBg5tFRwZ6WOgBojtbELqz0CWgIUmOeRgn1qZPve0JzwjKXjvtt_HhoCOScQAvD_BwE"
+              target="_blank"
+              rel="noopener noreferrer"
+              >더 알아보기</a
+            >
+          </div>
+
+          <div class="section-card">
+            <h3>📤 결과 공유하기</h3>
+            <div class="share-row">
+              <button class="btn-share btn-share-link" onclick="shareResult()">
+                🔗 링크 복사
+              </button>
+              <button class="btn-share btn-share-k" onclick="shareKakao()">
+                💬 카카오 공유
+              </button>
+            </div>
+            <button class="btn-secondary" onclick="resetTest()">
+              ↩ 다시하기
+            </button>
+          </div>
+        </div>
+        <!-- /result-scroll -->
+      </div>
+      <!-- /result-screen -->
+    </div>
+    <!-- /app -->
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+      /* ================================================
+   DATA: 8 QUESTIONS
+================================================ */
+      const QUESTIONS = [
+        {
+          text: "오후 2~5시에 가장 자주 드는 생각은?",
+          options: [
+            { label: '"커피 한 잔 더 해야 한다"', scores: { caffeine: 2 } },
+            { label: '"그냥 졸리고 멍하다"', scores: { sleep: 2 } },
+            { label: '"일이 너무 많아서 숨 막힌다"', scores: { work: 2 } },
+            { label: '"짜증/불안이 같이 온다"', scores: { stress: 2 } },
+            { label: '"몸이 무겁고 기력이 없다"', scores: { fitness: 2 } },
+          ],
+        },
+        {
+          text: "하루 커피/카페인 섭취는?",
+          options: [
+            { label: "0~1잔", scores: {} },
+            { label: "2잔", scores: { caffeine: 1 } },
+            { label: "3잔 이상", scores: { caffeine: 2 } },
+          ],
+        },
+        {
+          text: "카페인 없이 일할 때 가장 힘든 건?",
+          options: [
+            { label: "집중이 안 된다", scores: { caffeine: 2 } },
+            { label: "두통/예민함", scores: { caffeine: 2, stress: 1 } },
+            { label: "그냥 졸림", scores: { sleep: 2 } },
+            { label: "멘탈이 무너짐", scores: { stress: 2 } },
+          ],
+        },
+        {
+          text: "평일 평균 수면은?",
+          options: [
+            { label: "7시간 이상", scores: {} },
+            { label: "6~7시간", scores: { sleep: 1 } },
+            { label: "5~6시간", scores: { sleep: 2 } },
+            { label: "5시간 미만", scores: { sleep: 2, stress: 1 } },
+          ],
+        },
+        {
+          text: '"퇴근 후" 상태에 가장 가까운 건?',
+          options: [
+            { label: "방전이라 아무것도 못함", scores: { work: 1, sleep: 1 } },
+            { label: "긴장 풀리며 단것/야식 땡김", scores: { stress: 2 } },
+            { label: "운동해야 하는데 못 움직임", scores: { fitness: 2 } },
+            { label: "커피로 억지로 버팀", scores: { caffeine: 2 } },
+          ],
+        },
+        {
+          text: "최근 2주, 운동/걷기 루틴은?",
+          options: [
+            { label: "주 3회 이상", scores: {} },
+            { label: "주 1~2회", scores: { fitness: 1 } },
+            { label: "거의 없음", scores: { fitness: 2 } },
+          ],
+        },
+        {
+          text: "피곤할 때 '몸'보다 먼저 나타나는 건?",
+          options: [
+            { label: "예민/불안/짜증", scores: { stress: 2 } },
+            { label: "멍함/졸림", scores: { sleep: 2 } },
+            { label: "소화/속 불편", scores: { stress: 1 } },
+            { label: "어깨/목 뻐근", scores: { fitness: 1, work: 1 } },
+          ],
+        },
+        {
+          text: "가장 바꾸고 싶은 건?",
+          options: [
+            { label: "오후 꺾임", scores: { caffeine: 1, fitness: 1 } },
+            { label: "아침 기상", scores: { sleep: 2 } },
+            { label: "업무 집중", scores: { work: 1, caffeine: 1 } },
+            { label: "감정기복", scores: { stress: 2 } },
+          ],
+        },
+      ];
+
+      /* ================================================
+   DATA: 5 RESULT TYPES
+================================================ */
+      const RESULT_TYPES = {
+        caffeine: {
+          emoji: "☕",
+          badge: "카페인의존형",
+          name: "카페인의존형",
+          diag: "커피가 문제라기보다,\n커피로 루틴을 땜질 중입니다.",
+          action: "오후 첫 커피 전에\n'물 한 잔 + 가벼운 스트레칭 60초' 먼저!",
+          week1: [
+            "오후 커피는 유지하되, 커피 '이전'에 A행동(스트레칭+물) 고정",
+            "오후 2~5시 중 한 번, 10분 걷기 or 계단 이동",
+            "저녁 카페인은 가능한 한 당기지 않기",
+          ],
+          week2: [
+            "오후 커피를 '조건부'로(회의/운전 등 꼭 필요한 때만)",
+            "대체 루틴(물+호흡+짧은 산책) 3세트 반복",
+            "컨디션 기록(체감 로그) 주 3회 남기기",
+          ],
+        },
+        sleep: {
+          emoji: "😴",
+          badge: "수면부족형",
+          name: "수면부족형",
+          diag: "피로의 시작이 낮이 아니라,\n전날 밤일 가능성이 큽니다.",
+          action: "기상 시간을 고정하고,\n취침 30분 전 스크린을 끄세요!",
+          week1: [
+            "평일 수면 30분만 먼저 늘려보기",
+            "낮잠은 20분 이내로 제한",
+            "오후 카페인은 4시 이전까지만",
+          ],
+          week2: [
+            "취침 루틴 2개 고정(샤워/스트레칭/독서 중 택2)",
+            "주말도 기상 시간 ±1시간 내로 유지",
+            "아침 햇빛 5분 쬐기(루틴 시작 신호)",
+          ],
+        },
+        work: {
+          emoji: "💼",
+          badge: "야근·업무과부하형",
+          name: "야근·업무과부하형",
+          diag: "피로는 몸보다 일정표에서\n먼저 터집니다.",
+          action: "오늘 할 일 3개만 남기고,\n나머지는 '보류' 표시부터!",
+          week1: [
+            "업무 블록 50분 + 10분 리셋 루틴 시작",
+            "퇴근 후 30분은 회복 시간(알림 최소화)",
+            "커피는 '업무 시작 전'만 허용",
+          ],
+          week2: [
+            "업무 종료 의식(5분 정리 + 내일 할 일 3개 작성)",
+            "주 2회는 퇴근 후 걷기 15분",
+            "주간 피로 피크 시간대 체크 및 기록",
+          ],
+        },
+        stress: {
+          emoji: "🌀",
+          badge: "스트레스형",
+          name: "스트레스형",
+          diag: "피곤함과 함께 '감정'이\n먼저 올라옵니다.",
+          action: "천천히 숨 6번 + 어깨 힘 빼기\n30초부터 시작해요!",
+          week1: [
+            "오후 1회 '리셋 루틴' 고정(호흡/짧은 산책)",
+            "당 폭주 타이밍을 메모로 기록",
+            "대화/일정 과밀이면 1개 취소해보기",
+          ],
+          week2: [
+            "하루 10분 '나만의 무소음 시간' 만들기",
+            "주 1회 땀나는 활동(걷기/러닝/헬스 중 택1)",
+            "주간 스트레스 트리거 1개 제거",
+          ],
+        },
+        fitness: {
+          emoji: "🏃",
+          badge: "운동부족·체력저하형",
+          name: "운동부족·체력저하형",
+          diag: "에너지는 의지가 아니라\n체력에서 나옵니다.",
+          action: "하루 10분 걷기,\n점심 or 퇴근 중 딱 하나만 고르세요!",
+          week1: [
+            "10분 걷기 주 5일 실천",
+            "계단 1~2층만 추가하기",
+            "물 1잔 더(매일 아침 기상 직후)",
+          ],
+          week2: [
+            "15~20분 걷기 주 4일로 업그레이드",
+            "가벼운 근력 주 2회(스쿼트/푸시업 각 10회)",
+            "컨디션 좋아진 시간대 체크",
+          ],
+        },
+      };
+
+      /* ================================================
+   LOADING COPIES
+================================================ */
+      const LOADING_COPIES = [
+        "오후 3시의 꺾임 패턴을\n분석하고 있어요...",
+        "커피 의존도와\n수면 패턴을 크로스 체크 중...",
+        "당신에게 맞는\n2주 루틴을 찾고 있어요!",
+      ];
+
+      /* ================================================
+   STATE
+================================================ */
+      let currentStep = 0; // 0~7
+      let answers = {}; // { qIndex: optionIndex }
+      let scores = {}; // { caffeine, sleep, work, stress, fitness }
+      let currentWeek = 1; // 결과 화면 Week 탭
+      let resultType = ""; // 현재 결과 유형
+
+      // URL 파라미터로 결과 바로 보기
+      (function initFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        const r = params.get("result");
+        if (r && RESULT_TYPES[r]) {
+          resultType = r;
+          showResultScreen(r);
+        }
+      })();
+
+      /* ================================================
+   INTRO
+================================================ */
+      document
+        .getElementById("agree-check")
+        .addEventListener("change", function () {
+          document.getElementById("start-btn").disabled = !this.checked;
+        });
+
+      function startTest() {
+        currentStep = 0;
+        answers = {};
+        scores = { caffeine: 0, sleep: 0, work: 0, stress: 0, fitness: 0 };
+        showScreen("question-screen");
+        renderQuestion();
+      }
+
+      /* ================================================
+   QUESTION RENDER
+================================================ */
+      function renderQuestion() {
+        const q = QUESTIONS[currentStep];
+        const total = QUESTIONS.length;
+        const pct = Math.round(((currentStep + 1) / total) * 100);
+
+        document.getElementById("q-step-label").textContent =
+          `질문 ${currentStep + 1}/${total}`;
+        document.getElementById("q-step-pct").textContent = `${pct}%`;
+        document.getElementById("progress-fill").style.width = pct + "%";
+        document.getElementById("q-num").textContent = `Q ${currentStep + 1}`;
+        document.getElementById("q-text").textContent = q.text;
+
+        // 선택지 렌더
+        const list = document.getElementById("options-list");
+        list.innerHTML = "";
+        q.options.forEach((opt, i) => {
+          const checked = answers[currentStep] === i;
+          list.innerHTML += `
+      <div class="option-item">
+        <input type="radio" name="q${currentStep}" id="opt${i}" value="${i}"
+          ${checked ? "checked" : ""} onchange="selectOption(${i})">
+        <label class="option-label" for="opt${i}">
+          <span class="option-circle"></span>
+          <span>${opt.label}</span>
+        </label>
+      </div>`;
+        });
+
+        // 이전 버튼
+        document.getElementById("prev-btn").disabled = currentStep === 0;
+        // 다음 버튼
+        document.getElementById("next-btn").disabled =
+          answers[currentStep] === undefined;
+        document.getElementById("next-btn").textContent =
+          currentStep === QUESTIONS.length - 1 ? "결과 보기 🎯" : "다음 →";
+      }
+
+      function selectOption(optIdx) {
+        answers[currentStep] = optIdx;
+        document.getElementById("next-btn").disabled = false;
+      }
+
+      function nextQuestion() {
+        if (answers[currentStep] === undefined) return;
+        if (currentStep < QUESTIONS.length - 1) {
+          currentStep++;
+          renderQuestion();
+        } else {
+          // 8문항 완료 → 유저정보 입력 화면으로
+          showScreen("user-info-screen");
+        }
+      }
+
+      function goBackToQuestion() {
+        // 유저정보 화면 → 마지막 문항으로 돌아가기
+        currentStep = QUESTIONS.length - 1;
+        showScreen("question-screen");
+        renderQuestion();
+      }
+
+      function prevQuestion() {
+        if (currentStep > 0) {
+          currentStep--;
+          renderQuestion();
+        }
+      }
+
+      /* ================================================
+   SCORE CALCULATION
+================================================ */
+      function calcScores() {
+        const s = { caffeine: 0, sleep: 0, work: 0, stress: 0, fitness: 0 };
+        QUESTIONS.forEach((q, qi) => {
+          const ai = answers[qi];
+          if (ai === undefined) return;
+          const sc = q.options[ai].scores;
+          Object.keys(sc).forEach((k) => {
+            if (s[k] !== undefined) s[k] += sc[k];
+          });
+        });
+        return s;
+      }
+
+      // 동점 시 우선순위: 카페인 > 수면 > 스트레스 > 야근 > 체력
+      const PRIORITY = ["caffeine", "sleep", "stress", "work", "fitness"];
+
+      function getResultType(s) {
+        let maxScore = -1;
+        let winner = "caffeine";
+        PRIORITY.forEach((key) => {
+          if (s[key] > maxScore) {
+            maxScore = s[key];
+            winner = key;
+          }
+        });
+        return winner;
+      }
+
+      /* ================================================
+   USER INFO VALIDATION & SUBMIT
+================================================ */
+      let selectedGender = ""; // 선택된 성별
+
+      function selectGender(val) {
+        selectedGender = val;
+        ["male", "female", "other"].forEach((g) => {
+          document
+            .getElementById("g-" + g)
+            .classList.toggle("selected", g === val);
+        });
+      }
+
+      function submitUserInfo() {
+        let valid = true;
+
+        // 이름 검사
+        const name = document.getElementById("field-name").value.trim();
+        const errName = document.getElementById("err-name");
+        if (!name) {
+          document.getElementById("field-name").classList.add("error");
+          errName.classList.add("show");
+          valid = false;
+        } else {
+          document.getElementById("field-name").classList.remove("error");
+          errName.classList.remove("show");
+        }
+
+        // 성별 검사
+        const errGender = document.getElementById("err-gender");
+        if (!selectedGender) {
+          errGender.classList.add("show");
+          valid = false;
+        } else {
+          errGender.classList.remove("show");
+        }
+
+        // 연령대 검사
+        const age = document.getElementById("field-age").value;
+        const errAge = document.getElementById("err-age");
+        if (!age) {
+          document.getElementById("field-age").classList.add("error");
+          errAge.classList.add("show");
+          valid = false;
+        } else {
+          document.getElementById("field-age").classList.remove("error");
+          errAge.classList.remove("show");
+        }
+
+        // 이메일 검사
+        const email = document.getElementById("field-email").value.trim();
+        const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const errEmail = document.getElementById("err-email");
+        if (!email || !emailReg.test(email)) {
+          document.getElementById("field-email").classList.add("error");
+          errEmail.classList.add("show");
+          valid = false;
+        } else {
+          document.getElementById("field-email").classList.remove("error");
+          errEmail.classList.remove("show");
+        }
+
+        // 개인정보 동의 (필수)
+        const errConsent = document.getElementById("err-consent");
+        if (!document.getElementById("consent-privacy").checked) {
+          errConsent.classList.add("show");
+          valid = false;
+        } else {
+          errConsent.classList.remove("show");
+        }
+
+        if (!valid) return;
+
+        // 유효성 통과 → 로딩 화면 진행
+        // (DB 없음, 프론트에서만 수집 확인 후 진행)
+        showLoading();
+      }
+
+      /* ================================================
+   LOADING
+================================================ */
+      function showLoading() {
+        showScreen("loading-screen");
+        const copy =
+          LOADING_COPIES[Math.floor(Math.random() * LOADING_COPIES.length)];
+        document.getElementById("loading-copy").textContent = copy;
+
+        setTimeout(() => {
+          scores = calcScores();
+          resultType = getResultType(scores);
+          // URL 파라미터 업데이트 (공유용)
+          const url = new URL(window.location.href);
+          url.searchParams.set("result", resultType);
+          window.history.replaceState({}, "", url.toString());
+          showResultScreen(resultType);
+        }, 1500);
+      }
+
+      /* ================================================
+   RESULT
+================================================ */
+      function showResultScreen(type) {
+        const r = RESULT_TYPES[type];
+        document.getElementById("res-emoji").textContent = r.emoji;
+        document.getElementById("res-badge").textContent = r.badge;
+        document.getElementById("res-name").textContent = r.name;
+        document.getElementById("res-diag").textContent = r.diag;
+        document.getElementById("res-a-action").textContent = r.action;
+
+        currentWeek = 1;
+        renderWeekList(type, 1);
+        updateWeekTabs();
+
+        showScreen("result-screen");
+        document.getElementById("result-scroll").scrollTop = 0;
+      }
+
+      function renderWeekList(type, week) {
+        const r = RESULT_TYPES[type];
+        const items = week === 1 ? r.week1 : r.week2;
+        const list = document.getElementById("week-list");
+        list.innerHTML = items
+          .map(
+            (item, i) => `
+    <div class="week-item" id="wi-${week}-${i}" onclick="toggleCheck(${week},${i})">
+      <div class="week-check"></div>
+      <div class="week-item-text">${item}</div>
+    </div>`,
+          )
+          .join("");
+      }
+
+      function switchWeek(week) {
+        currentWeek = week;
+        renderWeekList(resultType, week);
+        updateWeekTabs();
+      }
+
+      function updateWeekTabs() {
+        document.getElementById("tab-w1").className =
+          "week-tab" + (currentWeek === 1 ? " active" : "");
+        document.getElementById("tab-w2").className =
+          "week-tab" + (currentWeek === 2 ? " active" : "");
+      }
+
+      function toggleCheck(week, i) {
+        const el = document.getElementById(`wi-${week}-${i}`);
+        if (el) el.classList.toggle("checked");
+      }
+
+      /* ================================================
+   SHARE
+================================================ */
+      async function shareResult() {
+        const url = window.location.href;
+        const type = RESULT_TYPES[resultType];
+        const shareText = `나의 피로 유형은 "${type.name}"! 당신은 어떤 유형인지 확인해보세요 👇`;
+
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: "피로 유형 진단",
+              text: shareText,
+              url,
+            });
+          } catch (e) {
+            /* 취소 */
+          }
+        } else {
+          try {
+            await navigator.clipboard.writeText(url);
+            showToast("🔗 링크가 복사되었습니다!");
+          } catch (e) {
+            showToast("링크 복사에 실패했습니다.");
+          }
+        }
+      }
+
+      function shareKakao() {
+        // 카카오 SDK 없이 텍스트 복사로 대체
+        const type = RESULT_TYPES[resultType];
+        const msg = `[피로 유형 진단]\n나의 유형: ${type.name}\n${type.diag}\n\n👉 ${window.location.href}`;
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(msg).then(() => {
+            showToast("💬 카카오 메시지용 텍스트가 복사되었습니다!");
+          });
+        } else {
+          showToast("카카오 앱에서 공유하세요!");
+        }
+      }
+
+      function resetTest() {
+        // URL 초기화
+        const url = new URL(window.location.href);
+        url.searchParams.delete("result");
+        window.history.replaceState({}, "", url.toString());
+        // 폼 초기화
+        document.getElementById("field-name").value = "";
+        document.getElementById("field-email").value = "";
+        document.getElementById("field-age").value = "";
+        document.getElementById("consent-privacy").checked = false;
+        document.getElementById("consent-marketing").checked = false;
+        selectedGender = "";
+        ["male", "female", "other"].forEach((g) => {
+          document.getElementById("g-" + g).classList.remove("selected");
+        });
+        showScreen("intro-screen");
+        document.getElementById("agree-check").checked = false;
+        document.getElementById("start-btn").disabled = true;
+      }
+
+      /* ================================================
+   ACCORDION
+================================================ */
+      function toggleAccordion() {
+        document.getElementById("ref-accordion").classList.toggle("open");
+      }
+
+      /* ================================================
+   TOAST
+================================================ */
+      function showToast(msg) {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 2500);
+      }
+
+      /* ================================================
+   SCREEN SWITCHER
+================================================ */
+      function showScreen(id) {
+        document
+          .querySelectorAll(".screen")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+      }
+    </script>
+  </body>
+</html>
