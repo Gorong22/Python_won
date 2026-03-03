@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>비트캠프 마케팅 총괄 | 이형원</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      body {
+        font-family: "Pretendard", "Apple SD Gothic Neo", sans-serif;
+        background: #fff;
+        color: #111;
+        font-size: 10px;
+        line-height: 1.5;
+      }
+      .page {
+        width: 297mm;
+        margin: 0 auto;
+        padding: 10mm 13mm;
+        background: #fff;
+      }
+
+      /* HEADER */
+      .hd {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 16px;
+        align-items: start;
+        border-bottom: 3px solid #0066ff;
+        padding-bottom: 8px;
+        margin-bottom: 11px;
+      }
+      .hd h1 {
+        font-size: 17px;
+        font-weight: 900;
+        color: #0f172a;
+        line-height: 1.2;
+      }
+      .hd h1 em {
+        color: #0066ff;
+        font-style: normal;
+      }
+      .hd .sub {
+        font-size: 9px;
+        color: #555;
+        margin-top: 3px;
+      }
+      .hd-r {
+        text-align: right;
+        font-size: 9px;
+        color: #444;
+        line-height: 1.8;
+      }
+      .badge {
+        display: inline-block;
+        background: #0066ff;
+        color: #fff;
+        padding: 3px 9px;
+        border-radius: 4px;
+        font-size: 8.5px;
+        font-weight: 700;
+        margin-top: 2px;
+      }
+
+      /* KPI */
+      .kpi {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 6px;
+        margin-bottom: 11px;
+      }
+      .kc {
+        background: #eff6ff;
+        border: 1.5px solid #bfdbfe;
+        border-radius: 7px;
+        padding: 7px 5px;
+        text-align: center;
+      }
+      .kc .n {
+        font-size: 17px;
+        font-weight: 900;
+        color: #0066ff;
+        line-height: 1.1;
+      }
+      .kc .n small {
+        font-size: 10px;
+      }
+      .kc p {
+        font-size: 8px;
+        color: #444;
+        margin-top: 2px;
+        line-height: 1.4;
+      }
+      .kc p em {
+        display: block;
+        font-style: normal;
+        color: #888;
+        font-size: 7.5px;
+      }
+
+      /* SECTION LABEL */
+      .slbl {
+        font-size: 9.5px;
+        font-weight: 800;
+        color: #0066ff;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        border-bottom: 1px solid #dbeafe;
+        padding-bottom: 3px;
+        margin-bottom: 7px;
+      }
+
+      /* BOX */
+      .box {
+        background: #f8faff;
+        border: 1.5px solid #dbeafe;
+        border-radius: 7px;
+        padding: 8px 10px;
+      }
+      .box .bl {
+        font-size: 7.5px;
+        font-weight: 700;
+        color: #0066ff;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        margin-bottom: 3px;
+      }
+      .box h3 {
+        font-size: 10.5px;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 5px;
+        line-height: 1.35;
+      }
+      .box ul {
+        list-style: none;
+      }
+      .box ul li {
+        font-size: 9px;
+        color: #334;
+        padding: 1.5px 0 1.5px 10px;
+        position: relative;
+        line-height: 1.5;
+      }
+      .box ul li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: #0066ff;
+        font-size: 7.5px;
+      }
+      .box p {
+        font-size: 9px;
+        color: #334;
+        line-height: 1.5;
+      }
+
+      /* GRIDS */
+      .g3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 7px;
+        margin-bottom: 9px;
+      }
+      .g2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+        margin-bottom: 9px;
+      }
+
+      /* PERSONA */
+      .persona {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+        margin-bottom: 9px;
+      }
+      .pc-cold {
+        background: #eff6ff;
+        border: 2px solid #3b82f6;
+        border-radius: 8px;
+        padding: 8px 10px;
+      }
+      .pc-warm {
+        background: #fff1f2;
+        border: 2px solid #e11d48;
+        border-radius: 8px;
+        padding: 8px 10px;
+      }
+      .pc-cold .tag {
+        background: #3b82f6;
+        color: #fff;
+        font-size: 7.5px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 3px;
+        display: inline-block;
+        margin-bottom: 4px;
+      }
+      .pc-warm .tag {
+        background: #e11d48;
+        color: #fff;
+        font-size: 7.5px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 3px;
+        display: inline-block;
+        margin-bottom: 4px;
+      }
+      .pc-cold h3,
+      .pc-warm h3 {
+        font-size: 10.5px;
+        font-weight: 800;
+        margin-bottom: 5px;
+      }
+      .pc-cold h3 {
+        color: #1e40af;
+      }
+      .pc-warm h3 {
+        color: #9f1239;
+      }
+
+      /* FUNNEL TIMELINE (simplified) */
+      .ftl {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+        margin-bottom: 9px;
+      }
+      .ft {
+        border-radius: 7px;
+        padding: 7px 8px;
+        text-align: center;
+        border: 1.5px solid;
+      }
+      .ft.sep {
+        background: #fffbeb;
+        border-color: #fbbf24;
+      }
+      .ft.oct {
+        background: #eff6ff;
+        border-color: #3b82f6;
+      }
+      .ft.nov {
+        background: #f0fdf4;
+        border-color: #10b981;
+      }
+      .ft.dec {
+        background: #faf5ff;
+        border-color: #a855f7;
+      }
+      .ft .mo {
+        font-size: 8px;
+        font-weight: 700;
+        margin-bottom: 2px;
+      }
+      .ft.sep .mo {
+        color: #92400e;
+      }
+      .ft.oct .mo {
+        color: #1e40af;
+      }
+      .ft.nov .mo {
+        color: #166534;
+      }
+      .ft.dec .mo {
+        color: #6b21a8;
+      }
+      .ft .pct {
+        font-size: 20px;
+        font-weight: 900;
+        line-height: 1.1;
+      }
+      .ft.sep .pct {
+        color: #d97706;
+      }
+      .ft.oct .pct {
+        color: #2563eb;
+      }
+      .ft.nov .pct {
+        color: #16a34a;
+      }
+      .ft.dec .pct {
+        color: #9333ea;
+      }
+      .ft p {
+        font-size: 7.5px;
+        color: #555;
+        margin-top: 2px;
+        line-height: 1.4;
+      }
+
+      /* KISEUNGJEONGGYEOL */
+      .ksj {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+        margin-bottom: 9px;
+      }
+      .ksj-step {
+        border-radius: 7px;
+        padding: 7px 8px;
+        border: 1.5px solid;
+      }
+      .ksj-step:nth-child(1) {
+        background: #fffbeb;
+        border-color: #f59e0b;
+      }
+      .ksj-step:nth-child(2) {
+        background: #eff6ff;
+        border-color: #3b82f6;
+      }
+      .ksj-step:nth-child(3) {
+        background: #f0fdf4;
+        border-color: #16a34a;
+      }
+      .ksj-step:nth-child(4) {
+        background: #faf5ff;
+        border-color: #a855f7;
+      }
+      .ksj-step .ch {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 11px;
+        color: #fff;
+        margin-bottom: 4px;
+      }
+      .ksj-step:nth-child(1) .ch {
+        background: #f59e0b;
+      }
+      .ksj-step:nth-child(2) .ch {
+        background: #3b82f6;
+      }
+      .ksj-step:nth-child(3) .ch {
+        background: #16a34a;
+      }
+      .ksj-step:nth-child(4) .ch {
+        background: #a855f7;
+      }
+      .ksj-step h4 {
+        font-size: 9.5px;
+        font-weight: 700;
+        margin-bottom: 3px;
+      }
+      .ksj-step p {
+        font-size: 8.5px;
+        color: #555;
+        line-height: 1.5;
+      }
+
+      /* SUPPORTER + SEMINAR */
+      .ss {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+        margin-bottom: 9px;
+      }
+
+      /* CONTENT CARDS */
+      .cc {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        margin-bottom: 9px;
+      }
+      .content-card {
+        border-radius: 7px;
+        padding: 8px 10px;
+        border-top: 3px solid;
+      }
+      .content-card:nth-child(1) {
+        border-color: #f59e0b;
+        background: #fffbeb;
+      }
+      .content-card:nth-child(2) {
+        border-color: #0066ff;
+        background: #eff6ff;
+      }
+      .content-card:nth-child(3) {
+        border-color: #10b981;
+        background: #f0fdf4;
+      }
+      .content-card .tag {
+        font-size: 7.5px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 3px;
+        display: block;
+      }
+      .content-card:nth-child(1) .tag {
+        color: #92400e;
+      }
+      .content-card:nth-child(2) .tag {
+        color: #1e40af;
+      }
+      .content-card:nth-child(3) .tag {
+        color: #166534;
+      }
+      .content-card h4 {
+        font-size: 9.5px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 4px;
+      }
+      .content-card p {
+        font-size: 8.5px;
+        color: #555;
+        line-height: 1.5;
+      }
+
+      /* CTA */
+      .cta {
+        margin-top: 8px;
+        background: #0f172a;
+        border-radius: 8px;
+        padding: 10px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .cta .cl {
+        color: #fff;
+      }
+      .cta .cl strong {
+        font-size: 11px;
+        display: block;
+        margin-bottom: 2px;
+      }
+      .cta .cl span {
+        font-size: 8.5px;
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .cta .cr a {
+        display: inline-block;
+        background: #0066ff;
+        color: #fff;
+        padding: 6px 14px;
+        border-radius: 5px;
+        font-weight: 700;
+        font-size: 9.5px;
+        text-decoration: none;
+      }
+      .cta .cr a span {
+        display: block;
+        font-size: 8px;
+        font-weight: 400;
+        opacity: 0.8;
+        margin-top: 1px;
+      }
+
+      @media print {
+        body {
+          margin: 0;
+        }
+        .page {
+          margin: 0;
+          padding: 9mm 12mm;
+        }
+        @page {
+          size: A4 landscape;
+          margin: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <!-- HEADER -->
+      <div class="hd">
+        <div>
+          <h1>(주)에이아이팜 <em>마케팅 총괄</em> 2년 4개월</h1>
+          <p class="sub">
+            브랜드 포지셔닝 · 랜딩페이지 기획 · 서포터즈 운영 · 세미나 기획 ·
+            SNS 콘텐츠 전략 — 마케팅 PM · 이형원 · 2023.02–2025.05
+          </p>
+        </div>
+        <div class="hd-r">
+          <strong style="font-size: 11px; color: #0f172a">이형원</strong><br />
+          9,700만원 광고 예산 직접 운영<br />
+          <a
+            href="https://hyungwon-portfolio.web.app/project_bitcamp.html"
+            class="badge"
+            >▶ 웹 포트폴리오 바로가기</a
+          >
+        </div>
+      </div>
+
+      <!-- KPI -->
+      <div class="kpi">
+        <div class="kc">
+          <div class="n">8%<small>→15%</small></div>
+          <p>최종 등록 전환율<em>영업팀 없이 퍼널만으로</em></p>
+        </div>
+        <div class="kc">
+          <div class="n">7.7%<small>→35.3%</small></div>
+          <p>홈페이지 전환율<em>랜딩페이지 재설계 후</em></p>
+        </div>
+        <div class="kc">
+          <div class="n">₩164K</div>
+          <p>CAC (초기比 -34%)<em>수강신청당 비용 최적화</em></p>
+        </div>
+        <div class="kc">
+          <div class="n">100명</div>
+          <p>서포터즈 2기 지원<em>목표 50명 대비 2:1 경쟁</em></p>
+        </div>
+        <div class="kc">
+          <div class="n">↑55%</div>
+          <p>네이버 블로그 유입<em>광고비 0원 SEO 전략</em></p>
+        </div>
+      </div>
+
+      <!-- ROW 1: 브랜드 포지셔닝 + 페르소나 -->
+      <div
+        style="
+          display: grid;
+          grid-template-columns: 1.1fr 1fr;
+          gap: 9px;
+          margin-bottom: 9px;
+        "
+      >
+        <div>
+          <p class="slbl">
+            브랜드 포지셔닝 — "무료 교육" → "프리미엄 성장 커뮤니티"
+          </p>
+          <div class="g3" style="margin-bottom: 6px">
+            <div class="box" style="border-color: #fde68a; background: #fffbeb">
+              <div class="bl" style="color: #92400e">네이버클라우드 Brand</div>
+              <h3 style="color: #92400e">"Break the Ground"</h3>
+              <p>혁신의 시작 — 모든 혁신은 네이버클라우드와 만난다</p>
+            </div>
+            <div class="box" style="border-color: #bbf7d0; background: #f0fdf4">
+              <div class="bl" style="color: #166534">캠프 Philosophy</div>
+              <h3 style="color: #166534">"Together We Rise"</h3>
+              <p>혁신을 위해 함께 성장하는 동료 네트워크 지향</p>
+            </div>
+            <div class="box" style="border-color: #fca5a5; background: #fff5f5">
+              <div class="bl" style="color: #b91c1c">Campaign Slogan</div>
+              <h3 style="color: #b91c1c">"커리어, Carry ON!"</h3>
+              <p>함께 성장 + 오프라인 교류 가치 강조</p>
+            </div>
+          </div>
+          <div class="box" style="background: #f0f6ff">
+            <div class="bl">전략 핵심 — 3가지 차별화 축</div>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 5px;
+                margin-top: 3px;
+              "
+            >
+              <div style="text-align: center">
+                <div style="font-size: 14px">🤝</div>
+                <strong style="font-size: 8.5px; display: block"
+                  >핵심 가치: 상생</strong
+                >
+                <p style="font-size: 8px; color: #555">
+                  '같이의 가치' 협력 커뮤니티
+                </p>
+              </div>
+              <div style="text-align: center">
+                <div style="font-size: 14px">⚖️</div>
+                <strong style="font-size: 8.5px; display: block"
+                  >교육 철학: 균형</strong
+                >
+                <p style="font-size: 8px; color: #555">
+                  기술 역량 + 협업 + 인성 성장
+                </p>
+              </div>
+              <div style="text-align: center">
+                <div style="font-size: 14px">📖</div>
+                <strong style="font-size: 8.5px; display: block"
+                  >차별화: 스토리</strong
+                >
+                <p style="font-size: 8px; color: #555">
+                  수강생 성공 사례 콘텐츠화
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="slbl">페르소나 기반 메시지 분리</p>
+          <div class="persona">
+            <div class="pc-cold">
+              <span class="tag">🧊 Stone-Cold — 원실</span>
+              <h3>IT 비전공자 · 오직 취업 목표</h3>
+              <ul style="list-style: none">
+                <li
+                  style="
+                    font-size: 8.5px;
+                    padding: 1px 0 1px 9px;
+                    position: relative;
+                    color: #1e3a8a;
+                  "
+                >
+                  <span style="position: absolute; left: 0">→</span>Pain:
+                  "아무것도 모르는데 할 수 있을까?"
+                </li>
+                <li
+                  style="
+                    font-size: 8.5px;
+                    padding: 1px 0 1px 9px;
+                    position: relative;
+                    color: #1e3a8a;
+                  "
+                >
+                  <span style="position: absolute; left: 0">→</span>전략: 감성 +
+                  안도감 "몰라도 괜찮아"
+                </li>
+                <li
+                  style="
+                    font-size: 8.5px;
+                    padding: 1px 0 1px 9px;
+                    position: relative;
+                    color: #1e3a8a;
+                  "
+                >
+                  <span style="position: absolute; left: 0">→</span>CTA: "하나씩
+                  설명해줄게요" → 웨비나 신청
+                </li>
+              </ul>
+            </div>
+            <div class="pc-warm">
+              <span class="tag">🔥 Warm — 상엽</span>
+              <h3>전공자·경력자 · 실무 경험 필요</h3>
+              <ul style="list-style: none">
+                <li
+                  style="
+                    font-size: 8.5px;
+                    padding: 1px 0 1px 9px;
+                    position: relative;
+                    color: #7f1d1d;
+                  "
+                >
+                  <span style="position: absolute; left: 0">→</span>Pain: "수준
+                  낮은 수업 아닐까?"
+                </li>
+                <li
+                  style="
+                    font-size: 8.5px;
+                    padding: 1px 0 1px 9px;
+                    position: relative;
+                    color: #7f1d1d;
+                  "
+                >
+                  <span style="position: absolute; left: 0">→</span>전략: 논리 +
+                  전문성 "검증된 강사·멘토"
+                </li>
+                <li
+                  style="
+                    font-size: 8.5px;
+                    padding: 1px 0 1px 9px;
+                    position: relative;
+                    color: #7f1d1d;
+                  "
+                >
+                  <span style="position: absolute; left: 0">→</span>CTA: "커리어
+                  Carry ON!" → 웨비나 신청
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 2: 랜딩페이지 기승전결 + 퍼널 추이 -->
+      <div
+        style="
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 9px;
+          margin-bottom: 9px;
+        "
+      >
+        <div>
+          <p class="slbl">
+            랜딩페이지 기획 — 기승전결 구조 (전환율 7.7% → 35.3%)
+          </p>
+          <div class="ksj">
+            <div class="ksj-step">
+              <div class="ch">起</div>
+              <h4>결론부터 약속</h4>
+              <p>
+                원실: "아무것도 몰라도 취업 가능"<br />상엽: "기술 스택으로
+                경쟁력 보장"
+              </p>
+            </div>
+            <div class="ksj-step">
+              <div class="ch">承</div>
+              <h4>위기의식 + 공감</h4>
+              <p>
+                원실: 감성 접근, 위로와 희망<br />상엽: 객관적 데이터, AI 필요성
+              </p>
+            </div>
+            <div class="ksj-step">
+              <div class="ch">轉</div>
+              <h4>해결책 제시</h4>
+              <p>
+                원실: 성공사례+동료·멘토<br />상엽: 네이버 인증 강사·현직 멘토
+              </p>
+            </div>
+            <div class="ksj-step">
+              <div class="ch">結</div>
+              <h4>행동 유도 CTA</h4>
+              <p>원실: "하나씩 설명해줄게요"<br />상엽: "커리어 Carry ON!"</p>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="slbl">데이터 기반 최적화 — 월별 퍼널 추이</p>
+          <div class="ftl">
+            <div class="ft sep">
+              <div class="mo">9월 · 초기 데이터</div>
+              <div class="pct">7.7%</div>
+              <p>홈페이지 전환율<br />추적 시작</p>
+            </div>
+            <div class="ft oct">
+              <div class="mo">10월 · 🔍 병목 발견</div>
+              <div class="pct">6.62%</div>
+              <p>전환율 하락<br />페르소나별 니즈 차이 발견</p>
+            </div>
+            <div class="ft nov">
+              <div class="mo">11월 · ✅ 개선 실행</div>
+              <div class="pct">21.66%</div>
+              <p>페르소나별 랜딩 분리<br />기승전결 구조 적용</p>
+            </div>
+            <div class="ft dec">
+              <div class="mo">12월 · 🎯 목표 달성</div>
+              <div class="pct">15%+</div>
+              <p>최종 등록률<br />2년 연속 목표 초과</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 3: 서포터즈 + 세미나 + SNS 콘텐츠 -->
+      <div
+        style="
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 9px;
+          margin-bottom: 9px;
+        "
+      >
+        <div>
+          <p class="slbl">서포터즈 1·2기 운영 — 광고비 0원 SEO</p>
+          <div class="box" style="margin-bottom: 5px">
+            <div class="bl">전략 배경</div>
+            <ul>
+              <li>네이버 CPC 고단가 키워드 출혈경쟁 회피</li>
+              <li>오프페이지 SEO로 자연 검색 장기 선점</li>
+              <li>파워키워드: "무료 국비", "IT개발자", "개발자취업"</li>
+            </ul>
+          </div>
+          <div class="box">
+            <div class="bl">운영 성과</div>
+            <ul>
+              <li>모집 목표 50명 → 지원 100명 (경쟁률 2:1)</li>
+              <li>면접 통해 최종 선발 진행</li>
+              <li>수강생 후기 블로그 분산 노출</li>
+              <li><strong>네이버 블로그 유입 55% 증가</strong></li>
+              <li>광고 대비 낮은 비용으로 장기 채널 구축</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <p class="slbl">네이버클라우드 본사 웨비나 기획·운영</p>
+          <div class="box" style="margin-bottom: 5px">
+            <div class="bl">기획 목적</div>
+            <ul>
+              <li>"위탁 운영 껍데기" 불신 해소</li>
+              <li>네이버클라우드 본사에서 직접 기획·진행</li>
+              <li>브랜드 신뢰도 = 공간으로 증명</li>
+            </ul>
+          </div>
+          <div class="box">
+            <div class="bl">구성 및 결과</div>
+            <ul>
+              <li>기술 소개 · 교육담당 차장 직접 섭외</li>
+              <li>35세 비전공 수료생 직접 섭외 — 공감</li>
+              <li><strong>Q&A 40분 자발 진행</strong></li>
+              <li>수집된 니즈 → 콘텐츠·상담 스크립트 반영</li>
+              <li>웨비나 → CTA 퍼널 직접 연결</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <p class="slbl">SNS 콘텐츠 전략 (Instagram)</p>
+          <div class="cc" style="grid-template-columns: 1fr; margin-bottom: 0">
+            <div class="content-card" style="margin-bottom: 5px">
+              <span class="tag">Storytelling · #네클캠_성장일지</span>
+              <h4>교육생 성장 과정 콘텐츠</h4>
+              <p>
+                입과→교육→졸업 스토리 · 실제 인터뷰 & 에세이<br />목표: 캠프의
+                실질적 효과 증명
+              </p>
+            </div>
+            <div class="content-card" style="margin-bottom: 5px">
+              <span class="tag">Mentoring · #네클캠_멘토링</span>
+              <h4>현직자 멘토 상호작용</h4>
+              <p>멘토링 현장 스케치 & Q&A<br />목표: 개인화 케어 시스템 강조</p>
+            </div>
+            <div class="content-card">
+              <span class="tag">Tech & Trend · #네클캠_테크톡</span>
+              <h4>클라우드 기술 트렌드·취업 팁</h4>
+              <p>
+                카드뉴스 & 인포그래픽 형식<br />목표: 전문성 홍보 + 정보성 유입
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta">
+        <div class="cl">
+          <strong>이형원 · (주)에이아이팜 마케팅 PM · 2023.02–2025.05</strong>
+          <span
+            >경력 2년 4개월 · 브랜드 전략 / 퍼포먼스 / 콘텐츠 / SEO / 웨비나
+            기획 · JLPT 1급</span
+          >
+        </div>
+        <div class="cr">
+          <a href="https://hyungwon-portfolio.web.app/project_bitcamp.html"
+            >▶ 상세 웹 포트폴리오 바로가기
+            <span>hyungwon-portfolio.web.app/project_bitcamp.html</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

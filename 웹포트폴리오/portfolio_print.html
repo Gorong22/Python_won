@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>뉴칸 브랜드 전략 포트폴리오 | 이형원</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      body {
+        font-family: "Pretendard", "Apple SD Gothic Neo", sans-serif;
+        background: #fff;
+        color: #111;
+        font-size: 10px;
+        line-height: 1.5;
+      }
+      .page {
+        width: 297mm;
+        margin: 0 auto;
+        padding: 10mm 13mm;
+        background: #fff;
+      }
+
+      /* HEADER */
+      .hd {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 16px;
+        align-items: start;
+        border-bottom: 3px solid #1a7a4a;
+        padding-bottom: 8px;
+        margin-bottom: 11px;
+      }
+      .hd h1 {
+        font-size: 17px;
+        font-weight: 900;
+        color: #0a2e1a;
+        line-height: 1.2;
+      }
+      .hd h1 em {
+        color: #1a7a4a;
+        font-style: normal;
+      }
+      .hd .sub {
+        font-size: 9px;
+        color: #555;
+        margin-top: 3px;
+      }
+      .hd-r {
+        text-align: right;
+        font-size: 9px;
+        color: #444;
+        line-height: 1.8;
+      }
+      .badge {
+        display: inline-block;
+        background: #1a7a4a;
+        color: #fff;
+        padding: 3px 9px;
+        border-radius: 4px;
+        font-size: 8.5px;
+        font-weight: 700;
+        margin-top: 2px;
+      }
+
+      /* HYPOTHESIS */
+      .hypo {
+        background: #f0faf4;
+        border-left: 4px solid #1a7a4a;
+        border-radius: 0 6px 6px 0;
+        padding: 9px 13px;
+        margin-bottom: 11px;
+      }
+      .hypo .lbl {
+        font-size: 8px;
+        font-weight: 700;
+        color: #1a7a4a;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        margin-bottom: 3px;
+      }
+      .hypo p {
+        font-size: 10.5px;
+        font-weight: 600;
+        color: #0a2e1a;
+        line-height: 1.5;
+      }
+      .hypo p span {
+        color: #1a7a4a;
+      }
+
+      /* STATS */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 6px;
+        margin-bottom: 11px;
+      }
+      .sc {
+        background: #f8fffe;
+        border: 1.5px solid #c8ead8;
+        border-radius: 7px;
+        padding: 7px 5px;
+        text-align: center;
+      }
+      .sc .n {
+        font-size: 18px;
+        font-weight: 900;
+        color: #1a7a4a;
+        line-height: 1.1;
+      }
+      .sc .n small {
+        font-size: 10px;
+      }
+      .sc p {
+        font-size: 8px;
+        color: #444;
+        margin-top: 2px;
+        line-height: 1.4;
+      }
+      .sc p em {
+        display: block;
+        font-style: normal;
+        color: #888;
+        font-size: 7.5px;
+      }
+
+      /* SECTION LABEL */
+      .slbl {
+        font-size: 9.5px;
+        font-weight: 800;
+        color: #1a7a4a;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        border-bottom: 1px solid #c8ead8;
+        padding-bottom: 3px;
+        margin-bottom: 7px;
+      }
+
+      /* GRIDS */
+      .g4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 7px;
+        margin-bottom: 11px;
+      }
+      .g3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 7px;
+        margin-bottom: 11px;
+      }
+      .g2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+        margin-bottom: 11px;
+      }
+      .box {
+        background: #f8fffe;
+        border: 1.5px solid #c8ead8;
+        border-radius: 7px;
+        padding: 8px 10px;
+      }
+      .box .bl {
+        font-size: 7.5px;
+        font-weight: 700;
+        color: #1a7a4a;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        margin-bottom: 3px;
+      }
+      .box h3 {
+        font-size: 10.5px;
+        font-weight: 800;
+        color: #0a2e1a;
+        margin-bottom: 5px;
+        line-height: 1.35;
+      }
+      .box ul {
+        list-style: none;
+      }
+      .box ul li {
+        font-size: 9px;
+        color: #334;
+        padding: 1.5px 0 1.5px 10px;
+        position: relative;
+        line-height: 1.5;
+      }
+      .box ul li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: #1a7a4a;
+        font-size: 7.5px;
+      }
+      .box p {
+        font-size: 9px;
+        color: #334;
+        line-height: 1.5;
+      }
+
+      /* JOURNEY */
+      .jstrip {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 4px;
+        margin-bottom: 11px;
+      }
+      .js {
+        background: #f8fffe;
+        border: 1.5px solid #c8ead8;
+        border-radius: 6px;
+        padding: 7px 5px;
+        text-align: center;
+      }
+      .js.active {
+        background: #1a7a4a;
+        border-color: #1a7a4a;
+        color: #fff;
+      }
+      .js .jn {
+        font-size: 13px;
+        font-weight: 900;
+        line-height: 1;
+      }
+      .js .jt {
+        font-size: 8.5px;
+        font-weight: 700;
+        margin: 2px 0;
+        color: #0a2e1a;
+      }
+      .js.active .jt {
+        color: #fff;
+      }
+      .js .ja {
+        font-size: 7.5px;
+        color: #555;
+        line-height: 1.4;
+      }
+      .js.active .ja {
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      /* SEARCH TABLE */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 8.5px;
+      }
+      thead tr {
+        background: #1a7a4a;
+        color: #fff;
+      }
+      thead th {
+        padding: 4px 6px;
+        text-align: center;
+        font-weight: 700;
+        font-size: 8px;
+      }
+      tbody tr:nth-child(odd) {
+        background: #f0faf4;
+      }
+      tbody td {
+        padding: 4px 6px;
+        text-align: center;
+        border-bottom: 1px solid #c8ead8;
+      }
+      tbody td:first-child {
+        text-align: left;
+        font-weight: 600;
+      }
+
+      /* CRM CARDS */
+      .crm {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 7px;
+        margin-bottom: 8px;
+      }
+      .crm-c {
+        border-radius: 7px;
+        padding: 8px 10px;
+        text-align: center;
+      }
+      .crm-c.cold {
+        background: #e8f4fd;
+        border: 1.5px solid #93c5fd;
+      }
+      .crm-c.warm {
+        background: #fff7ed;
+        border: 1.5px solid #fdba74;
+      }
+      .crm-c.hot {
+        background: #fef2f2;
+        border: 1.5px solid #fca5a5;
+      }
+      .crm-c .pct {
+        font-size: 22px;
+        font-weight: 900;
+        margin-bottom: 3px;
+      }
+      .crm-c.cold .pct {
+        color: #1d4ed8;
+      }
+      .crm-c.warm .pct {
+        color: #c2410c;
+      }
+      .crm-c.hot .pct {
+        color: #b91c1c;
+      }
+      .crm-c h4 {
+        font-size: 9.5px;
+        font-weight: 700;
+        margin-bottom: 5px;
+      }
+      .crm-c p {
+        font-size: 8px;
+        color: #555;
+        line-height: 1.5;
+      }
+
+      /* CTA FOOTER */
+      .cta {
+        margin-top: 8px;
+        background: #0a2e1a;
+        border-radius: 8px;
+        padding: 10px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .cta .cl {
+        color: #fff;
+      }
+      .cta .cl strong {
+        font-size: 11px;
+        display: block;
+        margin-bottom: 2px;
+      }
+      .cta .cl span {
+        font-size: 8.5px;
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .cta .cr {
+        text-align: right;
+      }
+      .cta .cr a {
+        display: inline-block;
+        background: #1a7a4a;
+        color: #fff;
+        padding: 6px 14px;
+        border-radius: 5px;
+        font-weight: 700;
+        font-size: 9.5px;
+        text-decoration: none;
+      }
+      .cta .cr a span {
+        display: block;
+        font-size: 8px;
+        font-weight: 400;
+        opacity: 0.8;
+        margin-top: 1px;
+      }
+
+      @media print {
+        body {
+          margin: 0;
+        }
+        .page {
+          margin: 0;
+          padding: 9mm 12mm;
+        }
+        @page {
+          size: A4 landscape;
+          margin: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <!-- HEADER -->
+      <div class="hd">
+        <div>
+          <h1>뉴칸 브랜드 전략 <em>포트폴리오</em></h1>
+          <p class="sub">
+            Contents Marketing · Search Ad · CRM Design — 리뷰 12,210건 분석
+            기반 · 이형원 지원 포트폴리오 · 2026.03
+          </p>
+        </div>
+        <div class="hd-r">
+          <strong style="font-size: 11px; color: #0a2e1a">이형원</strong><br />
+          콘텐츠 마케터 지원 · 경력 3년 2개월<br />
+          <a href="https://hw-new-contetns.netlify.app/" class="badge"
+            >▶ 인터랙티브 웹 포트폴리오</a
+          >
+        </div>
+      </div>
+
+      <!-- HYPOTHESIS -->
+      <div class="hypo">
+        <div class="lbl">
+          핵심 가설 — 리뷰 12,210건(추출 문장 18,260개) 분석 도출
+        </div>
+        <p>
+          뉴칸의 진짜 경쟁자는 오쏘몰이 아닙니다.
+          <span>30·40대 남성이 매일 마시는 커피 루틴</span>입니다. &nbsp;고객이
+          원하는 것은 성분이 아니라 <span>'복잡한 루틴에서의 해방'</span>입니다.
+          &nbsp;—&nbsp; '커피·카페인' 433회+ &nbsp;·&nbsp; '간편' 409회
+          &nbsp;·&nbsp; '한번에' 204회 &nbsp;·&nbsp; '귀찮' 115회
+        </p>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats">
+        <div class="sc">
+          <div class="n">433<small>+</small></div>
+          <p>커피·카페인 언급<em>경쟁사: 0회</em></p>
+        </div>
+        <div class="sc">
+          <div class="n">409<small>회</small></div>
+          <p>'간편' 언급<em>루틴 단순화 니즈</em></p>
+        </div>
+        <div class="sc">
+          <div class="n">62.7<small>%</small></div>
+          <p>활력 키워드 비중<em>30대 남성 리뷰</em></p>
+        </div>
+        <div class="sc">
+          <div class="n">75<small>%</small></div>
+          <p>대리구매 맥락<em>남성 리뷰 中</em></p>
+        </div>
+        <div class="sc">
+          <div class="n">34.7<small>%</small></div>
+          <p>카페인 대체 언급<em>전 연령 최고</em></p>
+        </div>
+        <div class="sc">
+          <div class="n">4</div>
+          <p>타겟 세그먼트<em>Core·Growth·Slim·Key</em></p>
+        </div>
+      </div>
+
+      <!-- ROW: CH01~02 + JOURNEY -->
+      <div
+        style="
+          display: grid;
+          grid-template-columns: 1.2fr 1fr;
+          gap: 9px;
+          margin-bottom: 11px;
+        "
+      >
+        <div>
+          <p class="slbl">CH.01 · 경쟁 구조 리프레임</p>
+          <div class="g2" style="margin-bottom: 7px">
+            <div class="box" style="border-color: #fde68a; background: #fffbeb">
+              <div class="bl" style="color: #b45309">☕ 커피 = 반사 루틴</div>
+              <ul>
+                <li>비교 없이 하루 3~5잔 자동 반복</li>
+                <li>피로하면 바로 손이 간다</li>
+                <li><strong>빼앗아야 할 시간대: 아침 출근·오후 2시</strong></li>
+              </ul>
+            </div>
+            <div class="box">
+              <div class="bl">💊 뉴칸 = 의식적 루틴</div>
+              <ul>
+                <li>커피보다 낮은 1일 단가(1,500원↓)</li>
+                <li>한번 자리잡히면 반사적으로 반복</li>
+                <li><strong>전략: "커피 이후" 포지셔닝</strong></li>
+              </ul>
+            </div>
+          </div>
+          <p class="slbl">CH.02 · 타겟 세그먼트</p>
+          <div class="g2" style="margin-bottom: 0">
+            <div class="box">
+              <div class="bl">Seg A · Core</div>
+              <h3>40대 남성 · 체력 저하</h3>
+              <ul>
+                <li>활력 목적 1위(25%) · 재구매율↑</li>
+                <li>가격 민감도 낮음 · 성분 신뢰 결정</li>
+              </ul>
+            </div>
+            <div class="box">
+              <div class="bl">Seg B · Growth</div>
+              <h3>30대 남성 · 카페인 대체</h3>
+              <ul>
+                <li>'커피' 언급 34.7% — 전 연령 최고</li>
+                <li>숏폼·인스타 기반 즉각 반응</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="slbl">CH.03 · 고객 여정 5단계</p>
+          <div class="jstrip" style="grid-template-columns: 1fr; gap: 4px">
+            <div
+              class="js"
+              style="
+                display: grid;
+                grid-template-columns: 30px 1fr 1fr;
+                gap: 6px;
+                align-items: center;
+                text-align: left;
+                padding: 6px 8px;
+              "
+            >
+              <div class="jn" style="text-align: center">01</div>
+              <div class="jt" style="font-size: 9px">문제 인식</div>
+              <div class="ja">GIF·심리테스트로 자각 유도</div>
+            </div>
+            <div
+              class="js"
+              style="
+                display: grid;
+                grid-template-columns: 30px 1fr 1fr;
+                gap: 6px;
+                align-items: center;
+                text-align: left;
+                padding: 6px 8px;
+              "
+            >
+              <div class="jn" style="text-align: center">02</div>
+              <div class="jt" style="font-size: 9px">대안 탐색</div>
+              <div class="ja">SEO 블로그·브이로그 선점</div>
+            </div>
+            <div
+              class="js active"
+              style="
+                display: grid;
+                grid-template-columns: 30px 1fr 1fr;
+                gap: 6px;
+                align-items: center;
+                text-align: left;
+                padding: 6px 8px;
+              "
+            >
+              <div class="jn" style="text-align: center">03</div>
+              <div class="jt" style="font-size: 9px; color: #fff">
+                비교·검증 ★
+              </div>
+              <div class="ja">4그룹 검색광고 집중 구간</div>
+            </div>
+            <div
+              class="js"
+              style="
+                display: grid;
+                grid-template-columns: 30px 1fr 1fr;
+                gap: 6px;
+                align-items: center;
+                text-align: left;
+                padding: 6px 8px;
+              "
+            >
+              <div class="jn" style="text-align: center">04</div>
+              <div class="jt" style="font-size: 9px">첫 구매</div>
+              <div class="ja">환불보장·성분수치·가이드</div>
+            </div>
+            <div
+              class="js"
+              style="
+                display: grid;
+                grid-template-columns: 30px 1fr 1fr;
+                gap: 6px;
+                align-items: center;
+                text-align: left;
+                padding: 6px 8px;
+              "
+            >
+              <div class="jn" style="text-align: center">05</div>
+              <div class="jt" style="font-size: 9px">루틴화 CRM</div>
+              <div class="ja">RFM 기반 개인화 자동 발송</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW: 콘텐츠 + 광고 + CRM -->
+      <div
+        style="
+          display: grid;
+          grid-template-columns: 1fr 1.4fr 1fr;
+          gap: 9px;
+          margin-bottom: 9px;
+        "
+      >
+        <!-- 콘텐츠 전략 -->
+        <div>
+          <p class="slbl">CH.04 · 콘텐츠 전략</p>
+          <div class="box" style="margin-bottom: 6px">
+            <div class="bl">🎬 숏폼 GIF 4편 기획·제작</div>
+            <ul>
+              <li>아내가 먼저 알아챘다</li>
+              <li>오후 3시, 또 커피를 찾다</li>
+              <li>방관자→당사자 (아내 시선)</li>
+              <li><strong>KPI: 저장·공유율 / 자발 댓글</strong></li>
+            </ul>
+          </div>
+          <div class="box">
+            <div class="bl">📱 바이럴 심리테스트 기획·제작</div>
+            <ul>
+              <li>"내 피로는 어떤 타입?" 8문항</li>
+              <li>Type A~E 맞춤 루틴 처방</li>
+              <li>결과→카카오 공유→지인 유입 순환</li>
+              <li><strong>완료율 목표 70% · 공유율 10%</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 검색광고 -->
+        <div>
+          <p class="slbl">CH.05 · 검색광고 4그룹 구조</p>
+          <table>
+            <thead>
+              <tr>
+                <th>그룹·예산</th>
+                <th>핵심 키워드</th>
+                <th>랜딩 전략</th>
+                <th>카피 예시</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>A. 브랜드 방어</strong><br /><small
+                    >20% · 전환율 최고</small
+                  >
+                </td>
+                <td>뉴칸, 맨즈업, 후기, 재구매</td>
+                <td>성분표+후기 탭</td>
+                <td>"리뷰 12,210개 중 내 유형"</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>B. 수요 확장</strong><br /><small
+                    >50% · 모수 최대</small
+                  >
+                </td>
+                <td>피로회복, 카페인 대체, 직장인 영양제</td>
+                <td>심리테스트→리타겟팅</td>
+                <td>"요즘 왜 이렇게 피곤하지?"</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>C. 성분 비교</strong><br /><small>30% · 고의도</small>
+                </td>
+                <td>밀크씨슬 함량, 고함량 B12, 아연</td>
+                <td>수치비교표+환불보장</td>
+                <td>"밀크씨슬 2,000mg 숫자로 비교"</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>D. 경쟁 우회</strong><br /><small>5% · 테스트</small>
+                </td>
+                <td>오쏘몰 대체, 남성 멀티비타민</td>
+                <td>선택기준 체크리스트</td>
+                <td>"현명하게 고르는 기준 3가지"</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- CRM -->
+        <div>
+          <p class="slbl">CH.06 · RFM + CRM 설계</p>
+          <div class="crm" style="grid-template-columns: 1fr; gap: 5px">
+            <div class="crm-c cold">
+              <div class="pct" style="font-size: 16px">❄️ COLD · D0~D14</div>
+              <h4>온보딩 — 불안 제거</h4>
+              <p>
+                D0~D2 도착확인+성분표 발송<br />D7 문제유형별 후기 분기<br />D14
+                "2주 됐는데 어떠세요?" 체크인
+              </p>
+            </div>
+            <div class="crm-c warm">
+              <div class="pct" style="font-size: 16px">🔥 WARM · D+20~26</div>
+              <h4>소진 예측 → 구독 오퍼</h4>
+              <p>
+                D+23 RFM 트리거 "포 몇 개 남으셨나요?"<br />D+26 "신경 쓸 일
+                없이 매달 배송"<br />카카오 채널 친구 10% 영구 할인
+              </p>
+            </div>
+            <div class="crm-c hot">
+              <div class="pct" style="font-size: 16px">👑 HOT · VIP 락인</div>
+              <h4>앰배서더 → 바이럴 순환</h4>
+              <p>
+                VIP 전용 신제품 선출시 권한<br />추천 코드 양측 혜택<br />HOT
+                1%가 새 COLD 유입
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta">
+        <div class="cl">
+          <strong>이형원 · 뉴칸 콘텐츠 마케터 지원 포트폴리오 2026.03</strong>
+          <span>경력 3년 2개월 · 브랜드 전략 / 퍼포먼스 / CRM · JLPT 1급</span>
+        </div>
+        <div class="cr">
+          <a href="https://hw-new-contetns.netlify.app/"
+            >▶ 인터랙티브 웹 포트폴리오 바로가기
+            <span>https://hw-new-contetns.netlify.app/</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
